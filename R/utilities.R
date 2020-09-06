@@ -1,0 +1,379 @@
+#' @importFrom tibble as_tibble
+#'
+#' @keywords internal
+#'
+#' @param .data A tidySE
+#'
+#' @noRd
+to_tib <- function(.data) {
+    .data@colData %>%
+        as.data.frame() %>%
+        as_tibble(rownames="cell")
+}
+
+# Greater than
+gt <- function(a, b) {
+    a > b
+}
+
+# Smaller than
+st <- function(a, b) {
+    a < b
+}
+
+# Negation
+not <- function(is) {
+    !is
+}
+
+# Raise to the power
+pow <- function(a, b) {
+    a^b
+}
+
+# Equals
+eq <- function(a, b) {
+    a == b
+}
+
+prepend <- function(x, values, before=1) {
+    n <- length(x)
+    stopifnot(before > 0 && before <= n)
+    if (before == 1) {
+        c(values, x)
+    }
+    else {
+        c(x[seq_len(before - 1)], values, x[before:n])
+    }
+}
+#' Add class to abject
+#'
+#'
+#' @keywords internal
+#'
+#' @param var A tibble
+#' @param name A character name of the attribute
+#'
+#' @return A tibble with an additional attribute
+add_class <- function(var, name) {
+    if (!name %in% class(var)) class(var) <- prepend(class(var), name)
+
+    var
+}
+
+#' Remove class to abject
+#'
+#' @keywords internal
+#'
+#'
+#' @param var A tibble
+#' @param name A character name of the class
+#'
+#' @return A tibble with an additional attribute
+#' @keywords internal
+drop_class <- function(var, name) {
+    class(var) <- class(var)[!class(var) %in% name]
+    var
+}
+
+#' get abundance long
+#'
+#' @keywords internal
+#'
+#' @importFrom magrittr "%$%"
+#' @importFrom utils tail
+#'
+#' @param .data A tidySE
+#' @param transcripts A character
+#' @param all A boolean
+#'
+#'
+#' @return A tidySE object
+#'
+#'
+#' @noRd
+get_abundance_sc_wide <- function(.data, transcripts=NULL, all=FALSE) {
+
+    # Solve CRAN warnings
+    . <- NULL
+
+    # For SCE there is not filed for variable features
+    variable_feature <- c()
+
+    # Check if output would be too big without forcing
+    if (
+        length(variable_feature) == 0 &
+            is.null(transcripts) &
+            all == FALSE
+    ) {
+        stop("
+                Your object does not contain variable transcript labels,
+                transcript argument is empty and all arguments are set to FALSE.
+                Either:
+                1. use detect_variable_features() to select variable feature
+                2. pass an array of transcript names
+                3. set all=TRUE (this will output a very large object, does your computer have enough RAM?)
+                ")
+    }
+
+    # Get variable features if existing
+    if (
+        length(variable_feature) > 0 &
+            is.null(transcripts) &
+            all == FALSE
+    ) {
+        variable_genes <- variable_feature
+    } # Else
+    else {
+        variable_genes <- NULL
+    }
+
+    # Just grub last assay
+    .data@assays@data %>%
+        as.list() %>%
+        tail(1) %>%
+        .[[1]] %>%
+        when(
+            variable_genes %>% is.null() %>% `!`() ~ (.)[variable_genes, , drop=FALSE],
+            transcripts %>% is.null() %>% `!`() ~ (.)[transcripts, , drop=FALSE],
+            ~ stop("It is not convenient to extract all genes, you should have either variable features or transcript list to extract")
+        ) %>%
+        as.matrix() %>%
+        t() %>%
+        as_tibble(rownames="cell")
+}
+
+#' get abundance long
+#'
+#' @keywords internal
+#'
+#' @importFrom magrittr "%$%"
+#' @importFrom tidyr pivot_longer
+#' @importFrom tibble as_tibble
+#' @importFrom purrr when
+#' @importFrom purrr map2
+#'
+#' @param .data A tidySE
+#' @param transcripts A character
+#' @param all A boolean
+#' @param exclude_zeros A boolean
+#'
+#' @return A tidySE object
+#'
+#'
+#' @noRd
+get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_zeros=FALSE) {
+
+    # Solve CRAN warnings
+    . <- NULL
+
+    # For SCE there is not filed for variable features
+    variable_feature <- c()
+
+    # Check if output would be too big without forcing
+    if (
+        length(variable_feature) == 0 &
+            is.null(transcripts) &
+            all == FALSE
+    ) {
+        stop("
+                Your object does not contain variable transcript labels,
+                transcript argument is empty and all arguments are set to FALSE.
+                Either:
+                1. use detect_variable_features() to select variable feature
+                2. pass an array of transcript names
+                3. set all=TRUE (this will output a very large object, does your computer have enough RAM?)
+                ")
+    }
+
+
+    # Get variable features if existing
+    if (
+        length(variable_feature) > 0 &
+            is.null(transcripts) &
+            all == FALSE
+    ) {
+        variable_genes <- variable_feature
+    } # Else
+    else {
+        variable_genes <- NULL
+    }
+
+    assay_names <- .data@assays %>% names()
+
+
+    .data@assays@data %>%
+        as.list() %>%
+
+        # Take active assay
+        map2(
+            assay_names,
+
+            ~ .x %>%
+                when(
+                    variable_genes %>% is.null() %>% `!`() ~ .x[variable_genes, , drop=FALSE],
+                    transcripts %>% is.null() %>% `!`() ~ .x[toupper(rownames(.x)) %in% toupper(transcripts), , drop=FALSE],
+                    all ~ .x,
+                    ~ stop("It is not convenient to extract all genes, you should have either variable features or transcript list to extract")
+                ) %>%
+
+                # Replace 0 with NA
+                when(exclude_zeros ~ (.) %>% {
+                    x <- (.)
+                    x[x == 0] <- NA
+                    x
+                }, ~ (.)) %>%
+                as.matrix() %>%
+                data.frame() %>%
+                as_tibble(rownames="transcript") %>%
+                tidyr::pivot_longer(
+                    cols=-transcript,
+                    names_to="cell",
+                    values_to="abundance" %>% paste(.y, sep="_"),
+                    values_drop_na=TRUE
+                )
+            # %>%
+            # mutate_if(is.character, as.factor) %>%
+        ) %>%
+        Reduce(function(...) left_join(..., by=c("transcript", "cell")), .)
+}
+
+#' @importFrom methods .hasSlot
+#' @importFrom S4Vectors DataFrame
+#' @importFrom nanny subset
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment rowData
+#'
+#' @keywords internal
+#'
+#' @param .data A tibble
+#' @param SummarizedExperiment_object A tidySE
+#'
+#' @noRd
+update_SE_from_tibble = function(.data_mutated, .data){
+
+    # Get the colnames of samples and transcript datasets
+    colnames_col = colnames(.data@colData) %>% c("sample")
+    colnames_row = when( .hasSlot(.data, "rowData") ~ colnames(.data@rowData), ~ c() ) %>% c("transcript")
+
+   col_data =
+        .data_mutated  %>%
+        select(-one_of(get_special_columns(.data))) %>%
+        nanny::subset(sample) %>%
+
+        # In case unitary SE subset does not ork
+        select(-one_of(colnames_row)) %>%
+        data.frame(row.names = .$sample) %>%
+        select(-sample) %>%
+        DataFrame()
+
+    row_data =
+        .data_mutated  %>%
+        select(-one_of(get_special_columns(.data))) %>%
+        nanny::subset(transcript) %>%
+
+        # In case unitary SE subset does not ork
+        select(-one_of(colnames_col)) %>%
+        data.frame(row.names = .$transcript) %>%
+        select(-transcript) %>%
+        DataFrame()
+
+
+    # Subset if needed. This function is used by many dplyr utilities
+    .data = .data[rownames(row_data), rownames(col_data)]
+
+    # Update
+    colData(.data) = col_data
+    rowData(.data) = row_data
+
+    # return
+    .data
+}
+
+
+#' @importFrom purrr map_chr
+#'
+#' @keywords internal
+#'
+#' @param SummarizedExperiment_object A tidySE
+#'
+#' @noRd
+#'
+get_special_columns <- function(SummarizedExperiment_object) {
+
+
+    colnames_special =
+        get_special_datasets(SummarizedExperiment_object) %>%
+
+        # In case any of those have transcript of sample in column names
+        map(
+            ~ .x %>%
+                select_if(!colnames(.) %in% get_needed_columns()) %>%
+                colnames()
+        ) %>%
+        unlist() %>%
+        as.character()
+
+    colnames_counts =
+        get_count_datasets(SummarizedExperiment_object) %>%
+        select(-transcript, -sample) %>%
+        colnames()
+
+    colnames_special %>% c(colnames_counts)
+}
+
+get_special_datasets <- function(SummarizedExperiment_object) {
+
+    if("RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object))
+       SummarizedExperiment_object@rowRanges %>%
+          as.data.frame %>%
+          tibble::as_tibble(rownames="transcript") %>%
+        list()
+    else tibble()
+
+}
+
+get_count_datasets <- function(SummarizedExperiment_object) {
+
+    map2(
+        SummarizedExperiment_object@assays@data %>% as.list(),
+        names(SummarizedExperiment_object@assays@data),
+        ~ .x %>%
+            tibble::as_tibble(rownames="transcript") %>%
+            gather(sample, count, -transcript) %>%
+            rename(!!.y := count)
+    ) %>%
+        reduce(left_join, by = c("transcript", "sample"))
+
+}
+
+get_needed_columns <- function() {
+    # c("cell",  "orig.ident", "nCount_RNA", "nFeature_RNA")
+    c("transcript", "sample")
+}
+
+#' Convert array of quosure (e.g. c(col_a, col_b)) into character vector
+#'
+#' @keywords internal
+#'
+#' @importFrom rlang quo_name
+#' @importFrom rlang quo_squash
+#'
+#' @param v A array of quosures (e.g. c(col_a, col_b))
+#'
+#' @return A character vector
+quo_names <- function(v) {
+    v <- quo_name(quo_squash(v))
+    gsub("^c\\(|`|\\)$", "", v) %>%
+        strsplit(", ") %>%
+        unlist()
+}
+
+#' @importFrom purrr when
+#' @importFrom dplyr select
+#' @importFrom rlang expr
+select_helper <- function(.data, ...) {
+    loc <- tidyselect::eval_select(expr(c(...)), .data)
+
+    dplyr::select(.data, loc)
+}

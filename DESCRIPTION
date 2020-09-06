@@ -1,0 +1,52 @@
+Type: Package
+Package: tidySE
+Title: 'Brings SummarizedExperiment to the Tidyverse 
+Version: 0.99.0
+Authors@R: c(person("Stefano", "Mangiola", email = "mangiolastefano@gmail.com",
+                  role = c("aut", "cre")) )
+Description: tidySE creates an invisible layer that enables using the 
+    Bioconductor 'SummarizedExperiment' object as a tibble and interacting 
+    seamlessly with the tidyverse. Tidyverse packages such as dplyr, tidyr, 
+    ggplot and plotly can all be used with the tidy SummarizedExperiment object.
+    This allows users to get the best of both Bioconductor and tidyverse worlds.
+License: GPL-3
+Depends:
+    R (>= 4.0.0),
+    SummarizedExperiment
+Imports:
+    tibble,
+    dplyr,
+    magrittr,
+    tidyr,
+    ggplot2,
+    rlang,
+    purrr,
+    lifecycle,
+    methods,
+    plotly,
+    ellipsis,
+    tidyselect,
+    utils,
+    S4Vectors
+Suggests:
+    BiocStyle,
+    testthat,
+    knitr,
+    GGally,
+    markdown,
+    SingleCellSignalR,
+    scater,
+    scran,
+    tidyHeatmap,
+    igraph,
+    uwot,
+    dittoSeq
+VignetteBuilder: 
+    knitr
+RdMacros:
+    lifecycle
+Biarch: true
+biocViews: AssayDomain, Infrastructure, RNASeq, DifferentialExpression, GeneExpression, Normalization, Clustering, QualityControl, Sequencing, Transcription, Transcriptomics
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
