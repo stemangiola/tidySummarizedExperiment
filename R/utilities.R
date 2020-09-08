@@ -240,7 +240,6 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
 
 #' @importFrom methods .hasSlot
 #' @importFrom S4Vectors DataFrame
-#' @importFrom nanny subset
 #' @importFrom SummarizedExperiment colData
 #' @importFrom SummarizedExperiment rowData
 #'
@@ -263,7 +262,6 @@ update_SE_from_tibble = function(.data_mutated, .data){
        # Replace for subset
         select(sample, get_subset_columns(., sample)) %>%
        distinct() %>%
-        #nanny::subset(sample) %>%
 
         # In case unitary SE subset does not ork
         select_if(!colnames(.) %in% colnames_row) %>%
@@ -278,7 +276,6 @@ update_SE_from_tibble = function(.data_mutated, .data){
         # Replace for subset
         select(transcript, get_subset_columns(., transcript)) %>%
         distinct() %>%
-        #nanny::subset(transcript) %>%
 
         # In case unitary SE subset does not work because all same
         select_if(!colnames(.) %in% c(colnames_col, colnames(col_data))) %>%
