@@ -77,8 +77,15 @@ bind_rows.tidySE <- function(..., .id=NULL, add.cell.ids=NULL) {
 
     new_obj <- cbind(tts[[1]], tts[[2]]) %>% tidy()
 
-    # # If duplicated cell names
-    # colnames(new_obj) <- make.unique(colnames(new_obj), sep="_")
+    # If duplicated cell names
+    if(new_obj %>% colnames %>% duplicated %>% which %>% length %>% gt(0))
+        warning("tidySE says: you have duplicated sample names, they will be made unique.")
+    unique_colnames <- make.unique(colnames(new_obj), sep="_")
+
+    colnames(new_obj) <- unique_colnames
+
+    # Change also all assays colnames
+    new_obj@assays@data@listData = new_obj@assays@data@listData %>% map(~ { colnames(.x) = unique_colnames; .x })
 
     new_obj
 }
@@ -203,8 +210,8 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 
         # If rectangular
         is_rectangular(.) ~ .data[
-            unque(.$transcript),
-            unque(.$sample)
+            unique(.$transcript),
+            unique(.$sample)
         ],
 
         # If not rectangular return just tibble
@@ -618,7 +625,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
         when(
 
             # If duplicated sample-transcript pair returns tibble
-            is_duplicated(.data) ~ {
+            !is_not_duplicated(.) ~ {
                 message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
                 (.)
             },
@@ -861,7 +868,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 
     .data %>%
         as_tibble() %>%
-        dplyr::slice(.data@colData %>% as.data.frame(), ..., .preserve=.preserve) %>%
+        dplyr::slice( ..., .preserve=.preserve) %>%
 
         when(
 
@@ -872,7 +879,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
                 },
 
             # Otherwise return updated tidySE
-            ~  update_SE_from_tibble(., x)
+            ~  update_SE_from_tibble(., .data)
 
         )
 
