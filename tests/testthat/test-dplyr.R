@@ -1,9 +1,11 @@
 context("dplyr test")
 
-tt <- se %>% tidy()
+library(tidySE)
+
+tt <- pasilla %>% tidy()
 
 test_that("bind_rows", {
-    tt_bind <- bind_rows(tt, tt )
+    tt_bind <- tidySE::bind_rows(tt, tt )
 
     expect_equal(
         tt_bind %>% count(sample, transcript) %>% dplyr::count(n) %>% filter(n>1) %>% nrow(),
@@ -12,15 +14,15 @@ test_that("bind_rows", {
 })
 
 test_that("distinct", {
-    expect_equal(tt %>% distinct(run) %>% ncol(), 1)
+    expect_equal(tt %>% distinct(condition) %>% ncol(), 1)
 })
 
 test_that("filter", {
-    expect_equal(tt %>% filter(run == "ERR188297") %>% nrow(), 200401)
+    expect_equal(tt %>% filter(condition == "untreated") %>% nrow(), 14599)
 })
 
 test_that("group_by", {
-    expect_equal(tt %>% group_by(run) %>% col(), 21)
+    expect_equal(tt %>% group_by(condition) %>% ncol(), 5)
 })
 
 test_that("summarise", {
@@ -28,11 +30,11 @@ test_that("summarise", {
 })
 
 test_that("mutate", {
-    expect_equal(tt %>% mutate(run = 1) %>% distinct(run) %>% nrow(), 1)
+    expect_equal(tt %>% mutate(condition = 1) %>% distinct(condition) %>% nrow(), 1)
 })
 
 test_that("rename", {
-    expect_equal(tt %>% rename( groups = condition) %>% select(condition) %>% ncol(), 1)
+    expect_equal(tt %>% rename( groups = condition) %>% select(groups) %>% ncol(), 1)
 })
 
 test_that("left_join", {
@@ -43,15 +45,15 @@ test_that("left_join", {
 })
 
 test_that("inner_join", {
-    expect_equal(tt %>% inner_join(tt %>% distinct(condition) %>% mutate(new_column = 1:2) %>% slice(1)) %>% ncol(), 3)
+    expect_equal(tt %>% inner_join(tt %>% distinct(condition) %>% mutate(new_column = 1:2) %>% slice(1)) %>% ncol(), 4)
 })
 
 test_that("right_join", {
-    expect_equal(tt %>% right_join(tt %>% distinct(condition) %>% mutate(new_column = 1:2) %>% slice(1)) %>% ncol(), 3)
+    expect_equal(tt %>% right_join(tt %>% distinct(condition) %>% mutate(new_column = 1:2) %>% slice(1)) %>% ncol(), 4)
 })
 
 test_that("full_join", {
-    expect_equal(tt %>% full_join(tibble::tibble(condition = "A", other = 1:4)) %>% nrow(), 3006015)
+    expect_equal(tt %>% full_join(tibble::tibble(condition = "A", other = 1:4)) %>% nrow(), 102197)
 })
 
 test_that("slice", {
@@ -59,7 +61,7 @@ test_that("slice", {
 })
 
 test_that("select", {
-    expect_equal(tt %>% select(-pop) %>% class() %>% as.character(), "tidySE")
+    expect_equal(tt %>% select(-condition) %>% class() %>% as.character(), "tidySE")
 
     expect_equal(tt %>% select(condition) %>% class() %>% as.character() %>% .[1], "tbl_df")
 })
@@ -69,7 +71,7 @@ test_that("sample_n", {
 })
 
 test_that("sample_frac", {
-    expect_equal(tt %>% sample_frac(0.1) %>% nrow(), 120241)
+    expect_equal(tt %>% sample_frac(0.1) %>% nrow(), 10219)
 })
 
 test_that("count", {

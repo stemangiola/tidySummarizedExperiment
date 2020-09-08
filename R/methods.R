@@ -31,7 +31,8 @@ tidy <- function(object) {
 
 tidy_ <-  function(object) {
     object %>%
-    as("tidySE") %>%
+        as("RangedSummarizedExperiment") %>%
+        as("tidySE") %>%
 
         # If there is a column called sample change it's name
         when( "sample" %in% colnames(.@colData) ~ {

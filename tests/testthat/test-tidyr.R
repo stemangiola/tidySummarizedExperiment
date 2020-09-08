@@ -1,49 +1,54 @@
 context("tidyr test")
 
+library(tidySE)
+
 tt <-
-    pbmc_small %>%
+    pasilla %>%
     tidy() %>%
-    mutate(col2 = "other_col")
+    tidySE::mutate(col2 = "other_col")
 
 test_that("nest_unnest", {
-    col_names <- colnames(tt@colData) %>% c("cell")
+    col_names <- colnames(tt@colData) %>% c("sample")
+    library(magrittr)
 
     x <- tt %>%
-        nest(data = -groups) %>%
-        unnest(data) %>%
-        scater::logNormCounts() %>%
-        scater::runPCA()
+         nest(data = -condition) %>%
+         unnest(data) %>%
+         DESeq2::DESeqTransform() %>%
+         DESeq2::plotPCA() %$%
+         data %>%
+         .[,1]
+
     y <- tt %>%
-        scater::logNormCounts() %>%
-        scater::runPCA()
+        DESeq2::DESeqTransform() %>%
+        DESeq2::plotPCA() %$%
+        data %>%
+        .[,1]
 
 
-    expect_equal(
-        x@int_colData@listData$reducedDims$PCA %>% as.data.frame() %>% as_tibble(rownames = "cell") %>% arrange(cell) %>% pull(PC1) %>% abs(),
-        y@int_colData@listData$reducedDims$PCA %>% as.data.frame() %>% as_tibble(rownames = "cell") %>% arrange(cell) %>% pull(PC1) %>% abs()
-    )
+    expect_equal(x, y)
 })
 
 test_that("unite separate", {
-    un <- tt %>% unite("new_col", c(groups, col2), sep = ":")
+    un <- tt %>% unite("new_col", c(condition, col2), sep = ":")
 
-    expect_equal(un %>% select(new_col) %>% slice(1) %>% pull(new_col), "g2:other_col")
+    expect_equal(un %>% tidySE::select(new_col) %>% slice(1) %>% pull(new_col), "untreated:other_col")
 
-    se <- un %>% separate(col = new_col, into = c("orig.ident", "groups"), sep = ":")
+    se <- un %>% separate(col = new_col, into = c("orig.ident", "condition"), sep = ":")
 
-    expect_equal(se %>% select(orig.ident) %>% ncol(), 1)
+    expect_equal(se %>% tidySE::select(sample) %>% ncol(), 1)
 })
 
 test_that("extract", {
     expect_equal(
-        tt %>% extract(groups, into = "g", regex = "g([0-9])", convert = TRUE) %>% pull(g) %>% class(),
-        "integer"
+        tt %>% tidySE::extract(col2, into = "g", regex = "other_([a-z]+)", convert = TRUE) %>% tidySE::pull(g) %>% class(),
+        "character"
     )
 })
 
 test_that("pivot_longer", {
     expect_equal(
-        tt %>% pivot_longer(c(orig.ident, groups), names_to = "name", values_to = "value") %>% class() %>% .[1],
+        tt %>% tidySE::pivot_longer(c(sample, condition), names_to = "name", values_to = "value") %>% class() %>% .[1],
         "tbl_df"
     )
 })

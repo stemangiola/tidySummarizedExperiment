@@ -90,6 +90,51 @@ bind_rows.tidySE <- function(..., .id=NULL, add.cell.ids=NULL) {
     new_obj
 }
 
+#' @export
+#'
+#' @inheritParams bind
+#'
+#' @rdname dplyr-methods
+bind_cols <- function(..., .id=NULL) {
+    UseMethod("bind_cols")
+}
+
+#' @export
+bind_cols.default <- function(..., .id=NULL) {
+    dplyr::bind_cols(..., .id=.id)
+}
+
+#' @importFrom rlang dots_values
+#' @importFrom rlang flatten_if
+#' @importFrom rlang is_spliced
+#'
+#' @export
+#'
+bind_cols.tidySE <- function(..., .id=NULL) {
+    tts <- tts <- flatten_if(dots_values(...), is_spliced)
+
+    tts[[1]] %>%
+        as_tibble() %>%
+        dplyr::bind_cols(tts[[2]], .id=.id) %>%
+
+        when(
+
+            # If the column added are not sample-wise or transcript-wise return tibble
+            (colnames(tts[[2]]) %in% c(
+                get_subset_columns(., sample),
+                get_subset_columns(., transcript)
+                )
+            ) %>% all ~ update_SE_from_tibble(., tts[[1]]),
+
+            # Return tiblle
+            ~ {
+                warning("tidySE says: The new columns do not include pure sample-wise or transcript-wise. A data frame is returned for independent data analysis.")
+                (.)
+            }
+
+        )
+
+}
 
 #' distinct
 #'
@@ -119,8 +164,7 @@ distinct.default <- function(.data, ..., .keep_all=FALSE) {
 
 #' @export
 distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
-    message("tidySE says: A data frame is returned for
-            independent data analysis.")
+    message("tidySE says: A data frame is returned for independent data analysis.")
 
     .data %>%
         as_tibble() %>%

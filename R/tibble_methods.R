@@ -97,12 +97,20 @@ as_tibble.tidySE <- function(x, ...,
         get_special_datasets(x) %>%
         reduce(left_join, by="transcript")
 
-    count_info = get_count_datasets(x)
+    gene_info =
+        rowData(x) %>%
+        as.data.frame %>%
 
+        # Convert to tibble
+        tibble::as_tibble(rownames="transcript")
+
+    count_info = get_count_datasets(x)
 
     sample_info %>%
         left_join(count_info, by="sample") %>%
-        left_join(range_info, by="transcript")
+        left_join(gene_info, by="transcript") %>%
+        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.))
+
 
 
 }

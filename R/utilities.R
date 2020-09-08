@@ -258,22 +258,30 @@ update_SE_from_tibble = function(.data_mutated, .data){
 
    col_data =
         .data_mutated  %>%
-        select(-one_of(get_special_columns(.data))) %>%
-        nanny::subset(sample) %>%
+        select_if(!colnames(.) %in% get_special_columns(.data)) %>%
+
+       # Replace for subset
+        select(sample, get_subset_columns(., sample)) %>%
+       distinct() %>%
+        #nanny::subset(sample) %>%
 
         # In case unitary SE subset does not ork
-        select(-one_of(colnames_row)) %>%
+        select_if(!colnames(.) %in% colnames_row) %>%
         data.frame(row.names = .$sample) %>%
         select(-sample) %>%
         DataFrame()
 
     row_data =
         .data_mutated  %>%
-        select(-one_of(get_special_columns(.data))) %>%
-        nanny::subset(transcript) %>%
+        select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
-        # In case unitary SE subset does not ork
-        select(-one_of(colnames_col)) %>%
+        # Replace for subset
+        select(transcript, get_subset_columns(., transcript)) %>%
+        distinct() %>%
+        #nanny::subset(transcript) %>%
+
+        # In case unitary SE subset does not work because all same
+        select_if(!colnames(.) %in% c(colnames_col, colnames(col_data))) %>%
         data.frame(row.names = .$transcript) %>%
         select(-transcript) %>%
         DataFrame()
@@ -292,6 +300,7 @@ update_SE_from_tibble = function(.data_mutated, .data){
 
 
 #' @importFrom purrr map_chr
+#' @importFrom dplyr select_if
 #'
 #' @keywords internal
 #'
@@ -322,17 +331,32 @@ get_special_columns <- function(SummarizedExperiment_object) {
     colnames_special %>% c(colnames_counts)
 }
 
+#' @importFrom dplyr select
+#' @importFrom tibble as_tibble
+#' @importFrom tibble tibble
 get_special_datasets <- function(SummarizedExperiment_object) {
 
-    if("RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object))
+    if(
+        "RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object) &
+
+        SummarizedExperiment_object@rowRanges %>% as.data.frame %>% nrow %>% gt(0)
+    )
        SummarizedExperiment_object@rowRanges %>%
           as.data.frame %>%
+
+        # Take off rowData columns as there is a recursive anomaly within gene ranges
+        select(-colnames(rowData(SummarizedExperiment_object))) %>%
           tibble::as_tibble(rownames="transcript") %>%
         list()
-    else tibble()
+    else tibble() %>% list()
 
 }
 
+#' @importFrom tidyr gather
+#' @importFrom dplyr rename
+#' @importFrom dplyr left_join
+#' @importFrom tibble as_tibble
+#' @importFrom purrr reduce
 get_count_datasets <- function(SummarizedExperiment_object) {
 
     map2(
@@ -376,4 +400,47 @@ select_helper <- function(.data, ...) {
     loc <- tidyselect::eval_select(expr(c(...)), .data)
 
     dplyr::select(.data, loc)
+}
+
+outersect <- function(x, y) {
+    sort(c(setdiff(x, y),
+           setdiff(y, x)))
+}
+
+#' @importFrom dplyr distinct_at
+#' @importFrom dplyr vars
+#' @importFrom purrr map
+#' @importFrom magrittr equals
+get_subset_columns = function(.data, .col){
+
+
+    # Comply with CRAN NOTES
+    . = NULL
+
+    # Make col names
+    .col = enquo(.col)
+
+    # x-annotation df
+    n_x = .data %>% distinct_at(vars(!!.col)) %>% nrow
+
+    # element wise columns
+    .data %>%
+        select(-!!.col) %>%
+        colnames %>%
+        map(
+            ~
+                .x %>%
+                when(
+                    .data %>%
+                        distinct_at(vars(!!.col, .x)) %>%
+                        nrow %>%
+                        equals(n_x) ~ (.) ,
+                    ~ NULL
+                )
+        ) %>%
+
+        # Drop NULL
+        {	(.)[lengths((.)) != 0]	} %>%
+        unlist
+
 }

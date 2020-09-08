@@ -3,9 +3,12 @@
 \name{bind}
 \alias{bind}
 \alias{bind_rows}
+\alias{bind_cols}
 \title{drplyr-methods}
 \usage{
 bind_rows(..., .id = NULL, add.cell.ids = NULL)
+
+bind_cols(..., .id = NULL)
 }
 \arguments{
 \item{...}{Data frames to combine.

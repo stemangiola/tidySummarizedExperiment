@@ -92,7 +92,7 @@ unnest.tidySE_nested <- function(.data, cols, ..., keep_empty=FALSE, ptype=NULL,
                         # Attach back the columns used for nesting
                         .data_ %>%
                             select(-!!cols) %>%
-                            slice(rep(.y, ncol(.x)))
+                            slice(rep(.y, ncol(.x) * nrow(.x)))
                     )
             )) %>%
                 pull(!!cols) %>%
@@ -148,7 +148,7 @@ nest.tidySE <- function(.data, ...) {
     my_data__ %>%
 
         # This is needed otherwise nest goes into loop and fails
-        to_tibble() %>%
+        as_tibble() %>%
         tidyr::nest(...) %>%
         mutate(
             !!as.symbol(col_name_data) := map(
@@ -209,6 +209,7 @@ extract <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
     UseMethod("extract")
 }
 
+#' @importFrom rlang enquo
 #' @export
 extract.default <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
     convert=FALSE, ...) {
@@ -219,6 +220,7 @@ extract.default <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE
     )
 }
 
+#' @importFrom rlang enquo
 #' @export
 extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
     convert=FALSE, ...) {
@@ -233,8 +235,6 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
         tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>%
         update_SE_from_tibble(data)
 
-
-    data
 }
 
 #' Pivot data from wide to long
@@ -339,6 +339,7 @@ pivot_longer <- function(data,
     UseMethod("pivot_longer")
 }
 
+#' @importFrom rlang enquo
 #' @export
 pivot_longer.default <- function(data,
     cols,
