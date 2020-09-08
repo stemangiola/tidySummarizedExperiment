@@ -111,7 +111,7 @@ under active development.
 # See vignette("pivot") for examples and explanation
 
 library(dplyr)
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    pivot_longer(c(orig.ident, groups), names_to="name", values_to="value")
+    pivot_longer(c(condition, type),names_to="name", values_to="value")
 }

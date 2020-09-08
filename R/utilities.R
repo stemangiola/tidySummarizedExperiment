@@ -369,7 +369,6 @@ get_count_datasets <- function(SummarizedExperiment_object) {
 }
 
 get_needed_columns <- function() {
-    # c("cell",  "orig.ident", "nCount_RNA", "nFeature_RNA")
     c("transcript", "sample")
 }
 

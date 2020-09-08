@@ -31,6 +31,6 @@ Left join datasets
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySE::pbmc_small \%>\% tidy()
-tt \%>\% left_join(tt \%>\% distinct(groups) \%>\% mutate(new_column=1:2))
+tt <- tidySE::pasilla \%>\% tidy()
+tt \%>\% left_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2))
 }

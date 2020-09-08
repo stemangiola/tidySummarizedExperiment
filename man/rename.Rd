@@ -38,9 +38,9 @@ The following methods are currently available in loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    rename(s_score=nFeature_RNA)
+    rename(type=sequencing)
 }
 \seealso{
 Other single table verbs: 

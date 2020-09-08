@@ -48,9 +48,9 @@ The following methods are currently available in loaded packages:
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    select(cell, orig.ident)
+    select(sample, transcript, counts)
 }
 \seealso{
 Other single table verbs: 

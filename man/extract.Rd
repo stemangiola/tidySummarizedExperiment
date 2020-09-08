@@ -51,9 +51,9 @@ is NA, the output will be NA.
 }
 \examples{
 
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    extract(groups, into="g", regex="g([0-9])", convert=TRUE)
+    extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
 }
 \seealso{
 [separate()] to split up by a separator.

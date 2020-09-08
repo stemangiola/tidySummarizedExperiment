@@ -17,5 +17,5 @@ tidy for SummarizedExperiment
 }
 \examples{
 
-tidySE::pbmc_small \%>\% tidy()
+tidySE::pasilla \%>\% tidy()
 }

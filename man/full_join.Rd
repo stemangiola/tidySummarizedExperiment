@@ -31,6 +31,6 @@ Full join datasets
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySE::pbmc_small \%>\% tidy()
-tt \%>\% full_join(tibble::tibble(groups="g1", other=1:4))
+tt <- tidySE::pasilla \%>\% tidy()
+tt \%>\% full_join(tibble::tibble(condition="treated", dose=10))
 }

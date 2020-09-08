@@ -47,7 +47,7 @@ The following methods are currently available in loaded packages:
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    pull(groups)
+    pull(transcript)
 }

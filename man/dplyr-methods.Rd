@@ -55,9 +55,9 @@ drplyr-methods
 }
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-tt <- tidySE::pbmc_small \%>\% tidy()
+tt <- tidySE::pasilla \%>\% tidy()
 bind_rows(tt, tt)
 
-tt_bind <- tt \%>\% select(nCount_RNA, nFeature_RNA)
+tt_bind <- tt \%>\% select(transcript, counts)
 tt \%>\% bind_cols(tt_bind)
 }

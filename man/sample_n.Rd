@@ -53,10 +53,10 @@ design issues with `sample_n()`/`sample_frac`:
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
     sample_n(50)
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
     sample_frac(0.1)
 }

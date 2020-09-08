@@ -71,7 +71,7 @@ Methods available in currently loaded packages:
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
     slice(1)
 }

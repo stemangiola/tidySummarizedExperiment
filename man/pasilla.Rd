@@ -3,7 +3,7 @@
 \docType{data}
 \name{pasilla}
 \alias{pasilla}
-\title{Example data set 2}
+\title{Example data set}
 \format{
 An object of class \code{SummarizedExperiment} with 14599 rows and 7 columns.
 }
@@ -11,6 +11,6 @@ An object of class \code{SummarizedExperiment} with 14599 rows and 7 columns.
 pasilla
 }
 \description{
-Example data set 2
+Example data set
 }
 \keyword{datasets}
