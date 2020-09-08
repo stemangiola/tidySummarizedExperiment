@@ -48,7 +48,7 @@ The following methods are currently available in loaded packages:
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pbmc_small \%>\%
     tidy() \%>\%
     select(cell, orig.ident)
 }

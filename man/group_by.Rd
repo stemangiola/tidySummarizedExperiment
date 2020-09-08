@@ -42,7 +42,7 @@ Methods available in currently loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pbmc_small \%>\%
     tidy() \%>\%
     group_by(groups)
 }

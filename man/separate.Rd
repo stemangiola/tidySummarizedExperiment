@@ -74,7 +74,7 @@ Given either a regular expression or a vector of character positions,
 }
 \examples{
 
-un <- pbmc_small \%>\%
+un <- tidySE::pbmc_small \%>\%
     tidy() \%>\%
     unite("new_col", c(orig.ident, groups))
 un \%>\% separate(col=new_col, into=c("orig.ident", "groups"))

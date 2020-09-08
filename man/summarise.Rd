@@ -75,7 +75,7 @@ The following methods are currently available in loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pbmc_small \%>\%
     tidy() \%>\%
     summarise(mean(nCount_RNA))
 }

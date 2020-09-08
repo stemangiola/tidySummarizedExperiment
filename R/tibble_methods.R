@@ -51,7 +51,7 @@
 #'
 #' @export
 #' @examples
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     as_tibble()
 as_tibble <- function(x, ...,

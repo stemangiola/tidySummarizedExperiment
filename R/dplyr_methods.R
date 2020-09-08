@@ -42,7 +42,7 @@
 #'   the first input, either a data frame, `tbl_df`, or `grouped_df`.
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' tt <- pbmc_small %>% tidy()
+#' tt <- tidySE::pbmc_small %>% tidy()
 #' bind_rows(tt, tt)
 #'
 #' tt_bind <- tt %>% select(nCount_RNA, nFeature_RNA)
@@ -149,7 +149,7 @@ bind_cols.tidySE <- function(..., .id=NULL) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     distinct(groups)
 #' @export
@@ -227,7 +227,7 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     filter(groups == "g1")
 #'
@@ -303,7 +303,7 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     group_by(groups)
 #' @export
@@ -390,7 +390,7 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 #' The following methods are currently available in loaded packages:
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     summarise(mean(nCount_RNA))
 #' @export
@@ -492,7 +492,7 @@ summarise.tidySE <- function(.data, ...) {
 #'
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     mutate(nFeature_RNA=1)
 #' @export
@@ -554,7 +554,7 @@ mutate.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     rename(s_score=nFeature_RNA)
 #' @export
@@ -648,7 +648,7 @@ rowwise.tidySE <- function(.data) {
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
+#' tt <- tidySE::pbmc_small %>% tidy()
 #' tt %>% left_join(tt %>% distinct(groups) %>% mutate(new_column=1:2))
 left_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     UseMethod("left_join")
@@ -696,7 +696,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
+#' tt <- tidySE::pbmc_small %>% tidy()
 #' tt %>% inner_join(tt %>% distinct(groups) %>% mutate(new_column=1:2) %>% slice(1))
 #' @export
 inner_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -747,7 +747,7 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
+#' tt <- tidySE::pbmc_small %>% tidy()
 #' tt %>% right_join(tt %>% distinct(groups) %>% mutate(new_column=1:2) %>% slice(1))
 #' @export
 right_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -800,7 +800,7 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
+#' tt <- tidySE::pbmc_small %>% tidy()
 #' tt %>% full_join(tibble::tibble(groups="g1", other=1:4))
 #' @export
 full_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -896,7 +896,7 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     slice(1)
 slice <- function(.data, ..., .preserve=FALSE) {
@@ -971,7 +971,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     select(cell, orig.ident)
 #' @family single table verbs
@@ -1043,10 +1043,10 @@ select.tidySE <- function(.data, ...) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     sample_n(50)
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     sample_frac(0.1)
 #' @return A tidySE object
@@ -1138,7 +1138,7 @@ sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     count(groups)
 count <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
@@ -1191,7 +1191,7 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     pull(groups)
 pull <- function(.data, var=-1, name=NULL, ...) {

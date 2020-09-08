@@ -38,7 +38,7 @@
 #' @examples
 #'
 #' library(dplyr)
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     nest(data=-groups) %>%
 #'     unnest(data)
@@ -118,7 +118,7 @@ unnest.tidySE_nested <- function(.data, cols, ..., keep_empty=FALSE, ptype=NULL,
 #' @examples
 #'
 #' library(dplyr)
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     nest(data=-groups) %>%
 #'     unnest(data)
@@ -196,7 +196,7 @@ nest.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #'
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     extract(groups, into="g", regex="g([0-9])", convert=TRUE)
 #' @return A tidySE objector a tibble depending on input
@@ -318,7 +318,7 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
 #' # See vignette("pivot") for examples and explanation
 #'
 #' library(dplyr)
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     pivot_longer(c(orig.ident, groups), names_to="name", values_to="value")
 pivot_longer <- function(data,
@@ -435,7 +435,7 @@ pivot_longer.tidySE <- function(data,
 #' @export
 #' @examples
 #'
-#' pbmc_small %>%
+#' tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     unite("new_col", c(orig.ident, groups))
 unite <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
@@ -502,7 +502,7 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 #' @export
 #' @examples
 #'
-#' un <- pbmc_small %>%
+#' un <- tidySE::pbmc_small %>%
 #'     tidy() %>%
 #'     unite("new_col", c(orig.ident, groups))
 #' un %>% separate(col=new_col, into=c("orig.ident", "groups"))
