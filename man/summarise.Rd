@@ -75,9 +75,9 @@ The following methods are currently available in loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    summarise(mean(nCount_RNA))
+    summarise(mean(counts))
 }
 \seealso{
 Other single table verbs: 

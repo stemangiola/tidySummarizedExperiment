@@ -35,9 +35,9 @@ Convenience function to paste together multiple columns into one.
 }
 \examples{
 
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    unite("new_col", c(orig.ident, groups))
+    unite("group", c(condition, type))
 }
 \seealso{
 [separate()], the complement.

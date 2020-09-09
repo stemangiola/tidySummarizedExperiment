@@ -50,8 +50,8 @@ is often the case in complex graphics.
 
 library(ggplot2)
 
-tidySE::pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    tidySE::ggplot(aes(groups, nCount_RNA)) +
+    tidySE::ggplot(aes(sample, counts)) +
     geom_boxplot()
 }

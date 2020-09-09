@@ -23,7 +23,7 @@ distinct
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    distinct(groups)
+    distinct(sample)
 }

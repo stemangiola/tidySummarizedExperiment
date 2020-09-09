@@ -67,7 +67,7 @@ prefer the more expressive maturing `as_tibble_row()` and
 }
 
 \examples{
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
     as_tibble()
 }

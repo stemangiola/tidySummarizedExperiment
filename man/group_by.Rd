@@ -42,8 +42,8 @@ Methods available in currently loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    group_by(groups)
+    group_by(sample)
 }
 \concept{grouping functions}

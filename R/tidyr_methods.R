@@ -38,9 +38,9 @@
 #' @examples
 #'
 #' library(dplyr)
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     nest(data=-groups) %>%
+#'     nest(data=-condition) %>%
 #'     unnest(data)
 #' @rdname tidyr-methods
 #'
@@ -118,9 +118,9 @@ unnest.tidySE_nested <- function(.data, cols, ..., keep_empty=FALSE, ptype=NULL,
 #' @examples
 #'
 #' library(dplyr)
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     nest(data=-groups) %>%
+#'     nest(data=-condition) %>%
 #'     unnest(data)
 #' @rdname tidyr-methods
 #'
@@ -196,9 +196,9 @@ nest.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #'
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     extract(groups, into="g", regex="g([0-9])", convert=TRUE)
+#'     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
 #' @return A tidySE objector a tibble depending on input
 #'
 #' @importFrom tidyr extract
@@ -318,9 +318,9 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
 #' # See vignette("pivot") for examples and explanation
 #'
 #' library(dplyr)
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     pivot_longer(c(orig.ident, groups), names_to="name", values_to="value")
+#'     pivot_longer(c(condition, type),names_to="name", values_to="value")
 pivot_longer <- function(data,
     cols,
     names_to="name",
@@ -435,9 +435,9 @@ pivot_longer.tidySE <- function(data,
 #' @export
 #' @examples
 #'
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     unite("new_col", c(orig.ident, groups))
+#'     unite("group", c(condition, type))
 unite <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
     ellipsis::check_dots_unnamed()
     UseMethod("unite")
@@ -502,10 +502,10 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 #' @export
 #' @examples
 #'
-#' un <- pbmc_small %>%
+#' un <- tidySE::pasilla %>%
 #'     tidy() %>%
-#'     unite("new_col", c(orig.ident, groups))
-#' un %>% separate(col=new_col, into=c("orig.ident", "groups"))
+#'     unite("group", c(condition, type))
+#' un %>% separate(col=group, into=c("condition", "type"))
 separate <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
     convert=FALSE, extra="warn", fill="warn", ...) {
     ellipsis::check_dots_used()

@@ -42,10 +42,10 @@
 #'   the first input, either a data frame, `tbl_df`, or `grouped_df`.
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' tt <- pbmc_small %>% tidy()
+#' tt <- tidySE::pasilla %>% tidy()
 #' bind_rows(tt, tt)
 #'
-#' tt_bind <- tt %>% select(nCount_RNA, nFeature_RNA)
+#' tt_bind <- tt %>% select(transcript, counts)
 #' tt %>% bind_cols(tt_bind)
 #' @name bind
 NULL
@@ -149,9 +149,9 @@ bind_cols.tidySE <- function(..., .id=NULL) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     distinct(groups)
+#'     distinct(sample)
 #' @export
 distinct <- function(.data, ..., .keep_all=FALSE) {
     UseMethod("distinct")
@@ -227,9 +227,9 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     filter(groups == "g1")
+#'     filter(sample == "untrt1")
 #'
 #' # Learn more in ?dplyr_tidy_eval
 #' @export
@@ -303,9 +303,9 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     group_by(groups)
+#'     group_by(sample)
 #' @export
 group_by <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
     UseMethod("group_by")
@@ -390,9 +390,9 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 #' The following methods are currently available in loaded packages:
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     summarise(mean(nCount_RNA))
+#'     summarise(mean(counts))
 #' @export
 summarise <- function(.data, ...) {
     UseMethod("summarise")
@@ -492,9 +492,9 @@ summarise.tidySE <- function(.data, ...) {
 #'
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     mutate(nFeature_RNA=1)
+#'     mutate(logcounts=log2(counts))
 #' @export
 mutate <- function(.data, ...) {
     UseMethod("mutate")
@@ -554,9 +554,9 @@ mutate.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     rename(s_score=nFeature_RNA)
+#'     rename(type=sequencing)
 #' @export
 rename <- function(.data, ...) {
     UseMethod("rename")
@@ -648,8 +648,8 @@ rowwise.tidySE <- function(.data) {
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
-#' tt %>% left_join(tt %>% distinct(groups) %>% mutate(new_column=1:2))
+#' tt <- tidySE::pasilla %>% tidy()
+#' tt %>% left_join(tt %>% distinct(condition) %>% mutate(new_column=1:2))
 left_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     UseMethod("left_join")
 }
@@ -696,8 +696,8 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
-#' tt %>% inner_join(tt %>% distinct(groups) %>% mutate(new_column=1:2) %>% slice(1))
+#' tt <- tidySE::pasilla %>% tidy()
+#' tt %>% inner_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
 #' @export
 inner_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     UseMethod("inner_join")
@@ -747,8 +747,8 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
-#' tt %>% right_join(tt %>% distinct(groups) %>% mutate(new_column=1:2) %>% slice(1))
+#' tt <- tidySE::pasilla %>% tidy()
+#' tt %>% right_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
 #' @export
 right_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     UseMethod("right_join")
@@ -800,8 +800,8 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- pbmc_small %>% tidy()
-#' tt %>% full_join(tibble::tibble(groups="g1", other=1:4))
+#' tt <- tidySE::pasilla %>% tidy()
+#' tt %>% full_join(tibble::tibble(condition="treated", dose=10))
 #' @export
 full_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     UseMethod("full_join")
@@ -896,7 +896,7 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
 #'     slice(1)
 slice <- function(.data, ..., .preserve=FALSE) {
@@ -971,9 +971,9 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     select(cell, orig.ident)
+#'     select(sample, transcript, counts)
 #' @family single table verbs
 #' @export
 select <- function(.data, ...) {
@@ -1043,10 +1043,10 @@ select.tidySE <- function(.data, ...) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
 #'     sample_n(50)
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
 #'     sample_frac(0.1)
 #' @return A tidySE object
@@ -1138,9 +1138,9 @@ sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     count(groups)
+#'     count(sample)
 count <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     UseMethod("count")
 }
@@ -1191,9 +1191,9 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
+#' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     pull(groups)
+#'     pull(transcript)
 pull <- function(.data, var=-1, name=NULL, ...) {
     ellipsis::check_dots_used()
     UseMethod("pull")
