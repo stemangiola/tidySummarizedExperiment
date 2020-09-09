@@ -1,0 +1,140 @@
+---
+title: "Overview of the tidySE package"
+author: "Stefano Mangiola"
+date: "`r Sys.Date()`"
+package: tidySE
+output:
+  BiocStyle::html_document:
+    toc_float: true
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{Overview of the tidySE package}
+  %\usepackage[UTF-8]{inputenc}
+---
+
+<!-- badges: start -->
+[![Lifecycle:maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![R build status](https://github.com/stemangiola/tidySE/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/stemangiola/tidySE/actions)
+<!-- badges: end -->
+
+```{r echo=FALSE}
+knitr::opts_chunk$set( fig.path = "man/figures/")
+```
+
+**Brings SummarizedExperiment to the tidyverse!** 
+
+website: [stemangiola.github.io/tidySE/](https://stemangiola.github.io/tidySE/)
+
+Please have a look also to 
+
+- [tidySCE](https://stemangiola.github.io/tidySCE/) for tidy manipulation of Seurat objects
+- [tidyseurat](https://stemangiola.github.io/tidyseurat/) for tidy manipulation of Seurat objects
+- [tidybulk](https://stemangiola.github.io/tidybulk/) for tidy high-level data analysis and manipulation 
+- [nanny](https://github.com/stemangiola/nanny) for tidy high-level data analysis and manipulation 
+- [tidygate](https://github.com/stemangiola/tidygate) for adding custom gate information to your tibble 
+- [tidyHeatmap](https://stemangiola.github.io/tidyHeatmap/) for heatmaps produced with tidy principles
+
+<!---
+
+[![Build Status](https://travis-ci.org/stemangiola/tidySE.svg?branch=master)](https://travis-ci.org/stemangiola/tidySE) [![Coverage Status](https://coveralls.io/repos/github/stemangiola/tidySE/badge.svg?branch=master)](https://coveralls.io/github/stemangiola/tidySE?branch=master)
+
+-->
+
+```{r, echo=FALSE, include=FALSE, }
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE, warning = FALSE,
+                      message = FALSE, cache.lazy = FALSE)
+
+library(purrr)
+library(magrittr)
+library(ggplot2)
+library(tidySE)
+
+
+my_theme = 	
+  list(
+    scale_fill_brewer(palette="Set1"),
+    scale_color_brewer(palette="Set1") ,
+    theme_bw() +
+  	theme(
+  		panel.border = element_blank(),
+  		axis.line = element_line(),
+  		panel.grid.major = element_line(size = 0.2),
+  		panel.grid.minor = element_line(size = 0.1),
+  		text = element_text(size=12),
+  		legend.position="bottom",
+  		aspect.ratio=1,
+  		strip.background = element_blank(),
+  		axis.title.x  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10)),
+  		axis.title.y  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10))
+  	)
+  )
+
+```
+
+## Functions/utilities available
+
+SummarizedExperiment-compatible Functions | Description
+------------ | -------------
+`all` | After all `tidySE` is a SummarizedExperiment object, just better
+
+tidyverse Packages | Description
+------------ | -------------
+`dplyr` | All `dplyr` APIs like for any tibble
+`tidyr` | All `tidyr` APIs like for any tibble
+`ggplot2` | `ggplot` like for any tibble
+`plotly` | `plot_ly` like for any tibble
+
+Utilities | Description
+------------ | -------------
+`tidy` | Add `tidySE` invisible layer over a SummarizedExperiment object
+`as_tibble` | Convert cell-wise information to a `tbl_df`
+
+## Installation
+
+From Github
+```{r, eval=FALSE}
+devtools::install_github("stemangiola/tidySE")
+```
+
+## Create `tidySE`, the best of both worlds!
+This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs. 
+
+```{r}
+pasilla_tidy = tidySE::pasilla %>% tidySE::tidy()
+```
+
+**It looks like a tibble**
+
+```{r}
+pasilla_tidy
+```
+
+**But it is a SummarizedExperiment object after all**
+
+```{r}
+pasilla_tidy@assays
+```
+## Annotation polishing using tidyverse
+We may have a column that contains the directory each run was taken from. We may want to extract the run/sample name out of it.
+
+```{r}
+pasilla_polished =
+  pasilla_tidy %>%
+  mutate(type = gsub("_end", "", type)) 
+
+pasilla_polished 
+```
+
+## Preliminary plots
+We can treat `pasilla_polished` effectively as a normal tibble for plotting. 
+
+Here we plot the distribution of counts per sample
+```{r plot1, cache=TRUE}
+
+pasilla_polished %>%
+	ggplot(aes(counts + 1, group=sample, color=`type`)) +
+	geom_density() +
+	scale_x_log10() +
+	my_theme
+
+```
