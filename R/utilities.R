@@ -240,7 +240,6 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
 
 #' @importFrom methods .hasSlot
 #' @importFrom S4Vectors DataFrame
-#' @importFrom nanny subset
 #' @importFrom SummarizedExperiment colData
 #' @importFrom SummarizedExperiment rowData
 #'
