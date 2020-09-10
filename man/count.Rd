@@ -55,7 +55,7 @@ with group-wise counts.
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    count(groups)
+    count(sample)
 }

@@ -12,5 +12,5 @@
 #' @return void
 #' @examples
 #'
-#' tidySE::pbmc_small %>% tidy()
+#' tidySE::pasilla %>% tidy()
 NULL

@@ -87,9 +87,9 @@ Methods available in currently loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    mutate(nFeature_RNA=1)
+    mutate(logcounts=log2(counts))
 }
 \seealso{
 Other single table verbs: 

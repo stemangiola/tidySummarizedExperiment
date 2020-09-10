@@ -69,9 +69,9 @@ The following methods are currently available in loaded packages:
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
+tidySE::pasilla \%>\%
     tidy() \%>\%
-    filter(groups == "g1")
+    filter(sample == "untrt1")
 
 # Learn more in ?dplyr_tidy_eval
 }
