@@ -7,6 +7,8 @@
 slice(.data, ..., .preserve = FALSE)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{...}{For `slice()`: <[`data-masking`][dplyr_data_masking]> Integer row
   values.
 

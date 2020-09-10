@@ -7,6 +7,8 @@
 summarise(.data, ...)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{...}{<[`tidy-eval`][dplyr_tidy_eval]> Name-value pairs of summary
   functions. The name will be the name of the variable in the result.
 

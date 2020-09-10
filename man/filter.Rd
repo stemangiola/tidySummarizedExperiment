@@ -7,6 +7,8 @@
 filter(.data, ..., .preserve = FALSE)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{...}{<[`tidy-eval`][dplyr_tidy_eval]> Logical predicates defined in
 terms of the variables in `.data`.
 Multiple conditions are combined with `&`. Only rows where the

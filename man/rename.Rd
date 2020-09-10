@@ -7,6 +7,8 @@
 rename(.data, ...)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{...}{<[`tidy-select`][dplyr_tidy_select]> Use `new_name=old_name`
 to rename selected variables.}
 }

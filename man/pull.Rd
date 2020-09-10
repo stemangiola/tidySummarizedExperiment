@@ -7,6 +7,8 @@
 pull(.data, var = -1, name = NULL, ...)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{var}{A variable specified as:
 \itemize{
 \item a literal variable name

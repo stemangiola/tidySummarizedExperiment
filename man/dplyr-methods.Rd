@@ -55,9 +55,10 @@ drplyr-methods
 }
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
+library(tibble)
 tt <- tidySE::pasilla \%>\% tidy()
 bind_rows(tt, tt)
 
-tt_bind <- tt \%>\% select(transcript, counts)
-tt \%>\% bind_cols(tt_bind)
+num_rows = nrow(tidySE::as_tibble(tt))
+tt \%>\% bind_cols(tibble(a = 0, num_rows))
 }
