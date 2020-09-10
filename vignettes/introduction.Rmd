@@ -39,37 +39,11 @@ Please have a look also to
 
 -->
 
-```{r, echo=FALSE, include=FALSE, }
+```{r, echo=FALSE, include=FALSE}
 library(knitr)
-knitr::opts_chunk$set(cache = TRUE, warning = FALSE,
-                      message = FALSE, cache.lazy = FALSE)
-
-library(purrr)
-library(magrittr)
-library(ggplot2)
-library(tidySE)
-
-
-my_theme = 	
-  list(
-    scale_fill_brewer(palette="Set1"),
-    scale_color_brewer(palette="Set1") ,
-    theme_bw() +
-  	theme(
-  		panel.border = element_blank(),
-  		axis.line = element_line(),
-  		panel.grid.major = element_line(size = 0.2),
-  		panel.grid.minor = element_line(size = 0.1),
-  		text = element_text(size=12),
-  		legend.position="bottom",
-  		aspect.ratio=1,
-  		strip.background = element_blank(),
-  		axis.title.x  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10)),
-  		axis.title.y  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10))
-  	)
-  )
-
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
+
 
 ## Functions/utilities available
 
@@ -96,6 +70,14 @@ From Github
 devtools::install_github("stemangiola/tidySE")
 ```
 
+Load libraries used in the examples.
+
+```{r}
+library(ggplot2)
+library(tidySE)
+```
+
+
 ## Create `tidySE`, the best of both worlds!
 This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs. 
 
@@ -114,8 +96,9 @@ pasilla_tidy
 ```{r}
 pasilla_tidy@assays
 ```
-## Annotation polishing using tidyverse
-We may have a column that contains the directory each run was taken from. We may want to extract the run/sample name out of it.
+
+## Annotation polishing 
+We may want to alter the content in a column, for example, shorten single_end to single.
 
 ```{r}
 pasilla_polished =
@@ -126,15 +109,36 @@ pasilla_polished
 ```
 
 ## Preliminary plots
+
+```{r}
+my_theme <- 	
+  list(
+    scale_fill_brewer(palette="Set1"),
+    scale_color_brewer(palette="Set1") ,
+    theme_bw() +
+  	theme(
+  		panel.border = element_blank(),
+  		axis.line = element_line(),
+  		panel.grid.major = element_line(size = 0.2),
+  		panel.grid.minor = element_line(size = 0.1),
+  		text = element_text(size=12),
+  		legend.position="bottom",
+  		aspect.ratio=1,
+  		strip.background = element_blank(),
+  		axis.title.x  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10)),
+  		axis.title.y  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10))
+  	)
+  )
+```
+
 We can treat `pasilla_polished` effectively as a normal tibble for plotting. 
 
-Here we plot the distribution of counts per sample
-```{r plot1, cache=TRUE}
+Here we plot the distribution of counts per sample.
 
+```{r plot1}
 pasilla_polished %>%
-	ggplot(aes(counts + 1, group=sample, color=`type`)) +
+	tidySE::ggplot(aes(counts + 1, group=sample, color=`type`)) +
 	geom_density() +
 	scale_x_log10() +
 	my_theme
-
 ```

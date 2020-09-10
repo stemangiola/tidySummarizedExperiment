@@ -10,20 +10,16 @@ tt <-
 test_that("nest_unnest", {
     col_names <- colnames(tt@colData) %>% c("sample")
     library(magrittr)
+    
+    y = tibble::tibble(sample = c("untrt1", "untrt2", "untrt3", "untrt4", 
+                   "trt1", "trt2", "trt3"), 
+                   counts = c(0L, 0L, 0L, 0L, 0L, 0L, 1L))
 
     x <- tt %>%
          nest(data = -condition) %>%
          unnest(data) %>%
-         DESeq2::DESeqTransform() %>%
-         DESeq2::plotPCA() %$%
-         data %>%
-         .[,1]
-
-    y <- tt %>%
-        DESeq2::DESeqTransform() %>%
-        DESeq2::plotPCA() %$%
-        data %>%
-        .[,1]
+         head(n=1) %>%
+         select(sample, counts)
 
 
     expect_equal(x, y)

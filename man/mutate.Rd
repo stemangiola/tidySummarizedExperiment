@@ -7,6 +7,13 @@
 mutate(.data, ...)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame
+
+With the grouped equivalent:
+
+The former normalises `mass` by the global average whereas the
+latter normalises by the averages within gender levels.}
+
 \item{...}{<[`tidy-eval`][dplyr_tidy_eval]> Name-value pairs.
   The name gives the name of the column in the output.
 
@@ -69,11 +76,6 @@ Because mutating expressions are computed within groups, they may
 yield different results on grouped tibbles. This will be the case
 as soon as an aggregating, lagging, or ranking function is
 involved. Compare this ungrouped mutate:
-
-With the grouped equivalent:
-
-The former normalises `mass` by the global average whereas the
-latter normalises by the averages within gender levels.
 }
 
 \section{Methods}{

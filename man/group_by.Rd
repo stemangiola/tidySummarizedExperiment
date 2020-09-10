@@ -7,6 +7,8 @@
 group_by(.data, ..., .add = FALSE, .drop = group_by_drop_default(.data))
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{...}{In `group_by()`, variables or computations to group by.
 In `ungroup()`, variables to remove from the grouping.}
 

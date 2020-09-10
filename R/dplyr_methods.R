@@ -42,11 +42,12 @@
 #'   the first input, either a data frame, `tbl_df`, or `grouped_df`.
 #' @examples
 #' `%>%` <- magrittr::`%>%`
+#' library(tibble)
 #' tt <- tidySE::pasilla %>% tidy()
 #' bind_rows(tt, tt)
 #'
-#' tt_bind <- tt %>% select(transcript, counts)
-#' tt %>% bind_cols(tt_bind)
+#' num_rows = nrow(tidySE::as_tibble(tt))
+#' tt %>% bind_cols(tibble(a = 0, num_rows))
 #' @name bind
 NULL
 
@@ -203,6 +204,7 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #' average.
 #' @family single table verbs
 #' @inheritParams arrange
+#' @param .data A tidySE object or any data frame
 #' @param ... <[`tidy-eval`][dplyr_tidy_eval]> Logical predicates defined in
 #'   terms of the variables in `.data`.
 #'   Multiple conditions are combined with `&`. Only rows where the
@@ -279,6 +281,7 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #'
 #' @family grouping functions
 #' @inheritParams arrange
+#' @param .data A tidySE object or any data frame
 #' @param ... In `group_by()`, variables or computations to group by.
 #'   In `ungroup()`, variables to remove from the grouping.
 #' @param .add When `FALSE`, the default, `group_by()` will
@@ -358,6 +361,8 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 #' This behaviour may not be supported in other backends. To avoid unexpected
 #' results, consider using new names for your summary variables, especially when
 #' creating multiple summaries.
+#'
+#' @param .data A tidySE object or any data frame
 #'
 #' @export
 #' @inheritParams arrange
@@ -443,7 +448,8 @@ summarise.tidySE <- function(.data, ...) {
 #' as soon as an aggregating, lagging, or ranking function is
 #' involved. Compare this ungrouped mutate:
 #'
-
+#' @param .data A tidySE object or any data frame
+#'
 #' With the grouped equivalent:
 #'
 #' The former normalises `mass` by the global average whereas the
@@ -536,6 +542,8 @@ mutate.tidySE <- function(.data, ...) {
 #' to renaming a set of variables with a function.
 #'
 #' @inheritParams arrange
+#'
+#' @param .data A tidySE object or any data frame
 #' @param ... <[`tidy-select`][dplyr_tidy_select]> Use `new_name=old_name`
 #'   to rename selected variables.
 #' @return
@@ -554,9 +562,9 @@ mutate.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
-#'     tidy() %>%
-#'     rename(type=sequencing)
+# tidySE::pasilla %>%
+#     tidy() %>%
+#     rename(cond=condition)
 #' @export
 rename <- function(.data, ...) {
     UseMethod("rename")
@@ -858,6 +866,8 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @family single table verbs
 #' @inheritParams arrange
 #' @inheritParams filter
+#'
+#' @param .data A tidySE object or any data frame
 #' @param ... For `slice()`: <[`data-masking`][dplyr_data_masking]> Integer row
 #'   values.
 #'
@@ -946,6 +956,8 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' ```
 #'
 #' @inheritParams arrange
+#'
+#' @param .data A tidySE object or any data frame
 #' @param ... <[`tidy-select`][dplyr_tidy_select]> One or more unquoted
 #'   expressions separated by commas. Variable names can be used as if they
 #'   were positions in the data frame, so expressions like `x:y` can
@@ -1176,6 +1188,8 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #'
 #' @inheritParams arrange
 #' @inheritParams tidyselect::vars_pull
+#'
+#' @param .data A tidySE object or any data frame
 #' @param name An optional parameter that specifies the column to be used
 #'   as names for a named vector. Specified in a similar manner as \code{var}.
 #' @param ... For use by methods.

@@ -7,6 +7,8 @@
 select(.data, ...)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{...}{<[`tidy-select`][dplyr_tidy_select]> One or more unquoted
 expressions separated by commas. Variable names can be used as if they
 were positions in the data frame, so expressions like `x:y` can

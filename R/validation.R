@@ -1,5 +1,6 @@
 #' @importFrom magrittr equals
-is_rectangular = function(.data){
+#' @importFrom dplyr n
+is_rectangular <- function(.data){
 
   is_rectangular_sample =
     .data %>%
@@ -19,9 +20,11 @@ is_rectangular = function(.data){
 
 }
 
-is_not_duplicated = function(.data){
+is_not_duplicated <- function(.data){
+
+
   .data %>%
-    count( sample, transcript) %>%
+    count(`sample`, `transcript`) %>%
     filter(n > 1) %>%
     nrow %>%
     equals(0)

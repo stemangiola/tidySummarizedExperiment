@@ -32,15 +32,7 @@ Suggests:
     BiocStyle,
     testthat,
     knitr,
-    GGally,
-    markdown,
-    SingleCellSignalR,
-    scater,
-    scran,
-    tidyHeatmap,
-    igraph,
-    uwot,
-    dittoSeq
+    markdown
 VignetteBuilder: 
     knitr
 RdMacros:

@@ -251,6 +251,9 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
 #' @noRd
 update_SE_from_tibble = function(.data_mutated, .data){
 
+    # Comply to CRAN notes
+    . = NULL
+
     # Get the colnames of samples and transcript datasets
     colnames_col = colnames(.data@colData) %>% c("sample")
     colnames_row = when( .hasSlot(.data, "rowData") ~ colnames(.data@rowData), ~ c() ) %>% c("transcript")
@@ -274,7 +277,7 @@ update_SE_from_tibble = function(.data_mutated, .data){
         select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
         # Replace for subset
-        select(transcript, get_subset_columns(., transcript)) %>%
+        select(`transcript`, get_subset_columns(., transcript)) %>%
         distinct() %>%
 
         # In case unitary SE subset does not work because all same

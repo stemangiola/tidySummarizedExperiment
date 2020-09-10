@@ -7,6 +7,8 @@
 rename(.data, ...)
 }
 \arguments{
+\item{.data}{A tidySE object or any data frame}
+
 \item{...}{<[`tidy-select`][dplyr_tidy_select]> Use `new_name=old_name`
 to rename selected variables.}
 }
@@ -38,9 +40,6 @@ The following methods are currently available in loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
-    tidy() \%>\%
-    rename(type=sequencing)
 }
 \seealso{
 Other single table verbs: 
