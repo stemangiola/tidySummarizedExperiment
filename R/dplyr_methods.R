@@ -562,9 +562,9 @@ mutate.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
-#'     tidy() %>%
-#'     rename(type=sequencing)
+# tidySE::pasilla %>%
+#     tidy() %>%
+#     rename(cond=condition)
 #' @export
 rename <- function(.data, ...) {
     UseMethod("rename")

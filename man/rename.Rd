@@ -40,9 +40,6 @@ The following methods are currently available in loaded packages:
 
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
-    tidy() \%>\%
-    rename(type=sequencing)
 }
 \seealso{
 Other single table verbs: 
