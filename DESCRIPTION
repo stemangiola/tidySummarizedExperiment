@@ -1,7 +1,7 @@
 Type: Package
 Package: tidySE
 Title: 'Brings SummarizedExperiment to the Tidyverse 
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: c(person("Stefano", "Mangiola", email = "mangiolastefano@gmail.com",
                   role = c("aut", "cre")) )
 Description: tidySE creates an invisible layer that enables using the 
