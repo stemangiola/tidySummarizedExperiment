@@ -85,10 +85,10 @@
     
     
 <!-- badges: start -->
-<p><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle:maturing"></a> <a href="https://github.com/stemangiola/tidySE/actions"><img src="https://github.com/stemangiola/tidySE/workflows/R-CMD-check-bioc/badge.svg" alt="R build status"></a> <!-- badges: end --></p>
+<p><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle:maturing"></a> <!-- badges: end --></p>
 <p><strong>Brings SummarizedExperiment to the tidyverse!</strong></p>
 <p>website: <a href="https://stemangiola.github.io/tidySE/">stemangiola.github.io/tidySE/</a></p>
-<p>Please have a look also to</p>
+<p>Please also have a look at</p>
 <ul>
 <li>
 <a href="https://stemangiola.github.io/tidySCE/">tidySCE</a> for tidy manipulation of Seurat objects</li>
@@ -103,11 +103,11 @@
 <li>
 <a href="https://stemangiola.github.io/tidyHeatmap/">tidyHeatmap</a> for heatmaps produced with tidy principles</li>
 </ul>
-<!---
-
-[![Build Status](https://travis-ci.org/stemangiola/tidySE.svg?branch=master)](https://travis-ci.org/stemangiola/tidySE) [![Coverage Status](https://coveralls.io/repos/github/stemangiola/tidySE/badge.svg?branch=master)](https://coveralls.io/github/stemangiola/tidySE?branch=master)
-
---><div id="functionsutilities-available" class="section level2">
+<div id="introduction" class="section level1">
+<h1 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h1>
+<p>tidySE provides a bridge between Bioconductor <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">SummarizedExperiment</a> <span class="citation">(Morgan et al. 2020)</span> and the tidyverse <span class="citation">(Wickham et al. 2019)</span>. It creates an invisible layer that enables viewing the Bioconductor <em>SummarizedExperiment</em> object as a tidyverse tibble, and provides SummarizedExperiment-compatible <em>dplyr</em>, <em>tidyr</em>, <em>ggplot</em> and <em>plotly</em> functions. This allows users to get the best of both Bioconductor and tidyverse worlds.</p>
+<div id="functionsutilities-available" class="section level2">
 <h2 class="hasAnchor">
 <a href="#functionsutilities-available" class="anchor"></a>Functions/utilities available</h2>
 <table class="table">
@@ -128,11 +128,11 @@
 <tbody>
 <tr class="odd">
 <td><code>dplyr</code></td>
-<td>All <code>dplyr</code> APIs like for any tibble</td>
+<td>Almost all <code>dplyr</code> APIs like for any tibble</td>
 </tr>
 <tr class="even">
 <td><code>tidyr</code></td>
-<td>All <code>tidyr</code> APIs like for any tibble</td>
+<td>Almost all <code>tidyr</code> APIs like for any tibble</td>
 </tr>
 <tr class="odd">
 <td><code>ggplot2</code></td>
@@ -167,25 +167,34 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>From Github</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, quietly=<span class="fl">TRUE</span>)) {
+      <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)
+  }
+
+<span class="kw">BiocManager</span>::<span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"tidySE"</span>)
+</pre></div>
+<p>From Github (development)</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="kw">devtools</span>::<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"stemangiola/tidySE"</span>)
 </pre></div>
 <p>Load libraries used in the examples.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
+<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">tidySE</span>)
 </pre></div>
 </div>
-<div id="create-tidyse-the-best-of-both-worlds" class="section level2">
-<h2 class="hasAnchor">
-<a href="#create-tidyse-the-best-of-both-worlds" class="anchor"></a>Create <code>tidySE</code>, the best of both worlds!</h2>
-<p>This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">pasilla_tidy</span> <span class="op">=</span> <span class="kw">tidySE</span>::<span class="kw"><a href="../reference/pasilla.html">pasilla</a></span> <span class="op">%&gt;%</span> <span class="kw">tidySE</span>::<span class="fu"><a href="../reference/tidy.html">tidy</a></span>()
+</div>
+<div id="create-tidyse-the-best-of-both-worlds" class="section level1">
+<h1 class="hasAnchor">
+<a href="#create-tidyse-the-best-of-both-worlds" class="anchor"></a>Create <code>tidySE</code>, the best of both worlds!</h1>
+<p>This is a SummarizedExperiment object but it is evaluated as a tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">&lt;-</span> <span class="kw">tidySE</span>::<span class="kw"><a href="../reference/pasilla.html">pasilla</a></span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/tidy.html">tidy</a></span>()
 </pre></div>
 <p><strong>It looks like a tibble</strong></p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="kw">pasilla_tidy</span>
 </pre></div>
 <pre><code>## # A tibble: 102,193 x 5
@@ -203,7 +212,7 @@
 ## 10 untrt1 untreated single_end FBgn0000032   1446
 ## # … with 102,183 more rows</code></pre>
 <p><strong>But it is a SummarizedExperiment object after all</strong></p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
+<div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="kw">pasilla_tidy</span><span class="op">@</span>assays
 </pre></div>
 <pre><code>## An object of class "SimpleAssays"
@@ -211,16 +220,110 @@
 ## List of length 1
 ## names(1): counts</code></pre>
 </div>
-<div id="annotation-polishing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#annotation-polishing" class="anchor"></a>Annotation polishing</h2>
-<p>We may want to alter the content in a column, for example, shorten single_end to single.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">pasilla_polished</span> <span class="op">=</span>
-  <span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/mutate.html">mutate</a></span>(type = <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_end"</span>, <span class="st">""</span>, <span class="kw">type</span>)) 
-
-<span class="kw">pasilla_polished</span> 
+<div id="tidyverse-commands" class="section level1">
+<h1 class="hasAnchor">
+<a href="#tidyverse-commands" class="anchor"></a>Tidyverse commands</h1>
+<p>We can use tidyverse commands to explore the tidy SummarizedExperiment object.</p>
+<p>We can use <code>slice</code> to choose rows by position, for example to choose the first row.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/slice.html">slice</a></span>(<span class="fl">1</span>)
+</pre></div>
+<pre><code>## # A tibble: 1 x 5
+##   sample condition type       transcript  counts
+##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
+## 1 untrt1 untreated single_end FBgn0000003      0</code></pre>
+<p>We can use <code>filter</code> to choose rows by criteria.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/filter.html">filter</a></span>(<span class="kw">condition</span> <span class="op">==</span> <span class="st">"untreated"</span>)
+</pre></div>
+<pre><code>## # A tibble: 58,396 x 5
+##    sample condition type       transcript  counts
+##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
+##  1 untrt1 untreated single_end FBgn0000003      0
+##  2 untrt1 untreated single_end FBgn0000008     92
+##  3 untrt1 untreated single_end FBgn0000014      5
+##  4 untrt1 untreated single_end FBgn0000015      0
+##  5 untrt1 untreated single_end FBgn0000017   4664
+##  6 untrt1 untreated single_end FBgn0000018    583
+##  7 untrt1 untreated single_end FBgn0000022      0
+##  8 untrt1 untreated single_end FBgn0000024     10
+##  9 untrt1 untreated single_end FBgn0000028      0
+## 10 untrt1 untreated single_end FBgn0000032   1446
+## # … with 58,386 more rows</code></pre>
+<p>We can use <code>select</code> to choose columns.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/select.html">select</a></span>(<span class="kw">sample</span>)
+</pre></div>
+<pre><code>## # A tibble: 102,193 x 1
+##    sample
+##    &lt;chr&gt; 
+##  1 untrt1
+##  2 untrt1
+##  3 untrt1
+##  4 untrt1
+##  5 untrt1
+##  6 untrt1
+##  7 untrt1
+##  8 untrt1
+##  9 untrt1
+## 10 untrt1
+## # … with 102,183 more rows</code></pre>
+<p>We can use <code>count</code> to count how many rows we have for each sample.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/count.html">count</a></span>(<span class="kw">sample</span>)
+</pre></div>
+<pre><code>## # A tibble: 7 x 2
+##   sample     n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 trt1   14599
+## 2 trt2   14599
+## 3 trt3   14599
+## 4 untrt1 14599
+## 5 untrt2 14599
+## 6 untrt3 14599
+## 7 untrt4 14599</code></pre>
+<p>We can use <code>distinct</code> to see what distinct sample information we have.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/distinct.html">distinct</a></span>(<span class="kw">sample</span>, <span class="kw">condition</span>, <span class="kw">type</span>)
+</pre></div>
+<pre><code>## # A tibble: 7 x 3
+##   sample condition type      
+##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     
+## 1 untrt1 untreated single_end
+## 2 untrt2 untreated single_end
+## 3 untrt3 untreated paired_end
+## 4 untrt4 untreated paired_end
+## 5 trt1   treated   single_end
+## 6 trt2   treated   paired_end
+## 7 trt3   treated   paired_end</code></pre>
+<p>We could use <code>rename</code> to rename a column. For example, to modify the type column name.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/rename.html">rename</a></span>(sequencing=<span class="kw">type</span>)
+</pre></div>
+<pre><code>## # A tibble: 102,193 x 5
+##    sample condition sequencing transcript  counts
+##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
+##  1 untrt1 untreated single_end FBgn0000003      0
+##  2 untrt1 untreated single_end FBgn0000008     92
+##  3 untrt1 untreated single_end FBgn0000014      5
+##  4 untrt1 untreated single_end FBgn0000015      0
+##  5 untrt1 untreated single_end FBgn0000017   4664
+##  6 untrt1 untreated single_end FBgn0000018    583
+##  7 untrt1 untreated single_end FBgn0000022      0
+##  8 untrt1 untreated single_end FBgn0000024     10
+##  9 untrt1 untreated single_end FBgn0000028      0
+## 10 untrt1 untreated single_end FBgn0000032   1446
+## # … with 102,183 more rows</code></pre>
+<p>We could use <code>mutate</code> to create a column. For example, we could create a new type column that contains single and paired instead of single_end and paired_end.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/mutate.html">mutate</a></span>(type=<span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_end"</span>, <span class="st">""</span>, <span class="kw">type</span>))
 </pre></div>
 <pre><code>## # A tibble: 102,193 x 5
 ##    sample condition type   transcript  counts
@@ -236,40 +339,165 @@
 ##  9 untrt1 untreated single FBgn0000028      0
 ## 10 untrt1 untreated single FBgn0000032   1446
 ## # … with 102,183 more rows</code></pre>
-</div>
-<div id="preliminary-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#preliminary-plots" class="anchor"></a>Preliminary plots</h2>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="kw">my_theme</span> <span class="op">&lt;-</span>     
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span>(palette=<span class="st">"Set1"</span>),
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span>(palette=<span class="st">"Set1"</span>) ,
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(
-        panel.border = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>(),
-        axis.line = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_line</a></span>(),
-        panel.grid.major = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_line</a></span>(size = <span class="fl">0.2</span>),
-        panel.grid.minor = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_line</a></span>(size = <span class="fl">0.1</span>),
-        text = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(size=<span class="fl">12</span>),
-        legend.position=<span class="st">"bottom"</span>,
-        aspect.ratio=<span class="fl">1</span>,
-        strip.background = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>(),
-        axis.title.x  = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(margin = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">margin</a></span>(t = <span class="fl">10</span>, r = <span class="fl">10</span>, b = <span class="fl">10</span>, l = <span class="fl">10</span>)),
-        axis.title.y  = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(margin = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">margin</a></span>(t = <span class="fl">10</span>, r = <span class="fl">10</span>, b = <span class="fl">10</span>, l = <span class="fl">10</span>))
-    )
-  )
+<p>We could use <code>unite</code> to combine multiple columns.into a single column.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/unite.html">unite</a></span>(<span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">condition</span>, <span class="kw">type</span>))
 </pre></div>
-<p>We can treat <code>pasilla_polished</code> effectively as a normal tibble for plotting.</p>
+<pre><code>## # A tibble: 102,193 x 4
+##    sample group                transcript  counts
+##    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;        &lt;int&gt;
+##  1 untrt1 untreated_single_end FBgn0000003      0
+##  2 untrt1 untreated_single_end FBgn0000008     92
+##  3 untrt1 untreated_single_end FBgn0000014      5
+##  4 untrt1 untreated_single_end FBgn0000015      0
+##  5 untrt1 untreated_single_end FBgn0000017   4664
+##  6 untrt1 untreated_single_end FBgn0000018    583
+##  7 untrt1 untreated_single_end FBgn0000022      0
+##  8 untrt1 untreated_single_end FBgn0000024     10
+##  9 untrt1 untreated_single_end FBgn0000028      0
+## 10 untrt1 untreated_single_end FBgn0000032   1446
+## # … with 102,183 more rows</code></pre>
+<p>We can also combine commands with the tidyverse pipe <code><a href="../reference/%&gt;%.html">%&gt;%</a></code>.</p>
+<p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/group_by.html">group_by</a></span>(<span class="kw">sample</span>) <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/summarise.html">summarise</a></span>(total_counts=<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw">counts</span>))
+</pre></div>
+<pre><code>## # A tibble: 7 x 2
+##   sample total_counts
+##   &lt;chr&gt;         &lt;int&gt;
+## 1 trt1       18670279
+## 2 trt2        9571826
+## 3 trt3       10343856
+## 4 untrt1     13972512
+## 5 untrt2     21911438
+## 6 untrt3      8358426
+## 7 untrt4      9841335</code></pre>
+<p>We could combine <code>group_by</code>, <code>mutate</code> and <code>filter</code> to get the transcripts with mean count &gt; 0.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/group_by.html">group_by</a></span>(<span class="kw">transcript</span>) <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/mutate.html">mutate</a></span>(mean_count=<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="kw">counts</span>)) <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/filter.html">filter</a></span>(<span class="kw">mean_count</span> <span class="op">&gt;</span> <span class="fl">0</span>)
+</pre></div>
+<pre><code>## # A tibble: 86,513 x 6
+## # Groups:   transcript [12,359]
+##    sample condition type       transcript  counts mean_count
+##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;
+##  1 untrt1 untreated single_end FBgn0000003      0      0.143
+##  2 untrt1 untreated single_end FBgn0000008     92     99.6  
+##  3 untrt1 untreated single_end FBgn0000014      5      1.43 
+##  4 untrt1 untreated single_end FBgn0000015      0      0.857
+##  5 untrt1 untreated single_end FBgn0000017   4664   4672.   
+##  6 untrt1 untreated single_end FBgn0000018    583    461.   
+##  7 untrt1 untreated single_end FBgn0000022      0      0.143
+##  8 untrt1 untreated single_end FBgn0000024     10      7    
+##  9 untrt1 untreated single_end FBgn0000028      0      0.429
+## 10 untrt1 untreated single_end FBgn0000032   1446   1085.   
+## # … with 86,503 more rows</code></pre>
+</div>
+<div id="plotting" class="section level1">
+<h1 class="hasAnchor">
+<a href="#plotting" class="anchor"></a>Plotting</h1>
+<div class="sourceCode" id="cb29"><pre class="downlit">
+<span class="kw">my_theme</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span>(palette=<span class="st">"Set1"</span>),
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span>(palette=<span class="st">"Set1"</span>),
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span>
+            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(
+                panel.border=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>(),
+                axis.line=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_line</a></span>(),
+                panel.grid.major=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_line</a></span>(size=<span class="fl">0.2</span>),
+                panel.grid.minor=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_line</a></span>(size=<span class="fl">0.1</span>),
+                text=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(size=<span class="fl">12</span>),
+                legend.position=<span class="st">"bottom"</span>,
+                aspect.ratio=<span class="fl">1</span>,
+                strip.background=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>(),
+                axis.title.x=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(margin=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">margin</a></span>(t=<span class="fl">10</span>, r=<span class="fl">10</span>, b=<span class="fl">10</span>, l=<span class="fl">10</span>)),
+                axis.title.y=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(margin=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">margin</a></span>(t=<span class="fl">10</span>, r=<span class="fl">10</span>, b=<span class="fl">10</span>, l=<span class="fl">10</span>))
+            )
+    )
+</pre></div>
+<p>We can treat <code>pasilla_tidy</code> as a normal tibble for plotting.</p>
 <p>Here we plot the distribution of counts per sample.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw">pasilla_polished</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb30"><pre class="downlit">
+<span class="kw">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="kw">tidySE</span>::<span class="fu"><a href="../reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">counts</span> <span class="op">+</span> <span class="fl">1</span>, group=<span class="kw">sample</span>, color=<span class="kw">`type`</span>)) <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>() <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_log10</a></span>() <span class="op">+</span>
     <span class="kw">my_theme</span>
 </pre></div>
-<p><img src="man/figures/plot1-1.png" width="700"></p>
+<p><img src="introduction_files/figure-html/plot1-1.png" width="700"></p>
+</div>
+<div id="session-info" class="section level1">
+<h1 class="hasAnchor">
+<a href="#session-info" class="anchor"></a>Session Info</h1>
+<div class="sourceCode" id="cb31"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+</pre></div>
+<pre><code>## R version 4.0.2 Patched (2020-09-10 r79182)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.1 LTS
+## 
+## Matrix products: default
+## BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-openmp/libopenblasp-r0.3.8.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+## [8] methods   base     
+## 
+## other attached packages:
+##  [1] tidySE_0.99.1               SummarizedExperiment_1.19.6
+##  [3] DelayedArray_0.15.7         matrixStats_0.56.0         
+##  [5] Matrix_1.2-18               Biobase_2.49.1             
+##  [7] GenomicRanges_1.41.6        GenomeInfoDb_1.25.11       
+##  [9] IRanges_2.23.10             S4Vectors_0.27.12          
+## [11] BiocGenerics_0.35.4         ggplot2_3.3.2              
+## [13] knitr_1.29                  BiocStyle_2.17.0           
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.1.0       xfun_0.17              purrr_0.3.4           
+##  [4] lattice_0.20-41        colorspace_1.4-1       vctrs_0.3.4           
+##  [7] generics_0.0.2         htmltools_0.5.0        yaml_2.2.1            
+## [10] utf8_1.1.4             rlang_0.4.7            pkgdown_1.6.0.9000    
+## [13] pillar_1.4.6           glue_1.4.2             withr_2.2.0           
+## [16] RColorBrewer_1.1-2     GenomeInfoDbData_1.2.3 lifecycle_0.2.0       
+## [19] stringr_1.4.0          zlibbioc_1.35.0        munsell_0.5.0         
+## [22] gtable_0.3.0           ragg_0.3.1             memoise_1.1.0         
+## [25] evaluate_0.14          labeling_0.3           fansi_0.4.1           
+## [28] scales_1.1.1           backports_1.1.9        BiocManager_1.30.10   
+## [31] desc_1.2.0             cpp11_0.2.1            XVector_0.29.3        
+## [34] farver_2.0.3           systemfonts_0.3.1      fs_1.5.0              
+## [37] digest_0.6.25          stringi_1.5.3          bookdown_0.20         
+## [40] dplyr_1.0.2            grid_4.0.2             rprojroot_1.3-2       
+## [43] cli_2.0.2              tools_4.0.2            bitops_1.0-6          
+## [46] magrittr_1.5           RCurl_1.98-1.2         tibble_3.0.3          
+## [49] tidyr_1.1.2            crayon_1.3.4           pkgconfig_2.0.3       
+## [52] ellipsis_0.3.1         assertthat_0.2.1       rmarkdown_2.3         
+## [55] R6_2.4.1               compiler_4.0.2</code></pre>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<div id="refs" class="references">
+<div id="ref-morgan2020summarized">
+<p>Morgan, Martin, Valerie Obenchain, Jim Hester, and Hervé Pagès. 2020. <em>SummarizedExperiment: SummarizedExperiment Container</em>.</p>
+</div>
+<div id="ref-wickham2019welcome">
+<p>Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. “Welcome to the Tidyverse.” <em>Journal of Open Source Software</em> 4 (43): 1686.</p>
+</div>
+</div>
 </div>
   </div>
 
