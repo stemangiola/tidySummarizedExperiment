@@ -9,7 +9,7 @@ always_allow_html: true
 <!-- badges: end -->
 
 ```{r echo=FALSE}
-knitr::opts_chunk$set( fig.path = "man/figures/")
+knitr::opts_chunk$set(fig.path="man/figures/")
 ```
 **Brings SummarizedExperiment to the tidyverse!** 
 
@@ -27,7 +27,7 @@ Please also have a look at
 
 ```{r, echo=FALSE, include=FALSE}
 library(knitr)
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
 
 # Introduction
@@ -58,8 +58,9 @@ Utilities | Description
 From Bioconductor (under submission)
 
 ```{r, eval=FALSE}
-if (!requireNamespace("BiocManager", quietly=TRUE))
-    install.packages("BiocManager")
+if (!requireNamespace("BiocManager", quietly=TRUE)) {
+      install.packages("BiocManager")
+  }
 
 BiocManager::install("tidySE")
 ```
@@ -82,7 +83,7 @@ library(tidySE)
 This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs. 
 
 ```{r}
-pasilla_tidy <- tidySE::pasilla %>% 
+pasilla_tidy <- tidySE::pasilla %>%
     tidy()
 ```
 
@@ -142,7 +143,7 @@ We could use `rename` to rename a column. For example, to modify the type column
 
 ```{r}
 pasilla_tidy %>%
-  rename(sequencing=type) 
+    rename(sequencing=type)
 ```
 
 We could use `mutate` to create a column. For example, we could create a new type column that contains single
@@ -150,7 +151,7 @@ and paired instead of single_end and paired_end.
 
 ```{r}
 pasilla_tidy %>%
-  mutate(type = gsub("_end", "", type)) 
+    mutate(type=gsub("_end", "", type))
 ```
 
 We could use `unite` to combine multiple columns.into a single column.
@@ -167,40 +168,40 @@ For example, we could combine `group_by` and `summarise` to get the total counts
 ```{r}
 pasilla_tidy %>%
     group_by(sample) %>%
-    summarise(total_counts = sum(counts))
+    summarise(total_counts=sum(counts))
 ```
 
 We could combine `group_by`, `mutate` and `filter` to get the transcripts with mean count > 0.
 
 ```{r}
 pasilla_tidy %>%
-  group_by(transcript) %>%
-  mutate(mean_count = mean(counts)) %>%
-  filter(mean_count > 0)   
+    group_by(transcript) %>%
+    mutate(mean_count=mean(counts)) %>%
+    filter(mean_count > 0)
 ```
 
 
 ## Plotting
 
 ```{r}
-my_theme <- 	
-  list(
-    scale_fill_brewer(palette="Set1"),
-    scale_color_brewer(palette="Set1") ,
-    theme_bw() +
-  	theme(
-  		panel.border = element_blank(),
-  		axis.line = element_line(),
-  		panel.grid.major = element_line(size = 0.2),
-  		panel.grid.minor = element_line(size = 0.1),
-  		text = element_text(size=12),
-  		legend.position="bottom",
-  		aspect.ratio=1,
-  		strip.background = element_blank(),
-  		axis.title.x  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10)),
-  		axis.title.y  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10))
-  	)
-  )
+my_theme <-
+    list(
+        scale_fill_brewer(palette="Set1"),
+        scale_color_brewer(palette="Set1"),
+        theme_bw() +
+            theme(
+                panel.border=element_blank(),
+                axis.line=element_line(),
+                panel.grid.major=element_line(size=0.2),
+                panel.grid.minor=element_line(size=0.1),
+                text=element_text(size=12),
+                legend.position="bottom",
+                aspect.ratio=1,
+                strip.background=element_blank(),
+                axis.title.x=element_text(margin=margin(t=10, r=10, b=10, l=10)),
+                axis.title.y=element_text(margin=margin(t=10, r=10, b=10, l=10))
+            )
+    )
 ```
 
 We can treat `pasilla_tidy` as a normal tibble for plotting. 
@@ -209,8 +210,8 @@ Here we plot the distribution of counts per sample.
 
 ```{r plot1}
 pasilla_tidy %>%
-	tidySE::ggplot(aes(counts + 1, group=sample, color=`type`)) +
-	geom_density() +
-	scale_x_log10() +
-	my_theme
+    tidySE::ggplot(aes(counts + 1, group=sample, color=`type`)) +
+    geom_density() +
+    scale_x_log10() +
+    my_theme
 ```

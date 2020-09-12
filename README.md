@@ -64,8 +64,9 @@ Installation
 
 From Bioconductor (under submission)
 
-    if (!requireNamespace("BiocManager", quietly=TRUE))
-        install.packages("BiocManager")
+    if (!requireNamespace("BiocManager", quietly=TRUE)) {
+          install.packages("BiocManager")
+      }
 
     BiocManager::install("tidySE")
 
@@ -85,7 +86,7 @@ This is a SummarizedExperiment object but it is evaluated as tibble. So
 it is fully compatible both with SummarizedExperiment and tidyverse
 APIs.
 
-    pasilla_tidy <- tidySE::pasilla %>% 
+    pasilla_tidy <- tidySE::pasilla %>%
         tidy()
 
 **It looks like a tibble**
@@ -209,7 +210,7 @@ We could use `rename` to rename a column. For example, to modify the
 type column name.
 
     pasilla_tidy %>%
-      rename(sequencing=type) 
+        rename(sequencing=type)
 
     ## # A tibble: 102,193 x 5
     ##    sample condition sequencing transcript  counts
@@ -231,7 +232,7 @@ new type column that contains single and paired instead of single\_end
 and paired\_end.
 
     pasilla_tidy %>%
-      mutate(type = gsub("_end", "", type)) 
+        mutate(type=gsub("_end", "", type))
 
     ## # A tibble: 102,193 x 5
     ##    sample condition type   transcript  counts
@@ -275,7 +276,7 @@ total counts for each sample.
 
     pasilla_tidy %>%
         group_by(sample) %>%
-        summarise(total_counts = sum(counts))
+        summarise(total_counts=sum(counts))
 
     ## # A tibble: 7 x 2
     ##   sample total_counts
@@ -292,9 +293,9 @@ We could combine `group_by`, `mutate` and `filter` to get the
 transcripts with mean count &gt; 0.
 
     pasilla_tidy %>%
-      group_by(transcript) %>%
-      mutate(mean_count = mean(counts)) %>%
-      filter(mean_count > 0)   
+        group_by(transcript) %>%
+        mutate(mean_count=mean(counts)) %>%
+        filter(mean_count > 0)
 
     ## # A tibble: 86,513 x 6
     ## # Groups:   transcript [12,359]
@@ -315,24 +316,24 @@ transcripts with mean count &gt; 0.
 Plotting
 --------
 
-    my_theme <-     
-      list(
-        scale_fill_brewer(palette="Set1"),
-        scale_color_brewer(palette="Set1") ,
-        theme_bw() +
-        theme(
-            panel.border = element_blank(),
-            axis.line = element_line(),
-            panel.grid.major = element_line(size = 0.2),
-            panel.grid.minor = element_line(size = 0.1),
-            text = element_text(size=12),
-            legend.position="bottom",
-            aspect.ratio=1,
-            strip.background = element_blank(),
-            axis.title.x  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10)),
-            axis.title.y  = element_text(margin = margin(t = 10, r = 10, b = 10, l = 10))
+    my_theme <-
+        list(
+            scale_fill_brewer(palette="Set1"),
+            scale_color_brewer(palette="Set1"),
+            theme_bw() +
+                theme(
+                    panel.border=element_blank(),
+                    axis.line=element_line(),
+                    panel.grid.major=element_line(size=0.2),
+                    panel.grid.minor=element_line(size=0.1),
+                    text=element_text(size=12),
+                    legend.position="bottom",
+                    aspect.ratio=1,
+                    strip.background=element_blank(),
+                    axis.title.x=element_text(margin=margin(t=10, r=10, b=10, l=10)),
+                    axis.title.y=element_text(margin=margin(t=10, r=10, b=10, l=10))
+                )
         )
-      )
 
 We can treat `pasilla_tidy` as a normal tibble for plotting.
 

@@ -113,5 +113,5 @@ under active development.
 library(dplyr)
 tidySE::pasilla \%>\%
     tidy() \%>\%
-    pivot_longer(c(condition, type),names_to="name", values_to="value")
+    pivot_longer(c(condition, type), names_to="name", values_to="value")
 }

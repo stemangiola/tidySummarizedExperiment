@@ -46,8 +46,8 @@
 #' tt <- tidySE::pasilla %>% tidy()
 #' bind_rows(tt, tt)
 #'
-#' num_rows = nrow(tidySE::as_tibble(tt))
-#' tt %>% bind_cols(tibble(a = 0, num_rows))
+#' num_rows <- nrow(tidySE::as_tibble(tt))
+#' tt %>% bind_cols(tibble(a=0, num_rows))
 #' @name bind
 NULL
 
@@ -79,14 +79,18 @@ bind_rows.tidySE <- function(..., .id=NULL, add.cell.ids=NULL) {
     new_obj <- cbind(tts[[1]], tts[[2]]) %>% tidy()
 
     # If duplicated cell names
-    if(new_obj %>% colnames %>% duplicated %>% which %>% length %>% gt(0))
+    if (new_obj %>% colnames() %>% duplicated() %>% which() %>% length() %>% gt(0)) {
         warning("tidySE says: you have duplicated sample names, they will be made unique.")
+    }
     unique_colnames <- make.unique(colnames(new_obj), sep="_")
 
     colnames(new_obj) <- unique_colnames
 
     # Change also all assays colnames
-    new_obj@assays@data@listData = new_obj@assays@data@listData %>% map(~ { colnames(.x) = unique_colnames; .x })
+    new_obj@assays@data@listData <- new_obj@assays@data@listData %>% map(~ {
+        colnames(.x) <- unique_colnames
+        .x
+    })
 
     new_obj
 }
@@ -117,24 +121,21 @@ bind_cols.tidySE <- function(..., .id=NULL) {
     tts[[1]] %>%
         as_tibble() %>%
         dplyr::bind_cols(tts[[2]], .id=.id) %>%
-
         when(
 
             # If the column added are not sample-wise or transcript-wise return tibble
             (colnames(tts[[2]]) %in% c(
                 get_subset_columns(., sample),
                 get_subset_columns(., transcript)
-                )
-            ) %>% all ~ update_SE_from_tibble(., tts[[1]]),
+            )
+            ) %>% all() ~ update_SE_from_tibble(., tts[[1]]),
 
             # Return tiblle
             ~ {
                 warning("tidySE says: The new columns do not include pure sample-wise or transcript-wise. A data frame is returned for independent data analysis.")
                 (.)
             }
-
         )
-
 }
 
 #' distinct
@@ -252,21 +253,20 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 
     new_meta %>%
 
-    when(
+        when(
 
-        # If rectangular
-        is_rectangular(.) ~ .data[
-            unique(.$transcript),
-            unique(.$sample)
-        ],
+            # If rectangular
+            is_rectangular(.) ~ .data[
+                unique(.$transcript),
+                unique(.$sample)
+            ],
 
-        # If not rectangular return just tibble
-        ~ {
-            message("tidySE says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
-            (.)
-        }
-    )
-
+            # If not rectangular return just tibble
+            ~ {
+                message("tidySE says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
+                (.)
+            }
+        )
 }
 
 
@@ -527,7 +527,6 @@ mutate.tidySE <- function(.data, ...) {
         as_tibble() %>%
         dplyr::mutate(...) %>%
         update_SE_from_tibble(.data)
-
 }
 
 
@@ -562,9 +561,9 @@ mutate.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-# tidySE::pasilla %>%
-#     tidy() %>%
-#     rename(cond=condition)
+#' # tidySE::pasilla %>%
+#' #     tidy() %>%
+#' #     rename(cond=condition)
 #' @export
 rename <- function(.data, ...) {
     UseMethod("rename")
@@ -683,8 +682,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
             },
 
             # Otherwise return updated tidySE
-            ~  update_SE_from_tibble(., x)
-
+            ~ update_SE_from_tibble(., x)
         )
 }
 
@@ -725,14 +723,13 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
 
             # If duplicated sample-transcript pair returns tibble
 
-            !is_not_duplicated(.) | !is_rectangular(.)  ~ {
-                    message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
-                    (.)
-                },
+            !is_not_duplicated(.) | !is_rectangular(.) ~ {
+                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                (.)
+            },
 
             # Otherwise return updated tidySE
-            ~  update_SE_from_tibble(., x)
-
+            ~ update_SE_from_tibble(., x)
         )
 }
 
@@ -777,14 +774,13 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
         when(
 
             # If duplicated sample-transcript pair returns tibble
-            !is_not_duplicated(.) | !is_rectangular(.)  ~ {
-                    message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
-                    (.)
-                },
+            !is_not_duplicated(.) | !is_rectangular(.) ~ {
+                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                (.)
+            },
 
             # Otherwise return updated tidySE
-            ~  update_SE_from_tibble(., x)
-
+            ~ update_SE_from_tibble(., x)
         )
 }
 
@@ -830,16 +826,14 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
         when(
 
             # If duplicated sample-transcript pair returns tibble
-            !is_not_duplicated(.) | !is_rectangular(.)  ~ {
-                    message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
-                    (.)
-                },
+            !is_not_duplicated(.) | !is_rectangular(.) ~ {
+                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                (.)
+            },
 
             # Otherwise return updated tidySE
-            ~  update_SE_from_tibble(., x)
-
+            ~ update_SE_from_tibble(., x)
         )
-
 }
 
 #' Subset rows using their positions
@@ -919,24 +913,20 @@ slice.default <- function(.data, ..., .preserve=FALSE) {
 
 #' @export
 slice.tidySE <- function(.data, ..., .preserve=FALSE) {
-
     .data %>%
         as_tibble() %>%
-        dplyr::slice( ..., .preserve=.preserve) %>%
-
+        dplyr::slice(..., .preserve=.preserve) %>%
         when(
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                    message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
-                    (.)
-                },
+                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                (.)
+            },
 
             # Otherwise return updated tidySE
-            ~  update_SE_from_tibble(., .data)
-
+            ~ update_SE_from_tibble(., .data)
         )
-
 }
 
 #' Subset columns using their names and types
@@ -1084,7 +1074,6 @@ sample_n.tidySE <- function(tbl, size, replace=FALSE,
     tbl %>%
         as_tibble() %>%
         dplyr::sample_n(size, replace=replace, weight=weight, .env=.env, ...)
-
 }
 
 #' @rdname sample_n
@@ -1109,7 +1098,6 @@ sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
     tbl %>%
         as_tibble() %>%
         dplyr::sample_frac(size, replace=replace, weight=weight, .env=.env, ...)
-
 }
 
 

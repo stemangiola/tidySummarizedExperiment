@@ -249,31 +249,31 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
 #' @param SummarizedExperiment_object A tidySE
 #'
 #' @noRd
-update_SE_from_tibble = function(.data_mutated, .data){
+update_SE_from_tibble <- function(.data_mutated, .data) {
 
     # Comply to CRAN notes
-    . = NULL
+    . <- NULL
 
     # Get the colnames of samples and transcript datasets
-    colnames_col = colnames(.data@colData) %>% c("sample")
-    colnames_row = when( .hasSlot(.data, "rowData") ~ colnames(.data@rowData), ~ c() ) %>% c("transcript")
+    colnames_col <- colnames(.data@colData) %>% c("sample")
+    colnames_row <- when(.hasSlot(.data, "rowData") ~ colnames(.data@rowData), ~ c()) %>% c("transcript")
 
-   col_data =
-        .data_mutated  %>%
+    col_data <-
+        .data_mutated %>%
         select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
-       # Replace for subset
+        # Replace for subset
         select(sample, get_subset_columns(., sample)) %>%
-       distinct() %>%
+        distinct() %>%
 
         # In case unitary SE subset does not ork
         select_if(!colnames(.) %in% colnames_row) %>%
-        data.frame(row.names = .$sample) %>%
+        data.frame(row.names=.$sample) %>%
         select(-sample) %>%
         DataFrame()
 
-    row_data =
-        .data_mutated  %>%
+    row_data <-
+        .data_mutated %>%
         select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
         # Replace for subset
@@ -282,17 +282,17 @@ update_SE_from_tibble = function(.data_mutated, .data){
 
         # In case unitary SE subset does not work because all same
         select_if(!colnames(.) %in% c(colnames_col, colnames(col_data))) %>%
-        data.frame(row.names = .$transcript) %>%
+        data.frame(row.names=.$transcript) %>%
         select(-transcript) %>%
         DataFrame()
 
 
     # Subset if needed. This function is used by many dplyr utilities
-    .data = .data[rownames(row_data), rownames(col_data)]
+    .data <- .data[rownames(row_data), rownames(col_data)]
 
     # Update
-    colData(.data) = col_data
-    rowData(.data) = row_data
+    colData(.data) <- col_data
+    rowData(.data) <- row_data
 
     # return
     .data
@@ -309,9 +309,7 @@ update_SE_from_tibble = function(.data_mutated, .data){
 #' @noRd
 #'
 get_special_columns <- function(SummarizedExperiment_object) {
-
-
-    colnames_special =
+    colnames_special <-
         get_special_datasets(SummarizedExperiment_object) %>%
 
         # In case any of those have transcript of sample in column names
@@ -323,7 +321,7 @@ get_special_columns <- function(SummarizedExperiment_object) {
         unlist() %>%
         as.character()
 
-    colnames_counts =
+    colnames_counts <-
         get_count_datasets(SummarizedExperiment_object) %>%
         select(-transcript, -sample) %>%
         colnames()
@@ -335,21 +333,24 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' @importFrom tibble as_tibble
 #' @importFrom tibble tibble
 get_special_datasets <- function(SummarizedExperiment_object) {
-
-    if(
+    if (
         "RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object) &
 
-        SummarizedExperiment_object@rowRanges %>% as.data.frame %>% nrow %>% gt(0)
-    )
-       SummarizedExperiment_object@rowRanges %>%
-          as.data.frame %>%
+            SummarizedExperiment_object@rowRanges %>%
+                as.data.frame() %>%
+                nrow() %>%
+                gt(0)
+    ) {
+        SummarizedExperiment_object@rowRanges %>%
+            as.data.frame() %>%
 
-        # Take off rowData columns as there is a recursive anomaly within gene ranges
-        select(-colnames(rowData(SummarizedExperiment_object))) %>%
-          tibble::as_tibble(rownames="transcript") %>%
-        list()
-    else tibble() %>% list()
-
+            # Take off rowData columns as there is a recursive anomaly within gene ranges
+            select(-colnames(rowData(SummarizedExperiment_object))) %>%
+            tibble::as_tibble(rownames="transcript") %>%
+            list()
+    } else {
+        tibble() %>% list()
+    }
 }
 
 #' @importFrom tidyr gather
@@ -358,7 +359,6 @@ get_special_datasets <- function(SummarizedExperiment_object) {
 #' @importFrom tibble as_tibble
 #' @importFrom purrr reduce
 get_count_datasets <- function(SummarizedExperiment_object) {
-
     map2(
         SummarizedExperiment_object@assays@data %>% as.list(),
         names(SummarizedExperiment_object@assays@data),
@@ -367,8 +367,7 @@ get_count_datasets <- function(SummarizedExperiment_object) {
             gather(sample, count, -transcript) %>%
             rename(!!.y := count)
     ) %>%
-        reduce(left_join, by = c("transcript", "sample"))
-
+        reduce(left_join, by=c("transcript", "sample"))
 }
 
 get_needed_columns <- function() {
@@ -402,44 +401,49 @@ select_helper <- function(.data, ...) {
 }
 
 outersect <- function(x, y) {
-    sort(c(setdiff(x, y),
-           setdiff(y, x)))
+    sort(c(
+        setdiff(x, y),
+        setdiff(y, x)
+    ))
 }
 
 #' @importFrom dplyr distinct_at
 #' @importFrom dplyr vars
 #' @importFrom purrr map
 #' @importFrom magrittr equals
-get_subset_columns = function(.data, .col){
+get_subset_columns <- function(.data, .col) {
 
 
     # Comply with CRAN NOTES
-    . = NULL
+    . <- NULL
 
     # Make col names
-    .col = enquo(.col)
+    .col <- enquo(.col)
 
     # x-annotation df
-    n_x = .data %>% distinct_at(vars(!!.col)) %>% nrow
+    n_x <- .data %>%
+        distinct_at(vars(!!.col)) %>%
+        nrow()
 
     # element wise columns
     .data %>%
         select(-!!.col) %>%
-        colnames %>%
+        colnames() %>%
         map(
             ~
-                .x %>%
+            .x %>%
                 when(
                     .data %>%
                         distinct_at(vars(!!.col, .x)) %>%
-                        nrow %>%
-                        equals(n_x) ~ (.) ,
-                    ~ NULL
+                        nrow() %>%
+                        equals(n_x) ~ (.),
+                    ~NULL
                 )
         ) %>%
 
         # Drop NULL
-        {	(.)[lengths((.)) != 0]	} %>%
-        unlist
-
+        {
+            (.)[lengths((.)) != 0]
+        } %>%
+        unlist()
 }

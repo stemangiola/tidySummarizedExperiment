@@ -10,16 +10,20 @@ tt <-
 test_that("nest_unnest", {
     col_names <- colnames(tt@colData) %>% c("sample")
     library(magrittr)
-    
-    y = tibble::tibble(sample = c("untrt1", "untrt2", "untrt3", "untrt4", 
-                   "trt1", "trt2", "trt3"), 
-                   counts = c(0L, 0L, 0L, 0L, 0L, 0L, 1L))
+
+    y <- tibble::tibble(
+        sample = c(
+            "untrt1", "untrt2", "untrt3", "untrt4",
+            "trt1", "trt2", "trt3"
+        ),
+        counts = c(0L, 0L, 0L, 0L, 0L, 0L, 1L)
+    )
 
     x <- tt %>%
-         nest(data = -condition) %>%
-         unnest(data) %>%
-         head(n=1) %>%
-         select(sample, counts)
+        nest(data = -condition) %>%
+        unnest(data) %>%
+        head(n = 1) %>%
+        select(sample, counts)
 
 
     expect_equal(x, y)

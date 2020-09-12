@@ -80,10 +80,9 @@ as_tibble.default <- function(x, ...,
 as_tibble.tidySE <- function(x, ...,
     .name_repair=c("check_unique", "unique", "universal", "minimal"),
     rownames=pkgconfig::get_config("tibble::rownames", NULL)) {
-
-    sample_info =
+    sample_info <-
         x@colData %>%
-        as.data.frame %>%
+        as.data.frame() %>%
 
         # Convert to tibble
         tibble::as_tibble(rownames="sample")
@@ -93,25 +92,21 @@ as_tibble.tidySE <- function(x, ...,
     #     as.data.frame %>%
     #     tibble::as_tibble(rownames="transcript")
 
-    range_info =
+    range_info <-
         get_special_datasets(x) %>%
         reduce(left_join, by="transcript")
 
-    gene_info =
+    gene_info <-
         rowData(x) %>%
-        as.data.frame %>%
+        as.data.frame() %>%
 
         # Convert to tibble
         tibble::as_tibble(rownames="transcript")
 
-    count_info = get_count_datasets(x)
+    count_info <- get_count_datasets(x)
 
     sample_info %>%
         left_join(count_info, by="sample") %>%
         left_join(gene_info, by="transcript") %>%
         when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.))
-
-
-
 }
-
