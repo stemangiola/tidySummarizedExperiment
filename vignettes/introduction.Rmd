@@ -6,6 +6,7 @@ package: tidySE
 output:
   BiocStyle::html_document:
     toc_float: true
+bibliography: tidySE.bib
 vignette: >
   %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{Overview of the tidySE package}
@@ -13,18 +14,15 @@ vignette: >
 ---
 
 <!-- badges: start -->
-[![Lifecycle:maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![R build status](https://github.com/stemangiola/tidySE/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/stemangiola/tidySE/actions)
+[![Lifecycle:maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-```{r echo=FALSE}
-knitr::opts_chunk$set( fig.path = "man/figures/")
-```
 
 **Brings SummarizedExperiment to the tidyverse!** 
 
 website: [stemangiola.github.io/tidySE/](https://stemangiola.github.io/tidySE/)
 
-Please have a look also to 
+Please also have a look at
 
 - [tidySCE](https://stemangiola.github.io/tidySCE/) for tidy manipulation of Seurat objects
 - [tidyseurat](https://stemangiola.github.io/tidyseurat/) for tidy manipulation of Seurat objects
@@ -33,16 +31,16 @@ Please have a look also to
 - [tidygate](https://github.com/stemangiola/tidygate) for adding custom gate information to your tibble 
 - [tidyHeatmap](https://stemangiola.github.io/tidyHeatmap/) for heatmaps produced with tidy principles
 
-<!---
-
-[![Build Status](https://travis-ci.org/stemangiola/tidySE.svg?branch=master)](https://travis-ci.org/stemangiola/tidySE) [![Coverage Status](https://coveralls.io/repos/github/stemangiola/tidySE/badge.svg?branch=master)](https://coveralls.io/github/stemangiola/tidySE?branch=master)
-
--->
 
 ```{r, echo=FALSE, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
+
+# Introduction
+
+tidySE provides a bridge between Bioconductor [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) [@morgan2020summarized] and the tidyverse [@wickham2019welcome]. It creates an invisible layer that enables viewing the
+Bioconductor *SummarizedExperiment* object as a tidyverse tibble, and provides SummarizedExperiment-compatible *dplyr*, *tidyr*, *ggplot* and *plotly* functions. This allows users to get the best of both Bioconductor and tidyverse worlds.
 
 
 ## Functions/utilities available
@@ -65,7 +63,14 @@ Utilities | Description
 
 ## Installation
 
-From Github
+```{r, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("tidySE")
+```
+
+From Github (development)
 ```{r, eval=FALSE}
 devtools::install_github("stemangiola/tidySE")
 ```
@@ -78,11 +83,13 @@ library(tidySE)
 ```
 
 
-## Create `tidySE`, the best of both worlds!
-This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs. 
+# Create `tidySE`, the best of both worlds!
+
+This is a SummarizedExperiment object but it is evaluated as a tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs. 
 
 ```{r}
-pasilla_tidy = tidySE::pasilla %>% tidySE::tidy()
+pasilla_tidy <- tidySE::pasilla %>% 
+    tidy()
 ```
 
 **It looks like a tibble**
@@ -97,18 +104,89 @@ pasilla_tidy
 pasilla_tidy@assays
 ```
 
-## Annotation polishing 
-We may want to alter the content in a column, for example, shorten single_end to single.
+
+# Tidyverse commands
+
+We can use tidyverse commands to explore the tidy SummarizedExperiment object.
+
+We can use `slice` to choose rows by position, for example to choose the first row.
 
 ```{r}
-pasilla_polished =
-  pasilla_tidy %>%
-  mutate(type = gsub("_end", "", type)) 
-
-pasilla_polished 
+pasilla_tidy %>%
+    slice(1)
 ```
 
-## Preliminary plots
+We can use `filter` to choose rows by criteria.
+
+```{r}
+pasilla_tidy %>%
+    filter(condition == "untreated")
+```
+
+We can use `select` to choose columns.
+
+```{r}
+pasilla_tidy %>%
+    select(sample)
+```
+
+We can use `count` to count how many rows we have for each sample.
+
+```{r}
+pasilla_tidy %>%
+    count(sample)
+```
+
+We can use `distinct` to see what distinct sample information we have.
+
+```{r}
+pasilla_tidy %>%
+    distinct(sample, condition, type)
+```
+
+We could use `rename` to rename a column. For example, to modify the type column name.
+
+```{r}
+pasilla_tidy %>%
+  rename(sequencing=type) 
+```
+
+We could use `mutate` to create a column. For example, we could create a new type column that contains single
+and paired instead of single_end and paired_end.
+
+```{r}
+pasilla_tidy %>%
+  mutate(type = gsub("_end", "", type)) 
+```
+
+We could use `unite` to combine multiple columns.into a single column.
+
+```{r}
+pasilla_tidy %>%
+    unite("group", c(condition, type))
+```
+
+We can also combine commands with the tidyverse pipe `%>%`.
+
+For example, we could combine `group_by` and `summarise` to get the total counts for each sample.
+
+```{r}
+pasilla_tidy %>%
+    group_by(sample) %>%
+    summarise(total_counts = sum(counts))
+```
+
+We could combine `group_by`, `mutate` and `filter` to get the transcripts with mean count > 0.
+
+```{r}
+pasilla_tidy %>%
+  group_by(transcript) %>%
+  mutate(mean_count = mean(counts)) %>%
+  filter(mean_count > 0)   
+```
+
+
+# Plotting
 
 ```{r}
 my_theme <- 	
@@ -131,14 +209,22 @@ my_theme <-
   )
 ```
 
-We can treat `pasilla_polished` effectively as a normal tibble for plotting. 
+We can treat `pasilla_tidy` as a normal tibble for plotting. 
 
 Here we plot the distribution of counts per sample.
 
 ```{r plot1}
-pasilla_polished %>%
+pasilla_tidy %>%
 	tidySE::ggplot(aes(counts + 1, group=sample, color=`type`)) +
 	geom_density() +
 	scale_x_log10() +
 	my_theme
 ```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
+# References
