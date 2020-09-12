@@ -59,6 +59,6 @@ library(tibble)
 tt <- tidySE::pasilla \%>\% tidy()
 bind_rows(tt, tt)
 
-num_rows = nrow(tidySE::as_tibble(tt))
-tt \%>\% bind_cols(tibble(a = 0, num_rows))
+num_rows <- nrow(tidySE::as_tibble(tt))
+tt \%>\% bind_cols(tibble(a=0, num_rows))
 }

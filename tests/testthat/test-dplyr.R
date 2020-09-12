@@ -5,10 +5,10 @@ library(tidySE)
 tt <- pasilla %>% tidy()
 
 test_that("bind_rows", {
-    tt_bind <- tidySE::bind_rows(tt, tt )
+    tt_bind <- tidySE::bind_rows(tt, tt)
 
     expect_equal(
-        tt_bind %>% count(sample, transcript) %>% dplyr::count(n) %>% filter(n>1) %>% nrow(),
+        tt_bind %>% count(sample, transcript) %>% dplyr::count(n) %>% filter(n > 1) %>% nrow(),
         0
     )
 })
@@ -34,7 +34,7 @@ test_that("mutate", {
 })
 
 test_that("rename", {
-    expect_equal(tt %>% rename( groups = condition) %>% select(groups) %>% ncol(), 1)
+    expect_equal(tt %>% rename(groups = condition) %>% select(groups) %>% ncol(), 1)
 })
 
 test_that("left_join", {

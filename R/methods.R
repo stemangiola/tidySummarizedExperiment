@@ -29,20 +29,20 @@ tidy <- function(object) {
     UseMethod("tidy", object)
 }
 
-tidy_ <-  function(object) {
+tidy_ <- function(object) {
     object %>%
         as("RangedSummarizedExperiment") %>%
         as("tidySE") %>%
 
         # If there is a column called sample change it's name
-        when( "sample" %in% colnames(.@colData) ~ {
+        when(
+            "sample" %in% colnames(.@colData) ~ {
+                warning("tidySE says: column sample in your colData have been renamed as sample_, since is a reserved column name.")
 
-            warning("tidySE says: column sample in your colData have been renamed as sample_, since is a reserved column name.")
-
-            rename(., sample_ = sample)
-        },
-        ~(.)
-    )
+                rename(., sample_=sample)
+            },
+            ~ (.)
+        )
 }
 
 #' @importFrom methods as
@@ -58,5 +58,3 @@ tidy.SummarizedExperiment <- tidy_
 #'
 #' @export
 tidy.RangedSummarizedExperiment <- tidy_
-
-

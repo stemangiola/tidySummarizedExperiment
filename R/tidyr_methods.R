@@ -234,7 +234,6 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
         as_tibble() %>%
         tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>%
         update_SE_from_tibble(data)
-
 }
 
 #' Pivot data from wide to long
@@ -320,7 +319,7 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
 #' library(dplyr)
 #' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     pivot_longer(c(condition, type),names_to="name", values_to="value")
+#'     pivot_longer(c(condition, type), names_to="name", values_to="value")
 pivot_longer <- function(data,
     cols,
     names_to="name",
@@ -462,7 +461,6 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
         as_tibble() %>%
         tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
         update_SE_from_tibble(data)
-
 }
 
 #' Separate a character column into multiple columns with a regular
@@ -537,5 +535,4 @@ separate.tidySE <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
         as_tibble() %>%
         tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
         update_SE_from_tibble(data)
-
 }
