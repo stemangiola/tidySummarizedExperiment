@@ -47,12 +47,12 @@ Functions/utilities available
 |-------------------------------------------|------------------------------------------------------------------|
 | `all`                                     | After all `tidySE` is a SummarizedExperiment object, just better |
 
-| tidyverse Packages | Description                          |
-|--------------------|--------------------------------------|
-| `dplyr`            | All `dplyr` APIs like for any tibble |
-| `tidyr`            | All `tidyr` APIs like for any tibble |
-| `ggplot2`          | `ggplot` like for any tibble         |
-| `plotly`           | `plot_ly` like for any tibble        |
+| tidyverse Packages | Description                                 |
+|--------------------|---------------------------------------------|
+| `dplyr`            | Almost all `dplyr` APIs like for any tibble |
+| `tidyr`            | Almost all `tidyr` APIs like for any tibble |
+| `ggplot2`          | `ggplot` like for any tibble                |
+| `plotly`           | `plot_ly` like for any tibble               |
 
 | Utilities   | Description                                                     |
 |-------------|-----------------------------------------------------------------|
