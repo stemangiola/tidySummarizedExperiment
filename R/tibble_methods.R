@@ -81,7 +81,7 @@ as_tibble.tidySE <- function(x, ...,
     .name_repair=c("check_unique", "unique", "universal", "minimal"),
     rownames=pkgconfig::get_config("tibble::rownames", NULL)) {
     sample_info <-
-        x@colData %>%
+        colData(x) %>%
         as.data.frame() %>%
 
         # Convert to tibble

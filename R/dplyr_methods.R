@@ -87,7 +87,7 @@ bind_rows.tidySE <- function(..., .id=NULL, add.cell.ids=NULL) {
     colnames(new_obj) <- unique_colnames
 
     # Change also all assays colnames
-    new_obj@assays@data@listData <- new_obj@assays@data@listData %>% map(~ {
+    assays(new_obj)@listData <- assays(new_obj)@listData %>% map(~ {
         colnames(.x) <- unique_colnames
         .x
     })
@@ -579,12 +579,12 @@ rename.default <- function(.data, ...) {
 rename.tidySE <- function(.data, ...) {
 
     # Check that we are not modifying a key column
-    cols <- tidyselect::eval_select(expr(c(...)), .data@colData %>% as.data.frame())
+    cols <- tidyselect::eval_select(expr(c(...)), colData(.data) %>% as.data.frame())
     if (intersect(cols %>% names(), get_special_columns(.data) %>% c(get_needed_columns())) %>% length() %>% gt(0)) {
         stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(.data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
     }
 
-    .data@colData <- dplyr::rename(.data@colData %>% as.data.frame(), ...) %>% DataFrame()
+    colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()
 
     .data
 }

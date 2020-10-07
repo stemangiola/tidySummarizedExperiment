@@ -96,7 +96,7 @@ pasilla_tidy
 **But it is a SummarizedExperiment object after all**
 
 ```{r}
-pasilla_tidy@assays
+assays(pasilla_tidy)
 ```
 
 
