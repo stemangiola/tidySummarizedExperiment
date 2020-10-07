@@ -449,3 +449,6 @@ get_subset_columns <- function(.data, .col) {
         } %>%
         unlist()
 }
+
+data_frame_returned_message = "tidySE says: A data frame is returned for independent data analysis."
+duplicated_cell_names = "tidySE says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."

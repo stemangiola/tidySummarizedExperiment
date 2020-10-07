@@ -166,7 +166,7 @@ distinct.default <- function(.data, ..., .keep_all=FALSE) {
 
 #' @export
 distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     .data %>%
         as_tibble() %>%
@@ -321,7 +321,7 @@ group_by.default <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default
 
 #' @export
 group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     .data %>%
         as_tibble() %>%
@@ -410,8 +410,8 @@ summarise.default <- function(.data, ...) {
 
 #' @export
 summarise.tidySE <- function(.data, ...) {
-    message("tidySE says: A data frame is returned for
-            independent data analysis.")
+    message(data_frame_returned_message)
+
 
     .data %>%
         as_tibble() %>%
@@ -627,7 +627,7 @@ rowwise.default <- function(.data) {
 
 #' @export
 rowwise.tidySE <- function(.data) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     .data %>%
         as_tibble() %>%
@@ -678,7 +678,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -725,7 +725,7 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
             # If duplicated sample-transcript pair returns tibble
 
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -776,7 +776,7 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -828,7 +828,7 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -921,7 +921,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -1070,7 +1070,7 @@ sample_n.tidySE <- function(tbl, size, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_n()", "slice_sample()")
 
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     tbl %>%
         as_tibble() %>%
@@ -1094,7 +1094,7 @@ sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_frac()", "slice_sample()")
 
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     tbl %>%
         as_tibble() %>%
@@ -1162,7 +1162,7 @@ count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by
 }
 #' @export
 count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     x %>%
         as_tibble() %>%
