@@ -65,10 +65,10 @@ test_that("left_join", {
             left_join(tt %>%
                           distinct(condition) %>%
                           mutate(new_column = 1:2)) %>%
-            `@`(colData) %>%
+            colData() %>%
             ncol(),
         tt %>%
-            `@`(colData) %>%
+            colData() %>%
             ncol() %>%
             sum(1)
     )

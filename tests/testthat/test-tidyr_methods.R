@@ -1,5 +1,6 @@
 context("tidyr test")
 
+library(magrittr)
 library(tidySE)
 
 tt <-
@@ -8,7 +9,7 @@ tt <-
     tidySE::mutate(col2 = "other_col")
 
 test_that("nest_unnest", {
-    col_names <- colnames(tt@colData) %>% c("sample")
+    col_names <- tt %>% colData %>% colnames() %>% c("sample")
     library(magrittr)
 
     y <- tibble::tibble(
