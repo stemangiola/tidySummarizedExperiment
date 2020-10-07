@@ -574,6 +574,7 @@ rename.default <- function(.data, ...) {
     dplyr::rename(.data, ...)
 }
 
+#' @importFrom tidyselect eval_select
 #' @export
 rename.tidySE <- function(.data, ...) {
 
@@ -1173,6 +1174,8 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' `pull()` is similar to `$`. It's mostly useful because it looks a little
 #' nicer in pipes, it also works with remote data frames, and it can optionally
 #' name the output.
+#'
+#' @importFrom ellipsis check_dots_used
 #'
 #' @inheritParams arrange
 #' @inheritParams tidyselect::vars_pull
