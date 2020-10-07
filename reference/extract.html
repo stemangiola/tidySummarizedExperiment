@@ -83,12 +83,6 @@ is NA, the output will be NA." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -131,15 +125,15 @@ each group into a new column. If the groups don't match, or the input
 is NA, the output will be NA.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>extract</span>(
-  <span class='kw'>data</span>,
-  <span class='kw'>col</span>,
-  <span class='kw'>into</span>,
-  regex = <span class='st'>"([[:alnum:]]+)"</span>,
-  remove = <span class='fl'>TRUE</span>,
-  convert = <span class='fl'>FALSE</span>,
-  <span class='kw'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>extract</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>col</span>,
+  <span class='va'>into</span>,
+  regex <span class='op'>=</span> <span class='st'>"([[:alnum:]]+)"</span>,
+  remove <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  convert <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -192,9 +186,9 @@ There should be one group (defined by `()`) for each element of `into`.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>tidySE</span>::<span class='kw'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span>() <span class='op'>%&gt;%</span>
-    <span class='fu'>extract</span>(<span class='kw'>type</span>, into=<span class='st'>"sequencing"</span>, regex=<span class='st'>"([a-z]*)_end"</span>, convert=<span class='fl'>TRUE</span>)
+<span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>extract</span><span class='op'>(</span><span class='va'>type</span>, into<span class='op'>=</span><span class='st'>"sequencing"</span>, regex<span class='op'>=</span><span class='st'>"([a-z]*)_end"</span>, convert<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 102,193 x 5</span><span>
 #&gt;    sample condition sequencing transcript  counts
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
@@ -224,7 +218,7 @@ There should be one group (defined by `()`) for each element of `into`.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

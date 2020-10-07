@@ -79,12 +79,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -124,7 +118,7 @@
     <p>distinct</p>
     </div>
 
-    <pre class="usage"><span class='fu'>distinct</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, .keep_all = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>distinct</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, .keep_all <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,10 +144,10 @@ of ... is not distinct, this keeps the first row of values. (See dplyr)</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='kw'>magrittr</span>::<span class='kw'>`%&gt;%`</span>
-<span class='kw'>tidySE</span>::<span class='kw'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span>() <span class='op'>%&gt;%</span>
-    <span class='fu'>distinct</span>(<span class='kw'>sample</span>)
+<span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+<span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySE says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 7 x 1</span><span>
 #&gt;   sample
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> 
@@ -179,7 +173,7 @@ of ... is not distinct, this keeps the first row of values. (See dplyr)</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
