@@ -519,8 +519,26 @@ mutate.tidySE <- function(.data, ...) {
 
     # Check that we are not modifying a key column
     cols <- enquos(...) %>% names()
-    if (intersect(cols, get_special_columns(.data) %>% c(get_needed_columns())) %>% length() %>% gt(0)) {
-        stop(sprintf("tidySE says: you are trying to mutate a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(.data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+
+    tst =
+        intersect(
+            cols,
+            get_special_columns(.data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0)
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
 
     .data %>%
@@ -580,8 +598,26 @@ rename.tidySE <- function(.data, ...) {
 
     # Check that we are not modifying a key column
     cols <- tidyselect::eval_select(expr(c(...)), colData(.data) %>% as.data.frame())
-    if (intersect(cols %>% names(), get_special_columns(.data) %>% c(get_needed_columns())) %>% length() %>% gt(0)) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(.data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+
+    tst =
+        intersect(
+            cols %>% names(),
+            get_special_columns(.data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0)
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
 
     colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()

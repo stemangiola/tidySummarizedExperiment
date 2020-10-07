@@ -226,8 +226,26 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
     convert=FALSE, ...) {
     col <- enquo(col)
 
-    if (intersect(into %>% quo_names(), get_special_columns(data) %>% c(get_needed_columns())) %>% length() %>% gt(0) & remove) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+    tst =
+        intersect(
+            into %>% quo_names(),
+            get_special_columns(data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0) &
+        remove
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
 
     data %>%
@@ -456,9 +474,29 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 
     # Check that we are not modifying a key column
     cols <- enquo(col)
-    if (intersect(cols %>% quo_names(), get_special_columns(data) %>% c(get_needed_columns())) %>% length() %>% gt(0) & remove) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+
+    tst =
+        intersect(
+            cols %>% quo_names(),
+            get_special_columns(data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0) &
+        remove
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
+
 
 
     data %>%
@@ -531,10 +569,28 @@ separate.tidySE <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
 
     # Check that we are not modifying a key column
     cols <- enquo(col)
-    if (intersect(cols %>% quo_names(), get_special_columns(data) %>% c(get_needed_columns())) %>% length() %>% gt(0) & remove) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
-    }
 
+    tst =
+        intersect(
+            cols %>% quo_names(),
+            get_special_columns(data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0) &
+        remove
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
+    }
 
 
     data %>%

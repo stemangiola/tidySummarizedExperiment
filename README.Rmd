@@ -154,7 +154,7 @@ pasilla_tidy %>%
     mutate(type=gsub("_end", "", type))
 ```
 
-We could use `unite` to combine multiple columns.into a single column.
+We could use `unite` to combine multiple columns into a single column.
 
 ```{r}
 pasilla_tidy %>%
