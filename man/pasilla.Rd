@@ -3,14 +3,17 @@
 \docType{data}
 \name{pasilla}
 \alias{pasilla}
-\title{Example data set}
+\title{Read counts of RNA-seq samples of Pasilla knock-down by Brooks et al.}
 \format{
-An object of class \code{SummarizedExperiment} with 14599 rows and 7 columns.
+containing 14599 features and 7 biological replicates.
+}
+\source{
+\url{https://bioconductor.org/packages/release/data/experiment/html/pasilla.html}
 }
 \usage{
-pasilla
+data(pasilla)
 }
 \description{
-Example data set
+A SummarizedExperiment dataset containing the transcriptome information for Drosophila Melanogaster.
 }
 \keyword{datasets}

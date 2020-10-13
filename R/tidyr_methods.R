@@ -238,7 +238,7 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
 
     if (tst) {
         columns =
-            get_special_columns(.data) %>%
+            get_special_columns(data) %>%
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
@@ -487,7 +487,7 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 
     if (tst) {
         columns =
-            get_special_columns(.data) %>%
+            get_special_columns(data) %>%
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
@@ -582,7 +582,7 @@ separate.tidySE <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
 
     if (tst) {
         columns =
-            get_special_columns(.data) %>%
+            get_special_columns(data) %>%
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
