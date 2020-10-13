@@ -87,7 +87,7 @@ bind_rows.tidySE <- function(..., .id=NULL, add.cell.ids=NULL) {
     colnames(new_obj) <- unique_colnames
 
     # Change also all assays colnames
-    new_obj@assays@data@listData <- new_obj@assays@data@listData %>% map(~ {
+    assays(new_obj)@listData <- assays(new_obj)@listData %>% map(~ {
         colnames(.x) <- unique_colnames
         .x
     })
@@ -166,7 +166,7 @@ distinct.default <- function(.data, ..., .keep_all=FALSE) {
 
 #' @export
 distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     .data %>%
         as_tibble() %>%
@@ -321,7 +321,7 @@ group_by.default <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default
 
 #' @export
 group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     .data %>%
         as_tibble() %>%
@@ -410,8 +410,8 @@ summarise.default <- function(.data, ...) {
 
 #' @export
 summarise.tidySE <- function(.data, ...) {
-    message("tidySE says: A data frame is returned for
-            independent data analysis.")
+    message(data_frame_returned_message)
+
 
     .data %>%
         as_tibble() %>%
@@ -519,8 +519,26 @@ mutate.tidySE <- function(.data, ...) {
 
     # Check that we are not modifying a key column
     cols <- enquos(...) %>% names()
-    if (intersect(cols, get_special_columns(.data) %>% c(get_needed_columns())) %>% length() %>% gt(0)) {
-        stop(sprintf("tidySE says: you are trying to mutate a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(.data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+
+    tst =
+        intersect(
+            cols,
+            get_special_columns(.data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0)
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
 
     .data %>%
@@ -574,16 +592,35 @@ rename.default <- function(.data, ...) {
     dplyr::rename(.data, ...)
 }
 
+#' @importFrom tidyselect eval_select
 #' @export
 rename.tidySE <- function(.data, ...) {
 
     # Check that we are not modifying a key column
-    cols <- tidyselect::eval_select(expr(c(...)), .data@colData %>% as.data.frame())
-    if (intersect(cols %>% names(), get_special_columns(.data) %>% c(get_needed_columns())) %>% length() %>% gt(0)) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(.data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+    cols <- tidyselect::eval_select(expr(c(...)), colData(.data) %>% as.data.frame())
+
+    tst =
+        intersect(
+            cols %>% names(),
+            get_special_columns(.data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0)
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
 
-    .data@colData <- dplyr::rename(.data@colData %>% as.data.frame(), ...) %>% DataFrame()
+    colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()
 
     .data
 }
@@ -626,7 +663,7 @@ rowwise.default <- function(.data) {
 
 #' @export
 rowwise.tidySE <- function(.data) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     .data %>%
         as_tibble() %>%
@@ -677,7 +714,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -724,7 +761,7 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
             # If duplicated sample-transcript pair returns tibble
 
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -775,7 +812,7 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -827,7 +864,7 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -920,7 +957,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 
             # If duplicated sample-transcript pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message("tidySE says: This operation lead to duplicated cell names. A data frame is returned for independent data analysis.")
+                message(duplicated_cell_names)
                 (.)
             },
 
@@ -1069,7 +1106,7 @@ sample_n.tidySE <- function(tbl, size, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_n()", "slice_sample()")
 
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     tbl %>%
         as_tibble() %>%
@@ -1093,7 +1130,7 @@ sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_frac()", "slice_sample()")
 
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     tbl %>%
         as_tibble() %>%
@@ -1161,7 +1198,7 @@ count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by
 }
 #' @export
 count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     x %>%
         as_tibble() %>%
@@ -1173,6 +1210,8 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' `pull()` is similar to `$`. It's mostly useful because it looks a little
 #' nicer in pipes, it also works with remote data frames, and it can optionally
 #' name the output.
+#'
+#' @importFrom ellipsis check_dots_used
 #'
 #' @inheritParams arrange
 #' @inheritParams tidyselect::vars_pull

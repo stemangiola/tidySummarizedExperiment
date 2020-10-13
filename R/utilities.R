@@ -6,7 +6,7 @@
 #'
 #' @noRd
 to_tib <- function(.data) {
-    .data@colData %>%
+    colData(.data) %>%
         as.data.frame() %>%
         as_tibble(rownames="cell")
 }
@@ -129,7 +129,7 @@ get_abundance_sc_wide <- function(.data, transcripts=NULL, all=FALSE) {
     }
 
     # Just grub last assay
-    .data@assays@data %>%
+    assays(.data) %>%
         as.list() %>%
         tail(1) %>%
         .[[1]] %>%
@@ -199,10 +199,10 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
         variable_genes <- NULL
     }
 
-    assay_names <- .data@assays %>% names()
+    assay_names <- assays(.data) %>% names()
 
 
-    .data@assays@data %>%
+    assays(.data) %>%
         as.list() %>%
 
         # Take active assay
@@ -255,8 +255,8 @@ update_SE_from_tibble <- function(.data_mutated, .data) {
     . <- NULL
 
     # Get the colnames of samples and transcript datasets
-    colnames_col <- colnames(.data@colData) %>% c("sample")
-    colnames_row <- when(.hasSlot(.data, "rowData") ~ colnames(.data@rowData), ~ c()) %>% c("transcript")
+    colnames_col <- colnames(colData(.data)) %>% c("sample")
+    colnames_row <- when(.hasSlot(.data, "rowData") ~ colnames(rowData(.data)), ~ c()) %>% c("transcript")
 
     col_data <-
         .data_mutated %>%
@@ -336,12 +336,12 @@ get_special_datasets <- function(SummarizedExperiment_object) {
     if (
         "RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object) &
 
-            SummarizedExperiment_object@rowRanges %>%
+        rowRanges(SummarizedExperiment_object) %>%
                 as.data.frame() %>%
                 nrow() %>%
                 gt(0)
     ) {
-        SummarizedExperiment_object@rowRanges %>%
+        rowRanges(SummarizedExperiment_object) %>%
             as.data.frame() %>%
 
             # Take off rowData columns as there is a recursive anomaly within gene ranges
@@ -360,8 +360,8 @@ get_special_datasets <- function(SummarizedExperiment_object) {
 #' @importFrom purrr reduce
 get_count_datasets <- function(SummarizedExperiment_object) {
     map2(
-        SummarizedExperiment_object@assays@data %>% as.list(),
-        names(SummarizedExperiment_object@assays@data),
+        assays(SummarizedExperiment_object) %>% as.list(),
+        names(assays(SummarizedExperiment_object)),
         ~ .x %>%
             tibble::as_tibble(rownames="transcript") %>%
             gather(sample, count, -transcript) %>%
@@ -394,6 +394,8 @@ quo_names <- function(v) {
 #' @importFrom purrr when
 #' @importFrom dplyr select
 #' @importFrom rlang expr
+#' @importFrom tidyselect eval_select
+#'
 select_helper <- function(.data, ...) {
     loc <- tidyselect::eval_select(expr(c(...)), .data)
 
@@ -447,3 +449,6 @@ get_subset_columns <- function(.data, .col) {
         } %>%
         unlist()
 }
+
+data_frame_returned_message = "tidySE says: A data frame is returned for independent data analysis."
+duplicated_cell_names = "tidySE says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."

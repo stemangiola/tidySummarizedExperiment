@@ -226,8 +226,26 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
     convert=FALSE, ...) {
     col <- enquo(col)
 
-    if (intersect(into %>% quo_names(), get_special_columns(data) %>% c(get_needed_columns())) %>% length() %>% gt(0) & remove) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+    tst =
+        intersect(
+            into %>% quo_names(),
+            get_special_columns(data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0) &
+        remove
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
 
     data %>%
@@ -246,6 +264,8 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
 #' [pivot_wider()]
 #'
 #' Learn more in `vignette("pivot")`.
+#'
+#' @importFrom ellipsis check_dots_used
 #'
 #' @details
 #' `pivot_longer()` is an updated approach to [gather()], designed to be both
@@ -389,7 +409,7 @@ pivot_longer.tidySE <- function(data,
     ...) {
     cols <- enquo(cols)
 
-    message("tidySE says: A data frame is returned for independent data analysis.")
+    message(data_frame_returned_message)
 
     data %>%
         as_tibble() %>%
@@ -412,6 +432,8 @@ pivot_longer.tidySE <- function(data,
 #' Unite multiple columns into one by pasting strings together
 #'
 #' Convenience function to paste together multiple columns into one.
+#'
+#' @importFrom ellipsis check_dots_unnamed
 #'
 #' @param data A data frame.
 #' @param col The name of the new column, as a string or symbol.
@@ -452,9 +474,29 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 
     # Check that we are not modifying a key column
     cols <- enquo(col)
-    if (intersect(cols %>% quo_names(), get_special_columns(data) %>% c(get_needed_columns())) %>% length() %>% gt(0) & remove) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
+
+    tst =
+        intersect(
+            cols %>% quo_names(),
+            get_special_columns(data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0) &
+        remove
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
     }
+
 
 
     data %>%
@@ -468,6 +510,8 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 #'
 #' Given either a regular expression or a vector of character positions,
 #' `separate()` turns a single character column into multiple columns.
+#'
+#' @importFrom ellipsis check_dots_used
 #'
 #' @inheritParams extract
 #' @param sep Separator between columns.
@@ -525,10 +569,28 @@ separate.tidySE <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
 
     # Check that we are not modifying a key column
     cols <- enquo(col)
-    if (intersect(cols %>% quo_names(), get_special_columns(data) %>% c(get_needed_columns())) %>% length() %>% gt(0) & remove) {
-        stop(sprintf("tidySE says: you are trying to rename a column that is view only %s (it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one.", get_special_columns(data) %>% c(get_needed_columns()) %>% paste(collapse=", ")))
-    }
 
+    tst =
+        intersect(
+            cols %>% quo_names(),
+            get_special_columns(data) %>% c(get_needed_columns())
+        ) %>%
+        length() %>%
+        gt(0) &
+        remove
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns()) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySE says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
+    }
 
 
     data %>%

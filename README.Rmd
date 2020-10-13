@@ -96,7 +96,7 @@ pasilla_tidy
 **But it is a SummarizedExperiment object after all**
 
 ```{r}
-pasilla_tidy@assays
+assays(pasilla_tidy)
 ```
 
 
@@ -154,7 +154,7 @@ pasilla_tidy %>%
     mutate(type=gsub("_end", "", type))
 ```
 
-We could use `unite` to combine multiple columns.into a single column.
+We could use `unite` to combine multiple columns into a single column.
 
 ```{r}
 pasilla_tidy %>%
