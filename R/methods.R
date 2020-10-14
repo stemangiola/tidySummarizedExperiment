@@ -11,7 +11,6 @@ setMethod(
     definition=function(object) {
         object %>%
             print()
-
     }
 )
 
