@@ -9,17 +9,9 @@ setMethod(
     f="show",
     signature="tidySE",
     definition=function(object) {
-        x = object %>%
-            as_tibble() %>%
+        object %>%
             print()
 
-
-        cli::cat_line(format(x,  n = NULL, width = NULL, n_extra = NULL))
-
-        mat <- trunc_mat(x,  n = NULL, width = NULL, n_extra = NULL)
-        format(mat)
-
-        invisible(x)
     }
 )
 

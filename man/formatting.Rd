@@ -2,16 +2,13 @@
 % Please edit documentation in R/print_tibble.R
 \name{formatting}
 \alias{formatting}
-\alias{print.tbl}
-\alias{format.tbl}
-\alias{trunc_mat}
+\alias{print.tidySE}
+\alias{tidySE_format_tbl}
 \title{Printing tibbles}
 \usage{
-\method{print}{tbl}(x, ..., n = NULL, width = NULL, n_extra = NULL)
+\method{print}{tidySE}(x, ..., n = NULL, width = NULL, n_extra = NULL)
 
-\method{format}{tbl}(x, ..., n = NULL, width = NULL, n_extra = NULL)
-
-trunc_mat(x, n = NULL, width = NULL, n_extra = NULL)
+tidySE_format_tbl(x, ..., n = NULL, width = NULL, n_extra = NULL)
 }
 \arguments{
 \item{x}{Object to format or print.}
