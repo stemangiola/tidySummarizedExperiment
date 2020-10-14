@@ -86,17 +86,6 @@ turn off truncation of character columns.
 }
 
 \examples{
-print(as_tibble(mtcars))
-print(as_tibble(mtcars), n = 1)
-print(as_tibble(mtcars), n = 3)
-
-print(as_tibble(iris), n = 100)
-
-print(mtcars, width = 10)
-
-mtcars2 <- as_tibble(cbind(mtcars, mtcars), .name_repair = "unique")
-print(mtcars2, n = 25, n_extra = 3)
-
-trunc_mat(mtcars)
-
+library(dplyr)
+pasilla \%>\% tidy() \%>\% print()
 }

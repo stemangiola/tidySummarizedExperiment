@@ -49,27 +49,13 @@
 #'   if the width is too small for the entire tibble. If `NULL`, the default,
 #'   will print information about at most `tibble.max_extra_cols` extra columns.
 #' @examples
-#' print(as_tibble(mtcars))
-#' print(as_tibble(mtcars), n = 1)
-#' print(as_tibble(mtcars), n = 3)
-#'
-#' print(as_tibble(iris), n = 100)
-#'
-#' print(mtcars, width = 10)
-#'
-#' mtcars2 <- as_tibble(cbind(mtcars, mtcars), .name_repair = "unique")
-#' print(mtcars2, n = 25, n_extra = 3)
-#'
-#' trunc_mat(mtcars)
-#'
-#' @examplesIf requireNamespace("nycflights13", quietly = TRUE)
-#' print(nycflights13::flights, n_extra = 2)
-#' print(nycflights13::flights, width = Inf)
-#'
+#' library(dplyr)
+#' pasilla %>% tidy() %>% print()
 #' @name formatting
 NULL
 
 #' @rdname formatting
+#' @importFrom cli cat_line
 #' @export
 print.tidySE <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
@@ -83,25 +69,15 @@ print.tidySE <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
     map_chr(~ .x %>% str_replace("A tibble:", "A tibble abstraction:")) %>%
 
     # Output
-    cli::cat_line()
+    cat_line()
 
   invisible(x)
 }
 
-#' Legacy help page for compatibility with existing packages
-#'
-#' @description
-#' `r lifecycle::badge("superseded")`
-#'
-#' Please see [print.tbl()] for the print method for tibbles.
-#'
-#' @name print.tbl_df
-#' @keywords internal
-NULL
-
 #' @rdname formatting
+#' @importFrom tibble trunc_mat
 tidySE_format_tbl <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
-  mat <- tibble::trunc_mat(x, n = n, width = width, n_extra = n_extra)
+  mat <- trunc_mat(x, n = n, width = width, n_extra = n_extra)
   tidySE_format_truncated_mat(mat)
 }
 
@@ -132,6 +108,8 @@ tidySE_nchar_width <- function(x) {
 }
 
 #' @importFrom pillar style_subtle
+#' @importFrom rlang names2
+#' @importFrom pillar squeeze
 tidySE_format_truncated_mat <- function(x, width = NULL, ...) {
   if (is.null(width)) {
     width <- x$width
@@ -140,12 +118,12 @@ tidySE_format_truncated_mat <- function(x, width = NULL, ...) {
   width <- tidySE_tibble_width(width)
 
   named_header <- tidySE_format_header(x)
-  if (all(rlang::names2(named_header) == "")) {
+  if (all(names2(named_header) == "")) {
     header <- named_header
   } else {
     header <- paste0(
       tidySE_justify(
-        paste0(rlang::names2(named_header), ":"),
+        paste0(names2(named_header), ":"),
         right = FALSE, space = NBSP
       ),
       # We add a space after the NBSP inserted by tidySE_justify()
@@ -156,7 +134,7 @@ tidySE_format_truncated_mat <- function(x, width = NULL, ...) {
   }
 
   comment <- tidySE_format_comment(header, width = width)
-  squeezed <- pillar::squeeze(x$mcf, width = width)
+  squeezed <- squeeze(x$mcf, width = width)
   mcf <- tidySE_format_body(squeezed)
 
   # Splitting lines is important, otherwise subtle style may be lost
@@ -175,9 +153,10 @@ tidySE_format_body <- function(x) {
   format(x)
 }
 
+#' @importFrom pillar extra_cols
 tidySE_format_footer <- function(x, squeezed_colonnade) {
   extra_rows <- tidySE_format_footer_rows(x)
-  extra_cols <- tidySE_format_footer_cols(x, pillar::extra_cols(squeezed_colonnade, n = x$n_extra))
+  extra_cols <- tidySE_format_footer_cols(x, extra_cols(squeezed_colonnade, n = x$n_extra))
 
   extra <- c(extra_rows, extra_cols)
   if (length(extra) >= 1) {
@@ -280,8 +259,9 @@ tidySE_wrap <- function(..., indent = 0, prefix = "", width) {
   paste0(wrapped, collapse = "\n")
 }
 
+#' @importFrom fansi strwrap_ctl
 tidySE_strwrap2 <- function(x, width, indent) {
-  fansi::strwrap_ctl(x, width = max(width, 0), indent = indent, exdent = indent + 2)
+  strwrap_ctl(x, width = max(width, 0), indent = indent, exdent = indent + 2)
 }
 
 

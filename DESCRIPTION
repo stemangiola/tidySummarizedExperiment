@@ -11,7 +11,7 @@ Depends:
     R (>= 4.0.0),
     SummarizedExperiment
 Imports:
-    tibble,
+    tibble (>= 3.0.4),
     dplyr,
     magrittr,
     tidyr,
@@ -24,7 +24,11 @@ Imports:
     utils,
     S4Vectors,
     tidyselect,
-    ellipsis
+    ellipsis,
+    pillar,
+    stringr,
+    cli,
+    fansi
 Suggests:
     BiocStyle,
     testthat,
