@@ -122,7 +122,7 @@ where operations are performed &quot;by group&quot;. `ungroup()` removes groupin
 where operations are performed "by group". `ungroup()` removes grouping.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>group_by</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, .add <span class='op'>=</span> <span class='cn'>FALSE</span>, .drop <span class='op'>=</span> <span class='fu'>group_by_drop_default</span><span class='op'>(</span><span class='va'>.data</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>group_by</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, .add <span class='op'>=</span> <span class='cn'>FALSE</span>, .drop <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by_drop_default.html'>group_by_drop_default</a></span><span class='op'>(</span><span class='va'>.data</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,21 +171,11 @@ individual methods for extra arguments and differences in behaviour.</p>
 <span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySE says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 102,193 x 5</span><span>
-#&gt; </span><span style='color: #555555;'># Groups:   sample [7]</span><span>
-#&gt;    sample condition type       transcript  counts
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> untrt1 untreated single_end FBgn0000003      0
-#&gt; </span><span style='color: #555555;'> 2</span><span> untrt1 untreated single_end FBgn0000008     92
-#&gt; </span><span style='color: #555555;'> 3</span><span> untrt1 untreated single_end FBgn0000014      5
-#&gt; </span><span style='color: #555555;'> 4</span><span> untrt1 untreated single_end FBgn0000015      0
-#&gt; </span><span style='color: #555555;'> 5</span><span> untrt1 untreated single_end FBgn0000017   </span><span style='text-decoration: underline;'>4</span><span>664
-#&gt; </span><span style='color: #555555;'> 6</span><span> untrt1 untreated single_end FBgn0000018    583
-#&gt; </span><span style='color: #555555;'> 7</span><span> untrt1 untreated single_end FBgn0000022      0
-#&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end FBgn0000024     10
-#&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end FBgn0000028      0
-#&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div></span></pre>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: `group_by_()` is deprecated as of dplyr 0.7.0.</span>
+#&gt; <span class='warning'>Please use `group_by()` instead.</span>
+#&gt; <span class='warning'>See vignette('programming') for more help</span>
+#&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
+#&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='output co'>#&gt; <span class='error'>Error in UseMethod("group_by_"): no applicable method for 'group_by_' applied to an object of class "c('tidySE', 'RangedSummarizedExperiment', 'SummarizedExperiment', 'RectangularData', 'Vector', 'Annotated', 'vector_OR_Vector')"</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

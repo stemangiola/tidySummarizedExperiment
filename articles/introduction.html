@@ -69,7 +69,7 @@
       <h1 data-toc-skip>Overview of the tidySE package</h1>
                         <h4 class="author">Stefano Mangiola</h4>
             
-            <h4 class="date">2020-10-13</h4>
+            <h4 class="date">2020-10-18</h4>
       
       
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -186,7 +186,7 @@
 <p><strong>It looks like a tibble</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">pasilla_tidy</span></pre></div>
-<pre><code>## # A tibble: 102,193 x 5
+<pre><code>## # A tibble abstraction: 102,193 x 5
 ##    sample condition type       transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
 ##  1 untrt1 untreated single_end FBgn0000003      0
@@ -215,7 +215,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></pre></div>
-<pre><code>## # A tibble: 1 x 5
+<pre><code>## # A tibble abstraction: 1 x 5
 ##   sample condition type       transcript  counts
 ##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
 ## 1 untrt1 untreated single_end FBgn0000003      0</code></pre>
@@ -223,7 +223,7 @@
 <div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/filter.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></pre></div>
-<pre><code>## # A tibble: 58,396 x 5
+<pre><code>## # A tibble abstraction: 58,396 x 5
 ##    sample condition type       transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
 ##  1 untrt1 untreated single_end FBgn0000003      0
@@ -287,7 +287,7 @@
 <div class="sourceCode" id="cb19"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/rename.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></pre></div>
-<pre><code>## # A tibble: 102,193 x 5
+<pre><code>## # A tibble abstraction: 102,193 x 5
 ##    sample condition sequencing transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
 ##  1 untrt1 untreated single_end FBgn0000003      0
@@ -305,7 +305,7 @@
 <div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/mutate.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></pre></div>
-<pre><code>## # A tibble: 102,193 x 5
+<pre><code>## # A tibble abstraction: 102,193 x 5
 ##    sample condition type   transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;        &lt;int&gt;
 ##  1 untrt1 untreated single FBgn0000003      0
@@ -323,7 +323,7 @@
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/unite.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></pre></div>
-<pre><code>## # A tibble: 102,193 x 4
+<pre><code>## # A tibble abstraction: 102,193 x 4
 ##    sample group                transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;        &lt;int&gt;
 ##  1 untrt1 untreated_single_end FBgn0000003      0
@@ -412,7 +412,7 @@
 <a href="#session-info" class="anchor"></a>Session Info</h1>
 <div class="sourceCode" id="cb31"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<pre><code>## R version 4.0.2 (2020-06-22)
+<pre><code>## R version 4.0.3 Patched (2020-10-13 r79342)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.1 LTS
 ## 
@@ -436,7 +436,7 @@
 ##  [3] Biobase_2.49.1              GenomicRanges_1.41.6       
 ##  [5] GenomeInfoDb_1.25.11        IRanges_2.23.10            
 ##  [7] S4Vectors_0.27.14           BiocGenerics_0.35.4        
-##  [9] MatrixGenerics_1.1.4        matrixStats_0.57.0         
+##  [9] MatrixGenerics_1.1.7        matrixStats_0.57.0         
 ## [11] ggplot2_3.3.2               knitr_1.30                 
 ## [13] BiocStyle_2.17.1           
 ## 
@@ -448,17 +448,17 @@
 ## [13] Matrix_1.2-18          rmarkdown_2.4          pkgdown_1.6.1.9000    
 ## [16] textshaping_0.1.1      desc_1.2.0             labeling_0.3          
 ## [19] stringr_1.4.0          RCurl_1.98-1.2         munsell_0.5.0         
-## [22] DelayedArray_0.15.16   compiler_4.0.2         xfun_0.18             
+## [22] DelayedArray_0.15.16   compiler_4.0.3         xfun_0.18             
 ## [25] pkgconfig_2.0.3        systemfonts_0.3.2      htmltools_0.5.0       
-## [28] tidyselect_1.1.0       tibble_3.0.3           GenomeInfoDbData_1.2.4
+## [28] tidyselect_1.1.0       tibble_3.0.4           GenomeInfoDbData_1.2.4
 ## [31] bookdown_0.20          fansi_0.4.1            crayon_1.3.4          
 ## [34] dplyr_1.0.2            withr_2.3.0            bitops_1.0-6          
-## [37] grid_4.0.2             gtable_0.3.0           lifecycle_0.2.0       
-## [40] magrittr_1.5           scales_1.1.1           cli_2.0.2             
+## [37] grid_4.0.3             gtable_0.3.0           lifecycle_0.2.0       
+## [40] magrittr_1.5           scales_1.1.1           cli_2.1.0             
 ## [43] stringi_1.5.3          farver_2.0.3           XVector_0.29.3        
 ## [46] fs_1.5.0               ellipsis_0.3.1         ragg_0.4.0            
 ## [49] generics_0.0.2         vctrs_0.3.4            RColorBrewer_1.1-2    
-## [52] tools_4.0.2            glue_1.4.2             purrr_0.3.4           
+## [52] tools_4.0.3            glue_1.4.2             purrr_0.3.4           
 ## [55] yaml_2.2.1             colorspace_1.4-1       BiocManager_1.30.10   
 ## [58] memoise_1.1.0</code></pre>
 </div>
