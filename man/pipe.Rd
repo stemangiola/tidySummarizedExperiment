@@ -14,6 +14,6 @@ See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
 }
 \examples{
 
-tidySE::pasilla \%>\% tidy()
+tidySummarizedExperiment::pasilla \%>\% tidy()
 }
 \keyword{internal}

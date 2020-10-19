@@ -60,13 +60,13 @@ NULL
 #' @rdname print
 #' @importFrom cli cat_line
 #' @export
-print.tidySE <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
+print.tidySummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
   x %>%
     as_tibble() %>%
 
     # Get formatting
-    tidySE_format_tbl(..., n = n, width = width, n_extra = n_extra) %>%
+    tidySummarizedExperiment_format_tbl(..., n = n, width = width, n_extra = n_extra) %>%
 
     # Hijack the tibble header
     map_chr(~ .x %>% str_replace("A tibble:", "A tibble abstraction:")) %>%
@@ -78,12 +78,12 @@ print.tidySE <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 }
 
 #' @importFrom tibble trunc_mat
-tidySE_format_tbl <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
+tidySummarizedExperiment_format_tbl <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
   mat <- trunc_mat(x, n = n, width = width, n_extra = n_extra)
-  tidySE_format_truncated_mat(mat)
+  tidySummarizedExperiment_format_truncated_mat(mat)
 }
 
-tidySE_pluralise_n <- function(message, n) {
+tidySummarizedExperiment_pluralise_n <- function(message, n) {
   stopifnot(n >= 0)
 
 
@@ -105,60 +105,60 @@ tidySE_pluralise_n <- function(message, n) {
   message
 }
 
-tidySE_nchar_width <- function(x) {
+tidySummarizedExperiment_nchar_width <- function(x) {
   nchar(x, type = "width")
 }
 
 #' @importFrom pillar style_subtle
 #' @importFrom rlang names2
 #' @importFrom pillar squeeze
-tidySE_format_truncated_mat <- function(x, width = NULL, ...) {
+tidySummarizedExperiment_format_truncated_mat <- function(x, width = NULL, ...) {
   if (is.null(width)) {
     width <- x$width
   }
 
-  width <- tidySE_tibble_width(width)
+  width <- tidySummarizedExperiment_tibble_width(width)
 
-  named_header <- tidySE_format_header(x)
+  named_header <- tidySummarizedExperiment_format_header(x)
   if (all(names2(named_header) == "")) {
     header <- named_header
   } else {
     header <- paste0(
-      tidySE_justify(
+      tidySummarizedExperiment_justify(
         paste0(names2(named_header), ":"),
         right = FALSE, space = NBSP
       ),
-      # We add a space after the NBSP inserted by tidySE_justify()
+      # We add a space after the NBSP inserted by tidySummarizedExperiment_justify()
       # so that wrapping occurs at the right location for very narrow outputs
       " ",
       named_header
     )
   }
 
-  comment <- tidySE_format_comment(header, width = width)
+  comment <- tidySummarizedExperiment_format_comment(header, width = width)
   squeezed <- squeeze(x$mcf, width = width)
-  mcf <- tidySE_format_body(squeezed)
+  mcf <- tidySummarizedExperiment_format_body(squeezed)
 
   # Splitting lines is important, otherwise subtle style may be lost
   # if column names contain spaces.
-  footer <- tidySE_pre_dots(tidySE_format_footer(x, squeezed))
-  footer_comment <- tidySE_split_lines(tidySE_format_comment(footer, width = width))
+  footer <- tidySummarizedExperiment_pre_dots(tidySummarizedExperiment_format_footer(x, squeezed))
+  footer_comment <- tidySummarizedExperiment_split_lines(tidySummarizedExperiment_format_comment(footer, width = width))
 
   c(style_subtle(comment), mcf, style_subtle(footer_comment))
 }
 
-tidySE_format_header <- function(x) {
+tidySummarizedExperiment_format_header <- function(x) {
   x$summary
 }
 
-tidySE_format_body <- function(x) {
+tidySummarizedExperiment_format_body <- function(x) {
   format(x)
 }
 
 #' @importFrom pillar extra_cols
-tidySE_format_footer <- function(x, squeezed_colonnade) {
-  extra_rows <- tidySE_format_footer_rows(x)
-  extra_cols <- tidySE_format_footer_cols(x, extra_cols(squeezed_colonnade, n = x$n_extra))
+tidySummarizedExperiment_format_footer <- function(x, squeezed_colonnade) {
+  extra_rows <- tidySummarizedExperiment_format_footer_rows(x)
+  extra_cols <- tidySummarizedExperiment_format_footer_cols(x, extra_cols(squeezed_colonnade, n = x$n_extra))
 
   extra <- c(extra_rows, extra_cols)
   if (length(extra) >= 1) {
@@ -170,30 +170,30 @@ tidySE_format_footer <- function(x, squeezed_colonnade) {
   }
 }
 
-tidySE_format_footer_rows <- function(x) {
+tidySummarizedExperiment_format_footer_rows <- function(x) {
   if (length(x$mcf) != 0) {
     if (is.na(x$rows_missing)) {
       "more rows"
     } else if (x$rows_missing > 0) {
-      paste0(tidySE_big_mark(x$rows_missing), tidySE_pluralise_n(" more row(s)", x$rows_missing))
+      paste0(tidySummarizedExperiment_big_mark(x$rows_missing), tidySummarizedExperiment_pluralise_n(" more row(s)", x$rows_missing))
     }
   } else if (is.na(x$rows_total) && x$rows_min > 0) {
-    paste0("at least ", tidySE_big_mark(x$rows_min), tidySE_pluralise_n(" row(s) total", x$rows_min))
+    paste0("at least ", tidySummarizedExperiment_big_mark(x$rows_min), tidySummarizedExperiment_pluralise_n(" row(s) total", x$rows_min))
   }
 }
 
-tidySE_format_footer_cols <- function(x, extra_cols) {
+tidySummarizedExperiment_format_footer_cols <- function(x, extra_cols) {
   if (length(extra_cols) == 0) return(NULL)
 
-  vars <- tidySE_format_extra_vars(extra_cols)
+  vars <- tidySummarizedExperiment_format_extra_vars(extra_cols)
   paste0(
-    tidySE_big_mark(length(extra_cols)), " ",
+    tidySummarizedExperiment_big_mark(length(extra_cols)), " ",
     if (!identical(x$rows_total, 0L) && x$rows_min > 0) "more ",
     pluralise("variable(s)", extra_cols), vars
   )
 }
 
-tidySE_format_extra_vars <- function(extra_cols) {
+tidySummarizedExperiment_format_extra_vars <- function(extra_cols) {
   # Also covers empty extra_cols vector!
   if (is.na(extra_cols[1])) return("")
 
@@ -204,12 +204,12 @@ tidySE_format_extra_vars <- function(extra_cols) {
   paste0(": ", collapse(extra_cols))
 }
 
-tidySE_format_comment <- function(x, width) {
+tidySummarizedExperiment_format_comment <- function(x, width) {
   if (length(x) == 0L) return(character())
-  map_chr(x, tidySE_wrap, prefix = "# ", width = min(width, getOption("width")))
+  map_chr(x, tidySummarizedExperiment_wrap, prefix = "# ", width = min(width, getOption("width")))
 }
 
-tidySE_pre_dots <- function(x) {
+tidySummarizedExperiment_pre_dots <- function(x) {
   if (length(x) > 0) {
     paste0(cli::symbol$ellipsis, " ", x)
   } else {
@@ -217,9 +217,9 @@ tidySE_pre_dots <- function(x) {
   }
 }
 
-tidySE_justify <- function(x, right = TRUE, space = " ") {
+tidySummarizedExperiment_justify <- function(x, right = TRUE, space = " ") {
   if (length(x) == 0L) return(character())
-  width <- tidySE_nchar_width(x)
+  width <- tidySummarizedExperiment_nchar_width(x)
   max_width <- max(width)
   spaces_template <- paste(rep(space, max_width), collapse = "")
   spaces <- map_chr(max_width - width, substr, x = spaces_template, start = 1L)
@@ -230,14 +230,14 @@ tidySE_justify <- function(x, right = TRUE, space = " ") {
   }
 }
 
-tidySE_split_lines <- function(x) {
+tidySummarizedExperiment_split_lines <- function(x) {
   # Avoid .ptype argument to vec_c()
   if (is_empty(x)) return(character())
 
   unlist(strsplit(x, "\n", fixed = TRUE))
 }
 
-tidySE_big_mark <- function(x, ...) {
+tidySummarizedExperiment_big_mark <- function(x, ...) {
   # The thousand separator,
   # "," unless it's used for the decimal point, in which case "."
   mark <- if (identical(getOption("OutDec"), ",")) "." else ","
@@ -248,13 +248,13 @@ tidySE_big_mark <- function(x, ...) {
 
 collapse <- function(x) paste(x, collapse = ", ")
 
-# tidySE_wrap --------------------------------------------------------------------
+# tidySummarizedExperiment_wrap --------------------------------------------------------------------
 
 NBSP <- "\U00A0"
 
-tidySE_wrap <- function(..., indent = 0, prefix = "", width) {
+tidySummarizedExperiment_wrap <- function(..., indent = 0, prefix = "", width) {
   x <- paste0(..., collapse = "")
-  wrapped <- tidySE_strwrap2(x, width - tidySE_nchar_width(prefix), indent)
+  wrapped <- tidySummarizedExperiment_strwrap2(x, width - tidySummarizedExperiment_nchar_width(prefix), indent)
   wrapped <- paste0(prefix, wrapped)
   wrapped <- gsub(NBSP, " ", wrapped)
 
@@ -262,7 +262,7 @@ tidySE_wrap <- function(..., indent = 0, prefix = "", width) {
 }
 
 #' @importFrom fansi strwrap_ctl
-tidySE_strwrap2 <- function(x, width, indent) {
+tidySummarizedExperiment_strwrap2 <- function(x, width, indent) {
   strwrap_ctl(x, width = max(width, 0), indent = indent, exdent = indent + 2)
 }
 
@@ -275,7 +275,7 @@ op.tibble <- list(
   tibble.view_max = 1000L
 )
 
-tidySE_tibble_opt <- function(x, dplyr = TRUE) {
+tidySummarizedExperiment_tibble_opt <- function(x, dplyr = TRUE) {
   x_tibble <- paste0("tibble.", x)
   res <- getOption(x_tibble)
   if (!is.null(res)) {
@@ -293,12 +293,12 @@ tidySE_tibble_opt <- function(x, dplyr = TRUE) {
   op.tibble[[x_tibble]]
 }
 
-tidySE_tibble_width <- function(width) {
+tidySummarizedExperiment_tibble_width <- function(width) {
   if (!is.null(width)) {
     return(width)
   }
 
-  width <- tidySE_tibble_opt("width")
+  width <- tidySummarizedExperiment_tibble_opt("width")
   if (!is.null(width)) {
     return(width)
   }
@@ -306,12 +306,12 @@ tidySE_tibble_width <- function(width) {
   getOption("width")
 }
 
-tidySE_tibble_glimpse_width <- function(width) {
+tidySummarizedExperiment_tibble_glimpse_width <- function(width) {
   if (!is.null(width)) {
     return(width)
   }
 
-  width <- tidySE_tibble_opt("width")
+  width <- tidySummarizedExperiment_tibble_opt("width")
   if (!is.null(width) && is.finite(width)) {
     return(width)
   }

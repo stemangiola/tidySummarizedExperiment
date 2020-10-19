@@ -152,17 +152,17 @@ each value.}
   * "left": fill with missing values on the left}
 }
 \value{
-A tidySE objector a tibble depending on input
+A tidySummarizedExperiment objector a tibble depending on input
 
-A tidySE objector a tibble depending on input
+A tidySummarizedExperiment objector a tibble depending on input
 
-A tidySE objector a tibble depending on input
+A tidySummarizedExperiment objector a tibble depending on input
 
-A tidySE objector a tibble depending on input
+A tidySummarizedExperiment objector a tibble depending on input
 
-A tidySE objector a tibble depending on input
+A tidySummarizedExperiment objector a tibble depending on input
 
-A tidySE objector a tibble depending on input
+A tidySummarizedExperiment objector a tibble depending on input
 }
 \description{
 Given a regular expression with capturing groups, `extract()` turns
@@ -190,32 +190,32 @@ under active development.
 }
 \examples{
 
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     nest(data=-condition) \%>\%
     unnest(data)
 
 
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     nest(data=-condition)
 
 
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
 # See vignette("pivot") for examples and explanation
 
 library(dplyr)
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     pivot_longer(c(condition, type), names_to="name", values_to="value")
 
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     unite("group", c(condition, type))
 
-un <- tidySE::pasilla \%>\%
+un <- tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     unite("group", c(condition, type))
 un \%>\% separate(col=group, into=c("condition", "type"))

@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-#' @param .data A tidySE
+#' @param .data A tidySummarizedExperiment
 #'
 #' @noRd
 to_tib <- function(.data) {
@@ -83,12 +83,12 @@ drop_class <- function(var, name) {
 #' @importFrom magrittr "%$%"
 #' @importFrom utils tail
 #'
-#' @param .data A tidySE
+#' @param .data A tidySummarizedExperiment
 #' @param transcripts A character
 #' @param all A boolean
 #'
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #'
 #' @noRd
@@ -153,12 +153,12 @@ get_abundance_sc_wide <- function(.data, transcripts=NULL, all=FALSE) {
 #' @importFrom purrr when
 #' @importFrom purrr map2
 #'
-#' @param .data A tidySE
+#' @param .data A tidySummarizedExperiment
 #' @param transcripts A character
 #' @param all A boolean
 #' @param exclude_zeros A boolean
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #'
 #' @noRd
@@ -246,7 +246,7 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
 #' @keywords internal
 #'
 #' @param .data A tibble
-#' @param SummarizedExperiment_object A tidySE
+#' @param SummarizedExperiment_object A tidySummarizedExperiment
 #'
 #' @noRd
 update_SE_from_tibble <- function(.data_mutated, .data) {
@@ -304,7 +304,7 @@ update_SE_from_tibble <- function(.data_mutated, .data) {
 #'
 #' @keywords internal
 #'
-#' @param SummarizedExperiment_object A tidySE
+#' @param SummarizedExperiment_object A tidySummarizedExperiment
 #'
 #' @noRd
 #'
@@ -450,5 +450,5 @@ get_subset_columns <- function(.data, .col) {
         unlist()
 }
 
-data_frame_returned_message = "tidySE says: A data frame is returned for independent data analysis."
-duplicated_cell_names = "tidySE says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."
+data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
+duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."

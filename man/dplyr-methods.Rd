@@ -88,13 +88,13 @@ the input. Weights are automatically standardised to sum to 1.}
 
 \item{.env}{DEPRECATED.}
 
-\item{.data}{A tidySE object or any data frame}
+\item{.data}{A tidySummarizedExperiment object or any data frame}
 
 \item{name}{An optional parameter that specifies the column to be used
 as names for a named vector. Specified in a similar manner as \code{var}.}
 }
 \value{
-A tidySE object
+A tidySummarizedExperiment object
 
 An object of the same type as `.data`.
 
@@ -149,13 +149,13 @@ A `tbl`
 
   A `tbl`
 
-A tidySE object
+A tidySummarizedExperiment object
 
-A tidySE object
+A tidySummarizedExperiment object
 
-A tidySE object
+A tidySummarizedExperiment object
 
-A tidySE object
+A tidySummarizedExperiment object
 
 An object of the same type as `.data`. The output has the following
 properties:
@@ -174,7 +174,7 @@ properties:
 * Data frame attributes are preserved.
 * Groups are maintained; you can't select off grouping variables.
 
-A tidySE object
+A tidySummarizedExperiment object
 
 A vector the same size as `.data`.
 }
@@ -423,74 +423,74 @@ to renaming a set of variables with a function.
 \examples{
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     distinct(sample)
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     filter(sample == "untrt1")
 
 # Learn more in ?dplyr_tidy_eval
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     group_by(sample)
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     summarise(mean(counts))
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     mutate(logcounts=log2(counts))
 
 `\%>\%` <- magrittr::`\%>\%`
-# tidySE::pasilla \%>\%
+# tidySummarizedExperiment::pasilla \%>\%
 #     tidy() \%>\%
 #     rename(cond=condition)
 `\%>\%` <- magrittr::`\%>\%`
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySE::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
 tt \%>\% left_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2))
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySE::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
 tt \%>\% inner_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2) \%>\% slice(1))
 
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySE::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
 tt \%>\% right_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2) \%>\% slice(1))
 
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySE::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
 tt \%>\% full_join(tibble::tibble(condition="treated", dose=10))
 
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     slice(1)
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     select(sample, transcript, counts)
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     sample_n(50)
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     sample_frac(0.1)
 
 `\%>\%` <- magrittr::`\%>\%`
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     pull(transcript)
 }

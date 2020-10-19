@@ -1,11 +1,11 @@
 context("dplyr test")
 
-library(tidySE)
+library(tidySummarizedExperiment)
 
 tt <- pasilla %>% tidy()
 
 test_that("bind_rows", {
-    tt_bind <- tidySE::bind_rows(tt, tt)
+    tt_bind <- tidySummarizedExperiment::bind_rows(tt, tt)
 
     tt_bind %>%
         count(sample, transcript) %>%
@@ -110,7 +110,7 @@ test_that("select", {
         select(-condition) %>%
         class() %>%
         as.character() %>%
-        expect_equal("tidySE")
+        expect_equal("tidySummarizedExperiment")
 
     tt %>%
         select(condition) %>%

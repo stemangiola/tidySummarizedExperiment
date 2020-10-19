@@ -59,7 +59,7 @@ prefer the more expressive maturing `as_tibble_row()` and
 }
 
 \examples{
-tidySE::pasilla \%>\%
+tidySummarizedExperiment::pasilla \%>\%
     tidy() \%>\%
     as_tibble()
 }
