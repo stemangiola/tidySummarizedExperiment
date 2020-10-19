@@ -1,4 +1,4 @@
 library(testthat)
-library(tidySE)
+library(tidySummarizedExperiment)
 
-test_check("tidySE")
+test_check("tidySummarizedExperiment")

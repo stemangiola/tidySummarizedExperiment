@@ -35,10 +35,10 @@
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' library(tibble)
-#' tt <- tidySE::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
 #' bind_rows(tt, tt)
 #'
-#' num_rows <- nrow(tidySE::as_tibble(tt))
+#' num_rows <- nrow(tidySummarizedExperiment::as_tibble(tt))
 #' tt %>% bind_cols(tibble(a=0, num_rows))
 #' @name bind
 NULL
@@ -64,14 +64,14 @@ bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
 #'
 #' @export
 #'
-bind_rows.tidySE <- function(..., .id=NULL, add.cell.ids=NULL) {
+bind_rows.tidySummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     tts <- flatten_if(dots_values(...), is_spliced)
 
     new_obj <- cbind(tts[[1]], tts[[2]]) %>% tidy()
 
     # If duplicated cell names
     if (new_obj %>% colnames() %>% duplicated() %>% which() %>% length() %>% gt(0)) {
-        warning("tidySE says: you have duplicated sample names, they will be made unique.")
+        warning("tidySummarizedExperiment says: you have duplicated sample names, they will be made unique.")
     }
     unique_colnames <- make.unique(colnames(new_obj), sep="_")
 
@@ -117,7 +117,7 @@ bind_cols_ = function(..., .id=NULL) {
 
             # Return tiblle
             ~ {
-                warning("tidySE says: The new columns do not include pure sample-wise or transcript-wise. A data frame is returned for independent data analysis.")
+                warning("tidySummarizedExperiment says: The new columns do not include pure sample-wise or transcript-wise. A data frame is returned for independent data analysis.")
                 (.)
             }
         )
@@ -129,7 +129,7 @@ bind_cols_ = function(..., .id=NULL) {
 #'
 #' @export
 #'
-bind_cols.tidySE <- bind_cols_
+bind_cols.tidySummarizedExperiment <- bind_cols_
 
 #' distinct
 #'
@@ -139,7 +139,7 @@ bind_cols.tidySE <- bind_cols_
 #' @param .keep_all If TRUE, keep all variables in .data. If a combination
 #'   of ... is not distinct, this keeps the first row of values. (See dplyr)
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #' @importFrom dplyr distinct
 #'
@@ -149,7 +149,7 @@ bind_cols.tidySE <- bind_cols_
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     distinct(sample)
 #' @export
@@ -157,7 +157,7 @@ NULL
 
 #' @inheritParams distinct
 #' @export
-distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
+distinct.tidySummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
     message(data_frame_returned_message)
 
     .data %>%
@@ -199,7 +199,7 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #' average.
 #' @family single table verbs
 #' @inheritParams arrange
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #' @param ... <[`tidy-eval`][dplyr_tidy_eval]> Logical predicates defined in
 #'   terms of the variables in `.data`.
 #'   Multiple conditions are combined with `&`. Only rows where the
@@ -228,7 +228,7 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     filter(sample == "untrt1")
 #'
@@ -238,7 +238,7 @@ NULL
 
 #' @inheritParams filter
 #' @export
-filter.tidySE <- function(.data, ..., .preserve=FALSE) {
+filter.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     new_meta <- .data %>%
         as_tibble() %>%
         dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
@@ -255,7 +255,7 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 
             # If not rectangular return just tibble
             ~ {
-                message("tidySE says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
+                message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
                 (.)
             }
         )
@@ -274,7 +274,7 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #'
 #' @family grouping functions
 #' @inheritParams arrange
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #' @param ... In `group_by()`, variables or computations to group by.
 #'   In `ungroup()`, variables to remove from the grouping.
 #' @param .add When `FALSE`, the default, `group_by()` will
@@ -302,14 +302,14 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     group_by(sample)
 #' @export
 NULL
 
 #' @export
-group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
+group_by.tidySummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
     message(data_frame_returned_message)
 
     .data %>%
@@ -353,7 +353,7 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 #' results, consider using new names for your summary variables, especially when
 #' creating multiple summaries.
 #'
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #'
 #' @rdname dplyr-methods
 #' @name summarise
@@ -389,14 +389,14 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 #' The following methods are currently available in loaded packages:
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     summarise(mean(counts))
 #' @export
 NULL
 
 #' @export
-summarise.tidySE <- function(.data, ...) {
+summarise.tidySummarizedExperiment <- function(.data, ...) {
     message(data_frame_returned_message)
 
 
@@ -437,7 +437,7 @@ summarise.tidySE <- function(.data, ...) {
 #' as soon as an aggregating, lagging, or ranking function is
 #' involved. Compare this ungrouped mutate:
 #'
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #'
 #' With the grouped equivalent:
 #'
@@ -487,7 +487,7 @@ summarise.tidySE <- function(.data, ...) {
 #'
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     mutate(logcounts=log2(counts))
 #'
@@ -501,7 +501,7 @@ NULL
 #' @importFrom rlang enquos
 #'
 #' @export
-mutate.tidySE <- function(.data, ...) {
+mutate.tidySummarizedExperiment <- function(.data, ...) {
 
     # Check that we are not modifying a key column
     cols <- enquos(...) %>% names()
@@ -521,7 +521,7 @@ mutate.tidySE <- function(.data, ...) {
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
-            "tidySE says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
             columns,
             "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
         )
@@ -548,7 +548,7 @@ mutate.tidySE <- function(.data, ...) {
 #'
 #' @inheritParams arrange
 #'
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #' @param ... <[`tidy-select`][dplyr_tidy_select]> Use `new_name=old_name`
 #'   to rename selected variables.
 #' @return
@@ -571,7 +571,7 @@ mutate.tidySE <- function(.data, ...) {
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' # tidySE::pasilla %>%
+#' # tidySummarizedExperiment::pasilla %>%
 #' #     tidy() %>%
 #' #     rename(cond=condition)
 #' @export
@@ -579,7 +579,7 @@ NULL
 
 #' @importFrom tidyselect eval_select
 #' @export
-rename.tidySE <- function(.data, ...) {
+rename.tidySummarizedExperiment <- function(.data, ...) {
 
     # Check that we are not modifying a key column
     cols <- tidyselect::eval_select(expr(c(...)), colData(.data) %>% as.data.frame())
@@ -599,7 +599,7 @@ rename.tidySE <- function(.data, ...) {
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
-            "tidySE says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
             columns,
             "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
         )
@@ -646,7 +646,7 @@ rename.tidySE <- function(.data, ...) {
 NULL
 
 #' @export
-rowwise.tidySE <- function(data, ...) {
+rowwise.tidySummarizedExperiment <- function(data, ...) {
     message(data_frame_returned_message)
 
     data %>%
@@ -670,7 +670,7 @@ rowwise.tidySE <- function(data, ...) {
 #'   character vector of length 2. (See dplyr)
 #' @param ... Data frames to combine (See dplyr)
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #' @rdname dplyr-methods
 #' @name left_join
@@ -680,12 +680,12 @@ rowwise.tidySE <- function(data, ...) {
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySE::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
 #' tt %>% left_join(tt %>% distinct(condition) %>% mutate(new_column=1:2))
 NULL
 
 #' @export
-left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+left_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
         as_tibble() %>%
@@ -698,7 +698,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
                 (.)
             },
 
-            # Otherwise return updated tidySE
+            # Otherwise return updated tidySummarizedExperiment
             ~ update_SE_from_tibble(., x)
         )
 }
@@ -715,12 +715,12 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @param suffix If there are non-joined duplicate variables in x and y, these suffixes will be added to the output to disambiguate them. Should be a character vector of length 2. (See dplyr)
 #' @param ... Data frames to combine (See dplyr)
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySE::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
 #' tt %>% inner_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
 #'
 #' @rdname dplyr-methods
@@ -730,7 +730,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 NULL
 
 #' @export
-inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
+inner_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     x %>%
         as_tibble() %>%
         dplyr::inner_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
@@ -743,7 +743,7 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
                 (.)
             },
 
-            # Otherwise return updated tidySE
+            # Otherwise return updated tidySummarizedExperiment
             ~ update_SE_from_tibble(., x)
         )
 }
@@ -763,12 +763,12 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
 #'   character vector of length 2. (See dplyr)
 #' @param ... Data frames to combine (See dplyr)
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySE::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
 #' tt %>% right_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
 #'
 #' @rdname dplyr-methods
@@ -778,7 +778,7 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
 NULL
 
 #' @export
-right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+right_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
         as_tibble() %>%
@@ -791,7 +791,7 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
                 (.)
             },
 
-            # Otherwise return updated tidySE
+            # Otherwise return updated tidySummarizedExperiment
             ~ update_SE_from_tibble(., x)
         )
 }
@@ -812,12 +812,12 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #'   character vector of length 2. (See dplyr)
 #' @param ... Data frames to combine (See dplyr)
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySE::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
 #' tt %>% full_join(tibble::tibble(condition="treated", dose=10))
 #'
 #' @rdname dplyr-methods
@@ -827,7 +827,7 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 NULL
 
 #' @export
-full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+full_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
         as_tibble() %>%
@@ -840,7 +840,7 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
                 (.)
             },
 
-            # Otherwise return updated tidySE
+            # Otherwise return updated tidySummarizedExperiment
             ~ update_SE_from_tibble(., x)
         )
 }
@@ -872,7 +872,7 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @inheritParams arrange
 #' @inheritParams filter
 #'
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #' @param ... For `slice()`: <[`data-masking`][dplyr_data_masking]> Integer row
 #'   values.
 #'
@@ -915,13 +915,13 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     slice(1)
 NULL
 
 #' @export
-slice.tidySE <- function(.data, ..., .preserve=FALSE) {
+slice.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     .data %>%
         as_tibble() %>%
         dplyr::slice(..., .preserve=.preserve) %>%
@@ -933,7 +933,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
                 (.)
             },
 
-            # Otherwise return updated tidySE
+            # Otherwise return updated tidySummarizedExperiment
             ~ update_SE_from_tibble(., .data)
         )
 }
@@ -958,7 +958,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 #'
 #' @inheritParams arrange
 #'
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #' @param ... <[`tidy-select`][dplyr_tidy_select]> One or more unquoted
 #'   expressions separated by commas. Variable names can be used as if they
 #'   were positions in the data frame, so expressions like `x:y` can
@@ -984,7 +984,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     select(sample, transcript, counts)
 #' @family single table verbs
@@ -996,7 +996,7 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 NULL
 
 #' @export
-select.tidySE <- function(.data, ...) {
+select.tidySummarizedExperiment <- function(.data, ...) {
     .data %>%
         as_tibble() %>%
         select_helper(...) %>%
@@ -1006,7 +1006,7 @@ select.tidySE <- function(.data, ...) {
             (get_special_columns(.data) %>% c(get_needed_columns()) %in% colnames(.)) %>%
                 all() %>%
                 `!`() ~ {
-                message("tidySE says: Key columns are missing. A data frame is returned for independent data analysis.")
+                message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
                 (.)
             },
 
@@ -1055,13 +1055,13 @@ select.tidySE <- function(.data, ...) {
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     sample_n(50)
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     sample_frac(0.1)
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #' @rdname dplyr-methods
 #' @name sample_n
@@ -1070,7 +1070,7 @@ select.tidySE <- function(.data, ...) {
 NULL
 
 #' @export
-sample_n.tidySE <- function(tbl, size, replace=FALSE,
+sample_n.tidySummarizedExperiment <- function(tbl, size, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_n()", "slice_sample()")
 
@@ -1090,7 +1090,7 @@ sample_n.tidySE <- function(tbl, size, replace=FALSE,
 NULL
 
 #' @export
-sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
+sample_frac.tidySummarizedExperiment <- function(tbl, size=1, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_frac()", "slice_sample()")
 
@@ -1139,7 +1139,7 @@ sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     count(sample)
 count <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
@@ -1161,7 +1161,7 @@ count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by
     out
 }
 #' @export
-count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
+count.tidySummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     message(data_frame_returned_message)
 
     x %>%
@@ -1183,7 +1183,7 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' @inheritParams arrange
 #' @inheritParams tidyselect::vars_pull
 #'
-#' @param .data A tidySE object or any data frame
+#' @param .data A tidySummarizedExperiment object or any data frame
 #' @param name An optional parameter that specifies the column to be used
 #'   as names for a named vector. Specified in a similar manner as \code{var}.
 #' @param ... For use by methods.
@@ -1203,13 +1203,13 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     pull(transcript)
 NULL
 
 #' @export
-pull.tidySE <- function(.data, var=-1, name=NULL, ...) {
+pull.tidySummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     var <- enquo(var)
     name <- enquo(name)
 

@@ -1,11 +1,11 @@
 ---
-title: "tidySE - part of tidytranscriptomics"
+title: "tidySummarizedExperiment - part of tidytranscriptomics"
 output: github_document
 always_allow_html: true
 ---
 
 <!-- badges: start -->
-[![Lifecycle:maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![R build status](https://github.com/stemangiola/tidySE/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/stemangiola/tidySE/actions)
+[![Lifecycle:maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![R build status](https://github.com/stemangiola/tidySummarizedExperiment/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/stemangiola/tidySummarizedExperiment/actions)
 <!-- badges: end -->
 
 ```{r echo=FALSE}
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(fig.path="man/figures/")
 ```
 **Brings SummarizedExperiment to the tidyverse!** 
 
-website: [stemangiola.github.io/tidySE/](https://stemangiola.github.io/tidySE/)
+website: [stemangiola.github.io/tidySummarizedExperiment/](https://stemangiola.github.io/tidySummarizedExperiment/)
 
 Please also have a look at
 
@@ -32,7 +32,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 # Introduction
 
-tidySE provides a bridge between Bioconductor [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) [@morgan2020summarized] and the tidyverse [@wickham2019welcome]. It creates an invisible layer that enables viewing the
+tidySummarizedExperiment provides a bridge between Bioconductor [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) [@morgan2020summarized] and the tidyverse [@wickham2019welcome]. It creates an invisible layer that enables viewing the
 Bioconductor *SummarizedExperiment* object as a tidyverse tibble, and provides SummarizedExperiment-compatible *dplyr*, *tidyr*, *ggplot* and *plotly* functions. This allows users to get the best of both Bioconductor and tidyverse worlds.
 
 
@@ -40,7 +40,7 @@ Bioconductor *SummarizedExperiment* object as a tidyverse tibble, and provides S
 
 SummarizedExperiment-compatible Functions | Description
 ------------ | -------------
-`all` | After all `tidySE` is a SummarizedExperiment object, just better
+`all` | After all `tidySummarizedExperiment` is a SummarizedExperiment object, just better
 
 tidyverse Packages | Description
 ------------ | -------------
@@ -51,7 +51,7 @@ tidyverse Packages | Description
 
 Utilities | Description
 ------------ | -------------
-`tidy` | Add `tidySE` invisible layer over a SummarizedExperiment object
+`tidy` | Add `tidySummarizedExperiment` invisible layer over a SummarizedExperiment object
 `as_tibble` | Convert cell-wise information to a `tbl_df`
 
 ## Installation
@@ -62,28 +62,28 @@ if (!requireNamespace("BiocManager", quietly=TRUE)) {
       install.packages("BiocManager")
   }
 
-BiocManager::install("tidySE")
+BiocManager::install("tidySummarizedExperiment")
 ```
 
 From Github
 ```{r, eval=FALSE}
-devtools::install_github("stemangiola/tidySE")
+devtools::install_github("stemangiola/tidySummarizedExperiment")
 ```
 
 Load libraries used in the examples.
 
 ```{r}
 library(ggplot2)
-library(tidySE)
+library(tidySummarizedExperiment)
 ```
 
 
-# Create `tidySE`, the best of both worlds!
+# Create `tidySummarizedExperiment`, the best of both worlds!
 
 This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs. 
 
 ```{r}
-pasilla_tidy <- tidySE::pasilla %>%
+pasilla_tidy <- tidySummarizedExperiment::pasilla %>%
     tidy()
 ```
 
@@ -210,7 +210,7 @@ Here we plot the distribution of counts per sample.
 
 ```{r plot1}
 pasilla_tidy %>%
-    tidySE::ggplot(aes(counts + 1, group=sample, color=`type`)) +
+    tidySummarizedExperiment::ggplot(aes(counts + 1, group=sample, color=`type`)) +
     geom_density() +
     scale_x_log10() +
     my_theme

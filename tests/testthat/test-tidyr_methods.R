@@ -1,12 +1,12 @@
 context("tidyr test")
 
 library(magrittr)
-library(tidySE)
+library(tidySummarizedExperiment)
 
 tt <-
     pasilla %>%
     tidy() %>%
-    tidySE::mutate(col2 = "other_col")
+    tidySummarizedExperiment::mutate(col2 = "other_col")
 
 test_that("nest_unnest", {
     col_names <- tt %>% colData %>% colnames() %>% c("sample")
@@ -39,7 +39,7 @@ test_that("unite separate", {
     un <- tt %>% unite("new_col", c(condition, col2), sep = ":")
 
     un %>%
-        tidySE::select(new_col) %>%
+        tidySummarizedExperiment::select(new_col) %>%
         slice(1) %>%
         pull(new_col) %>%
         expect_equal("untreated:other_col")
@@ -53,25 +53,25 @@ test_that("unite separate", {
         )
 
     se %>%
-        tidySE::select(sample) %>%
+        tidySummarizedExperiment::select(sample) %>%
         ncol() %>%
         expect_equal(1)
 })
 
 test_that("extract", {
     tt %>%
-        tidySE::extract(col2,
+        tidySummarizedExperiment::extract(col2,
                         into = "g",
                         regex = "other_([a-z]+)",
                         convert = TRUE) %>%
-        tidySE::pull(g) %>%
+        tidySummarizedExperiment::pull(g) %>%
         class() %>%
         expect_equal("character")
 })
 
 test_that("pivot_longer", {
     tt %>%
-        tidySE::pivot_longer(c(sample, condition),
+        tidySummarizedExperiment::pivot_longer(c(sample, condition),
                              names_to = "name",
                              values_to = "value") %>%
         class() %>%

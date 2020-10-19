@@ -10,12 +10,12 @@ tidy(object)
 \item{object}{A SummarizedExperiment object}
 }
 \value{
-A tidySE object
+A tidySummarizedExperiment object
 }
 \description{
 tidy for SummarizedExperiment
 }
 \examples{
 
-tidySE::pasilla \%>\% tidy()
+tidySummarizedExperiment::pasilla \%>\% tidy()
 }

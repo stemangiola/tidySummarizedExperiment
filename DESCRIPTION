@@ -1,10 +1,10 @@
 Type: Package
-Package: tidySE
+Package: tidySummarizedExperiment
 Title: Brings SummarizedExperiment to the Tidyverse 
 Version: 0.99.2
 Authors@R: c(person("Stefano", "Mangiola", email = "mangiolastefano@gmail.com",
                   role = c("aut", "cre")) )
-Description: tidySE is an adapter that abstracts the 'SingleCellExperiment' container 
+Description: tidySummarizedExperiment is an adapter that abstracts the 'SingleCellExperiment' container 
     in the form of tibble and allows the data manipulation, plotting and nesting using 'tidyverse' 
 License: GPL-3
 Depends:

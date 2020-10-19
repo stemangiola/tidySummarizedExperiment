@@ -2,10 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
-tidySE.Rproj
+tidySummarizedExperiment.Rproj
 README_cache/*
 vignettes/introduction_cache*
-tidySE.Rproj
+tidySummarizedExperiment.Rproj
 Meta
 doc
 dev/*csv
@@ -13,4 +13,4 @@ dev/*rds
 dev/*rda
 dev/*pdf
 dev/dplyr-master/*
-tidySE.Rproj
+tidySummarizedExperiment.Rproj

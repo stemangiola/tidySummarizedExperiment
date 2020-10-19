@@ -1,5 +1,5 @@
 
-#' Create a new ggplot from a tidySE object
+#' Create a new ggplot from a tidySummarizedExperiment object
 #'
 #'
 #' `ggplot()` initializes a ggplot object. It can be used to
@@ -47,14 +47,14 @@
 #'
 #' library(ggplot2)
 #'
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
-#'     tidySE::ggplot(aes(sample, counts)) +
+#'     tidySummarizedExperiment::ggplot(aes(sample, counts)) +
 #'     geom_boxplot()
 NULL
 
 #' @export
-ggplot.tidySE <- function(data=NULL, mapping=aes(), ..., environment=parent.frame()) {
+ggplot.tidySummarizedExperiment <- function(data=NULL, mapping=aes(), ..., environment=parent.frame()) {
     data %>%
         as_tibble() %>%
         ggplot2::ggplot(mapping=mapping)

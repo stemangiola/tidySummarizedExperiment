@@ -37,11 +37,11 @@
 #' @param .preserve See tidyr::unnest
 #'
 #'
-#' @return A tidySE objector a tibble depending on input
+#' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @examples
 #'
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     nest(data=-condition) %>%
 #'     unnest(data)
@@ -56,7 +56,7 @@ NULL
 #' @importFrom purrr imap
 #'
 #' @export
-unnest.tidySE_nested <-
+unnest.tidySummarizedExperiment_nested <-
     function(data, cols, ..., keep_empty=FALSE, ptype=NULL, names_sep=NULL, names_repair="check_unique", .drop, .id, .sep, .preserve) {
 
 
@@ -68,12 +68,12 @@ unnest.tidySE_nested <-
     .data_ %>%
         when(
 
-            # If my only column to unnest is tidySE
+            # If my only column to unnest is tidySummarizedExperiment
             pull(., !!cols) %>%
                 .[[1]] %>%
                 class() %>%
                 as.character() %>%
-                eq("tidySE") %>%
+                eq("tidySummarizedExperiment") %>%
                 any() ~
 
             # Do my trick to unnest
@@ -92,9 +92,9 @@ unnest.tidySE_nested <-
 
             # Else do normal stuff
             ~ (.) %>%
-                drop_class("tidySE_nested") %>%
+                drop_class("tidySummarizedExperiment_nested") %>%
                 tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
-                add_class("tidySE_nested")
+                add_class("tidySummarizedExperiment_nested")
         )
 }
 
@@ -106,11 +106,11 @@ unnest.tidySE_nested <-
 #' @param ... Name-variable pairs of the form new_col=c(col1, col2, col3) (See tidyr)
 #' @param .names_sep See ?tidyr::nest
 #'
-#' @return A tidySE objector a tibble depending on input
+#' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @examples
 #'
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     nest(data=-condition)
 #'
@@ -124,7 +124,7 @@ NULL
 #' @importFrom rlang :=
 #'
 #' @export
-nest.tidySE <- function(.data, ..., .names_sep = NULL) {
+nest.tidySummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     my_data__ <- .data
     cols <- enquos(...)
     col_name_data <- names(cols)
@@ -147,8 +147,8 @@ nest.tidySE <- function(.data, ..., .names_sep = NULL) {
             )
         ) %>%
 
-        # Coerce to tidySE_nested for unnesting
-        add_class("tidySE_nested")
+        # Coerce to tidySummarizedExperiment_nested for unnesting
+        add_class("tidySummarizedExperiment_nested")
 }
 
 #' Extract a character column into multiple columns using regular
@@ -160,7 +160,7 @@ nest.tidySE <- function(.data, ..., .names_sep = NULL) {
 #'
 #' @importFrom tidyr extract
 #'
-#' @param data A tidySE object
+#' @param data A tidySummarizedExperiment object
 #' @param col Column name or position. This is passed to
 #'   [tidyselect::vars_pull()].
 #'
@@ -186,10 +186,10 @@ nest.tidySE <- function(.data, ..., .names_sep = NULL) {
 #' @export
 #' @examples
 #'
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
-#' @return A tidySE objector a tibble depending on input
+#' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @importFrom tidyr extract
 #'
@@ -198,7 +198,7 @@ NULL
 
 #' @importFrom rlang enquo
 #' @export
-extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
+extract.tidySummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
     convert=FALSE, ...) {
     col <- enquo(col)
 
@@ -218,7 +218,7 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
-            "tidySE says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
             columns,
             "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
         )
@@ -307,7 +307,7 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
 #'   will be the common type of the input columns used to generate them.
 #' @param ... Additional arguments passed on to methods.
 #'
-#' @return A tidySE objector a tibble depending on input
+#' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @rdname tidyr-methods
 #' @name pivot_longer
@@ -317,13 +317,13 @@ extract.tidySE <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
 #' # See vignette("pivot") for examples and explanation
 #'
 #' library(dplyr)
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     pivot_longer(c(condition, type), names_to="name", values_to="value")
 NULL
 
 #' @export
-pivot_longer.tidySE <- function(data,
+pivot_longer.tidySummarizedExperiment <- function(data,
     cols,
     names_to="name",
     names_prefix=NULL,
@@ -382,7 +382,7 @@ pivot_longer.tidySE <- function(data,
 #' @param remove If `TRUE`, remove input columns from output data frame.
 #' @seealso [separate()], the complement.
 #'
-#' @return A tidySE objector a tibble depending on input
+#' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @rdname tidyr-methods
 #' @name unite
@@ -390,13 +390,13 @@ pivot_longer.tidySE <- function(data,
 #' @export
 #' @examples
 #'
-#' tidySE::pasilla %>%
+#' tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     unite("group", c(condition, type))
 NULL
 
 #' @export
-unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
+unite.tidySummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 
     # Check that we are not modifying a key column
     cols <- enquo(col)
@@ -417,7 +417,7 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
-            "tidySE says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
             columns,
             "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
         )
@@ -466,7 +466,7 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 #' @seealso [unite()], the complement, [extract()] which uses regular
 #'   expression capturing groups.
 #'
-#' @return A tidySE objector a tibble depending on input
+#' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @rdname tidyr-methods
 #' @name separate
@@ -474,14 +474,14 @@ unite.tidySE <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 #' @export
 #' @examples
 #'
-#' un <- tidySE::pasilla %>%
+#' un <- tidySummarizedExperiment::pasilla %>%
 #'     tidy() %>%
 #'     unite("group", c(condition, type))
 #' un %>% separate(col=group, into=c("condition", "type"))
 NULL
 
 #' @export
-separate.tidySE <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
+separate.tidySummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
     convert=FALSE, extra="warn", fill="warn", ...) {
 
     # Check that we are not modifying a key column
@@ -503,7 +503,7 @@ separate.tidySE <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
             c(get_needed_columns()) %>%
             paste(collapse=", ")
         stop(
-            "tidySE says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
             columns,
             "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
         )

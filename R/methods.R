@@ -1,13 +1,13 @@
 
 
-setClass("tidySE", contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
+setClass("tidySummarizedExperiment", contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
 
 #' @importFrom methods show
 #' @import SummarizedExperiment
 #' @importFrom magrittr %>%
 setMethod(
     f="show",
-    signature="tidySE",
+    signature="tidySummarizedExperiment",
     definition=function(object) {
         object %>%
             print()
@@ -20,13 +20,13 @@ setMethod(
 #'
 #' @param object A SummarizedExperiment object
 #'
-#' @return A tidySE object
+#' @return A tidySummarizedExperiment object
 #'
 #' @name tidy
 #'
 #' @examples
 #'
-#' tidySE::pasilla %>% tidy()
+#' tidySummarizedExperiment::pasilla %>% tidy()
 #' @export
 tidy <- function(object) {
     UseMethod("tidy", object)
@@ -35,12 +35,12 @@ tidy <- function(object) {
 tidy_ <- function(object) {
     object %>%
         as("RangedSummarizedExperiment") %>%
-        as("tidySE") %>%
+        as("tidySummarizedExperiment") %>%
 
         # If there is a column called sample change it's name
         when(
             "sample" %in% colnames(colData(.)) ~ {
-                warning("tidySE says: column sample in your colData have been renamed as sample_, since is a reserved column name.")
+                warning("tidySummarizedExperiment says: column sample in your colData have been renamed as sample_, since is a reserved column name.")
 
                 rename(., sample_=sample)
             },
