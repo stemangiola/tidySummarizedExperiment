@@ -100,13 +100,7 @@ bind_cols.default <- function(..., .id=NULL) {
     dplyr::bind_cols(..., .id=.id)
 }
 
-#' @importFrom rlang dots_values
-#' @importFrom rlang flatten_if
-#' @importFrom rlang is_spliced
-#'
-#' @export
-#'
-bind_cols.tidySE <- function(..., .id=NULL) {
+bind_cols_ = function(..., .id=NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
     tts[[1]] %>%
@@ -128,6 +122,14 @@ bind_cols.tidySE <- function(..., .id=NULL) {
             }
         )
 }
+
+#' @importFrom rlang dots_values
+#' @importFrom rlang flatten_if
+#' @importFrom rlang is_spliced
+#'
+#' @export
+#'
+bind_cols.tidySE <- bind_cols_
 
 #' distinct
 #'
