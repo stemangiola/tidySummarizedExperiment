@@ -112,8 +112,7 @@ unnest.tidySE_nested <-
 #'
 #' tidySE::pasilla %>%
 #'     tidy() %>%
-#'     nest(data=-condition) %>%
-#'     unnest(data)
+#'     nest(data=-condition)
 #'
 #' @rdname tidyr-methods
 #' @name nest

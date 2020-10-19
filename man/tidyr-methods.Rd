@@ -198,8 +198,7 @@ tidySE::pasilla \%>\%
 
 tidySE::pasilla \%>\%
     tidy() \%>\%
-    nest(data=-condition) \%>\%
-    unnest(data)
+    nest(data=-condition)
 
 
 tidySE::pasilla \%>\%
