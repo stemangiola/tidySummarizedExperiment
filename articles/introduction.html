@@ -214,7 +214,7 @@
 <p>We can use <code>slice</code> to choose rows by position, for example to choose the first row.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble abstraction: 1 x 5
 ##   sample condition type       transcript  counts
 ##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
@@ -222,7 +222,7 @@
 <p>We can use <code>filter</code> to choose rows by criteria.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/filter.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble abstraction: 58,396 x 5
 ##    sample condition type       transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
@@ -240,7 +240,7 @@
 <p>We can use <code>select</code> to choose columns.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/select.html">select</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">select</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 102,193 x 1
 ##    sample
 ##    &lt;chr&gt; 
@@ -272,7 +272,7 @@
 <p>We can use <code>distinct</code> to see what distinct sample information we have.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">sample</span>, <span class="va">condition</span>, <span class="va">type</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">distinct</a></span><span class="op">(</span><span class="va">sample</span>, <span class="va">condition</span>, <span class="va">type</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 7 x 3
 ##   sample condition type      
 ##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     
@@ -286,7 +286,7 @@
 <p>We could use <code>rename</code> to rename a column. For example, to modify the type column name.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/rename.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble abstraction: 102,193 x 5
 ##    sample condition sequencing transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
@@ -304,7 +304,7 @@
 <p>We could use <code>mutate</code> to create a column. For example, we could create a new type column that contains single and paired instead of single_end and paired_end.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/mutate.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble abstraction: 102,193 x 5
 ##    sample condition type   transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;        &lt;int&gt;
@@ -322,7 +322,7 @@
 <p>We could use <code>unite</code> to combine multiple columns into a single column.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/unite.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/unnest.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble abstraction: 102,193 x 4
 ##    sample group                transcript  counts
 ##    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;        &lt;int&gt;
@@ -341,8 +341,8 @@
 <p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/summarise.html">summarise</a></span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">group_by</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/bind_rows.html">summarise</a></span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 7 x 2
 ##   sample total_counts
 ##   &lt;chr&gt;         &lt;int&gt;
@@ -356,9 +356,9 @@
 <p>We could combine <code>group_by</code>, <code>mutate</code> and <code>filter</code> to get the transcripts with mean count &gt; 0.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">transcript</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/mutate.html">mutate</a></span><span class="op">(</span>mean_count<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mean_count</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></pre></div>
+    <span class="fu"><a href="../reference/bind_rows.html">group_by</a></span><span class="op">(</span><span class="va">transcript</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/bind_rows.html">mutate</a></span><span class="op">(</span>mean_count<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/bind_rows.html">filter</a></span><span class="op">(</span><span class="va">mean_count</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 86,513 x 6
 ## # Groups:   transcript [12,359]
 ##    sample condition type       transcript  counts mean_count
@@ -441,26 +441,28 @@
 ## [13] BiocStyle_2.17.1           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] lattice_0.20-41        tidyr_1.1.2            assertthat_0.2.1      
-##  [4] rprojroot_1.3-2        digest_0.6.25          utf8_1.1.4            
+##  [1] lattice_0.20-41        tidyr_1.1.2            utf8_1.1.4            
+##  [4] assertthat_0.2.1       rprojroot_1.3-2        digest_0.6.25         
 ##  [7] R6_2.4.1               backports_1.1.10       evaluate_0.14         
-## [10] pillar_1.4.6           zlibbioc_1.35.0        rlang_0.4.8           
-## [13] Matrix_1.2-18          rmarkdown_2.4          pkgdown_1.6.1.9000    
-## [16] textshaping_0.1.1      desc_1.2.0             labeling_0.3          
-## [19] stringr_1.4.0          RCurl_1.98-1.2         munsell_0.5.0         
-## [22] DelayedArray_0.15.16   compiler_4.0.3         xfun_0.18             
-## [25] pkgconfig_2.0.3        systemfonts_0.3.2      htmltools_0.5.0       
-## [28] tidyselect_1.1.0       tibble_3.0.4           GenomeInfoDbData_1.2.4
-## [31] bookdown_0.20          fansi_0.4.1            crayon_1.3.4          
-## [34] dplyr_1.0.2            withr_2.3.0            bitops_1.0-6          
-## [37] grid_4.0.3             gtable_0.3.0           lifecycle_0.2.0       
-## [40] magrittr_1.5           scales_1.1.1           cli_2.1.0             
-## [43] stringi_1.5.3          farver_2.0.3           XVector_0.29.3        
-## [46] fs_1.5.0               ellipsis_0.3.1         ragg_0.4.0            
-## [49] generics_0.0.2         vctrs_0.3.4            RColorBrewer_1.1-2    
-## [52] tools_4.0.3            glue_1.4.2             purrr_0.3.4           
-## [55] yaml_2.2.1             colorspace_1.4-1       BiocManager_1.30.10   
-## [58] memoise_1.1.0</code></pre>
+## [10] httr_1.4.2             pillar_1.4.6           zlibbioc_1.35.0       
+## [13] rlang_0.4.8            lazyeval_0.2.2         data.table_1.13.0     
+## [16] Matrix_1.2-18          rmarkdown_2.4          pkgdown_1.6.1.9000    
+## [19] labeling_0.3           textshaping_0.1.1      desc_1.2.0            
+## [22] stringr_1.4.0          htmlwidgets_1.5.2      RCurl_1.98-1.2        
+## [25] munsell_0.5.0          DelayedArray_0.15.16   compiler_4.0.3        
+## [28] xfun_0.18              pkgconfig_2.0.3        systemfonts_0.3.2     
+## [31] htmltools_0.5.0        tidyselect_1.1.0       tibble_3.0.4          
+## [34] GenomeInfoDbData_1.2.4 bookdown_0.20          viridisLite_0.3.0     
+## [37] fansi_0.4.1            crayon_1.3.4           dplyr_1.0.2           
+## [40] withr_2.3.0            bitops_1.0-6           grid_4.0.3            
+## [43] jsonlite_1.7.1         gtable_0.3.0           lifecycle_0.2.0       
+## [46] magrittr_1.5           scales_1.1.1           cli_2.1.0             
+## [49] stringi_1.5.3          farver_2.0.3           XVector_0.29.3        
+## [52] fs_1.5.0               ellipsis_0.3.1         ragg_0.4.0            
+## [55] generics_0.0.2         vctrs_0.3.4            RColorBrewer_1.1-2    
+## [58] tools_4.0.3            glue_1.4.2             purrr_0.3.4           
+## [61] yaml_2.2.1             colorspace_1.4-1       BiocManager_1.30.10   
+## [64] memoise_1.1.0          plotly_4.9.2.1</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
