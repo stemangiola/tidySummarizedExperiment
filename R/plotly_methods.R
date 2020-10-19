@@ -93,6 +93,9 @@
 #' }
 #'
 #' @return A plotly
+#'
+#' @importFrom plotly plot_ly
+#'
 #' @export
 #' @examples
 #' \dontrun{

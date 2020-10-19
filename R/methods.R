@@ -22,6 +22,8 @@ setMethod(
 #'
 #' @return A tidySE object
 #'
+#' @name tidy
+#'
 #' @examples
 #'
 #' tidySE::pasilla %>% tidy()

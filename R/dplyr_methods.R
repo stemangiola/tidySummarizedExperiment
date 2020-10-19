@@ -1,11 +1,3 @@
-#' drplyr-methods
-#'
-#' @rdname dplyr-methods
-#'
-#' @return A tibble
-
-
-
 #' Efficiently bind multiple data frames by row and column
 #'
 #' This is an efficient implementation of the common pattern of
@@ -50,7 +42,6 @@
 #' tt %>% bind_cols(tibble(a=0, num_rows))
 #' @name bind
 NULL
-
 
 #' @rdname dplyr-methods
 #'
@@ -109,13 +100,7 @@ bind_cols.default <- function(..., .id=NULL) {
     dplyr::bind_cols(..., .id=.id)
 }
 
-#' @importFrom rlang dots_values
-#' @importFrom rlang flatten_if
-#' @importFrom rlang is_spliced
-#'
-#' @export
-#'
-bind_cols.tidySE <- function(..., .id=NULL) {
+bind_cols_ = function(..., .id=NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
     tts[[1]] %>%
@@ -138,6 +123,14 @@ bind_cols.tidySE <- function(..., .id=NULL) {
         )
 }
 
+#' @importFrom rlang dots_values
+#' @importFrom rlang flatten_if
+#' @importFrom rlang is_spliced
+#'
+#' @export
+#'
+bind_cols.tidySE <- bind_cols_
+
 #' distinct
 #'
 #'
@@ -148,6 +141,11 @@ bind_cols.tidySE <- function(..., .id=NULL) {
 #'
 #' @return A tidySE object
 #'
+#' @importFrom dplyr distinct
+#'
+#' @rdname dplyr-methods
+#' @name distinct
+#'
 #' @examples
 #'
 #' `%>%` <- magrittr::`%>%`
@@ -155,15 +153,9 @@ bind_cols.tidySE <- function(..., .id=NULL) {
 #'     tidy() %>%
 #'     distinct(sample)
 #' @export
-distinct <- function(.data, ..., .keep_all=FALSE) {
-    UseMethod("distinct")
-}
+NULL
 
-#' @export
-distinct.default <- function(.data, ..., .keep_all=FALSE) {
-    dplyr::distinct(.data, ..., .keep_all=FALSE)
-}
-
+#' @inheritParams distinct
 #' @export
 distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
     message(data_frame_returned_message)
@@ -183,6 +175,8 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #' dplyr is not yet smart enough to optimise filtering optimisation
 #' on grouped datasets that don't need grouped calculations. For this reason,
 #' filtering is often considerably faster on [ungroup()]ed data.
+#'
+#' @importFrom dplyr filter
 #'
 #' @section Useful filter functions:
 #'
@@ -226,6 +220,10 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #'
 #' The following methods are currently available in loaded packages:
 #' @seealso [filter_all()], [filter_if()] and [filter_at()].
+#'
+#' @rdname dplyr-methods
+#' @name filter
+#'
 #' @export
 #' @examples
 #'
@@ -236,15 +234,9 @@ distinct.tidySE <- function(.data, ..., .keep_all=FALSE) {
 #'
 #' # Learn more in ?dplyr_tidy_eval
 #' @export
-filter <- function(.data, ..., .preserve=FALSE) {
-    UseMethod("filter")
-}
+NULL
 
-#' @export
-filter.default <- function(.data, ..., .preserve=FALSE) {
-    dplyr::filter(.data, ..., .preserve=.preserve)
-}
-
+#' @inheritParams filter
 #' @export
 filter.tidySE <- function(.data, ..., .preserve=FALSE) {
     new_meta <- .data %>%
@@ -273,6 +265,7 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' Group by one or more variables
 #'
 #' @importFrom dplyr group_by_drop_default
+#' @importFrom dplyr group_by
 #'
 #' @description
 #' Most data operations are done on groups defined by variables.
@@ -303,6 +296,9 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #'
 #' Methods available in currently loaded packages:
 #'
+#' @rdname dplyr-methods
+#' @name group_by
+#'
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
@@ -310,14 +306,7 @@ filter.tidySE <- function(.data, ..., .preserve=FALSE) {
 #'     tidy() %>%
 #'     group_by(sample)
 #' @export
-group_by <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
-    UseMethod("group_by")
-}
-
-#' @export
-group_by.default <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
-    dplyr::group_by(.data, ..., .drop=.drop)
-}
+NULL
 
 #' @export
 group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
@@ -330,6 +319,8 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 
 
 #' Summarise each group to fewer rows
+#'
+#' @importFrom dplyr summarise
 #'
 #' @description
 #' `summarise()` creates a new data frame. It will have one (or more) rows for
@@ -363,6 +354,9 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 #' creating multiple summaries.
 #'
 #' @param .data A tidySE object or any data frame
+#'
+#' @rdname dplyr-methods
+#' @name summarise
 #'
 #' @export
 #' @inheritParams arrange
@@ -399,14 +393,7 @@ group_by.tidySE <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(
 #'     tidy() %>%
 #'     summarise(mean(counts))
 #' @export
-summarise <- function(.data, ...) {
-    UseMethod("summarise")
-}
-
-#' @export
-summarise.default <- function(.data, ...) {
-    dplyr::summarise(.data, ...)
-}
+NULL
 
 #' @export
 summarise.tidySE <- function(.data, ...) {
@@ -425,6 +412,8 @@ summarise.tidySE <- function(.data, ...) {
 #' `transmute()` adds new variables and drops existing ones.
 #' New variables overwrite existing variables of the same name.
 #' Variables can be removed by setting their value to `NULL`.
+#'
+#' @importFrom dplyr mutate
 #'
 #' @section Useful mutate functions:
 #'
@@ -501,15 +490,12 @@ summarise.tidySE <- function(.data, ...) {
 #' tidySE::pasilla %>%
 #'     tidy() %>%
 #'     mutate(logcounts=log2(counts))
+#'
+#' @rdname dplyr-methods
+#' @name mutate
+#'
 #' @export
-mutate <- function(.data, ...) {
-    UseMethod("mutate")
-}
-
-#' @export
-mutate.default <- function(.data, ...) {
-    dplyr::mutate(.data, ...)
-}
+NULL
 
 #' @importFrom dplyr mutate
 #' @importFrom rlang enquos
@@ -553,6 +539,8 @@ mutate.tidySE <- function(.data, ...) {
 #'
 #' Rename individual variables using `new_name=old_name` syntax.
 #'
+#' @importFrom dplyr rename
+#'
 #' @section Scoped selection and renaming:
 #'
 #' Use the three scoped variants ([rename_all()], [rename_if()], [rename_at()])
@@ -576,6 +564,10 @@ mutate.tidySE <- function(.data, ...) {
 #'
 #' The following methods are currently available in loaded packages:
 #' @family single table verbs
+#'
+#' @rdname dplyr-methods
+#' @name rename
+#'
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
@@ -583,14 +575,7 @@ mutate.tidySE <- function(.data, ...) {
 #' #     tidy() %>%
 #' #     rename(cond=condition)
 #' @export
-rename <- function(.data, ...) {
-    UseMethod("rename")
-}
-
-#' @export
-rename.default <- function(.data, ...) {
-    dplyr::rename(.data, ...)
-}
+NULL
 
 #' @importFrom tidyselect eval_select
 #' @export
@@ -642,30 +627,29 @@ rename.tidySE <- function(.data, ...) {
 #' use \code{[[1]]}. This makes `summarise()` on a rowwise tbl
 #' effectively equivalent to [plyr::ldply()].
 #'
-#' @param .data Input data frame.
+#' @importFrom dplyr rowwise
+#'
+#' @param data Input data frame.
+#' @param ... See dplyr::rowwise
 #'
 #' @return A `tbl`
 #'
 #'   A `tbl`
 #'
+#' @rdname dplyr-methods
+#' @name rowwise
+#'
 #' @export
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' @export
-rowwise <- function(.data) {
-    UseMethod("rowwise")
-}
+NULL
 
 #' @export
-rowwise.default <- function(.data) {
-    dplyr::rowwise(.data)
-}
-
-#' @export
-rowwise.tidySE <- function(.data) {
+rowwise.tidySE <- function(data, ...) {
     message(data_frame_returned_message)
 
-    .data %>%
+    data %>%
         as_tibble() %>%
         dplyr::rowwise()
 }
@@ -674,6 +658,7 @@ rowwise.tidySE <- function(.data) {
 #' Left join datasets
 #'
 #' @importFrom dplyr count
+#' @importFrom dplyr left_join
 #'
 #' @param x tbls to join. (See dplyr)
 #' @param y tbls to join. (See dplyr)
@@ -687,6 +672,9 @@ rowwise.tidySE <- function(.data) {
 #'
 #' @return A tidySE object
 #'
+#' @rdname dplyr-methods
+#' @name left_join
+#'
 #' @export
 #'
 #' @examples
@@ -694,15 +682,7 @@ rowwise.tidySE <- function(.data) {
 #'
 #' tt <- tidySE::pasilla %>% tidy()
 #' tt %>% left_join(tt %>% distinct(condition) %>% mutate(new_column=1:2))
-left_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
-    UseMethod("left_join")
-}
-
-#' @export
-left_join.default <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
-    ...) {
-    dplyr::left_join(x, y, by=by, copy=copy, suffix=suffix, ...)
-}
+NULL
 
 #' @export
 left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
@@ -726,6 +706,7 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' Inner join datasets
 #'
 #' @importFrom dplyr pull
+#' @importFrom dplyr inner_join
 #'
 #' @param x tbls to join. (See dplyr)
 #' @param y tbls to join. (See dplyr)
@@ -741,15 +722,12 @@ left_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #'
 #' tt <- tidySE::pasilla %>% tidy()
 #' tt %>% inner_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
+#'
+#' @rdname dplyr-methods
+#' @name inner_join
+#'
 #' @export
-inner_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
-    UseMethod("inner_join")
-}
-
-#' @export
-inner_join.default <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
-    dplyr::inner_join(x, y, by=by, copy=copy, suffix=suffix, ...)
-}
+NULL
 
 #' @export
 inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -773,6 +751,7 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
 #' Right join datasets
 #'
 #' @importFrom dplyr pull
+#' @importFrom dplyr right_join
 #'
 #' @param x tbls to join. (See dplyr)
 #' @param y tbls to join. (See dplyr)
@@ -791,16 +770,12 @@ inner_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), .
 #'
 #' tt <- tidySE::pasilla %>% tidy()
 #' tt %>% right_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
+#'
+#' @rdname dplyr-methods
+#' @name right_join
+#'
 #' @export
-right_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
-    UseMethod("right_join")
-}
-
-#' @export
-right_join.default <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
-    ...) {
-    dplyr::right_join(x, y, by=by, copy=copy, suffix=suffix, ...)
-}
+NULL
 
 #' @export
 right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
@@ -825,6 +800,7 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' Full join datasets
 #'
 #' @importFrom dplyr pull
+#' @importFrom dplyr full_join
 #'
 #' @param x tbls to join. (See dplyr)
 #' @param y tbls to join. (See dplyr)
@@ -843,16 +819,12 @@ right_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #'
 #' tt <- tidySE::pasilla %>% tidy()
 #' tt %>% full_join(tibble::tibble(condition="treated", dose=10))
+#'
+#' @rdname dplyr-methods
+#' @name full_join
+#'
 #' @export
-full_join <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
-    UseMethod("full_join")
-}
-
-#' @export
-full_join.default <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
-    ...) {
-    dplyr::full_join(x, y, by=by, copy=copy, suffix=suffix, ...)
-}
+NULL
 
 #' @export
 full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
@@ -888,6 +860,8 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' If `.data` is a [grouped_df], the operation will be performed on each group,
 #' so that (e.g.) `slice_head(df, n=5)` will select the first five rows in
 #' each group.
+#'
+#' @importFrom dplyr slice
 #'
 #' @details
 #' Slice does not work with relational databases because they have no
@@ -933,6 +907,10 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' * `slice_min()`: \Sexpr[stage=render,results=rd]{dplyr:::methods_rd("slice_min")}.
 #' * `slice_max()`: \Sexpr[stage=render,results=rd]{dplyr:::methods_rd("slice_max")}.
 #' * `slice_sample()`: \Sexpr[stage=render,results=rd]{dplyr:::methods_rd("slice_sample")}.
+#'
+#' @rdname dplyr-methods
+#' @name slice
+#'
 #' @export
 #' @examples
 #'
@@ -940,13 +918,7 @@ full_join.tidySE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
 #' tidySE::pasilla %>%
 #'     tidy() %>%
 #'     slice(1)
-slice <- function(.data, ..., .preserve=FALSE) {
-    UseMethod("slice")
-}
-#' @export
-slice.default <- function(.data, ..., .preserve=FALSE) {
-    dplyr::slice(.data, ..., .preserve=.preserve)
-}
+NULL
 
 #' @export
 slice.tidySE <- function(.data, ..., .preserve=FALSE) {
@@ -982,6 +954,8 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 #' ```{r, child="man/rmd/overview.Rmd"}
 #' ```
 #'
+#' @importFrom dplyr select
+#'
 #' @inheritParams arrange
 #'
 #' @param .data A tidySE object or any data frame
@@ -1014,15 +988,12 @@ slice.tidySE <- function(.data, ..., .preserve=FALSE) {
 #'     tidy() %>%
 #'     select(sample, transcript, counts)
 #' @family single table verbs
+#'
+#' @rdname dplyr-methods
+#' @name select
+#'
 #' @export
-select <- function(.data, ...) {
-    UseMethod("select")
-}
-
-#' @export
-select.default <- function(.data, ...) {
-    dplyr::select(.data, ...)
-}
+NULL
 
 #' @export
 select.tidySE <- function(.data, ...) {
@@ -1067,6 +1038,8 @@ select.tidySE <- function(.data, ...) {
 #' * It was easier to remove the deprecated `.env` argument.
 #' * `...` was in a suboptimal position.
 #'
+#' @importFrom dplyr sample_n
+#'
 #' @keywords internal
 #' @param tbl A data.frame.
 #' @param size <[`tidy-select`][dplyr_tidy_select]>
@@ -1090,16 +1063,11 @@ select.tidySE <- function(.data, ...) {
 #'     sample_frac(0.1)
 #' @return A tidySE object
 #'
+#' @rdname dplyr-methods
+#' @name sample_n
+#'
 #' @export
-sample_n <- function(tbl, size, replace=FALSE, weight=NULL, .env=NULL, ...) {
-    UseMethod("sample_n")
-}
-
-#' @export
-sample_n.default <- function(tbl, size, replace=FALSE, weight=NULL,
-    .env=parent.frame(), ...) {
-    tbl %>% sample_n(size, replace=replace, weight=weight, .env=.env, ...)
-}
+NULL
 
 #' @export
 sample_n.tidySE <- function(tbl, size, replace=FALSE,
@@ -1113,17 +1081,13 @@ sample_n.tidySE <- function(tbl, size, replace=FALSE,
         dplyr::sample_n(size, replace=replace, weight=weight, .env=.env, ...)
 }
 
-#' @rdname sample_n
+#' @importFrom dplyr sample_frac
+#'
+#' @rdname dplyr-methods
+#' @name sample_frac
+#'
 #' @export
-sample_frac <- function(tbl, size=1, replace=FALSE, weight=NULL, .env=NULL, ...) {
-    UseMethod("sample_frac")
-}
-
-#' @export
-sample_frac.default <- function(tbl, size, replace=FALSE, weight=NULL,
-    .env=parent.frame(), ...) {
-    tbl %>% dplyr::sample_frac(size, replace=replace, weight=weight, .env=.env, ...)
-}
+NULL
 
 #' @export
 sample_frac.tidySE <- function(tbl, size=1, replace=FALSE,
@@ -1205,6 +1169,8 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
         dplyr::count(..., wt=!!enquo(wt), sort=sort, name=name, .drop=.drop)
 }
 
+
+
 #' Extract a single column
 #'
 #' `pull()` is similar to `$`. It's mostly useful because it looks a little
@@ -1212,6 +1178,7 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' name the output.
 #'
 #' @importFrom ellipsis check_dots_used
+#' @importFrom dplyr pull
 #'
 #' @inheritParams arrange
 #' @inheritParams tidyselect::vars_pull
@@ -1228,6 +1195,10 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #'
 #' The following methods are currently available in loaded packages:
 #' \Sexpr[stage=render,results=rd]{dplyr:::methods_rd("pull")}.
+#'
+#' @rdname dplyr-methods
+#' @name pull
+#'
 #' @export
 #' @examples
 #'
@@ -1235,16 +1206,8 @@ count.tidySE <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_
 #' tidySE::pasilla %>%
 #'     tidy() %>%
 #'     pull(transcript)
-pull <- function(.data, var=-1, name=NULL, ...) {
-    ellipsis::check_dots_used()
-    UseMethod("pull")
-}
-#' @export
-pull.default <- function(.data, var=-1, name=NULL, ...) {
-    var <- enquo(var)
-    name <- enquo(name)
-    .data %>% dplyr::pull(var=!!var, name=!!name, ...)
-}
+NULL
+
 #' @export
 pull.tidySE <- function(.data, var=-1, name=NULL, ...) {
     var <- enquo(var)
