@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>unnest — unnest • tidySE</title>
+<title>unnest — unnest • tidySummarizedExperiment</title>
 
 
 <!-- jquery -->
@@ -81,7 +81,7 @@ Given either a regular expression or a vector of character positions,
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">tidySE</a>
+        <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.2</span>
       </span>
     </div>
@@ -99,7 +99,7 @@ Given either a regular expression or a vector of character positions,
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/introduction.html">Overview of the tidySE package</a>
+      <a href="../articles/introduction.html">Overview of the tidySummarizedExperiment package</a>
     </li>
   </ul>
 </li>
@@ -331,12 +331,12 @@ each value.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A tidySE objector a tibble depending on input</p>
-<p>A tidySE objector a tibble depending on input</p>
-<p>A tidySE objector a tibble depending on input</p>
-<p>A tidySE objector a tibble depending on input</p>
-<p>A tidySE objector a tibble depending on input</p>
-<p>A tidySE objector a tibble depending on input</p>
+    <p>A tidySummarizedExperiment objector a tibble depending on input</p>
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>`pivot_longer()` is an updated approach to [gather()], designed to be both
@@ -352,7 +352,7 @@ under active development.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>nest</span><span class='op'>(</span>data<span class='op'>=</span><span class='op'>-</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>unnest</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
@@ -371,16 +371,16 @@ under active development.</p>
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 single_end untreated FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
 #&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'>
 
-<span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>nest</span><span class='op'>(</span>data<span class='op'>=</span><span class='op'>-</span><span class='va'>condition</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 2 x 2</span><span>
-#&gt;   condition data    
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>  
-#&gt; </span><span style='color: #555555;'>1</span><span> untreated </span><span style='color: #555555;'>&lt;tidySE&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>2</span><span> treated   </span><span style='color: #555555;'>&lt;tidySE&gt;</span><span></div><div class='input'>
+#&gt;   condition data      
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>    
+#&gt; </span><span style='color: #555555;'>1</span><span> untreated </span><span style='color: #555555;'>&lt;tdySmmrE&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>2</span><span> treated   </span><span style='color: #555555;'>&lt;tdySmmrE&gt;</span><span></div><div class='input'>
 
-<span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>extract</span><span class='op'>(</span><span class='va'>type</span>, into<span class='op'>=</span><span class='st'>"sequencing"</span>, regex<span class='op'>=</span><span class='st'>"([a-z]*)_end"</span>, convert<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 5</span><span>
@@ -399,10 +399,10 @@ under active development.</p>
 #&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'><span class='co'># See vignette("pivot") for examples and explanation</span>
 
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-<span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>pivot_longer</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>condition</span>, <span class='va'>type</span><span class='op'>)</span>, names_to<span class='op'>=</span><span class='st'>"name"</span>, values_to<span class='op'>=</span><span class='st'>"value"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySE says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 204,386 x 5</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 204,386 x 5</span><span>
 #&gt;    sample transcript  counts name      value     
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
 #&gt; </span><span style='color: #555555;'> 1</span><span> untrt1 FBgn0000003      0 condition untreated 
@@ -416,7 +416,7 @@ under active development.</p>
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 FBgn0000017   </span><span style='text-decoration: underline;'>4</span><span>664 condition untreated 
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 FBgn0000017   </span><span style='text-decoration: underline;'>4</span><span>664 type      single_end
 #&gt; </span><span style='color: #555555;'># … with 204,376 more rows</span><span></div><div class='input'>
-<span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>unite</span><span class='op'>(</span><span class='st'>"group"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>condition</span>, <span class='va'>type</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 4</span><span>
@@ -433,7 +433,7 @@ under active development.</p>
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated_single_end FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated_single_end FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
 #&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'>
-<span class='va'>un</span> <span class='op'>&lt;-</span> <span class='fu'>tidySE</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+<span class='va'>un</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>unite</span><span class='op'>(</span><span class='st'>"group"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>condition</span>, <span class='va'>type</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>un</span> <span class='op'>%&gt;%</span> <span class='fu'>separate</span><span class='op'>(</span>col<span class='op'>=</span><span class='va'>group</span>, into<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"condition"</span>, <span class='st'>"type"</span><span class='op'>)</span><span class='op'>)</span>
