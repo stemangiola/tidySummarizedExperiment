@@ -68,8 +68,8 @@ print.tidySummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_ext
     
     # If I have more than 30 genes select first sample
     when(
-      nrow(.) > 30 ~.[1:50, 1, drop=FALSE] ,
-      ~ .[, 1:20, drop=FALSE]
+      nrow(.) > 30 ~.[1:min(50, nrow(x)), min(1, ncol(x)), drop=FALSE] ,
+      ~ .[, 1:min(20, ncol(x)), drop=FALSE]
     ) %>%
     
     as_tibble() %>%
