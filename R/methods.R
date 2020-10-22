@@ -33,6 +33,7 @@ tidy <- function(object) {
 }
 
 tidy_ <- function(object) {
+    
     object %>%
         as("RangedSummarizedExperiment") %>%
         as("tidySummarizedExperiment") %>%

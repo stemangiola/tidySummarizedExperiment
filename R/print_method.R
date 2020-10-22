@@ -62,14 +62,42 @@ NULL
 #' @export
 print.tidySummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
-  x %>%
+  # Getting print formatting
+  formatted = 
+    x %>%
+    
+    # If I have more than 30 genes select first sample
+    when(
+      nrow(.) > 30 ~.[1:50, 1, drop=FALSE] ,
+      ~ .[, 1:20, drop=FALSE]
+    ) %>%
+    
     as_tibble() %>%
 
     # Get formatting
-    tidySummarizedExperiment_format_tbl(..., n = n, width = width, n_extra = n_extra) %>%
+    tidySummarizedExperiment_format_tbl(..., n = n, width = width, n_extra = n_extra) 
+  
+  # Editing the header
+  str_to_be_replaced = formatted[1] %>% stringr::str_extract("(A tibble: [0-9,]+)")
+  new_str = sprintf(
+    "A tibble abstraction: %s",
+    
+    # Number of rows
+    x %>% dim %>% {(.)[1] * (.)[2]} %>% format(format="f", big.mark=",", digits=1)
+  )
+  
+  formatted_edited = 
+    formatted %>%
 
     # Hijack the tibble header
-    map_chr(~ .x %>% str_replace("A tibble:", "A tibble abstraction:")) %>%
+    {
+      x = (.);
+      x[1] = x[1] %>% str_replace(str_to_be_replaced, new_str); 
+      x
+    }
+
+  # Print
+  formatted_edited %>%
 
     # Output
     cat_line()
