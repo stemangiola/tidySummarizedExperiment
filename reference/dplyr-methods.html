@@ -129,7 +129,7 @@ name the output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.3</span>
       </span>
     </div>
 
@@ -592,7 +592,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 14,589 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='co'># Learn more in ?dplyr_tidy_eval</span>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
@@ -636,7 +636,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='co'># tidySummarizedExperiment::pasilla %&gt;%</span>
 <span class='co'>#     tidy() %&gt;%</span>
@@ -659,7 +659,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end          1 FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end          1 FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end          1 FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>inner_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
@@ -676,7 +676,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end          1 FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end          1 FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end          1 FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 58,386 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -694,7 +694,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end          1 FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end          1 FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end          1 FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 58,386 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -712,7 +712,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span> FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span> FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span> FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
@@ -739,7 +739,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>

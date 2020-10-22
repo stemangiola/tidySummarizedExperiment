@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.3</span>
       </span>
     </div>
 
@@ -69,7 +69,7 @@
       <h1 data-toc-skip>Overview of the tidySummarizedExperiment package</h1>
                         <h4 class="author">Stefano Mangiola</h4>
             
-            <h4 class="date">2020-10-21</h4>
+            <h4 class="date">2020-10-22</h4>
       
       
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -207,7 +207,7 @@
 ##  8 untrt1 untreated single_end FBgn0000024     10
 ##  9 untrt1 untreated single_end FBgn0000028      0
 ## 10 untrt1 untreated single_end FBgn0000032   1446
-## # … with 102,183 more rows</code></pre>
+## # … with 40 more rows</code></pre>
 <p><strong>But it is a SummarizedExperiment object after all</strong></p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="fu">Assays</span><span class="op">(</span><span class="va">pasilla_tidy</span><span class="op">)</span></pre></div>
@@ -244,7 +244,7 @@
 ##  8 untrt1 untreated single_end FBgn0000024     10
 ##  9 untrt1 untreated single_end FBgn0000028      0
 ## 10 untrt1 untreated single_end FBgn0000032   1446
-## # … with 58,386 more rows</code></pre>
+## # … with 40 more rows</code></pre>
 <p>We can use <code>select</code> to choose columns.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
@@ -308,7 +308,7 @@
 ##  8 untrt1 untreated single_end FBgn0000024     10
 ##  9 untrt1 untreated single_end FBgn0000028      0
 ## 10 untrt1 untreated single_end FBgn0000032   1446
-## # … with 102,183 more rows</code></pre>
+## # … with 40 more rows</code></pre>
 <p>We could use <code>mutate</code> to create a column. For example, we could create a new type column that contains single and paired instead of single_end and paired_end.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
@@ -326,7 +326,7 @@
 ##  8 untrt1 untreated single FBgn0000024     10
 ##  9 untrt1 untreated single FBgn0000028      0
 ## 10 untrt1 untreated single FBgn0000032   1446
-## # … with 102,183 more rows</code></pre>
+## # … with 40 more rows</code></pre>
 <p>We could use <code>unite</code> to combine multiple columns into a single column.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
@@ -344,7 +344,7 @@
 ##  8 untrt1 untreated_single_end FBgn0000024     10
 ##  9 untrt1 untreated_single_end FBgn0000028      0
 ## 10 untrt1 untreated_single_end FBgn0000032   1446
-## # … with 102,183 more rows</code></pre>
+## # … with 40 more rows</code></pre>
 <p>We can also combine commands with the tidyverse pipe <code><a href="../reference/%&gt;%.html">%&gt;%</a></code>.</p>
 <p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit">
@@ -440,11 +440,11 @@
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] tidySummarizedExperiment_0.99.2 SummarizedExperiment_1.19.9    
+##  [1] tidySummarizedExperiment_0.99.3 SummarizedExperiment_1.19.9    
 ##  [3] Biobase_2.49.1                  GenomicRanges_1.41.6           
 ##  [5] GenomeInfoDb_1.25.11            IRanges_2.23.10                
 ##  [7] S4Vectors_0.27.14               BiocGenerics_0.35.4            
-##  [9] MatrixGenerics_1.1.7            matrixStats_0.57.0             
+##  [9] MatrixGenerics_1.1.8            matrixStats_0.57.0             
 ## [11] ggplot2_3.3.2                   knitr_1.30                     
 ## [13] BiocStyle_2.17.1               
 ## 

@@ -74,7 +74,7 @@ data frames into one." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.3</span>
       </span>
     </div>
 
@@ -182,7 +182,7 @@ appears in any of the inputs.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 204,376 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>num_rows</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='fu'><a href='as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tt</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='bind_rows.html'>bind_cols</a></span><span class='op'>(</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>, <span class='va'>num_rows</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 7</span><span>
@@ -198,7 +198,7 @@ appears in any of the inputs.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000024     10
 #&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000028      0
 #&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div></span></pre>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
