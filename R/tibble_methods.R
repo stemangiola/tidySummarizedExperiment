@@ -73,8 +73,13 @@ as_tibble.tidySummarizedExperiment <- function(x, ...,
     rownames=pkgconfig::get_config("tibble::rownames", NULL)) {
     sample_info <-
         colData(x) %>%
-        as.data.frame() %>%
 
+        # If reserved column names are present add .x
+        setNames(
+            colnames(.) %>% 
+                str_replace("^sample$", "sample.x")
+        ) %>%
+        
         # Convert to tibble
         tibble::as_tibble(rownames="sample")
 
@@ -89,7 +94,12 @@ as_tibble.tidySummarizedExperiment <- function(x, ...,
 
     gene_info <-
         rowData(x) %>%
-        as.data.frame() %>%
+
+        # If reserved column names are present add .x
+        setNames(
+            colnames(.) %>% 
+                str_replace("^transcript$", "transcript.x")
+        ) %>%
 
         # Convert to tibble
         tibble::as_tibble(rownames="transcript")
