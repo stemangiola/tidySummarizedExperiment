@@ -35,6 +35,15 @@ test_that("nest_unnest", {
     expect_equal(x, y)
 })
 
+test_that("nest_unnest_slice_1",{
+    
+    tt %>%
+        nest(data = -condition) %>% 
+        slice(1) %>% 
+        unnest(data)
+    
+})
+
 test_that("unite separate", {
     un <- tt %>% unite("new_col", c(condition, col2), sep = ":")
 
