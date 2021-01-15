@@ -1,5 +1,4 @@
-
-
+setClass("SummarizedExperiment")
 setClass("tidySummarizedExperiment", contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
 
 #' @importFrom methods show
@@ -58,7 +57,18 @@ tidy.SummarizedExperiment <- tidy_
 
 #' @importFrom methods as
 #'
-#' @param object A SummarizedExperiment object
+#' @param object A RangedSummarizedExperiment object
 #'
 #' @export
 tidy.RangedSummarizedExperiment <- tidy_
+
+#' @importFrom methods as
+#'
+#' @param object A tidySummarizedExperiment object
+#'
+#' @export
+tidy.tidySummarizedExperiment <- function(object) {
+    
+    # Does nothing
+    object 
+}

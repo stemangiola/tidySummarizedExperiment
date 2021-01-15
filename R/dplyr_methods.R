@@ -55,7 +55,17 @@ bind_rows <- function(..., .id=NULL, add.cell.ids=NULL) {
 
 #' @export
 bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
-    dplyr::bind_rows(..., .id=.id)
+    
+    # If it is SE. I cannot use the wrapper for SE because
+    # we have the argument within the ...
+    if(is_SE(flatten_if(dots_values(...), is_spliced)[[1]])) 
+       bind_rows.tidySummarizedExperiment(..., .id=.id, add.cell.ids=add.cell.ids) %>%
+        
+        # Reattach original S4 class
+        as(class(flatten_if(dots_values(...), is_spliced)[[1]]))
+    
+    # If is something else
+    else dplyr::bind_rows(..., .id=.id)
 }
 
 #' @importFrom rlang dots_values
@@ -97,7 +107,17 @@ bind_cols <- function(..., .id=NULL) {
 
 #' @export
 bind_cols.default <- function(..., .id=NULL) {
-    dplyr::bind_cols(..., .id=.id)
+    
+    # If it is SE. I cannot use the wrapper for SE because
+    # we have the argument within the ...
+    if(is_SE(flatten_if(dots_values(...), is_spliced)[[1]])) 
+        bind_cols.tidySummarizedExperiment(..., .id=.id) %>%
+        
+        # Reattach original S4 class
+        as(class(flatten_if(dots_values(...), is_spliced)[[1]]))
+    
+    # If is something else
+    else dplyr::bind_cols(..., .id=.id)
 }
 
 bind_cols_ = function(..., .id=NULL) {
@@ -115,10 +135,15 @@ bind_cols_ = function(..., .id=NULL) {
             )
             ) %>% all() ~ update_SE_from_tibble(., tts[[1]]),
 
-            # Return tiblle
-            ~ {
+            # Return tibble with warning if is tidy
+            class(tts[[1]]) == "tidySummarizedExperiment" ~ {
                 warning("tidySummarizedExperiment says: The new columns do not include pure sample-wise or transcript-wise. A data frame is returned for independent data analysis.")
                 (.)
+            },
+            
+            # Stop if is SummarizedExperiment
+            is_SE(tts[[1]]) ~ {
+                stop("tidySummarizedExperiment says: The new columns do not include pure sample-wise or transcript-wise.")
             }
         )
 }
@@ -164,7 +189,6 @@ distinct.tidySummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
         as_tibble() %>%
         dplyr::distinct(..., .keep_all=.keep_all)
 }
-
 
 #' Subset rows using column values
 #'
@@ -252,11 +276,16 @@ filter.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
                 unique(.$transcript),
                 unique(.$sample)
             ],
-
-            # If not rectangular return just tibble
-            ~ {
-                message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
+            
+            # Return tibble with warning if is tidy, not rectangular
+            class(.data) == "tidySummarizedExperiment" ~ {
+                warning("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
                 (.)
+            },
+            
+            # Stop if is SummarizedExperiment
+            is_SE(.data) ~ {
+                stop("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples).")
             }
         )
 }

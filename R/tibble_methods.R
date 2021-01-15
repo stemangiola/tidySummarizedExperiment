@@ -111,3 +111,25 @@ as_tibble.tidySummarizedExperiment <- function(x, ...,
         left_join(gene_info, by="transcript") %>%
         when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.))
 }
+
+#' @export
+#' @importFrom purrr reduce
+#' @importFrom purrr map
+#' @importFrom tidyr spread
+#' @importFrom tibble enframe
+#'
+#'
+as_tibble.SummarizedExperiment <- function(x, ...,
+                                               .name_repair=c("check_unique", "unique", "universal", "minimal"),
+                                               rownames=pkgconfig::get_config("tibble::rownames", NULL)) {
+    
+    x %>%
+        tidySummarizedExperiment::tidy() %>%
+        tidySummarizedExperiment::as_tibble(
+            x, ...,
+            .name_repair=.name_repair,
+            rownames=rownames
+        )
+    
+   
+}
