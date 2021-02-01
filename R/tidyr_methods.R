@@ -134,6 +134,14 @@ nest.tidySummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
         # This is needed otherwise nest goes into loop and fails
         as_tibble() %>%
         tidyr::nest(...) %>%
+        
+        # Check that sample or transcript are in the nesting
+        {
+            if(c("sample", "transcript") %in% colnames(.))
+                stop("tidySummarizedExperiment says: You cannot have the columns sample or transcript among the nesting")
+                (.)
+        } %>%
+        
         mutate(
             !!as.symbol(col_name_data) := map(
                 !!as.symbol(col_name_data),
