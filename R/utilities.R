@@ -345,7 +345,9 @@ get_special_datasets <- function(SummarizedExperiment_object) {
             as.data.frame() %>%
 
             # Take off rowData columns as there is a recursive anomaly within gene ranges
-            select(-colnames(rowData(SummarizedExperiment_object))) %>%
+            suppressWarnings(
+              select(-one_of(colnames(rowData(SummarizedExperiment_object))))
+            ) %>%
             tibble::as_tibble(rownames="transcript") %>%
             list()
     } else {
