@@ -176,34 +176,34 @@ appears in any of the inputs.</p>
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'><a href='bind_rows.html'>bind_rows</a></span><span class='op'>(</span><span class='va'>tt</span>, <span class='va'>tt</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: tidySummarizedExperiment says: you have duplicated sample names, they will be made unique.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble abstraction: 204,386 x 5</span><span>
-#&gt;    sample condition type       transcript  counts
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> untrt1 untreated single_end FBgn0000003      0
-#&gt; </span><span style='color: #555555;'> 2</span><span> untrt1 untreated single_end FBgn0000008     92
-#&gt; </span><span style='color: #555555;'> 3</span><span> untrt1 untreated single_end FBgn0000014      5
-#&gt; </span><span style='color: #555555;'> 4</span><span> untrt1 untreated single_end FBgn0000015      0
-#&gt; </span><span style='color: #555555;'> 5</span><span> untrt1 untreated single_end FBgn0000017   </span><span style='text-decoration: underline;'>4</span><span>664
-#&gt; </span><span style='color: #555555;'> 6</span><span> untrt1 untreated single_end FBgn0000018    583
-#&gt; </span><span style='color: #555555;'> 7</span><span> untrt1 untreated single_end FBgn0000022      0
-#&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end FBgn0000024     10
-#&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end FBgn0000028      0
-#&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
+#&gt;    transcript  sample counts condition type      
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
 #&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>num_rows</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='fu'><a href='as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tt</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='bind_rows.html'>bind_cols</a></span><span class='op'>(</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>, <span class='va'>num_rows</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 7</span><span>
-#&gt;    sample condition type           a num_rows transcript  counts
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000003      0
-#&gt; </span><span style='color: #555555;'> 2</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000008     92
-#&gt; </span><span style='color: #555555;'> 3</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000014      5
-#&gt; </span><span style='color: #555555;'> 4</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000015      0
-#&gt; </span><span style='color: #555555;'> 5</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000017   </span><span style='text-decoration: underline;'>4</span><span>664
-#&gt; </span><span style='color: #555555;'> 6</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000018    583
-#&gt; </span><span style='color: #555555;'> 7</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000022      0
-#&gt; </span><span style='color: #555555;'> 8</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000024     10
-#&gt; </span><span style='color: #555555;'> 9</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000028      0
-#&gt; </span><span style='color: #555555;'>10</span><span> untrt1 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193 FBgn0000032   </span><span style='text-decoration: underline;'>1</span><span>446
+#&gt;    transcript  sample counts condition type           a num_rows
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end     0   </span><span style='text-decoration: underline;'>102</span><span>193
 #&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

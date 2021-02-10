@@ -201,18 +201,18 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span></code></pre></div>
 <pre><code>## # A tibble abstraction: 102,193 x 5
-##    sample condition type       transcript  counts
-##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
-##  1 untrt1 untreated single_end FBgn0000003      0
-##  2 untrt1 untreated single_end FBgn0000008     92
-##  3 untrt1 untreated single_end FBgn0000014      5
-##  4 untrt1 untreated single_end FBgn0000015      0
-##  5 untrt1 untreated single_end FBgn0000017   4664
-##  6 untrt1 untreated single_end FBgn0000018    583
-##  7 untrt1 untreated single_end FBgn0000022      0
-##  8 untrt1 untreated single_end FBgn0000024     10
-##  9 untrt1 untreated single_end FBgn0000028      0
-## 10 untrt1 untreated single_end FBgn0000032   1446
+##    transcript  sample counts condition type      
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+##  1 FBgn0000003 untrt1      0 untreated single_end
+##  2 FBgn0000008 untrt1     92 untreated single_end
+##  3 FBgn0000014 untrt1      5 untreated single_end
+##  4 FBgn0000015 untrt1      0 untreated single_end
+##  5 FBgn0000017 untrt1   4664 untreated single_end
+##  6 FBgn0000018 untrt1    583 untreated single_end
+##  7 FBgn0000022 untrt1      0 untreated single_end
+##  8 FBgn0000024 untrt1     10 untreated single_end
+##  9 FBgn0000028 untrt1      0 untreated single_end
+## 10 FBgn0000032 untrt1   1446 untreated single_end
 ## # … with 40 more rows</code></pre>
 <p><strong>But it is a SummarizedExperiment object after all</strong></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -230,26 +230,26 @@
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/bind_rows.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble abstraction: 1 x 5
-##   sample condition type       transcript  counts
-##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
-## 1 untrt1 untreated single_end FBgn0000003      0</code></pre>
+##   transcript  sample counts condition type      
+##   &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+## 1 FBgn0000003 untrt1      0 untreated single_end</code></pre>
 <p>We can use <code>filter</code> to choose rows by criteria.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/bind_rows.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble abstraction: 58,396 x 5
-##    sample condition type       transcript  counts
-##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
-##  1 untrt1 untreated single_end FBgn0000003      0
-##  2 untrt1 untreated single_end FBgn0000008     92
-##  3 untrt1 untreated single_end FBgn0000014      5
-##  4 untrt1 untreated single_end FBgn0000015      0
-##  5 untrt1 untreated single_end FBgn0000017   4664
-##  6 untrt1 untreated single_end FBgn0000018    583
-##  7 untrt1 untreated single_end FBgn0000022      0
-##  8 untrt1 untreated single_end FBgn0000024     10
-##  9 untrt1 untreated single_end FBgn0000028      0
-## 10 untrt1 untreated single_end FBgn0000032   1446
+##    transcript  sample counts condition type      
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+##  1 FBgn0000003 untrt1      0 untreated single_end
+##  2 FBgn0000008 untrt1     92 untreated single_end
+##  3 FBgn0000014 untrt1      5 untreated single_end
+##  4 FBgn0000015 untrt1      0 untreated single_end
+##  5 FBgn0000017 untrt1   4664 untreated single_end
+##  6 FBgn0000018 untrt1    583 untreated single_end
+##  7 FBgn0000022 untrt1      0 untreated single_end
+##  8 FBgn0000024 untrt1     10 untreated single_end
+##  9 FBgn0000028 untrt1      0 untreated single_end
+## 10 FBgn0000032 untrt1   1446 untreated single_end
 ## # … with 40 more rows</code></pre>
 <p>We can use <code>select</code> to choose columns.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -302,54 +302,54 @@
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/bind_rows.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble abstraction: 102,193 x 5
-##    sample condition sequencing transcript  counts
-##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;
-##  1 untrt1 untreated single_end FBgn0000003      0
-##  2 untrt1 untreated single_end FBgn0000008     92
-##  3 untrt1 untreated single_end FBgn0000014      5
-##  4 untrt1 untreated single_end FBgn0000015      0
-##  5 untrt1 untreated single_end FBgn0000017   4664
-##  6 untrt1 untreated single_end FBgn0000018    583
-##  7 untrt1 untreated single_end FBgn0000022      0
-##  8 untrt1 untreated single_end FBgn0000024     10
-##  9 untrt1 untreated single_end FBgn0000028      0
-## 10 untrt1 untreated single_end FBgn0000032   1446
+##    transcript  sample counts condition sequencing
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+##  1 FBgn0000003 untrt1      0 untreated single_end
+##  2 FBgn0000008 untrt1     92 untreated single_end
+##  3 FBgn0000014 untrt1      5 untreated single_end
+##  4 FBgn0000015 untrt1      0 untreated single_end
+##  5 FBgn0000017 untrt1   4664 untreated single_end
+##  6 FBgn0000018 untrt1    583 untreated single_end
+##  7 FBgn0000022 untrt1      0 untreated single_end
+##  8 FBgn0000024 untrt1     10 untreated single_end
+##  9 FBgn0000028 untrt1      0 untreated single_end
+## 10 FBgn0000032 untrt1   1446 untreated single_end
 ## # … with 40 more rows</code></pre>
 <p>We could use <code>mutate</code> to create a column. For example, we could create a new type column that contains single and paired instead of single_end and paired_end.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/bind_rows.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble abstraction: 102,193 x 5
-##    sample condition type   transcript  counts
-##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;        &lt;int&gt;
-##  1 untrt1 untreated single FBgn0000003      0
-##  2 untrt1 untreated single FBgn0000008     92
-##  3 untrt1 untreated single FBgn0000014      5
-##  4 untrt1 untreated single FBgn0000015      0
-##  5 untrt1 untreated single FBgn0000017   4664
-##  6 untrt1 untreated single FBgn0000018    583
-##  7 untrt1 untreated single FBgn0000022      0
-##  8 untrt1 untreated single FBgn0000024     10
-##  9 untrt1 untreated single FBgn0000028      0
-## 10 untrt1 untreated single FBgn0000032   1446
+##    transcript  sample counts condition type  
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; 
+##  1 FBgn0000003 untrt1      0 untreated single
+##  2 FBgn0000008 untrt1     92 untreated single
+##  3 FBgn0000014 untrt1      5 untreated single
+##  4 FBgn0000015 untrt1      0 untreated single
+##  5 FBgn0000017 untrt1   4664 untreated single
+##  6 FBgn0000018 untrt1    583 untreated single
+##  7 FBgn0000022 untrt1      0 untreated single
+##  8 FBgn0000024 untrt1     10 untreated single
+##  9 FBgn0000028 untrt1      0 untreated single
+## 10 FBgn0000032 untrt1   1446 untreated single
 ## # … with 40 more rows</code></pre>
 <p>We could use <code>unite</code> to combine multiple columns into a single column.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/unnest.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble abstraction: 102,193 x 4
-##    sample group                transcript  counts
-##    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;        &lt;int&gt;
-##  1 untrt1 untreated_single_end FBgn0000003      0
-##  2 untrt1 untreated_single_end FBgn0000008     92
-##  3 untrt1 untreated_single_end FBgn0000014      5
-##  4 untrt1 untreated_single_end FBgn0000015      0
-##  5 untrt1 untreated_single_end FBgn0000017   4664
-##  6 untrt1 untreated_single_end FBgn0000018    583
-##  7 untrt1 untreated_single_end FBgn0000022      0
-##  8 untrt1 untreated_single_end FBgn0000024     10
-##  9 untrt1 untreated_single_end FBgn0000028      0
-## 10 untrt1 untreated_single_end FBgn0000032   1446
+##    transcript  sample counts group               
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;               
+##  1 FBgn0000003 untrt1      0 untreated_single_end
+##  2 FBgn0000008 untrt1     92 untreated_single_end
+##  3 FBgn0000014 untrt1      5 untreated_single_end
+##  4 FBgn0000015 untrt1      0 untreated_single_end
+##  5 FBgn0000017 untrt1   4664 untreated_single_end
+##  6 FBgn0000018 untrt1    583 untreated_single_end
+##  7 FBgn0000022 untrt1      0 untreated_single_end
+##  8 FBgn0000024 untrt1     10 untreated_single_end
+##  9 FBgn0000028 untrt1      0 untreated_single_end
+## 10 FBgn0000032 untrt1   1446 untreated_single_end
 ## # … with 40 more rows</code></pre>
 <p>We can also combine commands with the tidyverse pipe <code><a href="../reference/%&gt;%.html">%&gt;%</a></code>.</p>
 <p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
@@ -375,18 +375,18 @@
     <span class="fu"><a href="../reference/bind_rows.html">filter</a></span><span class="op">(</span><span class="va">mean_count</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 86,513 x 6
 ## # Groups:   transcript [12,359]
-##    sample condition type       transcript  counts mean_count
-##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;
-##  1 untrt1 untreated single_end FBgn0000003      0      0.143
-##  2 untrt1 untreated single_end FBgn0000008     92     99.6  
-##  3 untrt1 untreated single_end FBgn0000014      5      1.43 
-##  4 untrt1 untreated single_end FBgn0000015      0      0.857
-##  5 untrt1 untreated single_end FBgn0000017   4664   4672.   
-##  6 untrt1 untreated single_end FBgn0000018    583    461.   
-##  7 untrt1 untreated single_end FBgn0000022      0      0.143
-##  8 untrt1 untreated single_end FBgn0000024     10      7    
-##  9 untrt1 untreated single_end FBgn0000028      0      0.429
-## 10 untrt1 untreated single_end FBgn0000032   1446   1085.   
+##    transcript  sample counts condition type       mean_count
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;           &lt;dbl&gt;
+##  1 FBgn0000003 untrt1      0 untreated single_end      0.143
+##  2 FBgn0000008 untrt1     92 untreated single_end     99.6  
+##  3 FBgn0000014 untrt1      5 untreated single_end      1.43 
+##  4 FBgn0000015 untrt1      0 untreated single_end      0.857
+##  5 FBgn0000017 untrt1   4664 untreated single_end   4672.   
+##  6 FBgn0000018 untrt1    583 untreated single_end    461.   
+##  7 FBgn0000022 untrt1      0 untreated single_end      0.143
+##  8 FBgn0000024 untrt1     10 untreated single_end      7    
+##  9 FBgn0000028 untrt1      0 untreated single_end      0.429
+## 10 FBgn0000032 untrt1   1446 untreated single_end   1085.   
 ## # … with 86,503 more rows</code></pre>
 </div>
 <div id="plotting" class="section level1">
