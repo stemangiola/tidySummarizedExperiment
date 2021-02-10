@@ -106,8 +106,8 @@ as_tibble.tidySummarizedExperiment <- function(x, ...,
 
     count_info <- get_count_datasets(x)
 
-    sample_info %>%
-        left_join(count_info, by="sample") %>%
+    count_info %>%
+        left_join(sample_info, by="sample") %>%
         left_join(gene_info, by="transcript") %>%
-        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.))
+        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.)) 
 }
