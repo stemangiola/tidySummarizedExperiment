@@ -41,9 +41,19 @@ tidy_ <- function(object) {
         # If there is a column called sample change it's name
         when(
             "sample" %in% colnames(colData(.)) ~ {
-                warning("tidySummarizedExperiment says: column sample in your colData have been renamed as sample_, since is a reserved column name.")
+                warning("tidySummarizedExperiment says: the column `sample` in your colData has been renamed as sample_, since is a reserved column name.")
 
                 rename(., sample_=sample)
+            },
+            ~ (.)
+        ) %>%
+        
+        # If there is a column called sample change it's name
+        when(
+            "transcript" %in% colnames(rowData(.)) ~ {
+                warning("tidySummarizedExperiment says: the column `transcript` in your rowData has been renamed as transcript_, since is a reserved column name.")
+                
+                rename(., transcript_=transcript)
             },
             ~ (.)
         )

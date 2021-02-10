@@ -581,9 +581,29 @@ NULL
 #' @export
 rename.tidySummarizedExperiment <- function(.data, ...) {
 
+    
+    # Cols data frame
+    cols_data_frame = 
+      bind_cols(
+      colData(.data) %>% as_tibble() %>% slice(0),
+      rowData(.data) %>% as_tibble() %>% slice(0)
+    )
+  
     # Check that we are not modifying a key column
-    cols <- tidyselect::eval_select(expr(c(...)), colData(.data) %>% as.data.frame())
+    cols <- tidyselect::eval_select(  expr(c(...)), cols_data_frame  )
 
+    # Check if column is row-wise of column-wise
+    old_names = cols_data_frame[,cols] %>% colnames()
+    new_names = cols %>% names()
+    
+    # If renaming col and row data at the same time, it is too complicate, so error
+    if(
+      old_names %in% colnames(colData(.data)) %>% any() &
+      old_names %in% colnames(rowData(.data)) %>% any()
+    )
+      stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and transcript-wise columns.")
+    
+    
     tst =
         intersect(
             cols %>% names(),
@@ -592,7 +612,7 @@ rename.tidySummarizedExperiment <- function(.data, ...) {
         length() %>%
         gt(0)
 
-
+    # If column in view-only columns stop
     if (tst) {
         columns =
             get_special_columns(.data) %>%
@@ -605,8 +625,14 @@ rename.tidySummarizedExperiment <- function(.data, ...) {
         )
     }
 
-    colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()
+    # Rename sample annotation
+    if(old_names %in% colnames(colData(.data)) %>% any())
+      colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()
 
+    # Rename gene annotation
+    if(old_names %in% colnames(rowData(.data)) %>% any())
+      rowData(.data) <- dplyr::rename(rowData(.data) %>% as.data.frame(), ...) %>% DataFrame()
+    
     .data
 }
 
