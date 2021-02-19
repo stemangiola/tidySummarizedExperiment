@@ -330,6 +330,7 @@ get_special_columns <- function(SummarizedExperiment_object) {
 }
 
 #' @importFrom dplyr select
+#' @importFrom tidyselect one_of
 #' @importFrom tibble as_tibble
 #' @importFrom tibble tibble
 get_special_datasets <- function(SummarizedExperiment_object) {
