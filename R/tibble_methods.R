@@ -19,7 +19,7 @@
 #' @importFrom tibble as_tibble
 #'
 #' @section Row names:
-#' The default behavior is to silently remove row names.
+#' The default behaviour is to silently remove row names.
 #'
 #' New code should explicitly convert row names to a new column using the
 #' `rownames` argument.
