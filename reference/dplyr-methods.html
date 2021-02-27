@@ -571,78 +571,78 @@ to renaming a set of variables with a function.</p>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 7 x 1</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 7 x 1</span><span>
 #&gt;   sample
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> 
-#&gt; </span><span style='color: #555555;'>1</span><span> untrt1
-#&gt; </span><span style='color: #555555;'>2</span><span> untrt2
-#&gt; </span><span style='color: #555555;'>3</span><span> untrt3
-#&gt; </span><span style='color: #555555;'>4</span><span> untrt4
-#&gt; </span><span style='color: #555555;'>5</span><span> trt1  
-#&gt; </span><span style='color: #555555;'>6</span><span> trt2  
-#&gt; </span><span style='color: #555555;'>7</span><span> trt3  </div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> untrt1
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> untrt2
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> untrt3
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> untrt4
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> trt1  
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span> trt2  
+#&gt; </span><span style='color: #BCBCBC;'>7</span><span> trt3  </div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>filter</span><span class='op'>(</span><span class='va'>sample</span> <span class='op'>==</span> <span class='st'>"untrt1"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 14,599 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 14,599 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='co'># Learn more in ?dplyr_tidy_eval</span>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 102,193 x 5</span><span>
-#&gt; </span><span style='color: #555555;'># Groups:   sample [7]</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 102,193 x 5</span><span>
+#&gt; </span><span style='color: #949494;'># Groups:   sample [7]</span><span>
 #&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
-#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
+#&gt; </span><span style='color: #949494;'># … with 102,183 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 1 x 1</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 1</span><span>
 #&gt;   `mean(counts)`
-#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>           907.</div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+#&gt;            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span>           907.</div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>mutate</span><span class='op'>(</span>logcounts<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='co'># tidySummarizedExperiment::pasilla %&gt;%</span>
 <span class='co'>#     tidy() %&gt;%</span>
@@ -652,134 +652,134 @@ to renaming a set of variables with a function.</p>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 6</span><span>
 #&gt;    transcript  sample counts condition type       new_column
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>inner_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 58,396 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 58,396 x 6</span><span>
 #&gt;    transcript  sample counts condition type       new_column
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>right_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 58,396 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 58,396 x 6</span><span>
 #&gt;    transcript  sample counts condition type       new_column
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>full_join</span><span class='op'>(</span><span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>condition<span class='op'>=</span><span class='st'>"treated"</span>, dose<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 6</span><span>
 #&gt;    transcript  sample counts condition type        dose
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 1 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 1 x 5</span><span>
 #&gt;   transcript  sample counts condition type      
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #555555;'>1</span><span> FBgn0000003 untrt1      0 untreated single_end</div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> FBgn0000003 untrt1      0 untreated single_end</div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>select</span><span class='op'>(</span><span class='va'>sample</span>, <span class='va'>transcript</span>, <span class='va'>counts</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble abstraction: 102,193 x 3</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 3</span><span>
 #&gt;    transcript  sample counts
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>sample_n</span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 50 x 5</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 50 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0043069 untrt4      0 untreated paired_end
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0027793 trt2       30 treated   paired_end
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0011766 untrt3   </span><span style='text-decoration: underline;'>4</span><span>151 untreated paired_end
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0031320 untrt2    288 untreated single_end
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0034915 untrt4    827 untreated paired_end
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0030768 trt2      665 treated   paired_end
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0034292 untrt2      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0053817 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0030998 untrt1      3 untreated single_end
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0003511 untrt4    276 untreated paired_end
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0043069 untrt4      0 untreated paired_end
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0027793 trt2       30 treated   paired_end
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0011766 untrt3   </span><span style='text-decoration: underline;'>4</span><span>151 untreated paired_end
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0031320 untrt2    288 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0034915 untrt4    827 untreated paired_end
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0030768 trt2      665 treated   paired_end
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0034292 untrt2      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0053817 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0030998 untrt1      3 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0003511 untrt4    276 untreated paired_end
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>sample_frac</span><span class='op'>(</span><span class='fl'>0.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 10,219 x 5</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 10,219 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0037461 untrt3      0 untreated paired_end
-#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0011906 untrt2      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0010812 trt1     </span><span style='text-decoration: underline;'>1</span><span>736 treated   single_end
-#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0035065 trt1      409 treated   single_end
-#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0050418 untrt1      6 untreated single_end
-#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0038828 trt1       22 treated   single_end
-#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0036706 trt2        1 treated   paired_end
-#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0260953 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0034827 trt2        0 treated   paired_end
-#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0260748 trt2     </span><span style='text-decoration: underline;'>3</span><span>138 treated   paired_end
-#&gt; </span><span style='color: #555555;'># … with 10,209 more rows</span><span></div><div class='input'>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0037461 untrt3      0 untreated paired_end
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0011906 untrt2      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0010812 trt1     </span><span style='text-decoration: underline;'>1</span><span>736 treated   single_end
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0035065 trt1      409 treated   single_end
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0050418 untrt1      6 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0038828 trt1       22 treated   single_end
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0036706 trt2        1 treated   paired_end
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0260953 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0034827 trt2        0 treated   paired_end
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0260748 trt2     </span><span style='text-decoration: underline;'>3</span><span>138 treated   paired_end
+#&gt; </span><span style='color: #949494;'># … with 10,209 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
