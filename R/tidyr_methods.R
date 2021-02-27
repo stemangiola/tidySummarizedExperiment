@@ -42,7 +42,7 @@
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     nest(data=-condition) %>%
 #'     unnest(data)
 #'
@@ -111,7 +111,7 @@ unnest.tidySummarizedExperiment_nested <-
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     nest(data=-condition)
 #'
 #' @rdname tidyr-methods
@@ -124,7 +124,7 @@ NULL
 #' @importFrom rlang :=
 #'
 #' @export
-nest.tidySummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
+nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     my_data__ <- .data
     cols <- enquos(...)
     col_name_data <- names(cols)
@@ -195,7 +195,7 @@ nest.tidySummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
 #' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
@@ -206,7 +206,7 @@ NULL
 
 #' @importFrom rlang enquo
 #' @export
-extract.tidySummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
+extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
     convert=FALSE, ...) {
     col <- enquo(col)
 
@@ -326,12 +326,12 @@ extract.tidySummarizedExperiment <- function(data, col, into, regex="([[:alnum:]
 #'
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     pivot_longer(c(condition, type), names_to="name", values_to="value")
 NULL
 
 #' @export
-pivot_longer.tidySummarizedExperiment <- function(data,
+pivot_longer.SummarizedExperiment <- function(data,
     cols,
     names_to="name",
     names_prefix=NULL,
@@ -399,12 +399,12 @@ pivot_longer.tidySummarizedExperiment <- function(data,
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     unite("group", c(condition, type))
 NULL
 
 #' @export
-unite.tidySummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
+unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
 
     # Check that we are not modifying a key column
     cols <- enquo(col)
@@ -483,13 +483,13 @@ unite.tidySummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE,
 #' @examples
 #'
 #' un <- tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     unite("group", c(condition, type))
 #' un %>% separate(col=group, into=c("condition", "type"))
 NULL
 
 #' @export
-separate.tidySummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
+separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
     convert=FALSE, extra="warn", fill="warn", ...) {
 
     # Check that we are not modifying a key column

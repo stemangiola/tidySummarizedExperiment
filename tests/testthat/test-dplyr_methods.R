@@ -2,7 +2,7 @@ context("dplyr test")
 
 library(tidySummarizedExperiment)
 
-tt <- pasilla %>% tidy()
+tt <- pasilla 
 
 test_that("bind_rows", {
     tt_bind <- tidySummarizedExperiment::bind_rows(tt, tt)

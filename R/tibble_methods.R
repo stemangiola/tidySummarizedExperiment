@@ -57,7 +57,7 @@
 #' @export
 #' @examples
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     as_tibble()
 NULL
 
@@ -68,7 +68,7 @@ NULL
 #' @importFrom tibble enframe
 #'
 #'
-as_tibble.tidySummarizedExperiment <- function(x, ...,
+as_tibble.SummarizedExperiment <- function(x, ...,
     .name_repair=c("check_unique", "unique", "universal", "minimal"),
     rownames=pkgconfig::get_config("tibble::rownames", NULL)) {
     sample_info <-

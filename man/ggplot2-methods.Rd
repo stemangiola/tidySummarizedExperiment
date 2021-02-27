@@ -48,7 +48,7 @@ is often the case in complex graphics.
 library(ggplot2)
 
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     tidySummarizedExperiment::ggplot(aes(sample, counts)) +
     geom_boxplot()
 }

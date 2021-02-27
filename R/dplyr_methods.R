@@ -35,7 +35,7 @@
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' library(tibble)
-#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla 
 #' bind_rows(tt, tt)
 #'
 #' num_rows <- nrow(tidySummarizedExperiment::as_tibble(tt))
@@ -61,13 +61,14 @@ bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
 #' @importFrom rlang dots_values
 #' @importFrom rlang flatten_if
 #' @importFrom rlang is_spliced
+#' @importFrom SummarizedExperiment cbind
 #'
 #' @export
 #'
-bind_rows.tidySummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
+bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     tts <- flatten_if(dots_values(...), is_spliced)
 
-    new_obj <- cbind(tts[[1]], tts[[2]]) %>% tidy()
+    new_obj <- cbind(tts[[1]], tts[[2]]) 
 
     # If duplicated cell names
     if (new_obj %>% colnames() %>% duplicated() %>% which() %>% length() %>% gt(0)) {
@@ -129,7 +130,7 @@ bind_cols_ = function(..., .id=NULL) {
 #'
 #' @export
 #'
-bind_cols.tidySummarizedExperiment <- bind_cols_
+bind_cols.SummarizedExperiment <- bind_cols_
 
 #' distinct
 #'
@@ -150,14 +151,14 @@ bind_cols.tidySummarizedExperiment <- bind_cols_
 #'
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     distinct(sample)
 #' @export
 NULL
 
 #' @inheritParams distinct
 #' @export
-distinct.tidySummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
+distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
     message(data_frame_returned_message)
 
     .data %>%
@@ -229,7 +230,7 @@ distinct.tidySummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
 #'
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     filter(sample == "untrt1")
 #'
 #' # Learn more in ?dplyr_tidy_eval
@@ -238,7 +239,7 @@ NULL
 
 #' @inheritParams filter
 #' @export
-filter.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
+filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     new_meta <- .data %>%
         as_tibble() %>%
         dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
@@ -303,13 +304,13 @@ filter.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     group_by(sample)
 #' @export
 NULL
 
 #' @export
-group_by.tidySummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
+group_by.SummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
     message(data_frame_returned_message)
 
     .data %>%
@@ -390,13 +391,13 @@ group_by.tidySummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=grou
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     summarise(mean(counts))
 #' @export
 NULL
 
 #' @export
-summarise.tidySummarizedExperiment <- function(.data, ...) {
+summarise.SummarizedExperiment <- function(.data, ...) {
     message(data_frame_returned_message)
 
 
@@ -488,7 +489,7 @@ summarise.tidySummarizedExperiment <- function(.data, ...) {
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     mutate(logcounts=log2(counts))
 #'
 #' @rdname dplyr-methods
@@ -501,7 +502,7 @@ NULL
 #' @importFrom rlang enquos
 #'
 #' @export
-mutate.tidySummarizedExperiment <- function(.data, ...) {
+mutate.SummarizedExperiment <- function(.data, ...) {
 
     # Check that we are not modifying a key column
     cols <- enquos(...) %>% names()
@@ -572,14 +573,14 @@ mutate.tidySummarizedExperiment <- function(.data, ...) {
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' # tidySummarizedExperiment::pasilla %>%
-#' #     tidy() %>%
+#' #     
 #' #     rename(cond=condition)
 #' @export
 NULL
 
 #' @importFrom tidyselect eval_select
 #' @export
-rename.tidySummarizedExperiment <- function(.data, ...) {
+rename.SummarizedExperiment <- function(.data, ...) {
 
     
     # Cols data frame
@@ -672,7 +673,7 @@ rename.tidySummarizedExperiment <- function(.data, ...) {
 NULL
 
 #' @export
-rowwise.tidySummarizedExperiment <- function(data, ...) {
+rowwise.SummarizedExperiment <- function(data, ...) {
     message(data_frame_returned_message)
 
     data %>%
@@ -706,12 +707,12 @@ rowwise.tidySummarizedExperiment <- function(data, ...) {
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla 
 #' tt %>% left_join(tt %>% distinct(condition) %>% mutate(new_column=1:2))
 NULL
 
 #' @export
-left_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+left_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
         as_tibble() %>%
@@ -746,7 +747,7 @@ left_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla 
 #' tt %>% inner_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
 #'
 #' @rdname dplyr-methods
@@ -756,7 +757,7 @@ left_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix
 NULL
 
 #' @export
-inner_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
+inner_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     x %>%
         as_tibble() %>%
         dplyr::inner_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
@@ -794,7 +795,7 @@ inner_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffi
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla 
 #' tt %>% right_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
 #'
 #' @rdname dplyr-methods
@@ -804,7 +805,7 @@ inner_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffi
 NULL
 
 #' @export
-right_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+right_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
         as_tibble() %>%
@@ -843,7 +844,7 @@ right_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffi
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #'
-#' tt <- tidySummarizedExperiment::pasilla %>% tidy()
+#' tt <- tidySummarizedExperiment::pasilla 
 #' tt %>% full_join(tibble::tibble(condition="treated", dose=10))
 #'
 #' @rdname dplyr-methods
@@ -853,7 +854,7 @@ right_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffi
 NULL
 
 #' @export
-full_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+full_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
         as_tibble() %>%
@@ -942,12 +943,12 @@ full_join.tidySummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix
 #'
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     slice(1)
 NULL
 
 #' @export
-slice.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
+slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     .data %>%
         as_tibble() %>%
         dplyr::slice(..., .preserve=.preserve) %>%
@@ -1011,7 +1012,7 @@ slice.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #'
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     select(sample, transcript, counts)
 #' @family single table verbs
 #'
@@ -1022,7 +1023,7 @@ slice.tidySummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 NULL
 
 #' @export
-select.tidySummarizedExperiment <- function(.data, ...) {
+select.SummarizedExperiment <- function(.data, ...) {
     .data %>%
         as_tibble() %>%
         select_helper(...) %>%
@@ -1082,10 +1083,10 @@ select.tidySummarizedExperiment <- function(.data, ...) {
 #'
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     sample_n(50)
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     sample_frac(0.1)
 #' @return A tidySummarizedExperiment object
 #'
@@ -1096,7 +1097,7 @@ select.tidySummarizedExperiment <- function(.data, ...) {
 NULL
 
 #' @export
-sample_n.tidySummarizedExperiment <- function(tbl, size, replace=FALSE,
+sample_n.SummarizedExperiment <- function(tbl, size, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_n()", "slice_sample()")
 
@@ -1116,7 +1117,7 @@ sample_n.tidySummarizedExperiment <- function(tbl, size, replace=FALSE,
 NULL
 
 #' @export
-sample_frac.tidySummarizedExperiment <- function(tbl, size=1, replace=FALSE,
+sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_frac()", "slice_sample()")
 
@@ -1166,7 +1167,7 @@ sample_frac.tidySummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #'
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     count(sample)
 count <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     UseMethod("count")
@@ -1187,7 +1188,7 @@ count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by
     out
 }
 #' @export
-count.tidySummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
+count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     message(data_frame_returned_message)
 
     x %>%
@@ -1230,12 +1231,12 @@ count.tidySummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NUL
 #'
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     pull(transcript)
 NULL
 
 #' @export
-pull.tidySummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
+pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     var <- enquo(var)
     name <- enquo(name)
 

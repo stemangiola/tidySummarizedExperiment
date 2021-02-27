@@ -12,5 +12,5 @@
 #' @return void
 #' @examples
 #'
-#' tidySummarizedExperiment::pasilla %>% tidy()
+#' tidySummarizedExperiment::pasilla 
 NULL

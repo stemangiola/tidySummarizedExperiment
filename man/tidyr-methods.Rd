@@ -191,32 +191,32 @@ under active development.
 \examples{
 
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     nest(data=-condition) \%>\%
     unnest(data)
 
 
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     nest(data=-condition)
 
 
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
 # See vignette("pivot") for examples and explanation
 
 library(dplyr)
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     pivot_longer(c(condition, type), names_to="name", values_to="value")
 
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     unite("group", c(condition, type))
 
 un <- tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     unite("group", c(condition, type))
 un \%>\% separate(col=group, into=c("condition", "type"))
 }

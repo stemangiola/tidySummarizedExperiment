@@ -56,6 +56,6 @@ with group-wise counts.
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     count(sample)
 }
