@@ -1,4 +1,5 @@
 #' @importFrom tibble as_tibble
+#' @importFrom SummarizedExperiment colData
 #'
 #' @keywords internal
 #'
@@ -334,6 +335,7 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' @importFrom dplyr select
 #' @importFrom tibble as_tibble
 #' @importFrom tibble tibble
+#' @importFrom SummarizedExperiment rowRanges
 get_special_datasets <- function(SummarizedExperiment_object) {
     if (
         "RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object) &

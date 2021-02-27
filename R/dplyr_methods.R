@@ -579,6 +579,9 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 NULL
 
 #' @importFrom tidyselect eval_select
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment rowData
+#' 
 #' @export
 rename.SummarizedExperiment <- function(.data, ...) {
 
