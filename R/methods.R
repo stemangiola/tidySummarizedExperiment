@@ -25,6 +25,10 @@ setClass("tidySummarizedExperiment", contains=c("SummarizedExperiment", "RangedS
 #' @param object A SummarizedExperiment object
 #'
 #' @return A tidySummarizedExperiment object
+#' 
+#' @description 
+#' 
+#' DEPRECATED. Not needed any more.
 #'
 #' @name tidy
 #'
@@ -45,6 +49,8 @@ tidy_ <- function(object) {
         what = "tidy()",
         details = "tidySummarizedExperiment says: tidy() is not needed anymore."
     )
+    
+    object
 }
 
 #' @importFrom methods as

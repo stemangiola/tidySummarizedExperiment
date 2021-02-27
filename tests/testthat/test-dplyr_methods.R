@@ -110,7 +110,7 @@ test_that("select", {
         select(-condition) %>%
         class() %>%
         as.character() %>%
-        expect_equal("tidySummarizedExperiment")
+        expect_equal("SummarizedExperiment")
 
     tt %>%
         select(condition) %>%

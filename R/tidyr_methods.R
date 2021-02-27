@@ -73,7 +73,7 @@ unnest.tidySummarizedExperiment_nested <-
                 .[[1]] %>%
                 class() %>%
                 as.character() %>%
-                eq("tidySummarizedExperiment") %>%
+                eq("SummarizedExperiment") %>%
                 any() ~
 
             # Do my trick to unnest
@@ -91,7 +91,7 @@ unnest.tidySummarizedExperiment_nested <-
                 reduce(bind_rows),
 
             # Else do normal stuff
-            ~ (.) %>%
+            ~ (.) %>% 
                 drop_class("tidySummarizedExperiment_nested") %>%
                 tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
                 add_class("tidySummarizedExperiment_nested")
@@ -137,7 +137,7 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
         
         # Check that sample or transcript are in the nesting
         {
-            if(c("sample", "transcript") %in% colnames(.))
+            if(c("sample", "transcript") %>% intersect(colnames(.)) %>% length() %>% `>` (0))
                 stop("tidySummarizedExperiment says: You cannot have the columns sample or transcript among the nesting")
                 (.)
         } %>%
