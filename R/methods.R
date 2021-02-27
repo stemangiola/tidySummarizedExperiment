@@ -45,7 +45,7 @@ tidy_ <- function(object) {
     
     # DEPRECATE
     deprecate_warn(
-        when = "1.1.0",
+        when = "1.1.1",
         what = "tidy()",
         details = "tidySummarizedExperiment says: tidy() is not needed anymore."
     )
