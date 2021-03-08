@@ -41,7 +41,7 @@ in contrast with [tibble()], which builds a tibble from individual columns.
 }
 \section{Row names}{
 
-The default behavior is to silently remove row names.
+The default behaviour is to silently remove row names.
 
 New code should explicitly convert row names to a new column using the
 `rownames` argument.
@@ -60,7 +60,7 @@ prefer the more expressive maturing `as_tibble_row()` and
 
 \examples{
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     as_tibble()
 }
 \seealso{

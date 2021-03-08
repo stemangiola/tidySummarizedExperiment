@@ -424,74 +424,74 @@ to renaming a set of variables with a function.
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     distinct(sample)
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     filter(sample == "untrt1")
 
 # Learn more in ?dplyr_tidy_eval
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     group_by(sample)
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     summarise(mean(counts))
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     mutate(logcounts=log2(counts))
 
 `\%>\%` <- magrittr::`\%>\%`
 # tidySummarizedExperiment::pasilla \%>\%
-#     tidy() \%>\%
+#     
 #     rename(cond=condition)
 `\%>\%` <- magrittr::`\%>\%`
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla 
 tt \%>\% left_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2))
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla 
 tt \%>\% inner_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2) \%>\% slice(1))
 
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla 
 tt \%>\% right_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2) \%>\% slice(1))
 
 `\%>\%` <- magrittr::`\%>\%`
 
-tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla 
 tt \%>\% full_join(tibble::tibble(condition="treated", dose=10))
 
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     slice(1)
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     select(sample, transcript, counts)
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     sample_n(50)
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     sample_frac(0.1)
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
-    tidy() \%>\%
+    
     pull(transcript)
 }
 \seealso{

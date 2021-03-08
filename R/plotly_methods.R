@@ -176,7 +176,7 @@ plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
 }
 
 #' @export
-plot_ly.tidySummarizedExperiment <- function(data=data.frame(), ..., type=NULL, name=NULL,
+plot_ly.SummarizedExperiment <- function(data=data.frame(), ..., type=NULL, name=NULL,
     color=NULL, colors=NULL, alpha=NULL,
     stroke=NULL, strokes=NULL, alpha_stroke=1,
     size=NULL, sizes=c(10, 100),

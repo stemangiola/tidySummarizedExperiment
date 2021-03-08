@@ -1,19 +1,23 @@
-
-
-setClass("tidySummarizedExperiment", contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
-
-#' @importFrom methods show
-#' @import SummarizedExperiment
-#' @importFrom magrittr %>%
 setMethod(
-    f="show",
-    signature="tidySummarizedExperiment",
-    definition=function(object) {
-        object %>%
-            print()
+    f = "show",
+    signature = "SummarizedExperiment",
+    definition = function(object) {
+        if (isTRUE(x = getOption(x = "restore_SummarizedExperiment_show", default = FALSE))) {
+            f <- getMethod(
+                f = "show",
+                signature = "SummarizedExperiment",
+                where = asNamespace(ns = "SummarizedExperiment")
+            )
+            f(object = object)
+        } else {
+            object %>%
+                print()
+        }
     }
 )
 
+
+setClass("tidySummarizedExperiment", contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
 
 
 #' tidy for SummarizedExperiment
@@ -21,6 +25,10 @@ setMethod(
 #' @param object A SummarizedExperiment object
 #'
 #' @return A tidySummarizedExperiment object
+#' 
+#' @description 
+#' 
+#' DEPRECATED. Not needed any more.
 #'
 #' @name tidy
 #'
@@ -32,31 +40,17 @@ tidy <- function(object) {
     UseMethod("tidy", object)
 }
 
+#' @importFrom lifecycle deprecate_warn
 tidy_ <- function(object) {
     
-    object %>%
-        as("RangedSummarizedExperiment") %>%
-        as("tidySummarizedExperiment") %>%
-
-        # If there is a column called sample change it's name
-        when(
-            "sample" %in% colnames(colData(.)) ~ {
-                warning("tidySummarizedExperiment says: the column `sample` in your colData has been renamed as sample_, since is a reserved column name.")
-
-                rename(., sample_=sample)
-            },
-            ~ (.)
-        ) %>%
-        
-        # If there is a column called sample change it's name
-        when(
-            "transcript" %in% colnames(rowData(.)) ~ {
-                warning("tidySummarizedExperiment says: the column `transcript` in your rowData has been renamed as transcript_, since is a reserved column name.")
-                
-                rename(., transcript_=transcript)
-            },
-            ~ (.)
-        )
+    # DEPRECATE
+    deprecate_warn(
+        when = "1.1.1",
+        what = "tidy()",
+        details = "tidySummarizedExperiment says: tidy() is not needed anymore."
+    )
+    
+    object
 }
 
 #' @importFrom methods as

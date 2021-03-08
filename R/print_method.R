@@ -53,14 +53,14 @@
 #'
 #' @examples
 #' library(dplyr)
-#' pasilla %>% tidy() %>% print()
+#' pasilla  %>% print()
 #' @name formatting
 NULL
 
 #' @rdname print
 #' @importFrom cli cat_line
 #' @export
-print.tidySummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
+print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
   # Getting print formatting
   formatted = 

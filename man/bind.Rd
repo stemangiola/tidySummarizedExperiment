@@ -45,7 +45,7 @@ appears in any of the inputs.
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
 library(tibble)
-tt <- tidySummarizedExperiment::pasilla \%>\% tidy()
+tt <- tidySummarizedExperiment::pasilla 
 bind_rows(tt, tt)
 
 num_rows <- nrow(tidySummarizedExperiment::as_tibble(tt))
