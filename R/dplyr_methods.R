@@ -62,6 +62,7 @@ bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
 #' @importFrom rlang flatten_if
 #' @importFrom rlang is_spliced
 #' @importFrom SummarizedExperiment cbind
+#' @importFrom SummarizedExperiment assays
 #'
 #' @export
 #'
