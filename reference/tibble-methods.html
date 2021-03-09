@@ -182,7 +182,7 @@ Read more in [rownames].</p></td>
 
     
 
-<p>The default behavior is to silently remove row names.</p>
+<p>The default behaviour is to silently remove row names.</p>
 <p>New code should explicitly convert row names to a new column using the
 `rownames` argument.</p>
 <p>For existing code that relies on the retention of row names, call
@@ -203,7 +203,7 @@ prefer the more expressive maturing `as_tibble_row()` and
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 102,193 x 5</span><span>
 #&gt;    transcript  sample counts condition type      

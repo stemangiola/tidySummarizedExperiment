@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="tidy for SummarizedExperiment — tidy" />
-<meta property="og:description" content="tidy for SummarizedExperiment" />
+<meta property="og:description" content="DEPRECATED. Not needed any more." />
 
 
 
@@ -121,7 +121,7 @@
     </div>
 
     <div class="ref-description">
-    <p>tidy for SummarizedExperiment</p>
+    <p>DEPRECATED. Not needed any more.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tidy</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
@@ -142,7 +142,8 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'>tidy</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble abstraction: 102,193 x 5</span><span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: `tidy()` was deprecated in tidySummarizedExperiment 1.1.1.</span>
+#&gt; <span class='warning'>tidySummarizedExperiment says: tidy() is not needed anymore.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble abstraction: 102,193 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end

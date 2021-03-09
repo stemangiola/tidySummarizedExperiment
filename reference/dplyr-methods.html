@@ -569,7 +569,7 @@ to renaming a set of variables with a function.</p>
     <pre class="examples"><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 7 x 1</span><span>
 #&gt;   sample
@@ -583,7 +583,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #BCBCBC;'>7</span><span> trt3  </div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>filter</span><span class='op'>(</span><span class='va'>sample</span> <span class='op'>==</span> <span class='st'>"untrt1"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 14,599 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
@@ -602,7 +602,7 @@ to renaming a set of variables with a function.</p>
 <span class='co'># Learn more in ?dplyr_tidy_eval</span>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 102,193 x 5</span><span>
 #&gt; </span><span style='color: #949494;'># Groups:   sample [7]</span><span>
@@ -620,14 +620,14 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
 #&gt; </span><span style='color: #949494;'># … with 102,183 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 1</span><span>
 #&gt;   `mean(counts)`
 #&gt;            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'>1</span><span>           907.</div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>mutate</span><span class='op'>(</span>logcounts<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
@@ -645,12 +645,12 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='co'># tidySummarizedExperiment::pasilla %&gt;%</span>
-<span class='co'>#     tidy() %&gt;%</span>
+<span class='co'>#     </span>
 <span class='co'>#     rename(cond=condition)</span>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
-<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 6</span><span>
 #&gt;    transcript  sample counts condition type       new_column
@@ -667,7 +667,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
 #&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
-<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>inner_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 58,396 x 6</span><span>
 #&gt;    transcript  sample counts condition type       new_column
@@ -685,7 +685,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
-<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>right_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 58,396 x 6</span><span>
 #&gt;    transcript  sample counts condition type       new_column
@@ -703,7 +703,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
-<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>full_join</span><span class='op'>(</span><span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>condition<span class='op'>=</span><span class='st'>"treated"</span>, dose<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 6</span><span>
 #&gt;    transcript  sample counts condition type        dose
@@ -722,7 +722,7 @@ to renaming a set of variables with a function.</p>
 
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 1 x 5</span><span>
 #&gt;   transcript  sample counts condition type      
@@ -730,7 +730,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #BCBCBC;'>1</span><span> FBgn0000003 untrt1      0 untreated single_end</div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>select</span><span class='op'>(</span><span class='va'>sample</span>, <span class='va'>transcript</span>, <span class='va'>counts</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 3</span><span>
 #&gt;    transcript  sample counts
@@ -748,7 +748,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>sample_n</span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 50 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
@@ -764,7 +764,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0030998 untrt1      3 untreated single_end
 #&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0003511 untrt4    276 untreated paired_end
 #&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>sample_frac</span><span class='op'>(</span><span class='fl'>0.1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 10,219 x 5</span><span>
 #&gt;    transcript  sample counts condition type      
@@ -782,7 +782,7 @@ to renaming a set of variables with a function.</p>
 #&gt; </span><span style='color: #949494;'># … with 10,209 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    
     <span class='fu'>pull</span><span class='op'>(</span><span class='va'>transcript</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     [1] "FBgn0000003" "FBgn0000008" "FBgn0000014" "FBgn0000015" "FBgn0000017"
 #&gt;     [6] "FBgn0000018" "FBgn0000022" "FBgn0000024" "FBgn0000028" "FBgn0000032"
