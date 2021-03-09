@@ -459,3 +459,22 @@ get_subset_columns <- function(.data, .col) {
 
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."
+
+is_SE = function(object){
+    # This function check if object is S4 SummarizedExperiment
+    
+    isS4(object) & (class(object) %in% c("SummarizedExperiment", "RangedSummarizedExperiment"))
+    
+}
+
+#' @import dplyr
+#' @import tidyr
+#' @importFrom purrr as_mapper
+wrap_function_for_SE = function(.x, .f){
+    
+    my_class = class(.x)
+    #.x = .x %>% tidy()
+    .x = as_mapper(.f)(.x)
+    .x = .x %>% as(my_class)
+    .x
+}

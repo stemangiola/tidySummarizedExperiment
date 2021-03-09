@@ -1,3 +1,5 @@
+#' @importFrom methods show
+#' @importFrom magrittr %>%
 setMethod(
     f = "show",
     signature = "SummarizedExperiment",
@@ -62,7 +64,7 @@ tidy.SummarizedExperiment <- tidy_
 
 #' @importFrom methods as
 #'
-#' @param object A SummarizedExperiment object
+#' @param object A RangedSummarizedExperiment object
 #'
 #' @export
 tidy.RangedSummarizedExperiment <- tidy_
