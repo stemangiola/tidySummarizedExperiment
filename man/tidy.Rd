@@ -13,7 +13,7 @@ tidy(object)
 A tidySummarizedExperiment object
 }
 \description{
-tidy for SummarizedExperiment
+DEPRECATED. Not needed any more.
 }
 \examples{
 

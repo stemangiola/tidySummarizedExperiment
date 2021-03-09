@@ -1,4 +1,5 @@
 #' @importFrom tibble as_tibble
+#' @importFrom SummarizedExperiment colData
 #'
 #' @keywords internal
 #'
@@ -82,6 +83,7 @@ drop_class <- function(var, name) {
 #'
 #' @importFrom magrittr "%$%"
 #' @importFrom utils tail
+#' @importFrom SummarizedExperiment assays
 #'
 #' @param .data A tidySummarizedExperiment
 #' @param transcripts A character
@@ -152,6 +154,7 @@ get_abundance_sc_wide <- function(.data, transcripts=NULL, all=FALSE) {
 #' @importFrom tibble as_tibble
 #' @importFrom purrr when
 #' @importFrom purrr map2
+#' @importFrom SummarizedExperiment assays
 #'
 #' @param .data A tidySummarizedExperiment
 #' @param transcripts A character
@@ -333,6 +336,7 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' @importFrom tidyselect one_of
 #' @importFrom tibble as_tibble
 #' @importFrom tibble tibble
+#' @importFrom SummarizedExperiment rowRanges
 get_special_datasets <- function(SummarizedExperiment_object) {
     if (
         "RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object) &
@@ -361,6 +365,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
 #' @importFrom dplyr left_join
 #' @importFrom tibble as_tibble
 #' @importFrom purrr reduce
+#' @importFrom SummarizedExperiment assays
 get_count_datasets <- function(SummarizedExperiment_object) {
     map2(
         assays(SummarizedExperiment_object) %>% as.list(),

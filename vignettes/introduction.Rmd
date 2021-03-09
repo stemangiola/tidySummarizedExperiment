@@ -89,8 +89,7 @@ library(tidySummarizedExperiment)
 This is a SummarizedExperiment object but it is evaluated as a tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs. 
 
 ```{r}
-pasilla_tidy <- tidySummarizedExperiment::pasilla %>%
-    tidy()
+pasilla_tidy <- tidySummarizedExperiment::pasilla 
 ```
 
 **It looks like a tibble**

@@ -48,13 +48,13 @@
 #' library(ggplot2)
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     tidy() %>%
+#'     
 #'     tidySummarizedExperiment::ggplot(aes(sample, counts)) +
 #'     geom_boxplot()
 NULL
 
 #' @export
-ggplot.tidySummarizedExperiment <- function(data=NULL, mapping=aes(), ..., environment=parent.frame()) {
+ggplot.SummarizedExperiment <- function(data=NULL, mapping=aes(), ..., environment=parent.frame()) {
     data %>%
         as_tibble() %>%
         ggplot2::ggplot(mapping=mapping)

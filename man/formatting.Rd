@@ -83,5 +83,5 @@ turn off truncation of character columns.
 
 \examples{
 library(dplyr)
-pasilla \%>\% tidy() \%>\% print()
+pasilla  \%>\% print()
 }
