@@ -63,6 +63,8 @@ bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
 #' @importFrom rlang is_spliced
 #' @importFrom SummarizedExperiment cbind
 #' @importFrom SummarizedExperiment assays
+#' @importFrom SummarizedExperiment assays<-
+#' @importFrom S4Vectors SimpleList
 #'
 #' @export
 #'
@@ -80,10 +82,11 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     colnames(new_obj) <- unique_colnames
 
     # Change also all assays colnames
-    assays(new_obj)@listData <- assays(new_obj)@listData %>% map(~ {
+    assays(new_obj) <- assays(new_obj)@listData %>% map(~ {
         colnames(.x) <- unique_colnames
         .x
-    })
+    }) %>% 
+      SimpleList()
 
     new_obj
 }
@@ -582,6 +585,8 @@ NULL
 #' @importFrom tidyselect eval_select
 #' @importFrom SummarizedExperiment colData
 #' @importFrom SummarizedExperiment rowData
+#' @importFrom SummarizedExperiment colData<-
+#' @importFrom SummarizedExperiment rowData<-
 #' 
 #' @export
 rename.SummarizedExperiment <- function(.data, ...) {
