@@ -76,17 +76,17 @@ unnest.tidySummarizedExperiment_nested <-
                 eq("SummarizedExperiment") %>%
                 any() ~
 
-            # Do my trick to unnest
-            mutate(., !!cols := imap(
-                !!cols, ~ .x %>%
-                    bind_cols_(
-
-                        # Attach back the columns used for nesting
-                        .data_ %>%
-                            select(-!!cols) %>%
-                            slice(rep(.y, ncol(.x) * nrow(.x)))
-                    )
-            )) %>%
+                # Do my trick to unnest
+                mutate(., !!cols := imap(
+                    !!cols, ~ .x %>%
+                        bind_cols_(
+    
+                            # Attach back the columns used for nesting
+                            .data_ %>%
+                                select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
+                                slice(rep(.y, ncol(.x) * nrow(.x)))
+                        )
+                )) %>%
                 pull(!!cols) %>%
                 reduce(bind_rows),
 
@@ -122,6 +122,8 @@ NULL
 
 #' @importFrom rlang enquos
 #' @importFrom rlang :=
+#' @importFrom purrr when
+#' @importFrom purrr pmap
 #'
 #' @export
 nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
@@ -129,7 +131,8 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     cols <- enquos(...)
     col_name_data <- names(cols)
 
-    my_data__ %>%
+    my_data__nested = 
+      my_data__ %>%
 
         # This is needed otherwise nest goes into loop and fails
         as_tibble() %>%
@@ -139,19 +142,40 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
         {
             if(c("sample", "transcript") %>% intersect(colnames(.)) %>% length() %>% `>` (0))
                 stop("tidySummarizedExperiment says: You cannot have the columns sample or transcript among the nesting")
-                (.)
-        } %>%
+            (.)
+        } 
+    
+    my_data__nested %>%
         
         mutate(
-            !!as.symbol(col_name_data) := map(
-                !!as.symbol(col_name_data),
-                ~ my_data__ %>%
-
+            !!as.symbol(col_name_data) := pmap(
+              
+              # Add sample transcript to map if nesting by those
+                list(!!as.symbol(col_name_data)) %>%
+                  
+                  # Check if nested by sample
+                  when("sample" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("sample"))), ~ (.)) %>%
+                  
+                  # Check if nested by transcript
+                  when("transcript" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("transcript"))), ~ (.)) , ~ {
+                  
+                    # Check if nested by sample
+                    if("sample" %in% colnames(my_data__nested)) { my_samples=..2 } 
+                    else {my_samples=..1$sample}
+                    
+                    # Check if nested by transcript
+                    if("sample" %in% colnames(my_data__nested) & "transcript" %in% colnames(my_data__nested)) {my_transcripts=..3}
+                    else if("transcript" %in% colnames(my_data__nested)) my_transcripts=..2
+                    else my_transcripts=..1$transcript
+                 
+                  my_data__ %>%
+                    
                     # Subset cells
-                    filter(sample %in% .x$sample & transcript %in% .x$transcript) %>%
-
+                    filter(sample %in% my_samples & transcript %in% my_transcripts) %>%
+                    
                     # Subset columns
-                    select(colnames(.x))
+                    select(colnames(..1) %>% c("sample", "transcript") %>% unique)
+                } 
             )
         ) %>%
 
