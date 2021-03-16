@@ -129,7 +129,7 @@ name the output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -585,7 +585,8 @@ to renaming a set of variables with a function.</p>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>filter</span><span class='op'>(</span><span class='va'>sample</span> <span class='op'>==</span> <span class='st'>"untrt1"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 14,599 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 14,599 x 5</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=1 | Assays=counts</span><span>
 #&gt;    transcript  sample counts condition type      
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
@@ -629,7 +630,8 @@ to renaming a set of variables with a function.</p>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>mutate</span><span class='op'>(</span>logcounts<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 5</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts</span><span>
 #&gt;    transcript  sample counts condition type      
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
@@ -652,7 +654,8 @@ to renaming a set of variables with a function.</p>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts</span><span>
 #&gt;    transcript  sample counts condition type       new_column
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
@@ -669,7 +672,8 @@ to renaming a set of variables with a function.</p>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>inner_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 58,396 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 58,396 x 6</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=4 | Assays=counts</span><span>
 #&gt;    transcript  sample counts condition type       new_column
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
@@ -687,7 +691,8 @@ to renaming a set of variables with a function.</p>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>right_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 58,396 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 58,396 x 6</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=4 | Assays=counts</span><span>
 #&gt;    transcript  sample counts condition type       new_column
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
@@ -705,7 +710,8 @@ to renaming a set of variables with a function.</p>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>full_join</span><span class='op'>(</span><span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>condition<span class='op'>=</span><span class='st'>"treated"</span>, dose<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts</span><span>
 #&gt;    transcript  sample counts condition type        dose
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
@@ -724,7 +730,8 @@ to renaming a set of variables with a function.</p>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 1 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 1 x 5</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=1 | Samples=1 | Assays=counts</span><span>
 #&gt;   transcript  sample counts condition type      
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
 #&gt; </span><span style='color: #BCBCBC;'>1</span><span> FBgn0000003 untrt1      0 untreated single_end</div><div class='input'>
@@ -732,7 +739,8 @@ to renaming a set of variables with a function.</p>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>select</span><span class='op'>(</span><span class='va'>sample</span>, <span class='va'>transcript</span>, <span class='va'>counts</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble abstraction: 102,193 x 3</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 3</span><span>
+#&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts</span><span>
 #&gt;    transcript  sample counts
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0
