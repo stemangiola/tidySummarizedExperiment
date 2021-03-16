@@ -80,7 +80,7 @@ print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra =
   # Editing the header
   str_to_be_replaced = formatted[1] %>% stringr::str_extract("(A tibble: [0-9,]+)")
   new_str = sprintf(
-    "A tibble abstraction: %s",
+    "A SummarizedExperiment-tibble abstraction: %s",
     
     # Number of rows
     x %>% dim %>% {(.)[1] * (.)[2]} %>% format(format="f", big.mark=",", digits=1)
@@ -99,6 +99,14 @@ print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra =
   # Print
   formatted_edited %>%
 
+    # Insert more info
+    append(sprintf(
+      "\033[90m# Transcripts=%s | Samples=%s | Assays=%s\033[39m",
+      nrow(x), 
+      ncol(x),
+      assays(x) %>% names %>% paste(collapse=", ")
+    ), after = 1) %>%
+    
     # Output
     cat_line()
 
