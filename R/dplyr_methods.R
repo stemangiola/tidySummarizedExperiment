@@ -71,9 +71,16 @@ bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
 bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     tts <- flatten_if(dots_values(...), is_spliced)
 
-    new_obj <- cbind(tts[[1]], tts[[2]]) 
+    new_obj <- 
+      tts %>%
+      when(
+        is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: bind_rows cannot be applied to splits both by sample- and transcript-wise information"),
+        is_split_by_sample(.) ~ cbind(.[[1]], .[[2]]) ,
+        is_split_by_transcript(.) ~ rbind(.[[1]], .[[2]])
+      )
+    
 
-    # If duplicated cell names
+    # If duplicated sample names
     if (new_obj %>% colnames() %>% duplicated() %>% which() %>% length() %>% gt(0)) {
         warning("tidySummarizedExperiment says: you have duplicated sample names, they will be made unique.")
     }

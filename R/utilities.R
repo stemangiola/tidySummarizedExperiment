@@ -460,5 +460,28 @@ get_subset_columns <- function(.data, .col) {
         unlist()
 }
 
+is_split_by_transcript = function(.my_data){
+    
+    
+    tot_length = .my_data %>% map(~ pull(.x, transcript) ) %>% unlist %>% unique() %>% length
+    all_lengths = .my_data %>% map_int(~ pull(.x, transcript) %>% unique() %>% length) 
+    
+    all_lengths %>% unique %>% length() %>% gt(1) |
+        (all_lengths != tot_length) %>% any()
+    
+}
+
+is_split_by_sample = function(.my_data){
+    
+    
+    tot_length = .my_data %>% map(~ pull(.x, sample) ) %>% unlist %>% unique() %>% length
+    all_lengths = .my_data %>% map_int(~ pull(.x, sample) %>% unique() %>% length) 
+    
+    all_lengths %>% unique %>% length() %>% gt(1) |
+        (all_lengths != tot_length) %>% any()
+    
+}
+
+
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."
