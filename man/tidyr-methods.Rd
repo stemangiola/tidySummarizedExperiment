@@ -5,20 +5,11 @@
 \alias{nest}
 \alias{extract}
 \alias{pivot_longer}
+\alias{pivot_wider}
 \alias{unite}
 \alias{separate}
 \title{unnest}
 \arguments{
-\item{names_sep}{If `NULL`, the default, the names will be left
-  as is. In `nest()`, inner names will come from the former outer names;
-  in `unnest()`, the new outer names will come from the inner names.
-
-  If a string, the inner and outer names will be used together. In `nest()`,
-  the names of the new outer columns will be formed by pasting together the
-  outer and the inner column names, separated by `names_sep`. In `unnest()`,
-  the new inner names will have the outer names (+ `names_sep`) automatically
-  stripped. This makes `names_sep` roughly symmetric between nesting and unnesting.}
-
 \item{keep_empty}{See tidyr::unnest}
 
 \item{ptype}{See tidyr::unnest}
@@ -58,9 +49,6 @@ longer format.}
   * `NA` will discard that component of the name.
   * `.value` indicates that component of the name defines the name of the
     column containing the cell values, overriding `values_to`.}
-
-\item{names_prefix}{A regular expression used to remove matching text
-from the start of each variable name.}
 
 \item{names_sep, names_pattern}{If `names_to` contains multiple values,
   these arguments control how the column name is broken up.
@@ -107,6 +95,48 @@ a character week variable to an integer.}
   If not specified, the type of the columns generated from `names_to` will
   be character, and the type of the variables generated from `values_to`
   will be the common type of the input columns used to generate them.}
+
+\item{id_cols}{<[`tidy-select`][tidyr_tidy_select]> A set of columns that
+uniquely identifies each observation. Defaults to all columns in `data`
+except for the columns specified in `names_from` and `values_from`.
+Typically used when you have redundant variables, i.e. variables whose
+values are perfectly correlated with existing variables.}
+
+\item{names_from, values_from}{<[`tidy-select`][tidyr_tidy_select]> A pair of
+  arguments describing which column (or columns) to get the name of the
+  output column (`names_from`), and which column (or columns) to get the
+  cell values from (`values_from`).
+
+  If `values_from` contains multiple values, the value will be added to the
+  front of the output column.}
+
+\item{names_sep}{If `names_from` or `values_from` contains multiple
+variables, this will be used to join their values together into a single
+string to use as a column name.}
+
+\item{names_prefix}{String added to the start of every variable name. This is
+particularly useful if `names_from` is a numeric vector and you want to
+create syntactic variable names.}
+
+\item{names_glue}{Instead of `names_sep` and `names_prefix`, you can supply
+a glue specification that uses the `names_from` columns (and special
+`.value`) to create custom column names.}
+
+\item{names_sort}{Should the column names be sorted? If `FALSE`, the default,
+column names are ordered by first appearance.}
+
+\item{values_fill}{Optionally, a (scalar) value that specifies what each
+  `value` should be filled in with when missing.
+
+  This can be a named list if you want to apply different aggregations
+  to different value columns.}
+
+\item{values_fn}{Optionally, a function applied to the `value` in each cell
+  in the output. You will typically use this when the combination of
+  `id_cols` and `value` column does not uniquely identify an observation.
+
+  This can be a named list if you want to apply different aggregations
+  to different value columns.}
 
 \item{data}{A data frame.}
 
@@ -177,6 +207,12 @@ decreasing the number of columns. The inverse transformation is
 
 Learn more in `vignette("pivot")`.
 
+`pivot_wider()` "widens" data, increasing the number of columns and
+decreasing the number of rows. The inverse transformation is
+[pivot_longer()].
+
+Learn more in `vignette("pivot")`.
+
 Convenience function to paste together multiple columns into one.
 
 Given either a regular expression or a vector of character positions,
@@ -186,6 +222,11 @@ Given either a regular expression or a vector of character positions,
 `pivot_longer()` is an updated approach to [gather()], designed to be both
 simpler to use and to handle more use cases. We recommend you use
 `pivot_longer()` for new code; `gather()` isn't going away but is no longer
+under active development.
+
+`pivot_wider()` is an updated approach to [spread()], designed to be both
+simpler to use and to handle more use cases. We recommend you use
+`pivot_wider()` for new code; `spread()` isn't going away but is no longer
 under active development.
 }
 \examples{
@@ -210,6 +251,12 @@ library(dplyr)
 tidySummarizedExperiment::pasilla \%>\%
     
     pivot_longer(c(condition, type), names_to="name", values_to="value")
+# See vignette("pivot") for examples and explanation
+
+library(dplyr)
+tidySummarizedExperiment::pasilla \%>\%
+    
+    pivot_wider(c(condition, type), names_to="name", values_to="value")
 
 tidySummarizedExperiment::pasilla \%>\%
     
@@ -222,6 +269,9 @@ un \%>\% separate(col=group, into=c("condition", "type"))
 }
 \seealso{
 [separate()] to split up by a separator.
+
+[pivot_wider_spec()] to pivot "by hand" with a data frame that
+  defines a pivotting specification.
 
 [separate()], the complement.
 
