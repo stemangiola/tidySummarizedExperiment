@@ -396,7 +396,7 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
       setdiff(assays(.data) %>% names)
     
     if(length(colnames_assay)>0)
-      assays(.data) = 
+      assays(.data, withDimnames=FALSE) = 
         assays(.data) %>% c(
           .data_mutated %>% 
             

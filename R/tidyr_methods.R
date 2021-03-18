@@ -490,7 +490,7 @@ pivot_longer.SummarizedExperiment <- function(data,
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     pivot_wider(c(condition, type), names_to="name", values_to="value")
+#'     pivot_wider(names_from=transcript, values_from=counts)
 NULL
 
 #' @export
