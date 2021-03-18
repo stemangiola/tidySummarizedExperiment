@@ -1,3 +1,59 @@
+#' Get matrix from tibble
+#'
+#' @keywords internal
+#' 
+#' @import dplyr
+#' @import tidyr
+#' @importFrom magrittr set_rownames
+#' @importFrom rlang quo_is_null
+#'
+#' @param tbl A tibble
+#' @param rownames A character string of the rownames
+#' @param do_check A boolean
+#'
+#' @return A matrix
+#'
+#' @examples
+#'
+#' as_matrix(head(dplyr::select(tidybulk::counts_mini, transcript, count)), rownames=transcript)
+#'
+#' @noRd
+as_matrix <- function(tbl,
+                      rownames = NULL,
+                      do_check = TRUE) {
+  rownames = enquo(rownames)
+  tbl %>%
+    
+    # Through warning if data frame is not numerical beside the rownames column (if present)
+    when(
+      do_check &&
+        (.) %>%
+        # If rownames defined eliminate it from the data frame
+        when(!quo_is_null(rownames) ~ (.)[,-1], ~ (.)) %>%
+        dplyr::summarise_all(class) %>%
+        tidyr::gather(variable, class) %>%
+        pull(class) %>%
+        unique() %>%
+        `%in%`(c("numeric", "integer")) %>% not() %>% any() ~ {
+        warning("tidybulk says: there are NON-numerical columns, the matrix will NOT be numerical")
+        (.)
+      },
+      ~ (.)
+    ) %>%
+    as.data.frame() %>%
+    
+    # Deal with rownames column if present
+    when(
+      !quo_is_null(rownames) ~ (.) %>%
+        magrittr::set_rownames(tbl %>% pull(!!rownames)) %>%
+        select(-1),
+      ~ (.)
+    ) %>%
+    
+    # Convert to matrix
+    as.matrix()
+}
+
 #' @importFrom tibble as_tibble
 #' @importFrom SummarizedExperiment colData
 #'
@@ -56,6 +112,8 @@ prepend <- function(x, values, before=1) {
 #' @param name A character name of the attribute
 #'
 #' @return A tibble with an additional attribute
+#' 
+#' @noRd
 add_class <- function(var, name) {
     if (!name %in% class(var)) class(var) <- prepend(class(var), name)
 
@@ -71,7 +129,8 @@ add_class <- function(var, name) {
 #' @param name A character name of the class
 #'
 #' @return A tibble with an additional attribute
-#' @keywords internal
+#' 
+#' @noRd
 drop_class <- function(var, name) {
     class(var) <- class(var)[!class(var) %in% name]
     var
@@ -254,24 +313,54 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
 #' @param SummarizedExperiment_object A tidySummarizedExperiment
 #'
 #' @noRd
-update_SE_from_tibble <- function(.data_mutated, .data) {
+update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL) {
 
-    # Comply to CRAN notes
-    . <- NULL
+    # Comply to CRAN notes 
+    . <- NULL 
 
     # Get the colnames of samples and transcript datasets
-    colnames_col <- colnames(colData(.data)) %>% c("sample")
-    colnames_row <- when(.hasSlot(.data, "rowData") ~ colnames(rowData(.data)), ~ c()) %>% c("transcript")
-
+    colnames_col <- 
+      colnames(colData(.data)) %>% 
+      c("sample") %>%
+      
+      # Forcefully add the column I know the source. This is useful in nesting 
+      # where a unique value cannot be linked to sample or transcript
+      c(names(column_belonging[column_belonging=="sample"]))
+    
+    colnames_row <- .data %>%
+      when(
+        .hasSlot(., "rowData") | .hasSlot(., "elementMetadata") ~ colnames(rowData(.)), 
+        TRUE ~ c()
+      ) %>% 
+      c("transcript") %>%
+      
+      # Forcefully add the column I know the source. This is useful in nesting 
+      # where a unique value cannot be linked to sample or transcript
+      c(names(column_belonging[column_belonging=="transcript"]))
+    
+    colnames_assay <-
+      colnames(.data_mutated) %>% 
+      setdiff(colnames_col) %>% 
+      setdiff(colnames_row) %>%
+      setdiff(assays(.data) %>% names)
+    
     col_data <-
         .data_mutated %>%
+      
+        # Eliminate special columns that are read only. Assays
         select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
         # Replace for subset
-        select(sample, get_subset_columns(., sample)) %>%
+        select(sample, 
+            get_subset_columns(., sample) %>%
+                 
+           # Eliminate transcript column
+             setdiff(colnames_row)
+           
+        ) %>%
         distinct() %>%
 
-        # In case unitary SE subset does not ork
+        # In case unitary SE subset does not work
         select_if(!colnames(.) %in% colnames_row) %>%
         data.frame(row.names=.$sample) %>%
         select(-sample) %>%
@@ -279,10 +368,17 @@ update_SE_from_tibble <- function(.data_mutated, .data) {
 
     row_data <-
         .data_mutated %>%
+      
+       # Eliminate special columns that are read only 
         select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
         # Replace for subset
-        select(`transcript`, get_subset_columns(., transcript)) %>%
+        select(`transcript`, 
+               get_subset_columns(., transcript) %>%
+                 
+                 # Eliminate sample column
+                 setdiff(colnames_col)
+        ) %>%
         distinct() %>%
 
         # In case unitary SE subset does not work because all same
@@ -292,13 +388,42 @@ update_SE_from_tibble <- function(.data_mutated, .data) {
         DataFrame()
 
 
+
     # Subset if needed. This function is used by many dplyr utilities
     .data <- .data[rownames(row_data), rownames(col_data)]
 
     # Update
     colData(.data) <- col_data
     rowData(.data) <- row_data
-
+    
+    if(length(colnames_assay)>0)
+      assays(.data) = 
+        assays(.data) %>% c(
+          .data_mutated %>% 
+            
+            # Select assays column
+            select(transcript, sample, colnames_assay) %>% 
+            
+            # Pivot for generalising to many assays
+            pivot_longer(cols = -c(sample, transcript)) %>%
+            nest(data___ = c(sample, transcript, value)) %>%
+            
+            # Convert to matrix and to named list
+            mutate(data___ = map2(
+              data___, name,
+              ~ .x %>%
+                spread(sample, value) %>% 
+                as_matrix(rownames = transcript)  %>% 
+                suppressWarnings() %>%
+                list() %>%
+                setNames(.y)
+            )) %>%
+            
+            # Create correct list
+            pull(data___) %>%
+            reduce(c) 
+        )
+    
     # return
     .data
 }
@@ -339,6 +464,8 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' @importFrom tibble as_tibble
 #' @importFrom tibble tibble
 #' @importFrom SummarizedExperiment rowRanges
+#' 
+#' @noRd
 get_special_datasets <- function(SummarizedExperiment_object) {
     if (
         "RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object) &
@@ -368,6 +495,8 @@ get_special_datasets <- function(SummarizedExperiment_object) {
 #' @importFrom tibble as_tibble
 #' @importFrom purrr reduce
 #' @importFrom SummarizedExperiment assays
+#' 
+#' @noRd
 get_count_datasets <- function(SummarizedExperiment_object) {
     map2(
         assays(SummarizedExperiment_object) %>% as.list(),
@@ -394,6 +523,8 @@ get_needed_columns <- function() {
 #' @param v A array of quosures (e.g. c(col_a, col_b))
 #'
 #' @return A character vector
+#' 
+#' @noRd
 quo_names <- function(v) {
     v <- quo_name(quo_squash(v))
     gsub("^c\\(|`|\\)$", "", v) %>%
@@ -406,6 +537,7 @@ quo_names <- function(v) {
 #' @importFrom rlang expr
 #' @importFrom tidyselect eval_select
 #'
+#' @noRd
 select_helper <- function(.data, ...) {
     loc <- tidyselect::eval_select(expr(c(...)), .data)
 
@@ -423,6 +555,8 @@ outersect <- function(x, y) {
 #' @importFrom dplyr vars
 #' @importFrom purrr map
 #' @importFrom magrittr equals
+#' 
+#' @noRd
 get_subset_columns <- function(.data, .col) {
 
 

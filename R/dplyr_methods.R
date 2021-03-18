@@ -112,10 +112,10 @@ bind_cols.default <- function(..., .id=NULL) {
     dplyr::bind_cols(..., .id=.id)
 }
 
-bind_cols_ = function(..., .id=NULL) {
+bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
-    tts[[1]] %>%
+    tts[[1]] %>% 
         as_tibble() %>%
         dplyr::bind_cols(tts[[2]], .id=.id) %>%
         when(
@@ -125,7 +125,7 @@ bind_cols_ = function(..., .id=NULL) {
                 get_subset_columns(., sample),
                 get_subset_columns(., transcript)
             )
-            ) %>% all() ~ update_SE_from_tibble(., tts[[1]]),
+            ) %>% all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
 
             # Return tiblle
             ~ {
@@ -134,6 +134,8 @@ bind_cols_ = function(..., .id=NULL) {
             }
         )
 }
+
+bind_cols_ = function(..., .id=NULL) { bind_cols_internal(..., .id=NULL) }
 
 #' @importFrom rlang dots_values
 #' @importFrom rlang flatten_if

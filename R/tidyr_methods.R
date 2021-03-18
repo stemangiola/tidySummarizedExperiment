@@ -65,8 +65,10 @@ unnest.tidySummarizedExperiment_nested <-
     .data_ <- data
 
     cols <- enquo(cols)
+    
+    
 
-    .data_ %>%
+    .data_ %>% 
         when(
 
             # If my only column to unnest is tidySummarizedExperiment
@@ -75,26 +77,50 @@ unnest.tidySummarizedExperiment_nested <-
                 class() %>%
                 as.character() %>%
                 eq("SummarizedExperiment") %>%
-                any() ~
-
-                # Do my trick to unnest
-                mutate(., !!cols := imap(
+                any() ~ {
+                  
+                  # Mark if columns belong to transcript or sample
+                  my_unnested_tibble = 
+                    mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
+                    select(-suppressWarnings( one_of("sample", "transcript"))) %>%
+                    unnest(!!cols)
+                  
+                  # Get which column is relative to transcript or sample
+                  sample_columns = my_unnested_tibble %>% get_subset_columns(sample) 
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(transcript)
+                  source_column = 
+                    c(
+                      rep("sample", length(sample_columns)) %>% setNames(sample_columns),
+                      rep("transcript", length(transcript_columns)) %>% setNames(transcript_columns)
+                    )
+                  
+                  # Do my trick to unnest
+                  mutate(., !!cols := imap(
                     !!cols, ~ .x %>%
-                        bind_cols_(
-    
-                            # Attach back the columns used for nesting
+                      bind_cols_internal(
+                        
+                        # Attach back the columns used for nesting
+                        .data_ %>%
+                          select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
+                          slice(rep(.y, ncol(.x) * nrow(.x))),
+                        
+                        # Column sample-wise or transcript-wise
+                        column_belonging = 
+                          source_column[
                             .data_ %>%
-                                select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
-                                slice(rep(.y, ncol(.x) * nrow(.x)))
-                        )
-                )) %>%
-                pull(!!cols) %>%
-              
-              # See if split by transcript or sample
-              when(
-                is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and transcript-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
-                ~ reduce(., bind_rows)
-              ),
+                              select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
+                              colnames()
+                          ]
+                      )
+                  )) %>%
+                    pull(!!cols) %>%
+                    
+                    # See if split by transcript or sample
+                    when(
+                      is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and transcript-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
+                      ~ reduce(., bind_rows)
+                    )
+                },
 
             # Else do normal stuff
             ~ (.) %>% 
