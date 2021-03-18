@@ -76,7 +76,10 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
       when(
         is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: bind_rows cannot be applied to splits both by sample- and transcript-wise information"),
         is_split_by_sample(.) ~ cbind(.[[1]], .[[2]]) ,
-        is_split_by_transcript(.) ~ rbind(.[[1]], .[[2]])
+        is_split_by_transcript(.) ~ rbind(.[[1]], .[[2]]),
+        
+        # If there is not split, then bind the samples
+        ~ cbind(.[[1]], .[[2]])
       )
     
 

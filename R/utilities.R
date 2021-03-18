@@ -338,12 +338,6 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
       # where a unique value cannot be linked to sample or transcript
       c(names(column_belonging[column_belonging=="transcript"]))
     
-    colnames_assay <-
-      colnames(.data_mutated) %>% 
-      setdiff(colnames_col) %>% 
-      setdiff(colnames_row) %>%
-      setdiff(assays(.data) %>% names)
-    
     col_data <-
         .data_mutated %>%
       
@@ -387,14 +381,19 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
         select(-transcript) %>%
         DataFrame()
 
-
-
     # Subset if needed. This function is used by many dplyr utilities
     .data <- .data[rownames(row_data), rownames(col_data)]
 
     # Update
     colData(.data) <- col_data
     rowData(.data) <- row_data
+    
+    colnames_assay <-
+      colnames(.data_mutated) %>% 
+      setdiff(c("transcript", "sample")) %>%
+      setdiff(colnames(col_data)) %>% 
+      setdiff(colnames(row_data)) %>%
+      setdiff(assays(.data) %>% names)
     
     if(length(colnames_assay)>0)
       assays(.data) = 
@@ -594,6 +593,8 @@ get_subset_columns <- function(.data, .col) {
         unlist()
 }
 
+#' @importFrom purrr map_int
+#' @importFrom purrr map
 is_split_by_transcript = function(.my_data){
     
     
