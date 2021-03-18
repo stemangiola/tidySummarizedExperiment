@@ -71,9 +71,19 @@ bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
 bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     tts <- flatten_if(dots_values(...), is_spliced)
 
-    new_obj <- cbind(tts[[1]], tts[[2]]) 
+    new_obj <- 
+      tts %>%
+      when(
+        is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: bind_rows cannot be applied to splits both by sample- and transcript-wise information"),
+        is_split_by_sample(.) ~ cbind(.[[1]], .[[2]]) ,
+        is_split_by_transcript(.) ~ rbind(.[[1]], .[[2]]),
+        
+        # If there is not split, then bind the samples
+        ~ cbind(.[[1]], .[[2]])
+      )
+    
 
-    # If duplicated cell names
+    # If duplicated sample names
     if (new_obj %>% colnames() %>% duplicated() %>% which() %>% length() %>% gt(0)) {
         warning("tidySummarizedExperiment says: you have duplicated sample names, they will be made unique.")
     }
@@ -105,10 +115,10 @@ bind_cols.default <- function(..., .id=NULL) {
     dplyr::bind_cols(..., .id=.id)
 }
 
-bind_cols_ = function(..., .id=NULL) {
+bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
-    tts[[1]] %>%
+    tts[[1]] %>% 
         as_tibble() %>%
         dplyr::bind_cols(tts[[2]], .id=.id) %>%
         when(
@@ -118,7 +128,7 @@ bind_cols_ = function(..., .id=NULL) {
                 get_subset_columns(., sample),
                 get_subset_columns(., transcript)
             )
-            ) %>% all() ~ update_SE_from_tibble(., tts[[1]]),
+            ) %>% all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
 
             # Return tiblle
             ~ {
@@ -127,6 +137,8 @@ bind_cols_ = function(..., .id=NULL) {
             }
         )
 }
+
+bind_cols_ = function(..., .id=NULL) { bind_cols_internal(..., .id=NULL) }
 
 #' @importFrom rlang dots_values
 #' @importFrom rlang flatten_if

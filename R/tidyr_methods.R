@@ -52,6 +52,7 @@
 #' @export
 NULL
 
+
 #' @importFrom rlang quo_name
 #' @importFrom purrr imap
 #'
@@ -64,8 +65,10 @@ unnest.tidySummarizedExperiment_nested <-
     .data_ <- data
 
     cols <- enquo(cols)
+    
+    
 
-    .data_ %>%
+    .data_ %>% 
         when(
 
             # If my only column to unnest is tidySummarizedExperiment
@@ -74,21 +77,50 @@ unnest.tidySummarizedExperiment_nested <-
                 class() %>%
                 as.character() %>%
                 eq("SummarizedExperiment") %>%
-                any() ~
-
-                # Do my trick to unnest
-                mutate(., !!cols := imap(
+                any() ~ {
+                  
+                  # Mark if columns belong to transcript or sample
+                  my_unnested_tibble = 
+                    mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
+                    select(-suppressWarnings( one_of("sample", "transcript"))) %>%
+                    unnest(!!cols)
+                  
+                  # Get which column is relative to transcript or sample
+                  sample_columns = my_unnested_tibble %>% get_subset_columns(sample) 
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(transcript)
+                  source_column = 
+                    c(
+                      rep("sample", length(sample_columns)) %>% setNames(sample_columns),
+                      rep("transcript", length(transcript_columns)) %>% setNames(transcript_columns)
+                    )
+                  
+                  # Do my trick to unnest
+                  mutate(., !!cols := imap(
                     !!cols, ~ .x %>%
-                        bind_cols_(
-    
-                            # Attach back the columns used for nesting
+                      bind_cols_internal(
+                        
+                        # Attach back the columns used for nesting
+                        .data_ %>%
+                          select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
+                          slice(rep(.y, ncol(.x) * nrow(.x))),
+                        
+                        # Column sample-wise or transcript-wise
+                        column_belonging = 
+                          source_column[
                             .data_ %>%
-                                select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
-                                slice(rep(.y, ncol(.x) * nrow(.x)))
-                        )
-                )) %>%
-                pull(!!cols) %>%
-                reduce(bind_rows),
+                              select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
+                              colnames()
+                          ]
+                      )
+                  )) %>%
+                    pull(!!cols) %>%
+                    
+                    # See if split by transcript or sample
+                    when(
+                      is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and transcript-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
+                      ~ reduce(., bind_rows)
+                    )
+                },
 
             # Else do normal stuff
             ~ (.) %>% 
@@ -390,6 +422,114 @@ pivot_longer.SummarizedExperiment <- function(data,
             ...
         )
 }
+
+
+#' Pivot data from long to wide
+#
+#' @description
+#' `pivot_wider()` "widens" data, increasing the number of columns and
+#' decreasing the number of rows. The inverse transformation is
+#' [pivot_longer()].
+#'
+#' Learn more in `vignette("pivot")`.
+#'
+#' @details
+#' `pivot_wider()` is an updated approach to [spread()], designed to be both
+#' simpler to use and to handle more use cases. We recommend you use
+#' `pivot_wider()` for new code; `spread()` isn't going away but is no longer
+#' under active development.
+#'
+#' @seealso [pivot_wider_spec()] to pivot "by hand" with a data frame that
+#'   defines a pivotting specification.
+#' @inheritParams pivot_longer
+#' @param id_cols <[`tidy-select`][tidyr_tidy_select]> A set of columns that
+#'   uniquely identifies each observation. Defaults to all columns in `data`
+#'   except for the columns specified in `names_from` and `values_from`.
+#'   Typically used when you have redundant variables, i.e. variables whose
+#'   values are perfectly correlated with existing variables.
+#' @param names_from,values_from <[`tidy-select`][tidyr_tidy_select]> A pair of
+#'   arguments describing which column (or columns) to get the name of the
+#'   output column (`names_from`), and which column (or columns) to get the
+#'   cell values from (`values_from`).
+#'
+#'   If `values_from` contains multiple values, the value will be added to the
+#'   front of the output column.
+#' @param names_sep If `names_from` or `values_from` contains multiple
+#'   variables, this will be used to join their values together into a single
+#'   string to use as a column name.
+#' @param names_prefix String added to the start of every variable name. This is
+#'   particularly useful if `names_from` is a numeric vector and you want to
+#'   create syntactic variable names.
+#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply
+#'   a glue specification that uses the `names_from` columns (and special
+#'   `.value`) to create custom column names.
+#' @param names_sort Should the column names be sorted? If `FALSE`, the default,
+#'   column names are ordered by first appearance.
+#' @param values_fill Optionally, a (scalar) value that specifies what each
+#'   `value` should be filled in with when missing.
+#'
+#'   This can be a named list if you want to apply different aggregations
+#'   to different value columns.
+#' @param values_fn Optionally, a function applied to the `value` in each cell
+#'   in the output. You will typically use this when the combination of
+#'   `id_cols` and `value` column does not uniquely identify an observation.
+#'
+#'   This can be a named list if you want to apply different aggregations
+#'   to different value columns.
+#' @param ... Additional arguments passed on to methods.
+#' 
+#' @importFrom tidyr pivot_wider
+#' @rdname tidyr-methods
+#' @name pivot_wider
+#'
+#'
+#' @export
+#' @examples
+#' # See vignette("pivot") for examples and explanation
+#'
+#' library(dplyr)
+#' tidySummarizedExperiment::pasilla %>%
+#'     
+#'     pivot_wider(names_from=transcript, values_from=counts)
+NULL
+
+#' @export
+pivot_wider.SummarizedExperiment <- function(data,
+                                   id_cols = NULL,
+                                   names_from = name,
+                                   names_prefix = "",
+                                   names_sep = "_",
+                                   names_glue = NULL,
+                                   names_sort = FALSE,
+                                   names_repair = "check_unique",
+                                   values_from = value,
+                                   values_fill = NULL,
+                                   values_fn = NULL,
+                                   ...
+) {
+  id_cols <- enquo(id_cols)
+  name = enquo(names_from)
+  value = enquo(values_from)
+  
+  message(data_frame_returned_message)
+  
+  data %>%
+    as_tibble() %>%
+    tidyr::pivot_wider( id_cols = !!id_cols,
+                        names_from = !!name,
+                        names_prefix = names_prefix,
+                        names_sep = names_sep,
+                        names_glue = names_glue,
+                        names_sort = names_sort,
+                        names_repair = names_repair,
+                        values_from = !!value,
+                        values_fill = values_fill,
+                        values_fn = values_fn,
+                        ...
+    )
+}
+
+
 
 #' Unite multiple columns into one by pasting strings together
 #'
