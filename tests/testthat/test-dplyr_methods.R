@@ -2,12 +2,11 @@ context("dplyr test")
 
 library(tidySummarizedExperiment)
 
-tt <- pasilla 
 
 test_that("bind_rows", {
-    tt_bind <- tidySummarizedExperiment::bind_rows(tt, tt)
+    pasilla_bind <- tidySummarizedExperiment::bind_rows(pasilla, pasilla)
 
-    tt_bind %>%
+    pasilla_bind %>%
         count(sample, transcript) %>%
         dplyr::count(n) %>%
         filter(n > 1) %>%
@@ -16,35 +15,35 @@ test_that("bind_rows", {
 })
 
 test_that("distinct", {
-    tt %>%
+    pasilla %>%
         distinct(condition) %>%
         ncol() %>%
         expect_equal(1)
 })
 
 test_that("filter", {
-    tt %>%
+    pasilla %>%
         filter(condition == "untreated") %>%
         nrow() %>%
         expect_equal(14599)
 })
 
 test_that("group_by", {
-    tt %>%
+    pasilla %>%
         group_by(condition) %>%
         ncol() %>%
         expect_equal(5)
 })
 
 test_that("summarise", {
-    tt %>%
+    pasilla %>%
         summarise(mean(counts)) %>%
         nrow() %>%
         expect_equal(1)
 })
 
 test_that("mutate", {
-    tt %>%
+    pasilla %>%
         mutate(condition = 1) %>%
         distinct(condition) %>%
         nrow() %>%
@@ -52,7 +51,7 @@ test_that("mutate", {
 })
 
 test_that("rename", {
-    tt %>%
+    pasilla %>%
         rename(groups = condition) %>%
         select(groups) %>%
         ncol() %>%
@@ -61,13 +60,13 @@ test_that("rename", {
 
 test_that("left_join", {
     expect_equal(
-        tt %>%
-            left_join(tt %>%
+        pasilla %>%
+            left_join(pasilla %>%
                           distinct(condition) %>%
                           mutate(new_column = 1:2)) %>%
             colData() %>%
             ncol(),
-        tt %>%
+        pasilla %>%
             colData() %>%
             ncol() %>%
             sum(1)
@@ -75,7 +74,7 @@ test_that("left_join", {
 })
 
 test_that("inner_join", {
-    tt %>% inner_join(tt %>%
+    pasilla %>% inner_join(pasilla %>%
                           distinct(condition) %>%
                           mutate(new_column = 1:2) %>%
                           slice(1)) %>%
@@ -84,7 +83,7 @@ test_that("inner_join", {
 })
 
 test_that("right_join", {
-    tt %>% right_join(tt %>%
+    pasilla %>% right_join(pasilla %>%
                           distinct(condition) %>%
                           mutate(new_column = 1:2) %>%
                           slice(1)) %>%
@@ -93,26 +92,26 @@ test_that("right_join", {
 })
 
 test_that("full_join", {
-    tt %>%
+    pasilla %>%
         full_join(tibble::tibble(condition = "A",     other = 1:4)) %>% nrow() %>%
         expect_equal(102197)
 })
 
 test_that("slice", {
-    tt %>%
+    pasilla %>%
         slice(1) %>%
         ncol() %>%
         expect_equal(1)
 })
 
 test_that("select", {
-    tt %>%
+    pasilla %>%
         select(-condition) %>%
         class() %>%
         as.character() %>%
         expect_equal("SummarizedExperiment")
 
-    tt %>%
+    pasilla %>%
         select(condition) %>%
         class() %>%
         as.character() %>%
@@ -121,21 +120,21 @@ test_that("select", {
 })
 
 test_that("sample_n", {
-    tt %>%
+    pasilla %>%
         sample_n(50) %>%
         nrow() %>%
         expect_equal(50)
 })
 
 test_that("sample_frac", {
-    tt %>%
+    pasilla %>%
         sample_frac(0.1) %>%
         nrow() %>%
         expect_equal(10219)
 })
 
 test_that("count", {
-    tt %>%
+    pasilla %>%
         count(condition) %>%
         nrow() %>%
         expect_equal(2)
