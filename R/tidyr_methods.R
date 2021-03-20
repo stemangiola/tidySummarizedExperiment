@@ -2,7 +2,7 @@
 #'
 #' @importFrom tidyr unnest
 #'
-#' @param .data A tbl. (See tidyr)
+#' @param data A tbl. (See tidyr)
 #' @param cols <[`tidy-select`][tidyr_tidy_select]> Columns to unnest.
 #'   If you `unnest()` multiple columns, parallel entries must be of
 #'   compatible sizes, i.e. they're either equal or length 1 (following the
@@ -33,7 +33,7 @@
 #' @param ptype See tidyr::unnest
 #' @param .drop See tidyr::unnest
 #' @param .id tidyr::unnest
-#' @param sep tidyr::unnest
+#' @param .sep tidyr::unnest
 #' @param .preserve See tidyr::unnest
 #'
 #'
