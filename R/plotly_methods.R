@@ -98,6 +98,10 @@
 #'
 #' @export
 #' @examples
+#' 
+#' # Plotly better not run
+#' print("See below examples")
+#' 
 #' \dontrun{
 #' # plot_ly() tries to create a sensible plot based on the information you
 #' # give it. If you don't provide a trace type, plot_ly() will infer one.
