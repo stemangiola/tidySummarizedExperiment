@@ -48,6 +48,10 @@ is NA, the output will be NA.
 decreasing the number of columns. The inverse transformation is
 [pivot_wider()]
 Learn more in `vignette(&quot;pivot&quot;)`.
+`pivot_wider()` &quot;widens&quot; data, increasing the number of columns and
+decreasing the number of rows. The inverse transformation is
+[pivot_longer()].
+Learn more in `vignette(&quot;pivot&quot;)`.
 Convenience function to paste together multiple columns into one.
 Given either a regular expression or a vector of character positions,
 `separate()` turns a single character column into multiple columns." />
@@ -82,7 +86,7 @@ Given either a regular expression or a vector of character positions,
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -139,6 +143,10 @@ is NA, the output will be NA.</p>
 decreasing the number of columns. The inverse transformation is
 [pivot_wider()]</p>
 <p>Learn more in `vignette("pivot")`.</p>
+<p>`pivot_wider()` "widens" data, increasing the number of columns and
+decreasing the number of rows. The inverse transformation is
+[pivot_longer()].</p>
+<p>Learn more in `vignette("pivot")`.</p>
 <p>Convenience function to paste together multiple columns into one.</p>
 <p>Given either a regular expression or a vector of character positions,
 `separate()` turns a single character column into multiple columns.</p>
@@ -148,17 +156,6 @@ decreasing the number of columns. The inverse transformation is
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>names_sep</th>
-      <td><p>If `NULL`, the default, the names will be left
-  as is. In `nest()`, inner names will come from the former outer names;
-  in `unnest()`, the new outer names will come from the inner names.</p>
-<p>If a string, the inner and outer names will be used together. In `nest()`,
-  the names of the new outer columns will be formed by pasting together the
-  outer and the inner column names, separated by `names_sep`. In `unnest()`,
-  the new inner names will have the outer names (+ `names_sep`) automatically
-  stripped. This makes `names_sep` roughly symmetric between nesting and unnesting.</p></td>
-    </tr>
     <tr>
       <th>keep_empty</th>
       <td><p>See tidyr::unnest</p></td>
@@ -221,11 +218,6 @@ longer format.</p></td>
     column containing the cell values, overriding `values_to`.</p></td>
     </tr>
     <tr>
-      <th>names_prefix</th>
-      <td><p>A regular expression used to remove matching text
-from the start of each variable name.</p></td>
-    </tr>
-    <tr>
       <th>names_sep, names_pattern</th>
       <td><p>If `names_to` contains multiple values,
   these arguments control how the column name is broken up.</p>
@@ -278,6 +270,61 @@ a character week variable to an integer.</p></td>
 <p>If not specified, the type of the columns generated from `names_to` will
   be character, and the type of the variables generated from `values_to`
   will be the common type of the input columns used to generate them.</p></td>
+    </tr>
+    <tr>
+      <th>id_cols</th>
+      <td><p>&lt;[`tidy-select`][tidyr_tidy_select]&gt; A set of columns that
+uniquely identifies each observation. Defaults to all columns in `data`
+except for the columns specified in `names_from` and `values_from`.
+Typically used when you have redundant variables, i.e. variables whose
+values are perfectly correlated with existing variables.</p></td>
+    </tr>
+    <tr>
+      <th>names_from, values_from</th>
+      <td><p>&lt;[`tidy-select`][tidyr_tidy_select]&gt; A pair of
+  arguments describing which column (or columns) to get the name of the
+  output column (`names_from`), and which column (or columns) to get the
+  cell values from (`values_from`).</p>
+<p>If `values_from` contains multiple values, the value will be added to the
+  front of the output column.</p></td>
+    </tr>
+    <tr>
+      <th>names_sep</th>
+      <td><p>If `names_from` or `values_from` contains multiple
+variables, this will be used to join their values together into a single
+string to use as a column name.</p></td>
+    </tr>
+    <tr>
+      <th>names_prefix</th>
+      <td><p>String added to the start of every variable name. This is
+particularly useful if `names_from` is a numeric vector and you want to
+create syntactic variable names.</p></td>
+    </tr>
+    <tr>
+      <th>names_glue</th>
+      <td><p>Instead of `names_sep` and `names_prefix`, you can supply
+a glue specification that uses the `names_from` columns (and special
+`.value`) to create custom column names.</p></td>
+    </tr>
+    <tr>
+      <th>names_sort</th>
+      <td><p>Should the column names be sorted? If `FALSE`, the default,
+column names are ordered by first appearance.</p></td>
+    </tr>
+    <tr>
+      <th>values_fill</th>
+      <td><p>Optionally, a (scalar) value that specifies what each
+  `value` should be filled in with when missing.</p>
+<p>This can be a named list if you want to apply different aggregations
+  to different value columns.</p></td>
+    </tr>
+    <tr>
+      <th>values_fn</th>
+      <td><p>Optionally, a function applied to the `value` in each cell
+  in the output. You will typically use this when the combination of
+  `id_cols` and `value` column does not uniquely identify an observation.</p>
+<p>This can be a named list if you want to apply different aggregations
+  to different value columns.</p></td>
     </tr>
     <tr>
       <th>data</th>
@@ -349,9 +396,15 @@ each value.</p></td>
 simpler to use and to handle more use cases. We recommend you use
 `pivot_longer()` for new code; `gather()` isn't going away but is no longer
 under active development.</p>
+<p>`pivot_wider()` is an updated approach to [spread()], designed to be both
+simpler to use and to handle more use cases. We recommend you use
+`pivot_wider()` for new code; `spread()` isn't going away but is no longer
+under active development.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>[separate()] to split up by a separator.</p>
+<p>[pivot_wider_spec()] to pivot "by hand" with a data frame that
+  defines a pivotting specification.</p>
 <p>[separate()], the complement.</p>
 <p>[unite()], the complement, [extract()] which uses regular
   expression capturing groups.</p></div>
@@ -423,7 +476,48 @@ under active development.</p>
 #&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000015 untrt1      0 type      single_end
 #&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 condition untreated 
 #&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 type      single_end
-#&gt; </span><span style='color: #949494;'># … with 204,376 more rows</span><span></div><div class='input'>
+#&gt; </span><span style='color: #949494;'># … with 204,376 more rows</span><span></div><div class='input'><span class='co'># See vignette("pivot") for examples and explanation</span>
+
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+    
+    <span class='fu'>pivot_wider</span><span class='op'>(</span>names_from<span class='op'>=</span><span class='va'>transcript</span>, values_from<span class='op'>=</span><span class='va'>counts</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 7 x 14,602</span><span>
+#&gt;   sample condition type       FBgn0000003 FBgn0000008 FBgn0000014 FBgn0000015
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> untrt1 untreated single_end           0          92           5           0
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> untrt2 untreated single_end           0         161           1           2
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> untrt3 untreated paired_end           0          76           0           1
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> untrt4 untreated paired_end           0          70           0           2
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> trt1   treated   single_end           0         140           4           1
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span> trt2   treated   paired_end           0          88           0           0
+#&gt; </span><span style='color: #BCBCBC;'>7</span><span> trt3   treated   paired_end           1          70           0           0
+#&gt; </span><span style='color: #949494;'># … with 14,595 more variables: FBgn0000017 &lt;int&gt;, FBgn0000018 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000022 &lt;int&gt;, FBgn0000024 &lt;int&gt;, FBgn0000028 &lt;int&gt;, FBgn0000032 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000036 &lt;int&gt;, FBgn0000037 &lt;int&gt;, FBgn0000038 &lt;int&gt;, FBgn0000039 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000042 &lt;int&gt;, FBgn0000043 &lt;int&gt;, FBgn0000044 &lt;int&gt;, FBgn0000045 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000046 &lt;int&gt;, FBgn0000047 &lt;int&gt;, FBgn0000052 &lt;int&gt;, FBgn0000053 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000054 &lt;int&gt;, FBgn0000055 &lt;int&gt;, FBgn0000056 &lt;int&gt;, FBgn0000057 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000061 &lt;int&gt;, FBgn0000063 &lt;int&gt;, FBgn0000064 &lt;int&gt;, FBgn0000071 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000075 &lt;int&gt;, FBgn0000077 &lt;int&gt;, FBgn0000078 &lt;int&gt;, FBgn0000079 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000083 &lt;int&gt;, FBgn0000084 &lt;int&gt;, FBgn0000092 &lt;int&gt;, FBgn0000094 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000097 &lt;int&gt;, FBgn0000099 &lt;int&gt;, FBgn0000100 &lt;int&gt;, FBgn0000108 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000109 &lt;int&gt;, FBgn0000114 &lt;int&gt;, FBgn0000115 &lt;int&gt;, FBgn0000116 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000117 &lt;int&gt;, FBgn0000119 &lt;int&gt;, FBgn0000120 &lt;int&gt;, FBgn0000121 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000137 &lt;int&gt;, FBgn0000139 &lt;int&gt;, FBgn0000140 &lt;int&gt;, FBgn0000142 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000146 &lt;int&gt;, FBgn0000147 &lt;int&gt;, FBgn0000150 &lt;int&gt;, FBgn0000152 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000153 &lt;int&gt;, FBgn0000157 &lt;int&gt;, FBgn0000158 &lt;int&gt;, FBgn0000163 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000166 &lt;int&gt;, FBgn0000171 &lt;int&gt;, FBgn0000173 &lt;int&gt;, FBgn0000179 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000180 &lt;int&gt;, FBgn0000181 &lt;int&gt;, FBgn0000182 &lt;int&gt;, FBgn0000183 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000206 &lt;int&gt;, FBgn0000210 &lt;int&gt;, FBgn0000212 &lt;int&gt;, FBgn0000216 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000221 &lt;int&gt;, FBgn0000227 &lt;int&gt;, FBgn0000228 &lt;int&gt;, FBgn0000229 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000233 &lt;int&gt;, FBgn0000239 &lt;int&gt;, FBgn0000241 &lt;int&gt;, FBgn0000242 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000244 &lt;int&gt;, FBgn0000246 &lt;int&gt;, FBgn0000247 &lt;int&gt;, FBgn0000250 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000251 &lt;int&gt;, FBgn0000253 &lt;int&gt;, FBgn0000256 &lt;int&gt;, FBgn0000257 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000258 &lt;int&gt;, FBgn0000259 &lt;int&gt;, FBgn0000261 &lt;int&gt;, FBgn0000273 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000274 &lt;int&gt;, FBgn0000276 &lt;int&gt;, FBgn0000277 &lt;int&gt;, FBgn0000278 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000279 &lt;int&gt;, FBgn0000280 &lt;int&gt;, FBgn0000281 &lt;int&gt;, FBgn0000283 &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   FBgn0000286 &lt;int&gt;, FBgn0000287 &lt;int&gt;, …</span><span></div><div class='input'>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>unite</span><span class='op'>(</span><span class='st'>"group"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>condition</span>, <span class='va'>type</span><span class='op'>)</span><span class='op'>)</span>
