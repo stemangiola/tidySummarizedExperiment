@@ -173,6 +173,10 @@ decreasing the number of rows. The inverse transformation is
       <td><p>tidyr::unnest</p></td>
     </tr>
     <tr>
+      <th>.sep</th>
+      <td><p>tidyr::unnest</p></td>
+    </tr>
+    <tr>
       <th>.preserve</th>
       <td><p>See tidyr::unnest</p></td>
     </tr>
@@ -435,10 +439,10 @@ under active development.</p>
     
     <span class='fu'>nest</span><span class='op'>(</span>data<span class='op'>=</span><span class='op'>-</span><span class='va'>condition</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 2 x 2</span><span>
-#&gt;   condition data      
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> untreated </span><span style='color: #949494;'>&lt;SmmrzdEx&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> treated   </span><span style='color: #949494;'>&lt;SmmrzdEx&gt;</span><span></div><div class='input'>
+#&gt;   condition data          
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>        
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> untreated </span><span style='color: #949494;'>&lt;SmmrzdEx[,4]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> treated   </span><span style='color: #949494;'>&lt;SmmrzdEx[,3]&gt;</span><span></div><div class='input'>
 
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
