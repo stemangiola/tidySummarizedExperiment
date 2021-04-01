@@ -18,6 +18,8 @@
 
 \item{.id}{tidyr::unnest}
 
+\item{.sep}{tidyr::unnest}
+
 \item{.preserve}{See tidyr::unnest}
 
 \item{.data}{A tbl. (See tidyr)}
