@@ -390,7 +390,7 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
     
     colnames_assay <-
       colnames(.data_mutated) %>% 
-      setdiff(c("transcript", "sample")) %>%
+      setdiff(c("transcript", "sample", "GenomicRanges")) %>%
       setdiff(colnames(col_data)) %>% 
       setdiff(colnames(row_data)) %>%
       setdiff(assays(.data) %>% names)
@@ -466,26 +466,45 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' 
 #' @noRd
 get_special_datasets <- function(SummarizedExperiment_object) {
-    if (
-        "RangedSummarizedExperiment" %in% .class2(SummarizedExperiment_object) &
-
-        rowRanges(SummarizedExperiment_object) %>%
-                as.data.frame() %>%
-                nrow() %>%
-                gt(0)
-    ) {
-        rowRanges(SummarizedExperiment_object) %>%
-            as.data.frame() %>%
-
-            # Take off rowData columns as there is a recursive anomaly within gene ranges
-            suppressWarnings(
-              select(-one_of(colnames(rowData(SummarizedExperiment_object))))
-            ) %>%
-            tibble::as_tibble(rownames="transcript") %>%
-            list()
-    } else {
-        tibble() %>% list()
-    }
+  
+  SummarizedExperiment_object %>%
+    rowRanges() %>%
+    when(
+      # If no ranges
+      as.data.frame(.) %>%
+      nrow() %>%
+      equals(0) ~ tibble(),
+      
+      # If it is a range list (multiple rows per transcript)
+      class(.) %>% equals("CompressedGRangesList") ~ 
+        tibble::as_tibble(.) %>%
+        # suppressWarnings(
+        #   select(. , -one_of(colnames(rowData(SummarizedExperiment_object))))
+        # ) %>%
+        nest(GenomicRanges = -group_name) %>%
+        rename(transcript = group_name),
+      
+      # If standard GRanges (one transcript per line)
+      ~ {
+        transcript_column = 
+          rowRanges(SummarizedExperiment_object) %>% 
+          as.data.frame() %>% 
+          lapply(function(x) rownames(SummarizedExperiment_object)[1] %in% x) %>%
+          unlist() %>%
+          which() %>%
+          names()
+        
+        # Just rename
+        tibble::as_tibble(.) %>%
+          # suppressWarnings(
+          #   select(. , -one_of(colnames(rowData(SummarizedExperiment_object))))
+          # ) %>%
+          rename(transcript := !!transcript_column) %>%
+          nest(GenomicRanges = -transcript) 
+      }
+    ) %>%
+    list()
+  
 }
 
 #' @importFrom tidyr gather
@@ -617,6 +636,10 @@ is_split_by_sample = function(.my_data){
     
 }
 
+
+get_GRanges_colnames = function(){
+  "GenomicRanges"
+}
 
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."
