@@ -988,7 +988,7 @@ NULL
 #' @export
 slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     .data %>%
-        as_tibble(skip_GRanges = F) %>%
+        as_tibble(skip_GRanges = T) %>%
         dplyr::slice(..., .preserve=.preserve) %>%
         when(
 
@@ -1063,7 +1063,7 @@ NULL
 #' @export
 select.SummarizedExperiment <- function(.data, ...) {
     .data %>%
-        as_tibble(skip_GRanges = F) %>%
+        as_tibble(skip_GRanges = T) %>%
         select_helper(...) %>%
         when(
 

@@ -390,7 +390,7 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
     
     colnames_assay <-
       colnames(.data_mutated) %>% 
-      setdiff(c("transcript", "sample", "GenomicRanges")) %>%
+      setdiff(c("transcript", "sample", get_GRanges_colnames())) %>%
       setdiff(colnames(col_data)) %>% 
       setdiff(colnames(row_data)) %>%
       setdiff(assays(.data) %>% names)
