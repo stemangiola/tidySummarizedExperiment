@@ -119,7 +119,7 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
     tts[[1]] %>% 
-        as_tibble() %>%
+        as_tibble(skip_GRanges = T) %>%
         dplyr::bind_cols(tts[[2]], .id=.id) %>%
         when(
 
@@ -177,8 +177,14 @@ NULL
 distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
     message(data_frame_returned_message)
 
+  # If Ranges column not in query perform fast as_tibble
+  skip_GRanges = 
+    get_GRanges_colnames() %in% 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist) %>%
+    not()
+  
     .data %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges = skip_GRanges) %>%
         dplyr::distinct(..., .keep_all=.keep_all)
 }
 
@@ -257,7 +263,7 @@ NULL
 #' @export
 filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     new_meta <- .data %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges = T) %>%
         dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
 
     new_meta %>%
@@ -416,9 +422,14 @@ NULL
 summarise.SummarizedExperiment <- function(.data, ...) {
     message(data_frame_returned_message)
 
+  # If Ranges column not in query perform fast as_tibble
+  skip_GRanges = 
+    get_GRanges_colnames() %in% 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist) %>%
+    not()
 
     .data %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges = skip_GRanges) %>%
         dplyr::summarise(...)
 }
 
@@ -522,7 +533,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 
     # Check that we are not modifying a key column
     cols <- enquos(...) %>% names()
-
+    
     tst =
         intersect(
             cols,
@@ -544,8 +555,14 @@ mutate.SummarizedExperiment <- function(.data, ...) {
         )
     }
 
+    # If Ranges column not in query perform fast as_tibble
+    skip_GRanges = 
+      get_GRanges_colnames() %in% 
+      cols %>%
+      not()
+    
     .data %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges= skip_GRanges) %>%
         dplyr::mutate(...) %>%
         update_SE_from_tibble(.data)
 }
@@ -736,7 +753,7 @@ NULL
 left_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges  = T) %>%
         dplyr::left_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
@@ -780,7 +797,7 @@ NULL
 #' @export
 inner_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
     x %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges  = T) %>%
         dplyr::inner_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
@@ -829,7 +846,7 @@ NULL
 right_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges  = T) %>%
         dplyr::right_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
@@ -878,7 +895,7 @@ NULL
 full_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
     x %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges  = T) %>%
         dplyr::full_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
@@ -971,7 +988,7 @@ NULL
 #' @export
 slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     .data %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges = T) %>%
         dplyr::slice(..., .preserve=.preserve) %>%
         when(
 
@@ -1046,7 +1063,7 @@ NULL
 #' @export
 select.SummarizedExperiment <- function(.data, ...) {
     .data %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges = T) %>%
         select_helper(...) %>%
         when(
 
@@ -1212,8 +1229,14 @@ count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by
 count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     message(data_frame_returned_message)
 
+  # If Ranges column not in query perform fast as_tibble
+  skip_GRanges = 
+    get_GRanges_colnames() %in% 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist) %>%
+    not()
+  
     x %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges = skip_GRanges) %>%
         dplyr::count(..., wt=!!enquo(wt), sort=sort, name=name, .drop=.drop)
 }
 
@@ -1261,7 +1284,13 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     var <- enquo(var)
     name <- enquo(name)
 
+    # If Ranges column not in query perform fast as_tibble
+    skip_GRanges = 
+      get_GRanges_colnames() %in% 
+      quo_name(var) %>%
+      not()
+    
     .data %>%
-        as_tibble() %>%
+        as_tibble(skip_GRanges = skip_GRanges) %>%
         dplyr::pull(var=!!var, name=!!name, ...)
 }

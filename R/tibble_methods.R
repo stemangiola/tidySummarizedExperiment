@@ -72,43 +72,57 @@ NULL
 as_tibble.SummarizedExperiment <- function(x, ...,
     .name_repair=c("check_unique", "unique", "universal", "minimal"),
     rownames=pkgconfig::get_config("tibble::rownames", NULL)) {
-    sample_info <-
-        colData(x) %>%
+  
+  .as_tibble_optimised(x = x, ..., .name_repair=.name_repair, rownames=rownames)
 
-        # If reserved column names are present add .x
-        setNames(
-            colnames(.) %>% 
-                str_replace("^sample$", "sample.x")
-        ) %>%
-        
-        # Convert to tibble
-        tibble::as_tibble(rownames="sample")
+}
 
-    # range_info =
-    #     x@rowRanges %>%
-    #     as.data.frame %>%
-    #     tibble::as_tibble(rownames="transcript")
-
-    range_info <-
-        get_special_datasets(x) %>%
-        reduce(left_join, by="transcript")
-
-    gene_info <-
-        rowData(x) %>%
-
-        # If reserved column names are present add .x
-        setNames(
-            colnames(.) %>% 
-                str_replace("^transcript$", "transcript.x")
-        ) %>%
-
-        # Convert to tibble
-        tibble::as_tibble(rownames="transcript")
-
-    count_info <- get_count_datasets(x)
-
-    count_info %>%
-        left_join(sample_info, by="sample") %>%
-        left_join(gene_info, by="transcript") %>%
-        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.)) 
+.as_tibble_optimised = function(x, skip_GRanges = F,
+                                .name_repair=c("check_unique", "unique", "universal", "minimal"),
+                                rownames=pkgconfig::get_config("tibble::rownames", NULL)){
+  
+  sample_info <-
+    colData(x) %>% 
+    
+    # If reserved column names are present add .x
+    setNames(
+      colnames(.) %>% 
+        str_replace("^sample$", "sample.x")
+    ) %>%
+    
+    # Convert to tibble
+    tibble::as_tibble(rownames="sample")
+  
+  # range_info =
+  #     x@rowRanges %>%
+  #     as.data.frame %>%
+  #     tibble::as_tibble(rownames="transcript")
+  range_info <-
+    skip_GRanges %>%
+    when(
+      (.) ~ tibble() %>% list,
+      ~  get_special_datasets(x) 
+    ) %>%
+    reduce(left_join, by="transcript")
+     
+  
+  gene_info <-
+    rowData(x) %>%
+    
+    # If reserved column names are present add .x
+    setNames(
+      colnames(.) %>% 
+        str_replace("^transcript$", "transcript.x")
+    ) %>%
+    
+    # Convert to tibble
+    tibble::as_tibble(rownames="transcript")
+  
+  count_info <- get_count_datasets(x)
+  
+  count_info %>%
+    left_join(sample_info, by="sample") %>%
+    left_join(gene_info, by="transcript") %>%
+    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.)) 
+  
 }
