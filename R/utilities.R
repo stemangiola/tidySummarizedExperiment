@@ -527,15 +527,23 @@ get_special_datasets <- function(SummarizedExperiment_object) {
 #' 
 #' @noRd
 get_count_datasets <- function(SummarizedExperiment_object) {
-    map2(
-        assays(SummarizedExperiment_object) %>% as.list(),
-        names(assays(SummarizedExperiment_object)),
-        ~ .x %>%
-            tibble::as_tibble(rownames="transcript") %>%
-            gather(sample, count, -transcript) %>%
-            rename(!!.y := count)
+  map2(
+    assays(SummarizedExperiment_object) %>% as.list(),
+    names(assays(SummarizedExperiment_object)),
+    ~ .x %>%
+      tibble::as_tibble(rownames = "transcript", .name_repair = "minimal") %>%
+      
+      # If the matrix does not have sample names, fix column names
+      when(colnames(.x) %>% is.null() ~ setNames(., c(
+        "transcript",  seq_len(ncol(.x)) 
+      )),
+      ~ (.)
     ) %>%
-        reduce(left_join, by=c("transcript", "sample"))
+      
+      gather(sample, count,-transcript) %>%
+      rename(!!.y := count)
+  ) %>%
+    reduce(left_join, by = c("transcript", "sample"))
 }
 
 get_needed_columns <- function() {
