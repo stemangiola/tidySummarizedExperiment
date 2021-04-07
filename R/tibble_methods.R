@@ -116,7 +116,7 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     ) %>%
     
     # Convert to tibble
-    tibble::as_tibble(rownames="transcript")
+    tibble::as_tibble(rownames="transcript") 
   
   count_info <- get_count_datasets(x)
   

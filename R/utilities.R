@@ -469,7 +469,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
   
   SummarizedExperiment_object %>%
     rowRanges() %>%
-    when(
+    when( 
       # If no ranges
       as.data.frame(.) %>%
       nrow() %>%
@@ -478,9 +478,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
       # If it is a range list (multiple rows per transcript)
       class(.) %>% equals("CompressedGRangesList") ~ 
         tibble::as_tibble(.) %>%
-        # suppressWarnings(
-        #   select(. , -one_of(colnames(rowData(SummarizedExperiment_object))))
-        # ) %>%
+        eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
         nest(GenomicRanges = -group_name) %>%
         rename(transcript = group_name),
       
@@ -492,15 +490,28 @@ get_special_datasets <- function(SummarizedExperiment_object) {
           lapply(function(x) rownames(SummarizedExperiment_object)[1] %in% x) %>%
           unlist() %>%
           which() %>%
-          names()
+          names() 
+        
         
         # Just rename
-        tibble::as_tibble(.) %>%
-          # suppressWarnings(
-          #   select(. , -one_of(colnames(rowData(SummarizedExperiment_object))))
-          # ) %>%
-          rename(transcript := !!transcript_column) %>%
-          nest(GenomicRanges = -transcript) 
+        (.) %>%
+          
+          # If transcript_column exists all good 
+          when(
+            !is.null(transcript_column) ~  tibble::as_tibble(.) %>%
+              eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
+              rename(transcript := !!transcript_column) ,
+            
+            # If transcript_column is NULL add numeric column
+            ~ tibble::as_tibble(.) %>%
+              eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
+              rowid_to_column(var = "transcript") %>%
+              mutate(transcript = as.character(transcript))
+            ) %>%
+          
+          # Always nest
+          nest(GenomicRanges = -transcript)
+       
       }
     ) %>%
     list()
@@ -641,5 +652,14 @@ get_GRanges_colnames = function(){
   "GenomicRanges"
 }
 
+eliminate_GRanges_metadata_columns_also_present_in_Rowdata = function(.my_data, SummarizedExperiment_object){
+  .my_data %>%
+    select(-one_of(colnames(rowData(SummarizedExperiment_object)))) %>%
+    
+    # In case there is not metadata column
+    suppressWarnings() 
+}
+
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated transcript names. A data frame is returned for independent data analysis."
+
