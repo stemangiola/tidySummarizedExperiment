@@ -4,20 +4,20 @@
 \alias{as_tibble}
 \title{Coerce lists, matrices, and more to data frames}
 \arguments{
-\item{x}{A `SummarizedExperiment`}
+\item{x}{A \code{SummarizedExperiment}}
 
-\item{...}{This parameter includes `.subset` that can be set to any tidyselect expression. For example .subset = c(sample, type), or .subset = contains("PC").}
+\item{...}{This parameter includes \code{.subset} that can be set to any tidyselect expression. For example .subset = c(sample, type), or .subset = contains("PC").}
 }
 \value{
 A tibble
 }
 \description{
-`r lifecycle::badge("maturing")`
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 
-`as_tibble()` turns a SummarizedExperiment existing object into a so-called tibble, a data frame with class [`tbl_df`]. This is
-in contrast with [tibble()], which builds a tibble from individual columns.
+\code{as_tibble()} turns a SummarizedExperiment existing object into a so-called tibble, a data frame with class \code{tbl_df}.
 }
 \examples{
+
 tidySummarizedExperiment::pasilla \%>\%
     as_tibble()
     

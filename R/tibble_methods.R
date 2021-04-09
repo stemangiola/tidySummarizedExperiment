@@ -3,8 +3,7 @@
 #' @description
 #' `r lifecycle::badge("maturing")`
 #'
-#' `as_tibble()` turns a SummarizedExperiment existing object into a so-called tibble, a data frame with class [`tbl_df`]. This is
-#' in contrast with [tibble()], which builds a tibble from individual columns.
+#' `as_tibble()` turns a SummarizedExperiment existing object into a so-called tibble, a data frame with class `tbl_df`. 
 #'
 #'
 #' @importFrom tibble as_tibble
@@ -20,6 +19,7 @@
 #'
 #' @export
 #' @examples
+#' 
 #' tidySummarizedExperiment::pasilla %>%
 #'     as_tibble()
 #'     
