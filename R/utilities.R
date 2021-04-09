@@ -380,9 +380,29 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
         data.frame(row.names=.$feature) %>%
         select(-feature) %>%
         DataFrame()
-
+    
+    # This to avoid the mismatch between missing row names for counts 
+    # and numerical row names for rowData
+    row_names_row = 
+      row_data %>%
+      rownames() %>%
+      when(
+        rownames(.data) %>% is.null ~ as.integer(.),
+        ~ (.)
+      )
+    
+    # This to avoid the mismatch between missing column names for counts 
+    # and numerical row names for colData
+    row_names_col = 
+      col_data %>%
+      rownames() %>%
+      when(
+        colnames(.data) %>% is.null ~ as.integer(.),
+        ~ (.)
+      )
+    
     # Subset if needed. This function is used by many dplyr utilities
-    .data <- .data[rownames(row_data), rownames(col_data)]
+    .data <- .data[row_names_row, row_names_col]
 
     # Update
     colData(.data) <- col_data
