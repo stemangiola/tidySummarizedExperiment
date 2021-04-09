@@ -38,12 +38,12 @@ test_that("Example 2", {
 
 test_that("Example 3", {
     
-    rowRanges(rse) <- split(rowRanges(rse),seq_len(nrow(rse)))
-    
-    rse  %>% 
-        as_tibble() %>%
-        nrow() %>%
-        expect_equal(1200)
+    # rowRanges(rse) <- split(rowRanges(rse),seq_len(nrow(rse)))
+    # 
+    # rse  %>% 
+    #     as_tibble() %>%
+    #     nrow() %>%
+    #     expect_equal(1200)
     
     rowData(rse)$transcript <- seq_len(nrow(rse))
     
