@@ -77,9 +77,11 @@ as_tibble.SummarizedExperiment <- function(x, ...,
 
 }
 
-.as_tibble_optimised = function(x, skip_GRanges = F,
+.as_tibble_optimised = function(x, skip_GRanges = F, .subset = NULL,
                                 .name_repair=c("check_unique", "unique", "universal", "minimal"),
                                 rownames=pkgconfig::get_config("tibble::rownames", NULL)){
+  
+  .subset = enquo(.subset)
   
   sample_info <-
     colData(x) %>% 
@@ -120,9 +122,15 @@ as_tibble.SummarizedExperiment <- function(x, ...,
   
   count_info <- get_count_datasets(x)
   
-  count_info %>%
-    left_join(sample_info, by="sample") %>%
-    left_join(gene_info, by="feature") %>%
-    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="feature"), ~ (.)) 
+  # Return 
+  .subset %>%
+    when(
+      quo_is_null(.) ~ 
+        count_info %>%
+        left_join(sample_info, by="sample") %>%
+        left_join(gene_info, by="feature") %>%
+        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="feature"), ~ (.)) ,
+      ~ subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
+    )
   
 }

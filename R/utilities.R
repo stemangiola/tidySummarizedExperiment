@@ -672,6 +672,95 @@ eliminate_GRanges_metadata_columns_also_present_in_Rowdata = function(.my_data, 
     suppressWarnings() 
 }
 
+subset_tibble_output = function(count_info, sample_info, gene_info, range_info, .subset){
+  
+  .subset = enquo(.subset)
+  
+  # Build template of the output
+  output_colnames = 
+    slice(count_info, 0) %>%
+    left_join(slice(sample_info, 0), by="sample") %>%
+    left_join(slice(gene_info, 0), by = "feature") %>%
+    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="feature"), ~ (.)) %>%
+    select(!!.subset) %>%
+    colnames()
+  
+  
+  # Sample table
+  sample_info = 
+    sample_info %>%
+    when(
+      colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+      select(., one_of("sample", output_colnames)) %>%
+        suppressWarnings()
+    )
+  
+  # Ranges table
+  range_info = 
+    range_info %>%
+    when(
+      colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+      select(., one_of("feature", output_colnames)) %>%
+        suppressWarnings()
+    )
+  
+  # Ranges table
+  gene_info = 
+    gene_info %>%
+    when(
+      colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+      select(., one_of("feature", output_colnames)) %>%
+        suppressWarnings()
+    )
+  
+  # Ranges table
+  count_info = 
+    count_info %>%
+    when(
+      colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+      select(., one_of("feature", "sample", output_colnames)) %>%
+        suppressWarnings()
+    )
+  
+  
+  if(
+    !is.null(sample_info) & !is.null(gene_info) | 
+    
+    # Make exception for weirs cases (e.g. c(sample, counts))
+    colnames(count_info) %>% outersect(c("feature", "sample")) %>% length() %>% gt(0)
+  ) {
+    output_df = 
+      count_info %>%
+      left_join(sample_info, by="sample") %>%
+      
+      # For efficiency left_join gene wise together before
+      left_join(
+        gene_info %>%
+          
+          # If present join GRanges
+          when(!is.null(range_info) ~ (.) %>% left_join(range_info, by="feature"), ~ (.)),
+        by="feature"
+      ) 
+  }
+  else if(!is.null(sample_info) ){
+    output_df = sample_info
+  }
+  else if(!is.null(gene_info)){
+    output_df = gene_info %>%
+      
+      # If present join GRanges
+      when(!is.null(range_info) ~ (.) %>% left_join(range_info, by="feature"), ~ (.))
+  }
+  
+  output_df %>%
+    
+    # Cleanup
+    select(one_of(output_colnames)) %>%
+    suppressWarnings()
+  
+}
+
+
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated feature names. A data frame is returned for independent data analysis."
 
