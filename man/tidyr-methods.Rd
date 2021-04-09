@@ -258,7 +258,7 @@ tidySummarizedExperiment::pasilla \%>\%
 library(dplyr)
 tidySummarizedExperiment::pasilla \%>\%
     
-    pivot_wider(names_from=transcript, values_from=counts)
+    pivot_wider(names_from=feature, values_from=counts)
 
 tidySummarizedExperiment::pasilla \%>\%
     

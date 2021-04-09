@@ -94,7 +94,7 @@ APIs.
     pasilla_tidy
 
     ## # A tibble: 102,193 x 5
-    ##    sample condition type       transcript  counts
+    ##    sample condition type       feature  counts
     ##    <chr>  <chr>     <chr>      <chr>        <int>
     ##  1 untrt1 untreated single_end FBgn0000003      0
     ##  2 untrt1 untreated single_end FBgn0000008     92
@@ -130,7 +130,7 @@ first row.
         slice(1)
 
     ## # A tibble: 1 x 5
-    ##   sample condition type       transcript  counts
+    ##   sample condition type       feature  counts
     ##   <chr>  <chr>     <chr>      <chr>        <int>
     ## 1 untrt1 untreated single_end FBgn0000003      0
 
@@ -140,7 +140,7 @@ We can use `filter` to choose rows by criteria.
         filter(condition == "untreated")
 
     ## # A tibble: 58,396 x 5
-    ##    sample condition type       transcript  counts
+    ##    sample condition type       feature  counts
     ##    <chr>  <chr>     <chr>      <chr>        <int>
     ##  1 untrt1 untreated single_end FBgn0000003      0
     ##  2 untrt1 untreated single_end FBgn0000008     92
@@ -213,7 +213,7 @@ type column name.
         rename(sequencing=type)
 
     ## # A tibble: 102,193 x 5
-    ##    sample condition sequencing transcript  counts
+    ##    sample condition sequencing feature  counts
     ##    <chr>  <chr>     <chr>      <chr>        <int>
     ##  1 untrt1 untreated single_end FBgn0000003      0
     ##  2 untrt1 untreated single_end FBgn0000008     92
@@ -235,7 +235,7 @@ and paired\_end.
         mutate(type=gsub("_end", "", type))
 
     ## # A tibble: 102,193 x 5
-    ##    sample condition type   transcript  counts
+    ##    sample condition type   feature  counts
     ##    <chr>  <chr>     <chr>  <chr>        <int>
     ##  1 untrt1 untreated single FBgn0000003      0
     ##  2 untrt1 untreated single FBgn0000008     92
@@ -255,7 +255,7 @@ We could use `unite` to combine multiple columns.into a single column.
         unite("group", c(condition, type))
 
     ## # A tibble: 102,193 x 4
-    ##    sample group                transcript  counts
+    ##    sample group                feature  counts
     ##    <chr>  <chr>                <chr>        <int>
     ##  1 untrt1 untreated_single_end FBgn0000003      0
     ##  2 untrt1 untreated_single_end FBgn0000008     92
@@ -293,13 +293,13 @@ We could combine `group_by`, `mutate` and `filter` to get the
 transcripts with mean count &gt; 0.
 
     pasilla_tidy %>%
-        group_by(transcript) %>%
+        group_by(feature) %>%
         mutate(mean_count=mean(counts)) %>%
         filter(mean_count > 0)
 
     ## # A tibble: 86,513 x 6
-    ## # Groups:   transcript [12,359]
-    ##    sample condition type       transcript  counts mean_count
+    ## # Groups:   feature [12,359]
+    ##    sample condition type       feature  counts mean_count
     ##    <chr>  <chr>     <chr>      <chr>        <int>      <dbl>
     ##  1 untrt1 untreated single_end FBgn0000003      0      0.143
     ##  2 untrt1 untreated single_end FBgn0000008     92     99.6  

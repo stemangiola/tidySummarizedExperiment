@@ -96,14 +96,14 @@ as_tibble.SummarizedExperiment <- function(x, ...,
   # range_info =
   #     x@rowRanges %>%
   #     as.data.frame %>%
-  #     tibble::as_tibble(rownames="transcript")
+  #     tibble::as_tibble(rownames="feature")
   range_info <-
     skip_GRanges %>%
     when(
       (.) ~ tibble() %>% list,
       ~  get_special_datasets(x) 
     ) %>%
-    reduce(left_join, by="transcript")
+    reduce(left_join, by="feature")
      
   
   gene_info <-
@@ -112,17 +112,17 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     # If reserved column names are present add .x
     setNames(
       colnames(.) %>% 
-        str_replace("^transcript$", "transcript.x")
+        str_replace("^feature$", "feature.x")
     ) %>%
     
     # Convert to tibble
-    tibble::as_tibble(rownames="transcript") 
+    tibble::as_tibble(rownames="feature") 
   
   count_info <- get_count_datasets(x)
   
   count_info %>%
     left_join(sample_info, by="sample") %>%
-    left_join(gene_info, by="transcript") %>%
-    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="transcript"), ~ (.)) 
+    left_join(gene_info, by="feature") %>%
+    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="feature"), ~ (.)) 
   
 }

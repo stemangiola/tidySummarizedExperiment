@@ -74,7 +74,7 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     new_obj <- 
       tts %>%
       when(
-        is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: bind_rows cannot be applied to splits both by sample- and transcript-wise information"),
+        is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: bind_rows cannot be applied to splits both by sample- and feature-wise information"),
         is_split_by_sample(.) ~ cbind(.[[1]], .[[2]]) ,
         is_split_by_transcript(.) ~ rbind(.[[1]], .[[2]]),
         
@@ -123,16 +123,16 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
         dplyr::bind_cols(tts[[2]], .id=.id) %>%
         when(
 
-            # If the column added are not sample-wise or transcript-wise return tibble
+            # If the column added are not sample-wise or feature-wise return tibble
             (colnames(tts[[2]]) %in% c(
                 get_subset_columns(., sample),
-                get_subset_columns(., transcript)
+                get_subset_columns(., feature)
             )
             ) %>% all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
 
             # Return tiblle
             ~ {
-                warning("tidySummarizedExperiment says: The new columns do not include pure sample-wise or transcript-wise. A data frame is returned for independent data analysis.")
+                warning("tidySummarizedExperiment says: The new columns do not include pure sample-wise or feature-wise. A data frame is returned for independent data analysis.")
                 (.)
             }
         )
@@ -272,7 +272,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 
             # If rectangular
             is_rectangular(.) ~ .data[
-                unique(.$transcript),
+                unique(.$feature),
                 unique(.$sample)
             ],
 
@@ -640,7 +640,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
       old_names %in% colnames(colData(.data)) %>% any() &
       old_names %in% colnames(rowData(.data)) %>% any()
     )
-      stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and transcript-wise columns.")
+      stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and feature-wise columns.")
     
     
     tst =
@@ -757,7 +757,7 @@ left_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c("
         dplyr::left_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
-            # If duplicated sample-transcript pair returns tibble
+            # If duplicated sample-feature pair returns tibble
             !is_not_duplicated(.) ~ {
                 message(duplicated_cell_names)
                 (.)
@@ -801,7 +801,7 @@ inner_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(
         dplyr::inner_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
-            # If duplicated sample-transcript pair returns tibble
+            # If duplicated sample-feature pair returns tibble
 
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
                 message(duplicated_cell_names)
@@ -850,7 +850,7 @@ right_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(
         dplyr::right_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
-            # If duplicated sample-transcript pair returns tibble
+            # If duplicated sample-feature pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
                 message(duplicated_cell_names)
                 (.)
@@ -899,7 +899,7 @@ full_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c("
         dplyr::full_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
         when(
 
-            # If duplicated sample-transcript pair returns tibble
+            # If duplicated sample-feature pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
                 message(duplicated_cell_names)
                 (.)
@@ -992,7 +992,7 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
         dplyr::slice(..., .preserve=.preserve) %>%
         when(
 
-            # If duplicated sample-transcript pair returns tibble
+            # If duplicated sample-feature pair returns tibble
             !is_not_duplicated(.) | !is_rectangular(.) ~ {
                 message(duplicated_cell_names)
                 (.)
@@ -1051,7 +1051,7 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     select(sample, transcript, counts)
+#'     select(sample, feature, counts)
 #' @family single table verbs
 #'
 #' @rdname dplyr-methods
@@ -1276,7 +1276,7 @@ count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     pull(transcript)
+#'     pull(feature)
 NULL
 
 #' @export

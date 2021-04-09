@@ -79,19 +79,19 @@ unnest.tidySummarizedExperiment_nested <-
                 eq("SummarizedExperiment") %>%
                 any() ~ {
                   
-                  # Mark if columns belong to transcript or sample
+                  # Mark if columns belong to feature or sample
                   my_unnested_tibble = 
                     mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-                    select(-suppressWarnings( one_of("sample", "transcript"))) %>%
+                    select(-suppressWarnings( one_of("sample", "feature"))) %>%
                     unnest(!!cols)
                   
-                  # Get which column is relative to transcript or sample
+                  # Get which column is relative to feature or sample
                   sample_columns = my_unnested_tibble %>% get_subset_columns(sample) 
-                  transcript_columns = my_unnested_tibble %>% get_subset_columns(transcript)
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(feature)
                   source_column = 
                     c(
                       rep("sample", length(sample_columns)) %>% setNames(sample_columns),
-                      rep("transcript", length(transcript_columns)) %>% setNames(transcript_columns)
+                      rep("feature", length(transcript_columns)) %>% setNames(transcript_columns)
                     )
                   
                   # Do my trick to unnest
@@ -101,23 +101,23 @@ unnest.tidySummarizedExperiment_nested <-
                         
                         # Attach back the columns used for nesting
                         .data_ %>%
-                          select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
+                          select(-!!cols, -suppressWarnings( one_of("sample", "feature"))) %>%
                           slice(rep(.y, ncol(.x) * nrow(.x))),
                         
-                        # Column sample-wise or transcript-wise
+                        # Column sample-wise or feature-wise
                         column_belonging = 
                           source_column[
                             .data_ %>%
-                              select(-!!cols, -suppressWarnings( one_of("sample", "transcript"))) %>%
+                              select(-!!cols, -suppressWarnings( one_of("sample", "feature"))) %>%
                               colnames()
                           ]
                       )
                   )) %>%
                     pull(!!cols) %>%
                     
-                    # See if split by transcript or sample
+                    # See if split by feature or sample
                     when(
-                      is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and transcript-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
+                      is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and feature-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
                       ~ reduce(., bind_rows)
                     )
                 },
@@ -170,10 +170,10 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
         as_tibble() %>%
         tidyr::nest(...) %>%
         
-        # Check that sample or transcript are in the nesting
+        # Check that sample or feature are in the nesting
         {
-            if(c("sample", "transcript") %>% intersect(colnames(.)) %>% length() %>% `>` (0))
-                stop("tidySummarizedExperiment says: You cannot have the columns sample or transcript among the nesting")
+            if(c("sample", "feature") %>% intersect(colnames(.)) %>% length() %>% `>` (0))
+                stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting")
             (.)
         } 
     
@@ -182,31 +182,31 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
         mutate(
             !!as.symbol(col_name_data) := pmap(
               
-              # Add sample transcript to map if nesting by those
+              # Add sample feature to map if nesting by those
                 list(!!as.symbol(col_name_data)) %>%
                   
                   # Check if nested by sample
                   when("sample" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("sample"))), ~ (.)) %>%
                   
-                  # Check if nested by transcript
-                  when("transcript" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("transcript"))), ~ (.)) , ~ {
+                  # Check if nested by feature
+                  when("feature" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("feature"))), ~ (.)) , ~ {
                   
                     # Check if nested by sample
                     if("sample" %in% colnames(my_data__nested)) { my_samples=..2 } 
                     else {my_samples=..1$sample}
                     
-                    # Check if nested by transcript
-                    if("sample" %in% colnames(my_data__nested) & "transcript" %in% colnames(my_data__nested)) {my_transcripts=..3}
-                    else if("transcript" %in% colnames(my_data__nested)) my_transcripts=..2
-                    else my_transcripts=..1$transcript
+                    # Check if nested by feature
+                    if("sample" %in% colnames(my_data__nested) & "feature" %in% colnames(my_data__nested)) {my_transcripts=..3}
+                    else if("feature" %in% colnames(my_data__nested)) my_transcripts=..2
+                    else my_transcripts=..1$feature
                  
                   my_data__ %>%
                     
                     # Subset cells
-                    filter(sample %in% my_samples & transcript %in% my_transcripts) %>%
+                    filter(sample %in% my_samples & feature %in% my_transcripts) %>%
                     
                     # Subset columns
-                    select(colnames(..1) %>% c("sample", "transcript") %>% unique)
+                    select(colnames(..1) %>% c("sample", "feature") %>% unique)
                 } 
             )
         ) %>%
@@ -490,7 +490,7 @@ pivot_longer.SummarizedExperiment <- function(data,
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     pivot_wider(names_from=transcript, values_from=counts)
+#'     pivot_wider(names_from=feature, values_from=counts)
 NULL
 
 #' @export

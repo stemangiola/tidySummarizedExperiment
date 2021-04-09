@@ -479,7 +479,7 @@ tidySummarizedExperiment::pasilla \%>\%
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
     
-    select(sample, transcript, counts)
+    select(sample, feature, counts)
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
@@ -492,7 +492,7 @@ tidySummarizedExperiment::pasilla \%>\%
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
     
-    pull(transcript)
+    pull(feature)
 }
 \seealso{
 [filter_all()], [filter_if()] and [filter_at()].
