@@ -463,6 +463,7 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' @importFrom tibble as_tibble
 #' @importFrom tibble tibble
 #' @importFrom SummarizedExperiment rowRanges
+#' @importFrom tibble rowid_to_column
 #' 
 #' @noRd
 get_special_datasets <- function(SummarizedExperiment_object) {
