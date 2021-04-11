@@ -174,7 +174,7 @@ We could combine `group_by`, `mutate` and `filter` to get the transcripts with m
 
 ```{r}
 pasilla_tidy %>%
-    group_by(transcript) %>%
+    group_by(feature) %>%
     mutate(mean_count=mean(counts)) %>%
     filter(mean_count > 0)
 ```

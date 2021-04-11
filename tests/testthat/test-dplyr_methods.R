@@ -7,7 +7,7 @@ test_that("bind_rows", {
     pasilla_bind <- tidySummarizedExperiment::bind_rows(pasilla, pasilla)
 
     pasilla_bind %>%
-        count(sample, transcript) %>%
+        count(sample, feature) %>%
         dplyr::count(n) %>%
         filter(n > 1) %>%
         nrow() %>%
