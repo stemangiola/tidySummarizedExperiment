@@ -105,7 +105,13 @@ as_tibble.SummarizedExperiment <- function(x, ...,
       (.) ~ tibble() %>% list,
       ~  get_special_datasets(x) 
     ) %>%
-    reduce(left_join, by="feature")
+    reduce(left_join, by="coordinate") %>%
+    
+    # If reserved column names are present add .x
+    setNames(
+      colnames(.) %>% 
+        str_replace("^coordinate$", "coordinate.x")
+    ) 
      
   
   gene_info <-

@@ -480,7 +480,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
       class(.) %>% equals("CompressedGRangesList") ~ 
         tibble::as_tibble(.) %>%
         eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-        nest(GenomicRanges = -group_name) %>%
+        nest(coordinate = -group_name) %>%
         rename(feature = group_name),
       
       # If standard GRanges (one feature per line)
@@ -511,7 +511,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
             ) %>%
           
           # Always nest
-          nest(GenomicRanges = -feature)
+          nest(coordinate = -feature)
        
       }
     ) %>%
