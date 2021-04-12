@@ -500,7 +500,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
       class(.) %>% equals("CompressedGRangesList") ~ 
         tibble::as_tibble(.) %>%
         eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-        nest(GenomicRanges = -group_name) %>%
+        nest(coordinate = -group_name) %>%
         rename(feature = group_name),
       
       # If standard GRanges (one feature per line)
@@ -531,7 +531,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
             ) %>%
           
           # Always nest
-          nest(GenomicRanges = -feature)
+          nest(coordinate = -feature)
        
       }
     ) %>%
@@ -773,6 +773,18 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
   
 }
 
+change_reserved_column_names = function(.data){
+  
+  .data %>%
+    
+    setNames(
+      colnames(.) %>% 
+        str_replace("^feature$", "feature.x") %>% 
+        str_replace("^sample$", "sample.x") %>% 
+        str_replace("^coordinate$", "coordinate.x")
+    ) 
+  
+}
 
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated feature names. A data frame is returned for independent data analysis."

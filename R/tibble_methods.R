@@ -56,11 +56,8 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     colData(x) %>% 
     
     # If reserved column names are present add .x
-    setNames(
-      colnames(.) %>% 
-        str_replace("^sample$", "sample.x")
-    ) %>%
-    
+    change_reserved_column_names() %>%
+  
     # Convert to tibble
     tibble::as_tibble(rownames="sample")
   
@@ -74,18 +71,14 @@ as_tibble.SummarizedExperiment <- function(x, ...,
       (.) ~ tibble() %>% list,
       ~  get_special_datasets(x) 
     ) %>%
-    reduce(left_join, by="feature")
-     
-  
+    reduce(left_join, by="coordinate") 
+    
   gene_info <-
     rowData(x) %>%
     
     # If reserved column names are present add .x
-    setNames(
-      colnames(.) %>% 
-        str_replace("^feature$", "feature.x")
-    ) %>%
-    
+    change_reserved_column_names() %>%
+  
     # Convert to tibble
     tibble::as_tibble(rownames="feature") 
   
