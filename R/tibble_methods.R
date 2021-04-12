@@ -3,52 +3,15 @@
 #' @description
 #' `r lifecycle::badge("maturing")`
 #'
-#' `as_tibble()` turns an existing object, such as a data frame or
-#' matrix, into a so-called tibble, a data frame with class [`tbl_df`]. This is
-#' in contrast with [tibble()], which builds a tibble from individual columns.
-#' `as_tibble()` is to [`tibble()`] as [base::as.data.frame()] is to
-#' [base::data.frame()].
+#' `as_tibble()` turns a SummarizedExperiment existing object into a so-called tibble, a data frame with class `tbl_df`. 
 #'
-#' `as_tibble()` is an S3 generic, with methods for:
-#' * [`data.frame`][base::data.frame()]: Thin wrapper around the `list` method
-#'   that implements tibble's treatment of [rownames].
-#' * [`matrix`][methods::matrix-class], [`poly`][stats::poly()],
-#'   [`ts`][stats::ts()], [`table`][base::table()]
-#' * Default: Other inputs are first coerced with [base::as.data.frame()].
 #'
 #' @importFrom tibble as_tibble
 #'
-#' @section Row names:
-#' The default behaviour is to silently remove row names.
 #'
-#' New code should explicitly convert row names to a new column using the
-#' `rownames` argument.
+#' @param x A `SummarizedExperiment`
+#' @param ... This parameter includes `.subset` that can be set to any tidyselect expression. For example .subset = c(sample, type), or .subset = contains("PC").
 #'
-#' For existing code that relies on the retention of row names, call
-#' `pkgconfig::set_config("tibble::rownames"=NA)` in your script or in your
-#' package's [.onLoad()]  function.
-#'
-#' @section Life cycle:
-#' Using `as_tibble()` for vectors is superseded as of version 3.0.0,
-#' prefer the more expressive maturing `as_tibble_row()` and
-#' `as_tibble_col()` variants for new code.
-#'
-#' @seealso [tibble()] constructs a tibble from individual columns. [enframe()]
-#'   converts a named vector to a tibble with a column of names and column of
-#'   values. Name repair is implemented using [vctrs::vec_as_names()].
-#'
-#' @param x A data frame, list, matrix, or other object that could reasonably be
-#'   coerced to a tibble.
-#' @param ... Unused, for extensibility.
-#' @param rownames How to treat existing row names of a data frame or matrix:
-#'   * `NULL`: remove row names. This is the default.
-#'   * `NA`: keep row names.
-#'   * A string: the name of a new column. Existing rownames are transferred
-#'     into this column and the `row.names` attribute is deleted.
-#'  Read more in [rownames].
-#' @param .name_repair see tidyr
-#'
-#'   For compatibility only, do not use for new code.
 #' @return A tibble
 #'
 #' @rdname tibble-methods
@@ -56,9 +19,15 @@
 #'
 #' @export
 #' @examples
+#' 
 #' tidySummarizedExperiment::pasilla %>%
-#'     
 #'     as_tibble()
+#'     
+#' tidySummarizedExperiment::pasilla %>%
+#'     as_tibble(.subset = -c(condition, type))     
+#'     
+#'     
+#'     
 NULL
 
 #' @export

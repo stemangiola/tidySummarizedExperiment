@@ -1010,14 +1010,9 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' Select (and optionally rename) variables in a data frame, using a concise
 #' mini-language that makes it easy to refer to variables based on their name
 #' (e.g. `a:f` selects all columns from `a` on the left to `f` on the
-#' right). You can also use predicate functions like [is.numeric] to select
+#' right). You can also use predicate functions like is.numeric to select
 #' variables based on their properties.
 #'
-#'
-#' ## Overview of selection features
-#'
-#' ```{r, child="man/rmd/overview.Rmd"}
-#' ```
 #'
 #' @importFrom dplyr select
 #'

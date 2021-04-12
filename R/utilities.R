@@ -380,9 +380,29 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
         data.frame(row.names=.$feature) %>%
         select(-feature) %>%
         DataFrame()
-
+    
+    # This to avoid the mismatch between missing row names for counts 
+    # and numerical row names for rowData
+    row_names_row = 
+      row_data %>%
+      rownames() %>%
+      when(
+        rownames(.data) %>% is.null ~ as.integer(.),
+        ~ (.)
+      )
+    
+    # This to avoid the mismatch between missing column names for counts 
+    # and numerical row names for colData
+    row_names_col = 
+      col_data %>%
+      rownames() %>%
+      when(
+        colnames(.data) %>% is.null ~ as.integer(.),
+        ~ (.)
+      )
+    
     # Subset if needed. This function is used by many dplyr utilities
-    .data <- .data[rownames(row_data), rownames(col_data)]
+    .data <- .data[row_names_row, row_names_col]
 
     # Update
     colData(.data) <- col_data
@@ -727,20 +747,13 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
     !is.null(sample_info) & !is.null(gene_info) | 
     
     # Make exception for weirs cases (e.g. c(sample, counts))
-    colnames(count_info) %>% outersect(c("feature", "sample")) %>% length() %>% gt(0)
+    (colnames(count_info) %>% outersect(c("feature", "sample")) %>% length() %>% gt(0))
   ) {
     output_df = 
       count_info %>%
-      left_join(sample_info, by="sample") %>%
-      
-      # For efficiency left_join gene wise together before
-      left_join(
-        gene_info %>%
-          
-          # If present join GRanges
-          when(!is.null(range_info) ~ (.) %>% left_join(range_info, by="feature"), ~ (.)),
-        by="feature"
-      ) 
+      when(!is.null(sample_info) ~ (.) %>% left_join(sample_info, by="sample"), ~ (.)) %>%
+      when(!is.null(gene_info) ~ (.) %>% left_join(gene_info, by="feature"), ~ (.)) %>%
+      when(!is.null(range_info) ~ (.) %>% left_join(range_info, by="feature"), ~ (.))
   }
   else if(!is.null(sample_info) ){
     output_df = sample_info
