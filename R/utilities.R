@@ -773,6 +773,18 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
   
 }
 
+change_reserved_column_names = function(.data){
+  
+  .data %>%
+    
+    setNames(
+      colnames(.) %>% 
+        str_replace("^feature$", "feature.x") %>% 
+        str_replace("^sample$", "sample.x") %>% 
+        str_replace("^coordinate$", "coordinate.x")
+    ) 
+  
+}
 
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated feature names. A data frame is returned for independent data analysis."
