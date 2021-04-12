@@ -40,62 +40,62 @@
 
 
 <meta property="og:title" content="distinct — bind_rows" />
-<meta property="og:description" content="`filter()` retains the rows where the conditions you provide a `TRUE`. Note
-that, unlike base subsetting with `[`, rows where the condition evaluates
-to `NA` are dropped.
+<meta property="og:description" content="filter() retains the rows where the conditions you provide a TRUE. Note
+that, unlike base subsetting with [, rows where the condition evaluates
+to NA are dropped.
 Most data operations are done on groups defined by variables.
-`group_by()` takes an existing tbl and converts it into a grouped tbl
-where operations are performed &quot;by group&quot;. `ungroup()` removes grouping.
-`summarise()` creates a new data frame. It will have one (or more) rows for
+group_by() takes an existing tbl and converts it into a grouped tbl
+where operations are performed &quot;by group&quot;. ungroup() removes grouping.
+summarise() creates a new data frame. It will have one (or more) rows for
 each combination of grouping variables; if there are no grouping variables,
 the output will have a single row summarising all observations in the input.
 It will contain one column for each grouping variable and one column
 for each of the summary statistics that you have specified.
-`summarise()` and `summarize()` are synonyms.
-`mutate()` adds new variables and preserves existing ones;
-`transmute()` adds new variables and drops existing ones.
+summarise() and summarize() are synonyms.
+mutate() adds new variables and preserves existing ones;
+transmute() adds new variables and drops existing ones.
 New variables overwrite existing variables of the same name.
-Variables can be removed by setting their value to `NULL`.
-Rename individual variables using `new_name=old_name` syntax.
-See [this repository](https://github.com/jennybc/row-oriented-workflows)
+Variables can be removed by setting their value to NULL.
+Rename individual variables using new_name=old_name syntax.
+See this repository
 for alternative ways to perform row-wise operations.
-`slice()` lets you index rows by their (integer) locations. It allows you
+slice() lets you index rows by their (integer) locations. It allows you
 to select, remove, and duplicate rows. It is accompanied by a number of
 helpers for common use cases:
-* `slice_head()` and `slice_tail()` select the first or last rows.
-* `slice_sample()` randomly selects rows.
-* `slice_min()` and `slice_max()` select rows with highest or lowest values
-  of a variable.
-If `.data` is a [grouped_df], the operation will be performed on each group,
-so that (e.g.) `slice_head(df, n=5)` will select the first five rows in
+slice_head() and slice_tail() select the first or last rows.
+slice_sample() randomly selects rows.
+slice_min() and slice_max() select rows with highest or lowest values
+of a variable.
+
+
+If .data is a grouped_df, the operation will be performed on each group,
+so that (e.g.) slice_head(df, n=5) will select the first five rows in
 each group.
 Select (and optionally rename) variables in a data frame, using a concise
 mini-language that makes it easy to refer to variables based on their name
-(e.g. `a:f` selects all columns from `a` on the left to `f` on the
-right). You can also use predicate functions like [is.numeric] to select
+(e.g. a:f selects all columns from a on the left to f on the
+right). You can also use predicate functions like is.numeric to select
 variables based on their properties.
 
-## Overview of selection features
-```r, child=&quot;man/rmd/overview.Rmd&quot;
-```
 
-
-`sample_n()` and `sample_frac()` have been superseded in favour of
-[slice_sample()]. While they will not be deprecated in the near future,
+sample_n() and sample_frac() have been superseded in favour of
+slice_sample(). While they will not be deprecated in the near future,
 retirement means that we will only perform critical bug fixes, so we recommend
 moving to the newer alternative.
 These functions were superseded because we realised it was more convenient to
 have two mutually exclusive arguments to one function, rather than two
 separate functions. This also made it to clean up a few other smaller
-design issues with `sample_n()`/`sample_frac`:
-* The connection to `slice()` was not obvious.
-* The name of the first argument, `tbl`, is inconsistent with other
-  single table verbs which use `.data`.
-* The `size` argument uses tidy evaluation, which is surprising and
-  undocumented.
-* It was easier to remove the deprecated `.env` argument.
-* `...` was in a suboptimal position.
-`pull()` is similar to `$`. It's mostly useful because it looks a little
+design issues with sample_n()/sample_frac:
+The connection to slice() was not obvious.
+The name of the first argument, tbl, is inconsistent with other
+single table verbs which use .data.
+The size argument uses tidy evaluation, which is surprising and
+undocumented.
+It was easier to remove the deprecated .env argument.
+... was in a suboptimal position.
+
+
+pull() is similar to $. It's mostly useful because it looks a little
 nicer in pipes, it also works with remote data frames, and it can optionally
 name the output." />
 
@@ -129,7 +129,7 @@ name the output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -178,62 +178,62 @@ name the output." />
     </div>
 
     <div class="ref-description">
-    <p>`filter()` retains the rows where the conditions you provide a `TRUE`. Note
-that, unlike base subsetting with `[`, rows where the condition evaluates
-to `NA` are dropped.</p>
+    <p><code>filter()</code> retains the rows where the conditions you provide a <code>TRUE</code>. Note
+that, unlike base subsetting with <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>, rows where the condition evaluates
+to <code>NA</code> are dropped.</p>
 <p>Most data operations are done on groups defined by variables.
-`group_by()` takes an existing tbl and converts it into a grouped tbl
-where operations are performed "by group". `ungroup()` removes grouping.</p>
-<p>`summarise()` creates a new data frame. It will have one (or more) rows for
+<code>group_by()</code> takes an existing tbl and converts it into a grouped tbl
+where operations are performed "by group". <code>ungroup()</code> removes grouping.</p>
+<p><code>summarise()</code> creates a new data frame. It will have one (or more) rows for
 each combination of grouping variables; if there are no grouping variables,
 the output will have a single row summarising all observations in the input.
 It will contain one column for each grouping variable and one column
 for each of the summary statistics that you have specified.</p>
-<p>`summarise()` and `summarize()` are synonyms.</p>
-<p>`mutate()` adds new variables and preserves existing ones;
-`transmute()` adds new variables and drops existing ones.
+<p><code>summarise()</code> and <code>summarize()</code> are synonyms.</p>
+<p><code>mutate()</code> adds new variables and preserves existing ones;
+<code>transmute()</code> adds new variables and drops existing ones.
 New variables overwrite existing variables of the same name.
-Variables can be removed by setting their value to `NULL`.</p>
-<p>Rename individual variables using `new_name=old_name` syntax.</p>
-<p>See [this repository](https://github.com/jennybc/row-oriented-workflows)
+Variables can be removed by setting their value to <code>NULL</code>.</p>
+<p>Rename individual variables using <code>new_name=old_name</code> syntax.</p>
+<p>See <a href='https://github.com/jennybc/row-oriented-workflows'>this repository</a>
 for alternative ways to perform row-wise operations.</p>
-<p>`slice()` lets you index rows by their (integer) locations. It allows you
+<p><code>slice()</code> lets you index rows by their (integer) locations. It allows you
 to select, remove, and duplicate rows. It is accompanied by a number of
-helpers for common use cases:</p>
-<p>* `slice_head()` and `slice_tail()` select the first or last rows.
-* `slice_sample()` randomly selects rows.
-* `slice_min()` and `slice_max()` select rows with highest or lowest values
-  of a variable.</p>
-<p>If `.data` is a [grouped_df], the operation will be performed on each group,
-so that (e.g.) `slice_head(df, n=5)` will select the first five rows in
+helpers for common use cases:</p><ul>
+<li><p><code>slice_head()</code> and <code>slice_tail()</code> select the first or last rows.</p></li>
+<li><p><code>slice_sample()</code> randomly selects rows.</p></li>
+<li><p><code>slice_min()</code> and <code>slice_max()</code> select rows with highest or lowest values
+of a variable.</p></li>
+</ul>
+
+<p>If <code>.data</code> is a grouped_df, the operation will be performed on each group,
+so that (e.g.) <code>slice_head(df, n=5)</code> will select the first five rows in
 each group.</p>
 <p>Select (and optionally rename) variables in a data frame, using a concise
 mini-language that makes it easy to refer to variables based on their name
-(e.g. `a:f` selects all columns from `a` on the left to `f` on the
-right). You can also use predicate functions like [is.numeric] to select
+(e.g. <code>a:f</code> selects all columns from <code>a</code> on the left to <code>f</code> on the
+right). You can also use predicate functions like is.numeric to select
 variables based on their properties.</p>
-
-<p>## Overview of selection features</p>
-<p>```r, child="man/rmd/overview.Rmd"
-```</p>
 <p><a href='https://lifecycle.r-lib.org/articles/stages.html#superseded'><img src='figures/lifecycle-superseded.svg' alt='[Superseded]' /></a>
 
-`sample_n()` and `sample_frac()` have been superseded in favour of
-[slice_sample()]. While they will not be deprecated in the near future,
+<code>sample_n()</code> and <code>sample_frac()</code> have been superseded in favour of
+<code>slice_sample()</code>. While they will not be deprecated in the near future,
 retirement means that we will only perform critical bug fixes, so we recommend
 moving to the newer alternative.</p>
 <p>These functions were superseded because we realised it was more convenient to
 have two mutually exclusive arguments to one function, rather than two
 separate functions. This also made it to clean up a few other smaller
-design issues with `sample_n()`/`sample_frac`:</p>
-<p>* The connection to `slice()` was not obvious.
-* The name of the first argument, `tbl`, is inconsistent with other
-  single table verbs which use `.data`.
-* The `size` argument uses tidy evaluation, which is surprising and
-  undocumented.
-* It was easier to remove the deprecated `.env` argument.
-* `...` was in a suboptimal position.</p>
-<p>`pull()` is similar to `$`. It's mostly useful because it looks a little
+design issues with <code>sample_n()</code>/<code>sample_frac</code>:</p><ul>
+<li><p>The connection to <code>slice()</code> was not obvious.</p></li>
+<li><p>The name of the first argument, <code>tbl</code>, is inconsistent with other
+single table verbs which use <code>.data</code>.</p></li>
+<li><p>The <code>size</code> argument uses tidy evaluation, which is surprising and
+undocumented.</p></li>
+<li><p>It was easier to remove the deprecated <code>.env</code> argument.</p></li>
+<li><p><code>...</code> was in a suboptimal position.</p></li>
+</ul>
+
+<p><code>pull()</code> is similar to <code><a href='https://rdrr.io/r/base/Extract.html'>$</a></code>. It's mostly useful because it looks a little
 nicer in pipes, it also works with remote data frames, and it can optionally
 name the output.</p>
     </div>
@@ -252,12 +252,12 @@ name the output.</p>
     <tr>
       <th>.id</th>
       <td><p>Data frame identifier.</p>
-<p>When `.id` is supplied, a new column of identifiers is
-  created to link each row to its original data frame. The labels
-  are taken from the named arguments to `bind_rows()`. When a
-  list of data frames is supplied, the labels are taken from the
-  names of the list. If no names are found a numeric sequence is
-  used instead.</p></td>
+<p>When <code>.id</code> is supplied, a new column of identifiers is
+created to link each row to its original data frame. The labels
+are taken from the named arguments to <code>bind_rows()</code>. When a
+list of data frames is supplied, the labels are taken from the
+names of the list. If no names are found a numeric sequence is
+used instead.</p></td>
     </tr>
     <tr>
       <th>add.cell.ids</th>
@@ -272,22 +272,22 @@ of ... is not distinct, this keeps the first row of values. (See dplyr)</p></td>
     </tr>
     <tr>
       <th>.preserve</th>
-      <td><p>when `FALSE` (the default), the grouping structure
+      <td><p>when <code>FALSE</code> (the default), the grouping structure
 is recalculated based on the resulting data, otherwise it is kept as is.</p></td>
     </tr>
     <tr>
       <th>.add</th>
-      <td><p>When `FALSE`, the default, `group_by()` will
-  override existing groups. To add to the existing groups, use
-  `.add=TRUE`.</p>
-<p>This argument was previously called `add`, but that prevented
-  creating a new grouping variable called `add`, and conflicts with
-  our naming conventions.</p></td>
+      <td><p>When <code>FALSE</code>, the default, <code>group_by()</code> will
+override existing groups. To add to the existing groups, use
+<code>.add=TRUE</code>.</p>
+<p>This argument was previously called <code>add</code>, but that prevented
+creating a new grouping variable called <code>add</code>, and conflicts with
+our naming conventions.</p></td>
     </tr>
     <tr>
       <th>.drop</th>
-      <td><p>When `.drop=TRUE`, empty groups are dropped. See
-[group_by_drop_default()] for what the default value is for this argument.</p></td>
+      <td><p>When <code>.drop=TRUE</code>, empty groups are dropped. See
+<code>group_by_drop_default()</code> for what the default value is for this argument.</p></td>
     </tr>
     <tr>
       <th>data</th>
@@ -322,10 +322,10 @@ character vector of length 2. (See dplyr)</p></td>
     </tr>
     <tr>
       <th>size</th>
-      <td><p>&lt;[`tidy-select`][dplyr_tidy_select]&gt;
-For `sample_n()`, the number of rows to select.
-For `sample_frac()`, the fraction of rows to select.
-If `tbl` is grouped, `size` applies to each group.</p></td>
+      <td><p>&lt;<code>tidy-select</code>&gt;
+For <code>sample_n()</code>, the number of rows to select.
+For <code>sample_frac()</code>, the fraction of rows to select.
+If <code>tbl</code> is grouped, <code>size</code> applies to each group.</p></td>
     </tr>
     <tr>
       <th>replace</th>
@@ -333,7 +333,7 @@ If `tbl` is grouped, `size` applies to each group.</p></td>
     </tr>
     <tr>
       <th>weight</th>
-      <td><p>&lt;[`tidy-select`][dplyr_tidy_select]&gt; Sampling weights.
+      <td><p>&lt;<code>tidy-select</code>&gt; Sampling weights.
 This must evaluate to a vector of non-negative numbers the same length as
 the input. Weights are automatically standardised to sum to 1.</p></td>
     </tr>
@@ -355,90 +355,106 @@ as names for a named vector. Specified in a similar manner as <code>var</code>.<
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A tidySummarizedExperiment object</p>
-<p>An object of the same type as `.data`.</p>
-<p>* Rows are a subset of the input, but appear in the same order.
-* Columns are not modified.
-* The number of groups may be reduced (if `.preserve` is not `TRUE`).
-* Data frame attributes are preserved.</p>
-<p>A [grouped data frame][grouped_df()], unless the combination of
-  `...` and `add` yields a non empty set of grouping columns, a
-  regular (ungrouped) data frame otherwise.</p>
-<p>An object _usually_ of the same type as `.data`.</p>
-<p>* The rows come from the underlying `group_keys()`.
-* The columns are a combination of the grouping keys and the summary
-  expressions that you provide.
-* If `x` is grouped by more than one variable, the output will be another
-  [grouped_df] with the right-most group removed.
-* If `x` is grouped by one variable, or is not grouped, the output will
-  be a [tibble].
-* Data frame attributes are **not** preserved, because `summarise()`
-  fundamentally creates a new data frame.</p>
-<p>An object of the same type as `.data`.</p>
-<p>For `mutate()`:</p>
-<p>* Rows are not affected.
-* Existing columns will be preserved unless explicitly modified.
-* New columns will be added to the right of existing columns.
-* Columns given value `NULL` will be removed
-* Groups will be recomputed if a grouping variable is mutated.
-* Data frame attributes are preserved.</p>
-<p>For `transmute()`:</p>
-<p>* Rows are not affected.
-* Apart from grouping variables, existing columns will be remove unless
-  explicitly kept.
-* Column order matches order of expressions.
-* Groups will be recomputed if a grouping variable is mutated.
-* Data frame attributes are preserved.</p>
-<p>An object of the same type as `.data`.
-* Rows are not affected.
-* Column names are changed; column order is preserved
-* Data frame attributes are preserved.
-* Groups are updated to reflect new names.</p>
-<p>A `tbl`</p>
-<p>A `tbl`</p>
+<p>An object of the same type as <code>.data</code>.</p><ul>
+<li><p>Rows are a subset of the input, but appear in the same order.</p></li>
+<li><p>Columns are not modified.</p></li>
+<li><p>The number of groups may be reduced (if <code>.preserve</code> is not <code>TRUE</code>).</p></li>
+<li><p>Data frame attributes are preserved.</p></li>
+</ul>
+
+<p>A grouped data frame, unless the combination of
+<code>...</code> and <code>add</code> yields a non empty set of grouping columns, a
+regular (ungrouped) data frame otherwise.</p>
+<p>An object <em>usually</em> of the same type as <code>.data</code>.</p><ul>
+<li><p>The rows come from the underlying <code>group_keys()</code>.</p></li>
+<li><p>The columns are a combination of the grouping keys and the summary
+expressions that you provide.</p></li>
+<li><p>If <code>x</code> is grouped by more than one variable, the output will be another
+grouped_df with the right-most group removed.</p></li>
+<li><p>If <code>x</code> is grouped by one variable, or is not grouped, the output will
+be a <a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a>.</p></li>
+<li><p>Data frame attributes are <strong>not</strong> preserved, because <code>summarise()</code>
+fundamentally creates a new data frame.</p></li>
+</ul>
+
+<p>An object of the same type as <code>.data</code>.</p>
+<p>For <code>mutate()</code>:</p><ul>
+<li><p>Rows are not affected.</p></li>
+<li><p>Existing columns will be preserved unless explicitly modified.</p></li>
+<li><p>New columns will be added to the right of existing columns.</p></li>
+<li><p>Columns given value <code>NULL</code> will be removed</p></li>
+<li><p>Groups will be recomputed if a grouping variable is mutated.</p></li>
+<li><p>Data frame attributes are preserved.</p></li>
+</ul>
+
+<p>For <code>transmute()</code>:</p><ul>
+<li><p>Rows are not affected.</p></li>
+<li><p>Apart from grouping variables, existing columns will be remove unless
+explicitly kept.</p></li>
+<li><p>Column order matches order of expressions.</p></li>
+<li><p>Groups will be recomputed if a grouping variable is mutated.</p></li>
+<li><p>Data frame attributes are preserved.</p></li>
+</ul>
+
+<p>An object of the same type as <code>.data</code>.</p><ul>
+<li><p>Rows are not affected.</p></li>
+<li><p>Column names are changed; column order is preserved</p></li>
+<li><p>Data frame attributes are preserved.</p></li>
+<li><p>Groups are updated to reflect new names.</p></li>
+</ul>
+
+<p>A <code>tbl</code></p>
+<p>A <code>tbl</code></p>
 <p>A tidySummarizedExperiment object</p>
 <p>A tidySummarizedExperiment object</p>
 <p>A tidySummarizedExperiment object</p>
 <p>A tidySummarizedExperiment object</p>
-<p>An object of the same type as `.data`. The output has the following
-properties:</p>
-<p>* Each row may appear 0, 1, or many times in the output.
-* Columns are not modified.
-* Groups are not modified.
-* Data frame attributes are preserved.</p>
-<p>An object of the same type as `.data`. The output has the following
-properties:</p>
-<p>* Rows are not affected.
-* Output columns are a subset of input columns, potentially with a different
-  order. Columns will be renamed if `new_name=old_name` form is used.
-* Data frame attributes are preserved.
-* Groups are maintained; you can't select off grouping variables.</p>
+<p>An object of the same type as <code>.data</code>. The output has the following
+properties:</p><ul>
+<li><p>Each row may appear 0, 1, or many times in the output.</p></li>
+<li><p>Columns are not modified.</p></li>
+<li><p>Groups are not modified.</p></li>
+<li><p>Data frame attributes are preserved.</p></li>
+</ul>
+
+<p>An object of the same type as <code>.data</code>. The output has the following
+properties:</p><ul>
+<li><p>Rows are not affected.</p></li>
+<li><p>Output columns are a subset of input columns, potentially with a different
+order. Columns will be renamed if <code>new_name=old_name</code> form is used.</p></li>
+<li><p>Data frame attributes are preserved.</p></li>
+<li><p>Groups are maintained; you can't select off grouping variables.</p></li>
+</ul>
+
 <p>A tidySummarizedExperiment object</p>
-<p>A vector the same size as `.data`.</p>
+<p>A vector the same size as <code>.data</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>dplyr is not yet smart enough to optimise filtering optimisation
 on grouped datasets that don't need grouped calculations. For this reason,
-filtering is often considerably faster on [ungroup()]ed data.</p>
-<p>`rowwise()` is used for the results of [do()] when you
+filtering is often considerably faster on <code>ungroup()</code>ed data.</p>
+<p><code>rowwise()</code> is used for the results of <code>do()</code> when you
 create list-variables. It is also useful to support arbitrary
 complex operations that need to be applied to each row.</p>
 <p>Currently, rowwise grouping only works with data frames. Its
 main impact is to allow you to work with list-variables in
-[summarise()] and [mutate()] without having to
-use <code>[[1]]</code>. This makes `summarise()` on a rowwise tbl
-effectively equivalent to [plyr::ldply()].</p>
+<code>summarise()</code> and <code>mutate()</code> without having to
+use <code>[[1]]</code>. This makes <code>summarise()</code> on a rowwise tbl
+effectively equivalent to <code>plyr::ldply()</code>.</p>
 <p>Slice does not work with relational databases because they have no
 intrinsic notion of row order. If you want to perform the equivalent
-operation, use [filter()] and [row_number()].</p>
+operation, use <code>filter()</code> and <code>row_number()</code>.</p>
     <h2 class="hasAnchor" id="useful-filter-functions"><a class="anchor" href="#useful-filter-functions"></a>Useful filter functions</h2>
 
     
 
+<ul>
+<li><p><code><a href='https://rdrr.io/r/base/Comparison.html'>==</a></code>, <code>&gt;</code>, <code>&gt;=</code> etc</p></li>
+<li><p><code>&amp;</code>, <code><a href='https://rdrr.io/r/base/Logic.html'>|</a></code>, <code><a href='https://rdrr.io/r/base/Logic.html'>!</a></code>, <code><a href='https://rdrr.io/r/base/Logic.html'>xor()</a></code></p></li>
+<li><p><code><a href='https://rdrr.io/r/base/NA.html'>is.na()</a></code></p></li>
+<li><p><code>between()</code>, <code>near()</code></p></li>
+</ul>
 
-<p>* [`==`], [`&gt;`], [`&gt;=`] etc
-* [`&amp;`], [`|`], [`!`], [xor()]
-* [is.na()]
-* [between()], [near()]</p>
     <h2 class="hasAnchor" id="grouped-tibbles"><a class="anchor" href="#grouped-tibbles"></a>Grouped tibbles</h2>
 
     
@@ -448,9 +464,8 @@ operation, use [filter()] and [row_number()].</p>
 yield different results on grouped tibbles. This will be the case
 as soon as an aggregating, lagging, or ranking function is
 involved. Compare this ungrouped filtering:</p>
-
-<p>The former keeps rows with `mass` greater than the global average
-whereas the latter keeps rows with `mass` greater than the gender</p>
+<p>The former keeps rows with <code>mass</code> greater than the global average
+whereas the latter keeps rows with <code>mass</code> greater than the gender</p>
 <p>average.</p>
 
 
@@ -462,56 +477,58 @@ involved. Compare this ungrouped mutate:</p>
 
     
 
-<p>This function is a **generic**, which means that packages can provide
+<p>This function is a <strong>generic</strong>, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
 <p>The following methods are currently available in loaded packages:</p>
 
-<p>These function are **generic**s, which means that packages can provide
+<p>These function are <strong>generic</strong>s, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
 <p>Methods available in currently loaded packages:</p>
 
-<p>This function is a **generic**, which means that packages can provide
+<p>This function is a <strong>generic</strong>, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
 <p>The following methods are currently available in loaded packages:</p>
 
-<p>These function are **generic**s, which means that packages can provide
+<p>These function are <strong>generic</strong>s, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
 <p>Methods available in currently loaded packages:</p>
 
-<p>This function is a **generic**, which means that packages can provide
+<p>This function is a <strong>generic</strong>, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
 <p>The following methods are currently available in loaded packages:</p>
 
-<p>These function are **generic**s, which means that packages can provide
+<p>These function are <strong>generic</strong>s, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
-<p>Methods available in currently loaded packages:</p>
-<p>* `slice()`: no methods found
-.
-* `slice_head()`: no methods found
-.
-* `slice_tail()`: no methods found
-.
-* `slice_min()`: no methods found
-.
-* `slice_max()`: no methods found
-.
-* `slice_sample()`: no methods found
-.</p>
+<p>Methods available in currently loaded packages:</p><ul>
+<li><p><code>slice()</code>: no methods found
+.</p></li>
+<li><p><code>slice_head()</code>: no methods found
+.</p></li>
+<li><p><code>slice_tail()</code>: no methods found
+.</p></li>
+<li><p><code>slice_min()</code>: no methods found
+.</p></li>
+<li><p><code>slice_max()</code>: no methods found
+.</p></li>
+<li><p><code>slice_sample()</code>: no methods found
+.</p></li>
+</ul>
 
-<p>This function is a **generic**, which means that packages can provide
+
+<p>This function is a <strong>generic</strong>, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
 <p>The following methods are currently available in loaded packages:
 no methods found
 .</p>
 
-<p>This function is a **generic**, which means that packages can provide
+<p>This function is a <strong>generic</strong>, which means that packages can provide
 implementations (methods) for other classes. See the documentation of
 individual methods for extra arguments and differences in behaviour.</p>
 <p>The following methods are currently available in loaded packages:
@@ -521,13 +538,15 @@ no methods found
 
     
 
+<ul>
+<li><p>Center: <code><a href='https://rdrr.io/r/base/mean.html'>mean()</a></code>, <code><a href='https://rdrr.io/r/stats/median.html'>median()</a></code></p></li>
+<li><p>Spread: <code><a href='https://rdrr.io/r/stats/sd.html'>sd()</a></code>, <code><a href='https://rdrr.io/r/stats/IQR.html'>IQR()</a></code>, <code><a href='https://rdrr.io/r/stats/mad.html'>mad()</a></code></p></li>
+<li><p>Range: <code><a href='https://rdrr.io/r/base/Extremes.html'>min()</a></code>, <code><a href='https://rdrr.io/r/base/Extremes.html'>max()</a></code>, <code><a href='https://rdrr.io/r/stats/quantile.html'>quantile()</a></code></p></li>
+<li><p>Position: <code>first()</code>, <code>last()</code>, <code>nth()</code>,</p></li>
+<li><p>Count: <code>n()</code>, <code>n_distinct()</code></p></li>
+<li><p>Logical: <code><a href='https://rdrr.io/r/base/any.html'>any()</a></code>, <code><a href='https://rdrr.io/r/base/all.html'>all()</a></code></p></li>
+</ul>
 
-<p>* Center: [mean()], [median()]
-* Spread: [sd()], [IQR()], [mad()]
-* Range: [min()], [max()], [quantile()]
-* Position: [first()], [last()], [nth()],
-* Count: [n()], [n_distinct()]
-* Logical: [any()], [all()]</p>
     <h2 class="hasAnchor" id="backend-variations"><a class="anchor" href="#backend-variations"></a>Backend variations</h2>
 
     
@@ -535,7 +554,7 @@ no methods found
 
 <p>The data frame backend supports creating a variable and using it in the
 same summary. This means that previously created summary variables can be
-further transformed or combined within the summary, as in [mutate()].
+further transformed or combined within the summary, as in <code>mutate()</code>.
 However, it also means that summary variables with the same names as previous
 variables overwrite them, making those variables unavailable to later summary
 variables.</p>
@@ -546,24 +565,26 @@ creating multiple summaries.</p>
 
     
 
+<ul>
+<li><p><code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code>, <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code>, <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code>, etc., for their usual mathematical meanings</p></li>
+<li><p><code>lead()</code>, <code><a href='https://rdrr.io/r/stats/lag.html'>lag()</a></code></p></li>
+<li><p><code>dense_rank()</code>, <code>min_rank()</code>, <code>percent_rank()</code>, <code>row_number()</code>,
+<code>cume_dist()</code>, <code>ntile()</code></p></li>
+<li><p><code><a href='https://rdrr.io/r/base/cumsum.html'>cumsum()</a></code>, <code>cummean()</code>, <code><a href='https://rdrr.io/r/base/cumsum.html'>cummin()</a></code>, <code><a href='https://rdrr.io/r/base/cumsum.html'>cummax()</a></code>, <code>cumany()</code>, <code>cumall()</code></p></li>
+<li><p><code>na_if()</code>, <code>coalesce()</code></p></li>
+<li><p><code>if_else()</code>, <code>recode()</code>, <code>case_when()</code></p></li>
+</ul>
 
-<p>* [`+`], [`-`], [log()], etc., for their usual mathematical meanings</p>
-<p>* [lead()], [lag()]</p>
-<p>* [dense_rank()], [min_rank()], [percent_rank()], [row_number()],
-  [cume_dist()], [ntile()]</p>
-<p>* [cumsum()], [cummean()], [cummin()], [cummax()], [cumany()], [cumall()]</p>
-<p>* [na_if()], [coalesce()]</p>
-<p>* [if_else()], [recode()], [case_when()]</p>
     <h2 class="hasAnchor" id="scoped-selection-and-renaming"><a class="anchor" href="#scoped-selection-and-renaming"></a>Scoped selection and renaming</h2>
 
     
 
 
-<p>Use the three scoped variants ([rename_all()], [rename_if()], [rename_at()])
+<p>Use the three scoped variants (<code>rename_all()</code>, <code>rename_if()</code>, <code>rename_at()</code>)
 to renaming a set of variables with a function.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>[filter_all()], [filter_if()] and [filter_at()].</p></div>
+    <div class='dont-index'><p><code>filter_all()</code>, <code>filter_if()</code> and <code>filter_at()</code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -571,80 +592,80 @@ to renaming a set of variables with a function.</p>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 7 x 1</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 7 x 1</span><span>
 #&gt;   sample
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> untrt1
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> untrt2
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> untrt3
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> untrt4
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> trt1  
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> trt2  
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> trt3  </div><div class='input'>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> 
+#&gt; </span><span style='color: #555555;'>1</span><span> untrt1
+#&gt; </span><span style='color: #555555;'>2</span><span> untrt2
+#&gt; </span><span style='color: #555555;'>3</span><span> untrt3
+#&gt; </span><span style='color: #555555;'>4</span><span> untrt4
+#&gt; </span><span style='color: #555555;'>5</span><span> trt1  
+#&gt; </span><span style='color: #555555;'>6</span><span> trt2  
+#&gt; </span><span style='color: #555555;'>7</span><span> trt3  </div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>filter</span><span class='op'>(</span><span class='va'>sample</span> <span class='op'>==</span> <span class='st'>"untrt1"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 14,599 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 14,599 x 5</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=1 | Assays=counts</span><span>
-#&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    feature     sample counts condition type      
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='co'># Learn more in ?dplyr_tidy_eval</span>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 102,193 x 5</span><span>
-#&gt; </span><span style='color: #949494;'># Groups:   sample [7]</span><span>
-#&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
-#&gt; </span><span style='color: #949494;'># … with 102,183 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 102,193 x 5</span><span>
+#&gt; </span><span style='color: #555555;'># Groups:   sample [7]</span><span>
+#&gt;    feature     sample counts condition type      
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
+#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 1</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 1 x 1</span><span>
 #&gt;   `mean(counts)`
-#&gt;            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span>           907.</div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>           907.</div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>mutate</span><span class='op'>(</span>logcounts<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts, logcounts</span><span>
-#&gt;    transcript  sample counts logcounts condition type      
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0   -</span><span style='color: #BB0000;'>Inf</span><span>    untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92      7.13 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5      2    untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0      0    untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664     12.6  untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583      9.50 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0   -</span><span style='color: #BB0000;'>Inf</span><span>    untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10      3.32 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0   -</span><span style='color: #BB0000;'>Inf</span><span>    untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446     10.7  untreated single_end
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    feature     sample counts logcounts condition type      
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0   -</span><span style='color: #BB0000;'>Inf</span><span>    untreated single_end
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92      7.13 untreated single_end
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5      2    untreated single_end
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0      0    untreated single_end
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664     12.6  untreated single_end
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583      9.50 untreated single_end
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0   -</span><span style='color: #BB0000;'>Inf</span><span>    untreated single_end
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10      3.32 untreated single_end
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0   -</span><span style='color: #BB0000;'>Inf</span><span>    untreated single_end
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446     10.7  untreated single_end
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='co'># tidySummarizedExperiment::pasilla %&gt;%</span>
 <span class='co'>#     </span>
@@ -654,144 +675,144 @@ to renaming a set of variables with a function.</p>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts</span><span>
-#&gt;    transcript  sample counts condition type       new_column
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
+#&gt;    feature     sample counts condition type       new_column
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'><span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>inner_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 58,396 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 58,396 x 6</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=4 | Assays=counts</span><span>
-#&gt;    transcript  sample counts condition type       new_column
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    feature     sample counts condition type       new_column
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>right_join</span><span class='op'>(</span><span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>distinct</span><span class='op'>(</span><span class='va'>condition</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>new_column<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 58,396 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 58,396 x 6</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=4 | Assays=counts</span><span>
-#&gt;    transcript  sample counts condition type       new_column
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    feature     sample counts condition type       new_column
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end          1
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end          1
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end          1
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 
 <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> 
 <span class='va'>tt</span> <span class='op'>%&gt;%</span> <span class='fu'>full_join</span><span class='op'>(</span><span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>condition<span class='op'>=</span><span class='st'>"treated"</span>, dose<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
+</div><div class='output co'>#&gt; <span class='message'>Joining, by = "condition"</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 102,193 x 6</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts</span><span>
-#&gt;    transcript  sample counts condition type        dose
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    feature     sample counts condition type        dose
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end    </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 1 x 5</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 1 x 5</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=1 | Samples=1 | Assays=counts</span><span>
-#&gt;   transcript  sample counts condition type      
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> FBgn0000003 untrt1      0 untreated single_end</div><div class='input'>
+#&gt;   feature     sample counts condition type      
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'>1</span><span> FBgn0000003 untrt1      0 untreated single_end</div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
-    <span class='fu'>select</span><span class='op'>(</span><span class='va'>sample</span>, <span class='va'>transcript</span>, <span class='va'>counts</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A SummarizedExperiment-tibble abstraction: 102,193 x 3</span><span>
+    <span class='fu'>select</span><span class='op'>(</span><span class='va'>sample</span>, <span class='va'>feature</span>, <span class='va'>counts</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A SummarizedExperiment-tibble abstraction: 102,193 x 3</span><span>
 #&gt; </span><span style='color: #555555;'># Transcripts=14599 | Samples=7 | Assays=counts</span><span>
-#&gt;    transcript  sample counts
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
+#&gt;    feature     sample counts
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>sample_n</span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 50 x 5</span><span>
-#&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0043069 untrt4      0 untreated paired_end
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0027793 trt2       30 treated   paired_end
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0011766 untrt3   </span><span style='text-decoration: underline;'>4</span><span>151 untreated paired_end
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0031320 untrt2    288 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0034915 untrt4    827 untreated paired_end
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0030768 trt2      665 treated   paired_end
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0034292 untrt2      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0053817 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0030998 untrt1      3 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0003511 untrt4    276 untreated paired_end
-#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 50 x 5</span><span>
+#&gt;    feature     sample counts condition type      
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0043069 untrt4      0 untreated paired_end
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0027793 trt2       30 treated   paired_end
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0011766 untrt3   </span><span style='text-decoration: underline;'>4</span><span>151 untreated paired_end
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0031320 untrt2    288 untreated single_end
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0034915 untrt4    827 untreated paired_end
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0030768 trt2      665 treated   paired_end
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0034292 untrt2      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0053817 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0030998 untrt1      3 untreated single_end
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0003511 untrt4    276 untreated paired_end
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span></div><div class='input'><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>sample_frac</span><span class='op'>(</span><span class='fl'>0.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 10,219 x 5</span><span>
-#&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0037461 untrt3      0 untreated paired_end
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0011906 untrt2      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0010812 trt1     </span><span style='text-decoration: underline;'>1</span><span>736 treated   single_end
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0035065 trt1      409 treated   single_end
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0050418 untrt1      6 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0038828 trt1       22 treated   single_end
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0036706 trt2        1 treated   paired_end
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0260953 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0034827 trt2        0 treated   paired_end
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0260748 trt2     </span><span style='text-decoration: underline;'>3</span><span>138 treated   paired_end
-#&gt; </span><span style='color: #949494;'># … with 10,209 more rows</span><span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 10,219 x 5</span><span>
+#&gt;    feature     sample counts condition type      
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0037461 untrt3      0 untreated paired_end
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0011906 untrt2      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0010812 trt1     </span><span style='text-decoration: underline;'>1</span><span>736 treated   single_end
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0035065 trt1      409 treated   single_end
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0050418 untrt1      6 untreated single_end
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0038828 trt1       22 treated   single_end
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0036706 trt2        1 treated   paired_end
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0260953 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0034827 trt2        0 treated   paired_end
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0260748 trt2     </span><span style='text-decoration: underline;'>3</span><span>138 treated   paired_end
+#&gt; </span><span style='color: #555555;'># … with 10,209 more rows</span><span></div><div class='input'>
 <span class='va'>`%&gt;%`</span> <span class='op'>&lt;-</span> <span class='fu'>magrittr</span><span class='fu'>::</span><span class='va'>`%&gt;%`</span>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
-    <span class='fu'>pull</span><span class='op'>(</span><span class='va'>transcript</span><span class='op'>)</span>
+    <span class='fu'>pull</span><span class='op'>(</span><span class='va'>feature</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     [1] "FBgn0000003" "FBgn0000008" "FBgn0000014" "FBgn0000015" "FBgn0000017"
 #&gt;     [6] "FBgn0000018" "FBgn0000022" "FBgn0000024" "FBgn0000028" "FBgn0000032"
 #&gt;    [11] "FBgn0000036" "FBgn0000037" "FBgn0000038" "FBgn0000039" "FBgn0000042"

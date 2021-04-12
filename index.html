@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>tidySummarizedExperiment provides a bridge between Bioconductor <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">SummarizedExperiment</a> <br><span class="math display">@<em>m</em><em>o</em><em>r</em><em>g</em><em>a</em><em>n</em>2020<em>s</em><em>u</em><em>m</em><em>m</em><em>a</em><em>r</em><em>i</em><em>z</em><em>e</em><em>d</em></span><br> and the tidyverse <br><span class="math display">@<em>w</em><em>i</em><em>c</em><em>k</em><em>h</em><em>a</em><em>m</em>2019<em>w</em><em>e</em><em>l</em><em>c</em><em>o</em><em>m</em><em>e</em></span><br>. It creates an invisible layer that enables viewing the Bioconductor <em>SummarizedExperiment</em> object as a tidyverse tibble, and provides SummarizedExperiment-compatible <em>dplyr</em>, <em>tidyr</em>, <em>ggplot</em> and <em>plotly</em> functions. This allows users to get the best of both Bioconductor and tidyverse worlds.</p>
+<p>tidySummarizedExperiment provides a bridge between Bioconductor <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">SummarizedExperiment</a> <span class="math display">@<em>m</em><em>o</em><em>r</em><em>g</em><em>a</em><em>n</em>2020<em>s</em><em>u</em><em>m</em><em>m</em><em>a</em><em>r</em><em>i</em><em>z</em><em>e</em><em>d</em></span> and the tidyverse <span class="math display">@<em>w</em><em>i</em><em>c</em><em>k</em><em>h</em><em>a</em><em>m</em>2019<em>w</em><em>e</em><em>l</em><em>c</em><em>o</em><em>m</em><em>e</em></span>. It creates an invisible layer that enables viewing the Bioconductor <em>SummarizedExperiment</em> object as a tidyverse tibble, and provides SummarizedExperiment-compatible <em>dplyr</em>, <em>tidyr</em>, <em>ggplot</em> and <em>plotly</em> functions. This allows users to get the best of both Bioconductor and tidyverse worlds.</p>
 <div id="functionsutilities-available" class="section level2">
 <h2 class="hasAnchor">
 <a href="#functionsutilities-available" class="anchor"></a>Functions/utilities available</h2>
@@ -169,244 +169,244 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>From Bioconductor (under submission)</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>)) {</span>
-<span id="cb1-2"><a href="#cb1-2"></a>      <span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>  }</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"tidySummarizedExperiment"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly=</span><span class="cn">TRUE</span>)) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"tidySummarizedExperiment"</span>)</span></code></pre></div>
 <p>From Github</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"stemangiola/tidySummarizedExperiment"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"stemangiola/tidySummarizedExperiment"</span>)</span></code></pre></div>
 <p>Load libraries used in the examples.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">library</span>(tidySummarizedExperiment)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidySummarizedExperiment)</span></code></pre></div>
 </div>
 </div>
 <div id="create-tidysummarizedexperiment-the-best-of-both-worlds" class="section level1">
 <h1 class="hasAnchor">
 <a href="#create-tidysummarizedexperiment-the-best-of-both-worlds" class="anchor"></a>Create <code>tidySummarizedExperiment</code>, the best of both worlds!</h1>
 <p>This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>pasilla_tidy &lt;-<span class="st"> </span>tidySummarizedExperiment<span class="op">::</span>pasilla <span class="op">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="st">    </span><span class="kw">tidy</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="ot">&lt;-</span> tidySummarizedExperiment<span class="sc">::</span>pasilla <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>()</span></code></pre></div>
 <p><strong>It looks like a tibble</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>pasilla_tidy</span>
-<span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">## # A tibble: 102,193 x 5</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">##    sample condition type       transcript  counts</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">##  1 untrt1 untreated single_end FBgn0000003      0</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">##  2 untrt1 untreated single_end FBgn0000008     92</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">##  3 untrt1 untreated single_end FBgn0000014      5</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">##  4 untrt1 untreated single_end FBgn0000015      0</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">##  5 untrt1 untreated single_end FBgn0000017   4664</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co">##  6 untrt1 untreated single_end FBgn0000018    583</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="co">##  7 untrt1 untreated single_end FBgn0000022      0</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="co">##  8 untrt1 untreated single_end FBgn0000024     10</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="co">##  9 untrt1 untreated single_end FBgn0000028      0</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="co">## 10 untrt1 untreated single_end FBgn0000032   1446</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="co">## # … with 102,183 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 102,193 x 5</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="do">##    sample condition type       feature  counts</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 untrt1 untreated single_end FBgn0000003      0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 untrt1 untreated single_end FBgn0000008     92</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 untrt1 untreated single_end FBgn0000014      5</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 untrt1 untreated single_end FBgn0000015      0</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 untrt1 untreated single_end FBgn0000017   4664</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 untrt1 untreated single_end FBgn0000018    583</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 untrt1 untreated single_end FBgn0000022      0</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 untrt1 untreated single_end FBgn0000024     10</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated single_end FBgn0000028      0</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated single_end FBgn0000032   1446</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 102,183 more rows</span></span></code></pre></div>
 <p><strong>But it is a SummarizedExperiment object after all</strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>pasilla_tidy<span class="op">@</span>assays</span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co">## An object of class "SimpleAssays"</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">## Slot "data":</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">## List of length 1</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">## names(1): counts</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy<span class="sc">@</span>assays</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="do">## An object of class "SimpleAssays"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Slot "data":</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="do">## List of length 1</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="do">## names(1): counts</span></span></code></pre></div>
 </div>
 <div id="tidyverse-commands" class="section level1">
 <h1 class="hasAnchor">
 <a href="#tidyverse-commands" class="anchor"></a>Tidyverse commands</h1>
 <p>We can use tidyverse commands to explore the tidy SummarizedExperiment object.</p>
 <p>We can use <code>slice</code> to choose rows by position, for example to choose the first row.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="st">    </span><span class="kw">slice</span>(<span class="dv">1</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co">## # A tibble: 1 x 5</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co">##   sample condition type       transcript  counts</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">## 1 untrt1 untreated single_end FBgn0000003      0</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 1 x 5</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   sample condition type       feature  counts</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 untrt1 untreated single_end FBgn0000003      0</span></span></code></pre></div>
 <p>We can use <code>filter</code> to choose rows by criteria.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="st">    </span><span class="kw">filter</span>(condition <span class="op">==</span><span class="st"> "untreated"</span>)</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co">## # A tibble: 58,396 x 5</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co">##    sample condition type       transcript  counts</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co">##  1 untrt1 untreated single_end FBgn0000003      0</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co">##  2 untrt1 untreated single_end FBgn0000008     92</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co">##  3 untrt1 untreated single_end FBgn0000014      5</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="co">##  4 untrt1 untreated single_end FBgn0000015      0</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="co">##  5 untrt1 untreated single_end FBgn0000017   4664</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="co">##  6 untrt1 untreated single_end FBgn0000018    583</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="co">##  7 untrt1 untreated single_end FBgn0000022      0</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="co">##  8 untrt1 untreated single_end FBgn0000024     10</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="co">##  9 untrt1 untreated single_end FBgn0000028      0</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="co">## 10 untrt1 untreated single_end FBgn0000032   1446</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="co">## # … with 58,386 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"untreated"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 58,396 x 5</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="do">##    sample condition type       feature  counts</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 untrt1 untreated single_end FBgn0000003      0</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 untrt1 untreated single_end FBgn0000008     92</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 untrt1 untreated single_end FBgn0000014      5</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 untrt1 untreated single_end FBgn0000015      0</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 untrt1 untreated single_end FBgn0000017   4664</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 untrt1 untreated single_end FBgn0000018    583</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 untrt1 untreated single_end FBgn0000022      0</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 untrt1 untreated single_end FBgn0000024     10</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated single_end FBgn0000028      0</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated single_end FBgn0000032   1446</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 58,386 more rows</span></span></code></pre></div>
 <p>We can use <code>select</code> to choose columns.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="st">    </span><span class="kw">select</span>(sample)</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co">## # A tibble: 102,193 x 1</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="co">##    sample</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co">##    &lt;chr&gt; </span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="co">##  1 untrt1</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="co">##  2 untrt1</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="co">##  3 untrt1</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="co">##  4 untrt1</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="co">##  5 untrt1</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="co">##  6 untrt1</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a><span class="co">##  7 untrt1</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a><span class="co">##  8 untrt1</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a><span class="co">##  9 untrt1</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a><span class="co">## 10 untrt1</span></span>
-<span id="cb9-17"><a href="#cb9-17"></a><span class="co">## # … with 102,183 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(sample)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 102,193 x 1</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="do">##    sample</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt; </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 untrt1</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 untrt1</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 untrt1</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 untrt1</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 untrt1</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 untrt1</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 untrt1</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 untrt1</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 102,183 more rows</span></span></code></pre></div>
 <p>We can use <code>count</code> to count how many rows we have for each sample.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="st">    </span><span class="kw">count</span>(sample)</span>
-<span id="cb10-3"><a href="#cb10-3"></a></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">## # A tibble: 7 x 2</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">##   sample     n</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">##   &lt;chr&gt;  &lt;int&gt;</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">## 1 trt1   14599</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="co">## 2 trt2   14599</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="co">## 3 trt3   14599</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co">## 4 untrt1 14599</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a><span class="co">## 5 untrt2 14599</span></span>
-<span id="cb10-12"><a href="#cb10-12"></a><span class="co">## 6 untrt3 14599</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a><span class="co">## 7 untrt4 14599</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(sample)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 x 2</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   sample     n</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;  &lt;int&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 trt1   14599</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 trt2   14599</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 trt3   14599</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 untrt1 14599</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 untrt2 14599</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 untrt3 14599</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 untrt4 14599</span></span></code></pre></div>
 <p>We can use <code>distinct</code> to see what distinct sample information we have.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="st">    </span><span class="kw">distinct</span>(sample, condition, type)</span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="co">## # A tibble: 7 x 3</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="co">##   sample condition type      </span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="co">##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     </span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">## 1 untrt1 untreated single_end</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="co">## 2 untrt2 untreated single_end</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">## 3 untrt3 untreated paired_end</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="co">## 4 untrt4 untreated paired_end</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="co">## 5 trt1   treated   single_end</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="co">## 6 trt2   treated   paired_end</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a><span class="co">## 7 trt3   treated   paired_end</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(sample, condition, type)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 x 3</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   sample condition type      </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 untrt1 untreated single_end</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 untrt2 untreated single_end</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 untrt3 untreated paired_end</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 untrt4 untreated paired_end</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 trt1   treated   single_end</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 trt2   treated   paired_end</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 trt3   treated   paired_end</span></span></code></pre></div>
 <p>We could use <code>rename</code> to rename a column. For example, to modify the type column name.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="st">    </span><span class="kw">rename</span>(<span class="dt">sequencing=</span>type)</span>
-<span id="cb12-3"><a href="#cb12-3"></a></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="co">## # A tibble: 102,193 x 5</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="co">##    sample condition sequencing transcript  counts</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="co">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="co">##  1 untrt1 untreated single_end FBgn0000003      0</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="co">##  2 untrt1 untreated single_end FBgn0000008     92</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="co">##  3 untrt1 untreated single_end FBgn0000014      5</span></span>
-<span id="cb12-10"><a href="#cb12-10"></a><span class="co">##  4 untrt1 untreated single_end FBgn0000015      0</span></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="co">##  5 untrt1 untreated single_end FBgn0000017   4664</span></span>
-<span id="cb12-12"><a href="#cb12-12"></a><span class="co">##  6 untrt1 untreated single_end FBgn0000018    583</span></span>
-<span id="cb12-13"><a href="#cb12-13"></a><span class="co">##  7 untrt1 untreated single_end FBgn0000022      0</span></span>
-<span id="cb12-14"><a href="#cb12-14"></a><span class="co">##  8 untrt1 untreated single_end FBgn0000024     10</span></span>
-<span id="cb12-15"><a href="#cb12-15"></a><span class="co">##  9 untrt1 untreated single_end FBgn0000028      0</span></span>
-<span id="cb12-16"><a href="#cb12-16"></a><span class="co">## 10 untrt1 untreated single_end FBgn0000032   1446</span></span>
-<span id="cb12-17"><a href="#cb12-17"></a><span class="co">## # … with 102,183 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">sequencing=</span>type)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 102,193 x 5</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="do">##    sample condition sequencing feature  counts</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 untrt1 untreated single_end FBgn0000003      0</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 untrt1 untreated single_end FBgn0000008     92</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 untrt1 untreated single_end FBgn0000014      5</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 untrt1 untreated single_end FBgn0000015      0</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 untrt1 untreated single_end FBgn0000017   4664</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 untrt1 untreated single_end FBgn0000018    583</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 untrt1 untreated single_end FBgn0000022      0</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 untrt1 untreated single_end FBgn0000024     10</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated single_end FBgn0000028      0</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated single_end FBgn0000032   1446</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 102,183 more rows</span></span></code></pre></div>
 <p>We could use <code>mutate</code> to create a column. For example, we could create a new type column that contains single and paired instead of single_end and paired_end.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">type=</span><span class="kw">gsub</span>(<span class="st">"_end"</span>, <span class="st">""</span>, type))</span>
-<span id="cb13-3"><a href="#cb13-3"></a></span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="co">## # A tibble: 102,193 x 5</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="co">##    sample condition type   transcript  counts</span></span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="co">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;        &lt;int&gt;</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a><span class="co">##  1 untrt1 untreated single FBgn0000003      0</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a><span class="co">##  2 untrt1 untreated single FBgn0000008     92</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a><span class="co">##  3 untrt1 untreated single FBgn0000014      5</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a><span class="co">##  4 untrt1 untreated single FBgn0000015      0</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a><span class="co">##  5 untrt1 untreated single FBgn0000017   4664</span></span>
-<span id="cb13-12"><a href="#cb13-12"></a><span class="co">##  6 untrt1 untreated single FBgn0000018    583</span></span>
-<span id="cb13-13"><a href="#cb13-13"></a><span class="co">##  7 untrt1 untreated single FBgn0000022      0</span></span>
-<span id="cb13-14"><a href="#cb13-14"></a><span class="co">##  8 untrt1 untreated single FBgn0000024     10</span></span>
-<span id="cb13-15"><a href="#cb13-15"></a><span class="co">##  9 untrt1 untreated single FBgn0000028      0</span></span>
-<span id="cb13-16"><a href="#cb13-16"></a><span class="co">## 10 untrt1 untreated single FBgn0000032   1446</span></span>
-<span id="cb13-17"><a href="#cb13-17"></a><span class="co">## # … with 102,183 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type=</span><span class="fu">gsub</span>(<span class="st">"_end"</span>, <span class="st">""</span>, type))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 102,193 x 5</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="do">##    sample condition type   feature  counts</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 untrt1 untreated single FBgn0000003      0</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 untrt1 untreated single FBgn0000008     92</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 untrt1 untreated single FBgn0000014      5</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 untrt1 untreated single FBgn0000015      0</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 untrt1 untreated single FBgn0000017   4664</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 untrt1 untreated single FBgn0000018    583</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 untrt1 untreated single FBgn0000022      0</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 untrt1 untreated single FBgn0000024     10</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated single FBgn0000028      0</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated single FBgn0000032   1446</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 102,183 more rows</span></span></code></pre></div>
 <p>We could use <code>unite</code> to combine multiple columns.into a single column.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="st">    </span><span class="kw">unite</span>(<span class="st">"group"</span>, <span class="kw">c</span>(condition, type))</span>
-<span id="cb14-3"><a href="#cb14-3"></a></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="co">## # A tibble: 102,193 x 4</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="co">##    sample group                transcript  counts</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="co">##    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;        &lt;int&gt;</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a><span class="co">##  1 untrt1 untreated_single_end FBgn0000003      0</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a><span class="co">##  2 untrt1 untreated_single_end FBgn0000008     92</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a><span class="co">##  3 untrt1 untreated_single_end FBgn0000014      5</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a><span class="co">##  4 untrt1 untreated_single_end FBgn0000015      0</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a><span class="co">##  5 untrt1 untreated_single_end FBgn0000017   4664</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a><span class="co">##  6 untrt1 untreated_single_end FBgn0000018    583</span></span>
-<span id="cb14-13"><a href="#cb14-13"></a><span class="co">##  7 untrt1 untreated_single_end FBgn0000022      0</span></span>
-<span id="cb14-14"><a href="#cb14-14"></a><span class="co">##  8 untrt1 untreated_single_end FBgn0000024     10</span></span>
-<span id="cb14-15"><a href="#cb14-15"></a><span class="co">##  9 untrt1 untreated_single_end FBgn0000028      0</span></span>
-<span id="cb14-16"><a href="#cb14-16"></a><span class="co">## 10 untrt1 untreated_single_end FBgn0000032   1446</span></span>
-<span id="cb14-17"><a href="#cb14-17"></a><span class="co">## # … with 102,183 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unite</span>(<span class="st">"group"</span>, <span class="fu">c</span>(condition, type))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 102,193 x 4</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="do">##    sample group                feature  counts</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 untrt1 untreated_single_end FBgn0000003      0</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 untrt1 untreated_single_end FBgn0000008     92</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 untrt1 untreated_single_end FBgn0000014      5</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 untrt1 untreated_single_end FBgn0000015      0</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 untrt1 untreated_single_end FBgn0000017   4664</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 untrt1 untreated_single_end FBgn0000018    583</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 untrt1 untreated_single_end FBgn0000022      0</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 untrt1 untreated_single_end FBgn0000024     10</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated_single_end FBgn0000028      0</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated_single_end FBgn0000032   1446</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 102,183 more rows</span></span></code></pre></div>
 <p>We can also combine commands with the tidyverse pipe <code><a href="reference/%&gt;%.html">%&gt;%</a></code>.</p>
 <p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="st">    </span><span class="kw">group_by</span>(sample) <span class="op">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">total_counts=</span><span class="kw">sum</span>(counts))</span>
-<span id="cb15-4"><a href="#cb15-4"></a></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="co">## # A tibble: 7 x 2</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="co">##   sample total_counts</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a><span class="co">##   &lt;chr&gt;         &lt;int&gt;</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="co">## 1 trt1       18670279</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="co">## 2 trt2        9571826</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co">## 3 trt3       10343856</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="co">## 4 untrt1     13972512</span></span>
-<span id="cb15-12"><a href="#cb15-12"></a><span class="co">## 5 untrt2     21911438</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a><span class="co">## 6 untrt3      8358426</span></span>
-<span id="cb15-14"><a href="#cb15-14"></a><span class="co">## 7 untrt4      9841335</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(sample) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">total_counts=</span><span class="fu">sum</span>(counts))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 x 2</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="do">##   sample total_counts</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;         &lt;int&gt;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 trt1       18670279</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 trt2        9571826</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 trt3       10343856</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 untrt1     13972512</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 untrt2     21911438</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 untrt3      8358426</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 untrt4      9841335</span></span></code></pre></div>
 <p>We could combine <code>group_by</code>, <code>mutate</code> and <code>filter</code> to get the transcripts with mean count &gt; 0.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="st">    </span><span class="kw">group_by</span>(transcript) <span class="op">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">mean_count=</span><span class="kw">mean</span>(counts)) <span class="op">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="st">    </span><span class="kw">filter</span>(mean_count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
-<span id="cb16-5"><a href="#cb16-5"></a></span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="co">## # A tibble: 86,513 x 6</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a><span class="co">## # Groups:   transcript [12,359]</span></span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="co">##    sample condition type       transcript  counts mean_count</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="co">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;</span></span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="co">##  1 untrt1 untreated single_end FBgn0000003      0      0.143</span></span>
-<span id="cb16-11"><a href="#cb16-11"></a><span class="co">##  2 untrt1 untreated single_end FBgn0000008     92     99.6  </span></span>
-<span id="cb16-12"><a href="#cb16-12"></a><span class="co">##  3 untrt1 untreated single_end FBgn0000014      5      1.43 </span></span>
-<span id="cb16-13"><a href="#cb16-13"></a><span class="co">##  4 untrt1 untreated single_end FBgn0000015      0      0.857</span></span>
-<span id="cb16-14"><a href="#cb16-14"></a><span class="co">##  5 untrt1 untreated single_end FBgn0000017   4664   4672.   </span></span>
-<span id="cb16-15"><a href="#cb16-15"></a><span class="co">##  6 untrt1 untreated single_end FBgn0000018    583    461.   </span></span>
-<span id="cb16-16"><a href="#cb16-16"></a><span class="co">##  7 untrt1 untreated single_end FBgn0000022      0      0.143</span></span>
-<span id="cb16-17"><a href="#cb16-17"></a><span class="co">##  8 untrt1 untreated single_end FBgn0000024     10      7    </span></span>
-<span id="cb16-18"><a href="#cb16-18"></a><span class="co">##  9 untrt1 untreated single_end FBgn0000028      0      0.429</span></span>
-<span id="cb16-19"><a href="#cb16-19"></a><span class="co">## 10 untrt1 untreated single_end FBgn0000032   1446   1085.   </span></span>
-<span id="cb16-20"><a href="#cb16-20"></a><span class="co">## # … with 86,503 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">mean_count=</span><span class="fu">mean</span>(counts)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(mean_count <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 86,513 x 6</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="do">## # Groups:   feature [12,359]</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="do">##    sample condition type       feature  counts mean_count</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 untrt1 untreated single_end FBgn0000003      0      0.143</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 untrt1 untreated single_end FBgn0000008     92     99.6  </span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 untrt1 untreated single_end FBgn0000014      5      1.43 </span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 untrt1 untreated single_end FBgn0000015      0      0.857</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 untrt1 untreated single_end FBgn0000017   4664   4672.   </span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 untrt1 untreated single_end FBgn0000018    583    461.   </span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 untrt1 untreated single_end FBgn0000022      0      0.143</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 untrt1 untreated single_end FBgn0000024     10      7    </span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated single_end FBgn0000028      0      0.429</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated single_end FBgn0000032   1446   1085.   </span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 86,503 more rows</span></span></code></pre></div>
 <div id="plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>my_theme &lt;-</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="st">    </span><span class="kw">list</span>(</span>
-<span id="cb17-3"><a href="#cb17-3"></a>        <span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">"Set1"</span>),</span>
-<span id="cb17-4"><a href="#cb17-4"></a>        <span class="kw">scale_color_brewer</span>(<span class="dt">palette=</span><span class="st">"Set1"</span>),</span>
-<span id="cb17-5"><a href="#cb17-5"></a>        <span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a><span class="st">            </span><span class="kw">theme</span>(</span>
-<span id="cb17-7"><a href="#cb17-7"></a>                <span class="dt">panel.border=</span><span class="kw">element_blank</span>(),</span>
-<span id="cb17-8"><a href="#cb17-8"></a>                <span class="dt">axis.line=</span><span class="kw">element_line</span>(),</span>
-<span id="cb17-9"><a href="#cb17-9"></a>                <span class="dt">panel.grid.major=</span><span class="kw">element_line</span>(<span class="dt">size=</span><span class="fl">0.2</span>),</span>
-<span id="cb17-10"><a href="#cb17-10"></a>                <span class="dt">panel.grid.minor=</span><span class="kw">element_line</span>(<span class="dt">size=</span><span class="fl">0.1</span>),</span>
-<span id="cb17-11"><a href="#cb17-11"></a>                <span class="dt">text=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">12</span>),</span>
-<span id="cb17-12"><a href="#cb17-12"></a>                <span class="dt">legend.position=</span><span class="st">"bottom"</span>,</span>
-<span id="cb17-13"><a href="#cb17-13"></a>                <span class="dt">aspect.ratio=</span><span class="dv">1</span>,</span>
-<span id="cb17-14"><a href="#cb17-14"></a>                <span class="dt">strip.background=</span><span class="kw">element_blank</span>(),</span>
-<span id="cb17-15"><a href="#cb17-15"></a>                <span class="dt">axis.title.x=</span><span class="kw">element_text</span>(<span class="dt">margin=</span><span class="kw">margin</span>(<span class="dt">t=</span><span class="dv">10</span>, <span class="dt">r=</span><span class="dv">10</span>, <span class="dt">b=</span><span class="dv">10</span>, <span class="dt">l=</span><span class="dv">10</span>)),</span>
-<span id="cb17-16"><a href="#cb17-16"></a>                <span class="dt">axis.title.y=</span><span class="kw">element_text</span>(<span class="dt">margin=</span><span class="kw">margin</span>(<span class="dt">t=</span><span class="dv">10</span>, <span class="dt">r=</span><span class="dv">10</span>, <span class="dt">b=</span><span class="dv">10</span>, <span class="dt">l=</span><span class="dv">10</span>))</span>
-<span id="cb17-17"><a href="#cb17-17"></a>            )</span>
-<span id="cb17-18"><a href="#cb17-18"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_theme <span class="ot">&lt;-</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Set1"</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_brewer</span>(<span class="at">palette=</span><span class="st">"Set1"</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">theme</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">panel.border=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">axis.line=</span><span class="fu">element_line</span>(),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">size=</span><span class="fl">0.2</span>),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">panel.grid.minor=</span><span class="fu">element_line</span>(<span class="at">size=</span><span class="fl">0.1</span>),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">aspect.ratio=</span><span class="dv">1</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">strip.background=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">axis.title.x=</span><span class="fu">element_text</span>(<span class="at">margin=</span><span class="fu">margin</span>(<span class="at">t=</span><span class="dv">10</span>, <span class="at">r=</span><span class="dv">10</span>, <span class="at">b=</span><span class="dv">10</span>, <span class="at">l=</span><span class="dv">10</span>)),</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">axis.title.y=</span><span class="fu">element_text</span>(<span class="at">margin=</span><span class="fu">margin</span>(<span class="at">t=</span><span class="dv">10</span>, <span class="at">r=</span><span class="dv">10</span>, <span class="at">b=</span><span class="dv">10</span>, <span class="at">l=</span><span class="dv">10</span>))</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 <p>We can treat <code>pasilla_tidy</code> as a normal tibble for plotting.</p>
 <p>Here we plot the distribution of counts per sample.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>pasilla_tidy <span class="op">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="st">    </span>tidySummarizedExperiment<span class="op">::</span><span class="kw">ggplot</span>(<span class="kw">aes</span>(counts <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">group=</span>sample, <span class="dt">color=</span><span class="st">`</span><span class="dt">type</span><span class="st">`</span>)) <span class="op">+</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="st">    </span><span class="kw">geom_density</span>() <span class="op">+</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="st">    </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="st">    </span>my_theme</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    tidySummarizedExperiment<span class="sc">::</span><span class="fu">ggplot</span>(<span class="fu">aes</span>(counts <span class="sc">+</span> <span class="dv">1</span>, <span class="at">group=</span>sample, <span class="at">color=</span><span class="st">`</span><span class="at">type</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    my_theme</span></code></pre></div>
 <p><img src="reference/figures/plot1-1.png"><!-- --></p>
 </div>
 </div>

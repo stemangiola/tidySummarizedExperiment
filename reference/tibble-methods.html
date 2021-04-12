@@ -40,18 +40,8 @@
 
 
 <meta property="og:title" content="Coerce lists, matrices, and more to data frames — as_tibble" />
-<meta property="og:description" content="`r lifecycle::badge(&quot;maturing&quot;)`
-`as_tibble()` turns an existing object, such as a data frame or
-matrix, into a so-called tibble, a data frame with class [`tbl_df`]. This is
-in contrast with [tibble()], which builds a tibble from individual columns.
-`as_tibble()` is to [`tibble()`] as [base::as.data.frame()] is to
-[base::data.frame()].
-`as_tibble()` is an S3 generic, with methods for:
-* [`data.frame`][base::data.frame()]: Thin wrapper around the `list` method
-  that implements tibble's treatment of [rownames].
-* [`matrix`][methods::matrix-class], [`poly`][stats::poly()],
-  [`ts`][stats::ts()], [`table`][base::table()]
-* Default: Other inputs are first coerced with [base::as.data.frame()]." />
+<meta property="og:description" content="
+as_tibble() turns a SummarizedExperiment existing object into a so-called tibble, a data frame with class tbl_df." />
 
 
 
@@ -83,7 +73,7 @@ in contrast with [tibble()], which builds a tibble from individual columns.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -132,18 +122,8 @@ in contrast with [tibble()], which builds a tibble from individual columns.
     </div>
 
     <div class="ref-description">
-    <p>`r lifecycle::badge("maturing")`</p>
-<p>`as_tibble()` turns an existing object, such as a data frame or
-matrix, into a so-called tibble, a data frame with class [`tbl_df`]. This is
-in contrast with [tibble()], which builds a tibble from individual columns.
-`as_tibble()` is to [`tibble()`] as [base::as.data.frame()] is to
-[base::data.frame()].</p>
-<p>`as_tibble()` is an S3 generic, with methods for:
-* [`data.frame`][base::data.frame()]: Thin wrapper around the `list` method
-  that implements tibble's treatment of [rownames].
-* [`matrix`][methods::matrix-class], [`poly`][stats::poly()],
-  [`ts`][stats::ts()], [`table`][base::table()]
-* Default: Other inputs are first coerced with [base::as.data.frame()].</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a></p>
+<p><code>as_tibble()</code> turns a SummarizedExperiment existing object into a so-called tibble, a data frame with class <code>tbl_df</code>.</p>
     </div>
 
 
@@ -152,73 +132,55 @@ in contrast with [tibble()], which builds a tibble from individual columns.
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A data frame, list, matrix, or other object that could reasonably be
-coerced to a tibble.</p></td>
+      <td><p>A <code>SummarizedExperiment</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Unused, for extensibility.</p></td>
-    </tr>
-    <tr>
-      <th>rownames</th>
-      <td><p>How to treat existing row names of a data frame or matrix:
- * `NULL`: remove row names. This is the default.
- * `NA`: keep row names.
- * A string: the name of a new column. Existing rownames are transferred
-   into this column and the `row.names` attribute is deleted.
-Read more in [rownames].</p></td>
-    </tr>
-    <tr>
-      <th>.name_repair</th>
-      <td><p>see tidyr</p>
-<p>For compatibility only, do not use for new code.</p></td>
+      <td><p>This parameter includes <code>.subset</code> that can be set to any tidyselect expression. For example .subset = c(sample, type), or .subset = contains("PC").</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A tibble</p>
-    <h2 class="hasAnchor" id="row-names"><a class="anchor" href="#row-names"></a>Row names</h2>
-
-    
-
-<p>The default behaviour is to silently remove row names.</p>
-<p>New code should explicitly convert row names to a new column using the
-`rownames` argument.</p>
-<p>For existing code that relies on the retention of row names, call
-`pkgconfig::set_config("tibble::rownames"=NA)` in your script or in your
-package's [.onLoad()]  function.</p>
-    <h2 class="hasAnchor" id="life-cycle"><a class="anchor" href="#life-cycle"></a>Life cycle</h2>
-
-    
-
-<p>Using `as_tibble()` for vectors is superseded as of version 3.0.0,
-prefer the more expressive maturing `as_tibble_row()` and
-`as_tibble_col()` variants for new code.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>[tibble()] constructs a tibble from individual columns. [enframe()]
-  converts a named vector to a tibble with a column of names and column of
-  values. Name repair is implemented using [vctrs::vec_as_names()].</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
-    
+    <pre class="examples"><div class='input'>
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 102,193 x 5</span><span>
-#&gt;    transcript  sample counts condition type      
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
-#&gt; </span><span style='color: #949494;'># … with 102,183 more rows</span><span></div></span></pre>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 102,193 x 5</span><span>
+#&gt;    feature     sample counts condition type      
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92 untreated single_end
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5 untreated single_end
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664 untreated single_end
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583 untreated single_end
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10 untreated single_end
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0 untreated single_end
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446 untreated single_end
+#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'>    
+<span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
+    <span class='fu'>as_tibble</span><span class='op'>(</span>.subset <span class='op'>=</span> <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>condition</span>, <span class='va'>type</span><span class='op'>)</span><span class='op'>)</span>     
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 102,193 x 3</span><span>
+#&gt;    feature     sample counts
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> FBgn0000003 untrt1      0
+#&gt; </span><span style='color: #555555;'> 2</span><span> FBgn0000008 untrt1     92
+#&gt; </span><span style='color: #555555;'> 3</span><span> FBgn0000014 untrt1      5
+#&gt; </span><span style='color: #555555;'> 4</span><span> FBgn0000015 untrt1      0
+#&gt; </span><span style='color: #555555;'> 5</span><span> FBgn0000017 untrt1   </span><span style='text-decoration: underline;'>4</span><span>664
+#&gt; </span><span style='color: #555555;'> 6</span><span> FBgn0000018 untrt1    583
+#&gt; </span><span style='color: #555555;'> 7</span><span> FBgn0000022 untrt1      0
+#&gt; </span><span style='color: #555555;'> 8</span><span> FBgn0000024 untrt1     10
+#&gt; </span><span style='color: #555555;'> 9</span><span> FBgn0000028 untrt1      0
+#&gt; </span><span style='color: #555555;'>10</span><span> FBgn0000032 untrt1   </span><span style='text-decoration: underline;'>1</span><span>446
+#&gt; </span><span style='color: #555555;'># … with 102,183 more rows</span><span></div><div class='input'>    
+    
+    
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

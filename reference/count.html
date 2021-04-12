@@ -40,14 +40,14 @@
 
 
 <meta property="og:title" content="Count observations by group — count" />
-<meta property="og:description" content="`count()` lets you quickly count the unique values of one or more variables:
-`df 
-`df 
-`count()` is paired with `tally()`, a lower-level helper that is equivalent
-to `df 
-switching the summary from `n=n()` to `n=sum(wt)`.
-`add_count()` are `add_tally()` are equivalents to `count()` and `tally()`
-but use `mutate()` instead of `summarise()` so that they add a new column
+<meta property="og:description" content="count() lets you quickly count the unique values of one or more variables:
+df %&amp;gt;% count(a, b) is roughly equivalent to
+df %&amp;gt;% group_by(a, b) %&amp;gt;% summarise(n=n()).
+count() is paired with tally(), a lower-level helper that is equivalent
+to df %&amp;gt;% summarise(n=n()). Supply wt to perform weighted counts,
+switching the summary from n=n() to n=sum(wt).
+add_count() are add_tally() are equivalents to count() and tally()
+but use mutate() instead of summarise() so that they add a new column
 with group-wise counts." />
 
 
@@ -80,7 +80,7 @@ with group-wise counts." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -129,14 +129,14 @@ with group-wise counts." />
     </div>
 
     <div class="ref-description">
-    <p>`count()` lets you quickly count the unique values of one or more variables:
-`df <!-- %&gt;% count(a, b)` is roughly equivalent to -->
-`df <!-- %&gt;% group_by(a, b) %&gt;% summarise(n=n())`. -->
-`count()` is paired with `tally()`, a lower-level helper that is equivalent
-to `df <!-- %&gt;% summarise(n=n())`. Supply `wt` to perform weighted counts, -->
-switching the summary from `n=n()` to `n=sum(wt)`.</p>
-<p>`add_count()` are `add_tally()` are equivalents to `count()` and `tally()`
-but use `mutate()` instead of `summarise()` so that they add a new column
+    <p><code>count()</code> lets you quickly count the unique values of one or more variables:
+<code>df %&gt;% count(a, b)</code> is roughly equivalent to
+<code>df %&gt;% group_by(a, b) %&gt;% summarise(n=n())</code>.
+<code>count()</code> is paired with <code>tally()</code>, a lower-level helper that is equivalent
+to <code>df %&gt;% summarise(n=n())</code>. Supply <code>wt</code> to perform weighted counts,
+switching the summary from <code>n=n()</code> to <code>n=sum(wt)</code>.</p>
+<p><code>add_count()</code> are <code>add_tally()</code> are equivalents to <code>count()</code> and <code>tally()</code>
+but use <code><a href='bind_rows.html'>mutate()</a></code> instead of <code><a href='bind_rows.html'>summarise()</a></code> so that they add a new column
 with group-wise counts.</p>
     </div>
 
@@ -159,36 +159,37 @@ lazy data frame (e.g. from dbplyr or dtplyr).</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>&lt;[`data-masking`][dplyr_data_masking]&gt; Variables to group by.</p></td>
+      <td><p>&lt;<code>data-masking</code>&gt; Variables to group by.</p></td>
     </tr>
     <tr>
       <th>wt</th>
-      <td><p>&lt;[`data-masking`][dplyr_data_masking]&gt; Frequency weights.
-  Can be `NULL` or a variable:</p>
-<p>* If `NULL` (the default), counts the number of rows in each group.
-  * If a variable, computes `sum(wt)` for each group.</p></td>
+      <td><p>&lt;<code>data-masking</code>&gt; Frequency weights.
+Can be <code>NULL</code> or a variable:</p><ul>
+<li><p>If <code>NULL</code> (the default), counts the number of rows in each group.</p></li>
+<li><p>If a variable, computes <code><a href='https://rdrr.io/r/base/sum.html'>sum(wt)</a></code> for each group.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>sort</th>
-      <td><p>If `TRUE`, will show the largest groups at the top.</p></td>
+      <td><p>If <code>TRUE</code>, will show the largest groups at the top.</p></td>
     </tr>
     <tr>
       <th>name</th>
       <td><p>The name of the new column in the output.</p>
-<p>If omitted, it will default to `n`. If there's already a column called `n`,
-  it will error, and require you to specify the name.</p></td>
+<p>If omitted, it will default to <code>n</code>. If there's already a column called <code>n</code>,
+it will error, and require you to specify the name.</p></td>
     </tr>
     <tr>
       <th>.drop</th>
-      <td><p>For `count()`: if `FALSE` will include counts for empty groups
+      <td><p>For <code>count()</code>: if <code>FALSE</code> will include counts for empty groups
 (i.e. for levels of factors that don't exist in the data). Deprecated in
-`add_count()` since it didn't actually affect the output.</p></td>
+<code>add_count()</code> since it didn't actually affect the output.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of the same type as `.data`. `count()` and `add_count()`
+    <p>An object of the same type as <code>.data</code>. <code>count()</code> and <code>add_count()</code>
 group transiently, so the output has the same groups as the input.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -197,16 +198,16 @@ group transiently, so the output has the same groups as the input.</p>
 <span class='fu'>tidySummarizedExperiment</span><span class='fu'>::</span><span class='va'><a href='pasilla.html'>pasilla</a></span> <span class='op'>%&gt;%</span>
     
     <span class='fu'>count</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 7 x 2</span><span>
+</div><div class='output co'>#&gt; <span class='message'>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 7 x 2</span><span>
 #&gt;   sample     n
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> trt1   </span><span style='text-decoration: underline;'>14</span><span>599
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> trt2   </span><span style='text-decoration: underline;'>14</span><span>599
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> trt3   </span><span style='text-decoration: underline;'>14</span><span>599
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> untrt1 </span><span style='text-decoration: underline;'>14</span><span>599
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> untrt2 </span><span style='text-decoration: underline;'>14</span><span>599
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> untrt3 </span><span style='text-decoration: underline;'>14</span><span>599
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> untrt4 </span><span style='text-decoration: underline;'>14</span><span>599</div></span></pre>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> trt1   </span><span style='text-decoration: underline;'>14</span><span>599
+#&gt; </span><span style='color: #555555;'>2</span><span> trt2   </span><span style='text-decoration: underline;'>14</span><span>599
+#&gt; </span><span style='color: #555555;'>3</span><span> trt3   </span><span style='text-decoration: underline;'>14</span><span>599
+#&gt; </span><span style='color: #555555;'>4</span><span> untrt1 </span><span style='text-decoration: underline;'>14</span><span>599
+#&gt; </span><span style='color: #555555;'>5</span><span> untrt2 </span><span style='text-decoration: underline;'>14</span><span>599
+#&gt; </span><span style='color: #555555;'>6</span><span> untrt3 </span><span style='text-decoration: underline;'>14</span><span>599
+#&gt; </span><span style='color: #555555;'>7</span><span> untrt4 </span><span style='text-decoration: underline;'>14</span><span>599</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
