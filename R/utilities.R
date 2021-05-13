@@ -520,12 +520,12 @@ get_special_datasets <- function(SummarizedExperiment_object) {
           # If transcript_column exists all good 
           when(
             !is.null(transcript_column) ~  tibble::as_tibble(.) %>%
-              eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              rename(feature := !!transcript_column) ,
+              #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
+              mutate(feature := !!transcript_column[1]) ,
             
             # If transcript_column is NULL add numeric column
             ~ tibble::as_tibble(.) %>%
-              eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
+              #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
               rowid_to_column(var = "feature") %>%
               mutate(feature = as.character(feature))
             ) %>%

@@ -91,7 +91,7 @@ as_tibble.SummarizedExperiment <- function(x, ...,
         count_info %>%
         left_join(sample_info, by="sample") %>%
         left_join(gene_info, by="feature") %>%
-        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="feature"), ~ (.)) ,
+        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) ,
       ~ subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
     )
   
