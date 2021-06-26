@@ -125,8 +125,8 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
 
             # If the column added are not sample-wise or feature-wise return tibble
             (colnames(tts[[2]]) %in% c(
-                get_subset_columns(., sample),
-                get_subset_columns(., feature)
+                get_subset_columns(., !!sample_symbol),
+                get_subset_columns(., !!feature_symbol)
             )
             ) %>% all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
 
@@ -168,7 +168,7 @@ bind_cols.SummarizedExperiment <- bind_cols_
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     distinct(sample)
+#'     distinct(.sample)
 #' @export
 NULL
 
@@ -253,7 +253,7 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     filter(sample == "untrt1")
+#'     filter(.sample == "untrt1")
 #'
 #' # Learn more in ?dplyr_tidy_eval
 #' @export
@@ -262,6 +262,7 @@ NULL
 #' @inheritParams filter
 #' @export
 filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
+
     new_meta <- .data %>%
         as_tibble(skip_GRanges = T) %>%
         dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
@@ -272,8 +273,8 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 
             # If rectangular
             is_rectangular(.) ~ .data[
-                unique(.$feature),
-                unique(.$sample)
+                unique(pull(.,!!feature_symbol)),
+                unique(pull(.,!!sample_symbol))
             ],
 
             # If not rectangular return just tibble
@@ -327,7 +328,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     group_by(sample)
+#'     group_by(.sample)
 #' @export
 NULL
 
@@ -530,7 +531,6 @@ NULL
 #'
 #' @export
 mutate.SummarizedExperiment <- function(.data, ...) {
-
     # Check that we are not modifying a key column
     cols <- enquos(...) %>% names()
     
@@ -1046,7 +1046,7 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     select(sample, feature, counts)
+#'     select(.sample, .feature, counts)
 #' @family single table verbs
 #'
 #' @rdname dplyr-methods
@@ -1201,7 +1201,7 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #' `%>%` <- magrittr::`%>%`
 #' tidySummarizedExperiment::pasilla %>%
 #'     
-#'     count(sample)
+#'     count(.sample)
 count <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     UseMethod("count")
 }

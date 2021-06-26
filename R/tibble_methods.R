@@ -59,12 +59,8 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     change_reserved_column_names() %>%
   
     # Convert to tibble
-    tibble::as_tibble(rownames="sample")
+    tibble::as_tibble(rownames=sample_name)
   
-  # range_info =
-  #     x@rowRanges %>%
-  #     as.data.frame %>%
-  #     tibble::as_tibble(rownames="feature")
   range_info <-
     skip_GRanges %>%
     when(
@@ -80,7 +76,7 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     change_reserved_column_names() %>%
   
     # Convert to tibble
-    tibble::as_tibble(rownames="feature") 
+    tibble::as_tibble(rownames=feature_name) 
   
   count_info <- get_count_datasets(x)
   
@@ -89,8 +85,8 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     when(
       quo_is_null(.) ~ 
         count_info %>%
-        left_join(sample_info, by="sample") %>%
-        left_join(gene_info, by="feature") %>%
+        left_join(sample_info, by=sample_name) %>%
+        left_join(gene_info, by=feature_name) %>%
         when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) ,
       ~ subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
     )

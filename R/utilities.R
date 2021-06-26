@@ -287,9 +287,9 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
                 }, ~ (.)) %>%
                 as.matrix() %>%
                 data.frame() %>%
-                as_tibble(rownames="feature") %>%
+                as_tibble(rownames=feature_name) %>%
                 tidyr::pivot_longer(
-                    cols=-feature,
+                    cols=-!!feature_symbol,
                     names_to="cell",
                     values_to="abundance" %>% paste(.y, sep="_"),
                     values_drop_na=TRUE
@@ -297,7 +297,7 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
             # %>%
             # mutate_if(is.character, as.factor) %>%
         ) %>%
-        Reduce(function(...) left_join(..., by=c("feature", "cell")), .)
+        Reduce(function(...) left_join(..., by=c(feature_name, "cell")), .)
 }
 
 #' @importFrom methods .hasSlot
@@ -321,22 +321,22 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
     # Get the colnames of samples and feature datasets
     colnames_col <- 
       colnames(colData(.data)) %>% 
-      c("sample") %>%
+      c(sample_name) %>%
       
       # Forcefully add the column I know the source. This is useful in nesting 
       # where a unique value cannot be linked to sample or feature
-      c(names(column_belonging[column_belonging=="sample"]))
+      c(names(column_belonging[column_belonging==sample_name]))
     
     colnames_row <- .data %>%
       when(
         .hasSlot(., "rowData") | .hasSlot(., "elementMetadata") ~ colnames(rowData(.)), 
         TRUE ~ c()
       ) %>% 
-      c("feature") %>%
+      c(feature_name) %>%
       
       # Forcefully add the column I know the source. This is useful in nesting 
       # where a unique value cannot be linked to sample or feature
-      c(names(column_belonging[column_belonging=="feature"]))
+      c(names(column_belonging[column_belonging==feature_name]))
     
     col_data <-
         .data_mutated %>%
@@ -345,8 +345,8 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
         select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
         # Replace for subset
-        select(sample, 
-            get_subset_columns(., sample) %>%
+        select(!!sample_symbol, 
+            get_subset_columns(., !!sample_symbol) %>%
                  
            # Eliminate feature column
              setdiff(colnames_row)
@@ -356,8 +356,8 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
 
         # In case unitary SE subset does not work
         select_if(!colnames(.) %in% colnames_row) %>%
-        data.frame(row.names=.$sample) %>%
-        select(-sample) %>%
+        data.frame(row.names=pull(., !!sample_symbol)) %>%
+        select(-!!sample_symbol) %>%
         DataFrame()
 
     row_data <-
@@ -367,8 +367,8 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
         select_if(!colnames(.) %in% get_special_columns(.data)) %>%
 
         # Replace for subset
-        select(`feature`, 
-               get_subset_columns(., feature) %>%
+        select(!!feature_symbol, 
+               get_subset_columns(., !!feature_symbol) %>%
                  
                  # Eliminate sample column
                  setdiff(colnames_col)
@@ -377,8 +377,8 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
 
         # In case unitary SE subset does not work because all same
         select_if(!colnames(.) %in% c(colnames_col, colnames(col_data))) %>%
-        data.frame(row.names=.$feature) %>%
-        select(-feature) %>%
+        data.frame(row.names=pull(.,feature_symbol)) %>%
+        select(-!!feature_symbol) %>%
         DataFrame()
     
     # This to avoid the mismatch between missing row names for counts 
@@ -410,7 +410,7 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
     
     colnames_assay <-
       colnames(.data_mutated) %>% 
-      setdiff(c("feature", "sample", get_GRanges_colnames())) %>%
+      setdiff(c(feature_name, sample_name, get_GRanges_colnames())) %>%
       setdiff(colnames(col_data)) %>% 
       setdiff(colnames(row_data)) %>%
       setdiff(assays(.data) %>% names)
@@ -421,18 +421,18 @@ update_SE_from_tibble <- function(.data_mutated, .data, column_belonging = NULL)
           .data_mutated %>% 
             
             # Select assays column
-            select(feature, sample, colnames_assay) %>% 
+            select(!!feature_symbol, !!sample_symbol, colnames_assay) %>% 
             
             # Pivot for generalising to many assays
-            pivot_longer(cols = -c(sample, feature)) %>%
-            nest(data___ = c(sample, feature, value)) %>%
+            pivot_longer(cols = -c(!!sample_symbol, !!feature_symbol)) %>%
+            nest(data___ = c(!!sample_symbol, !!feature_symbol, value)) %>%
             
             # Convert to matrix and to named list
             mutate(data___ = map2(
               data___, name,
               ~ .x %>%
-                spread(sample, value) %>% 
-                as_matrix(rownames = feature)  %>% 
+                spread(!!sample_symbol, value) %>% 
+                as_matrix(rownames = !!feature_symbol)  %>% 
                 suppressWarnings() %>%
                 list() %>%
                 setNames(.y)
@@ -472,7 +472,7 @@ get_special_columns <- function(SummarizedExperiment_object) {
 
     colnames_counts <-
         get_count_datasets(SummarizedExperiment_object) %>%
-        select(-feature, -sample) %>%
+        select(-!!feature_symbol, -!!sample_symbol) %>%
         colnames()
 
     colnames_special %>% c(colnames_counts)
@@ -501,7 +501,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
         tibble::as_tibble(.) %>%
         eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
         nest(coordinate = -group_name) %>%
-        rename(feature = group_name),
+        rename(!!feature_symbol := group_name),
       
       # If standard GRanges (one feature per line)
       ~ {
@@ -521,17 +521,17 @@ get_special_datasets <- function(SummarizedExperiment_object) {
           when(
             !is.null(transcript_column) ~  tibble::as_tibble(.) %>%
               #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              mutate(feature := !!transcript_column[1]) ,
+              mutate(!!feature_symbol := !!transcript_column[1]) ,
             
             # If transcript_column is NULL add numeric column
             ~ tibble::as_tibble(.) %>%
               #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              rowid_to_column(var = "feature") %>%
-              mutate(feature = as.character(feature))
+              rowid_to_column(var = feature_name) %>%
+              mutate(!!feature_symbol := as.character(!!feature_symbol))
             ) %>%
           
           # Always nest
-          nest(coordinate = -feature)
+          nest(coordinate = -!!feature_symbol)
        
       }
     ) %>%
@@ -552,23 +552,23 @@ get_count_datasets <- function(SummarizedExperiment_object) {
     assays(SummarizedExperiment_object) %>% as.list(),
     names(assays(SummarizedExperiment_object)),
     ~ .x %>%
-      tibble::as_tibble(rownames = "feature", .name_repair = "minimal") %>%
+      tibble::as_tibble(rownames = feature_name, .name_repair = "minimal") %>%
       
       # If the matrix does not have sample names, fix column names
       when(colnames(.x) %>% is.null() ~ setNames(., c(
-        "feature",  seq_len(ncol(.x)) 
+        feature_name,  seq_len(ncol(.x)) 
       )),
       ~ (.)
     ) %>%
       
-      gather(sample, count,-feature) %>%
+      gather(!!sample_symbol, count,-!!feature_symbol) %>%
       rename(!!.y := count)
   ) %>%
-    reduce(left_join, by = c("feature", "sample"))
+    reduce(left_join, by = c(feature_name, sample_name))
 }
 
 get_needed_columns <- function() {
-    c("feature", "sample")
+    c(feature_name, sample_name)
 }
 
 #' Convert array of quosure (e.g. c(col_a, col_b)) into character vector
@@ -657,8 +657,8 @@ get_subset_columns <- function(.data, .col) {
 is_split_by_transcript = function(.my_data){
     
     
-    tot_length = .my_data %>% map(~ pull(.x, feature) ) %>% unlist %>% unique() %>% length
-    all_lengths = .my_data %>% map_int(~ pull(.x, feature) %>% unique() %>% length) 
+    tot_length = .my_data %>% map(~ pull(.x, !!feature_symbol) ) %>% unlist %>% unique() %>% length
+    all_lengths = .my_data %>% map_int(~ pull(.x, !!feature_symbol) %>% unique() %>% length) 
     
     all_lengths %>% unique %>% length() %>% gt(1) |
         (all_lengths != tot_length) %>% any()
@@ -668,8 +668,8 @@ is_split_by_transcript = function(.my_data){
 is_split_by_sample = function(.my_data){
     
     
-    tot_length = .my_data %>% map(~ pull(.x, sample) ) %>% unlist %>% unique() %>% length
-    all_lengths = .my_data %>% map_int(~ pull(.x, sample) %>% unique() %>% length) 
+    tot_length = .my_data %>% map(~ pull(.x, !!sample_symbol) ) %>% unlist %>% unique() %>% length
+    all_lengths = .my_data %>% map_int(~ pull(.x, !!sample_symbol) %>% unique() %>% length) 
     
     all_lengths %>% unique %>% length() %>% gt(1) |
         (all_lengths != tot_length) %>% any()
@@ -680,8 +680,6 @@ is_split_by_sample = function(.my_data){
 get_GRanges_colnames = function(){
   "GenomicRanges"
 }
-
-feature_col_name = "feature"
 
 
 eliminate_GRanges_metadata_columns_also_present_in_Rowdata = function(.my_data, SummarizedExperiment_object){
@@ -699,9 +697,9 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
   # Build template of the output
   output_colnames = 
     slice(count_info, 0) %>%
-    left_join(slice(sample_info, 0), by="sample") %>%
-    left_join(slice(gene_info, 0), by = "feature") %>%
-    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by="feature"), ~ (.)) %>%
+    left_join(slice(sample_info, 0), by=sample_name) %>%
+    left_join(slice(gene_info, 0), by = feature_name) %>%
+    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by=feature_name), ~ (.)) %>%
     select(!!.subset) %>%
     colnames()
   
@@ -711,7 +709,7 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
     sample_info %>%
     when(
       colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-      select(., one_of("sample", output_colnames)) %>%
+      select(., one_of(sample_name, output_colnames)) %>%
         suppressWarnings()
     )
   
@@ -720,7 +718,7 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
     range_info %>%
     when(
       colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-      select(., one_of("feature", output_colnames)) %>%
+      select(., one_of(feature_name, output_colnames)) %>%
         suppressWarnings()
     )
   
@@ -729,7 +727,7 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
     gene_info %>%
     when(
       colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-      select(., one_of("feature", output_colnames)) %>%
+      select(., one_of(feature_name, output_colnames)) %>%
         suppressWarnings()
     )
   
@@ -738,7 +736,7 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
     count_info %>%
     when(
       colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-      select(., one_of("feature", "sample", output_colnames)) %>%
+      select(., one_of(feature_name, sample_name, output_colnames)) %>%
         suppressWarnings()
     )
   
@@ -747,13 +745,13 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
     !is.null(sample_info) & !is.null(gene_info) | 
     
     # Make exception for weirs cases (e.g. c(sample, counts))
-    (colnames(count_info) %>% outersect(c("feature", "sample")) %>% length() %>% gt(0))
+    (colnames(count_info) %>% outersect(c(feature_name, sample_name)) %>% length() %>% gt(0))
   ) {
     output_df = 
       count_info %>%
-      when(!is.null(sample_info) ~ (.) %>% left_join(sample_info, by="sample"), ~ (.)) %>%
-      when(!is.null(gene_info) ~ (.) %>% left_join(gene_info, by="feature"), ~ (.)) %>%
-      when(!is.null(range_info) ~ (.) %>% left_join(range_info, by="feature"), ~ (.))
+      when(!is.null(sample_info) ~ (.) %>% left_join(sample_info, by=sample_name), ~ (.)) %>%
+      when(!is.null(gene_info) ~ (.) %>% left_join(gene_info, by=feature_name), ~ (.)) %>%
+      when(!is.null(range_info) ~ (.) %>% left_join(range_info, by=feature_name), ~ (.))
   }
   else if(!is.null(sample_info) ){
     output_df = sample_info
@@ -762,7 +760,7 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
     output_df = gene_info %>%
       
       # If present join GRanges
-      when(!is.null(range_info) ~ (.) %>% left_join(range_info, by="feature"), ~ (.))
+      when(!is.null(range_info) ~ (.) %>% left_join(range_info, by=feature_name), ~ (.))
   }
   
   output_df %>%
@@ -779,8 +777,8 @@ change_reserved_column_names = function(.data){
     
     setNames(
       colnames(.) %>% 
-        str_replace("^feature$", "feature.x") %>% 
-        str_replace("^sample$", "sample.x") %>% 
+        str_replace(feature_name, sprintf("%s.x", feature_name)) %>% 
+        str_replace(sample_name, sprintf("%s.x", sample_name)) %>% 
         str_replace("^coordinate$", "coordinate.x")
     ) 
   
@@ -789,3 +787,8 @@ change_reserved_column_names = function(.data){
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated feature names. A data frame is returned for independent data analysis."
 
+# Key column names
+feature_name = ".feature"
+sample_name = ".sample"
+feature_symbol = as.symbol(feature_name)
+sample_symbol = as.symbol(sample_name)

@@ -56,7 +56,7 @@ test_that("Example 3", {
     
     rse  %>% 
         as_tibble() %>%
-        select(sample, feature) %>%
+        select(.sample, .feature) %>%
         ncol() %>%
         expect_equal(2) 
 })

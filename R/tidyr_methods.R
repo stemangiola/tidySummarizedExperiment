@@ -42,7 +42,7 @@
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     nest(data=-condition) %>%
 #'     unnest(data)
 #'
@@ -65,10 +65,10 @@ unnest.tidySummarizedExperiment_nested <-
     .data_ <- data
 
     cols <- enquo(cols)
-    
-    
 
-    .data_ %>% 
+
+
+    .data_ %>%
         when(
 
             # If my only column to unnest is tidySummarizedExperiment
@@ -78,43 +78,43 @@ unnest.tidySummarizedExperiment_nested <-
                 as.character() %>%
                 eq("SummarizedExperiment") %>%
                 any() ~ {
-                  
+
                   # Mark if columns belong to feature or sample
-                  my_unnested_tibble = 
+                  my_unnested_tibble =
                     mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-                    select(-suppressWarnings( one_of("sample", "feature"))) %>%
+                    select(-suppressWarnings( one_of(sample_name, feature_name))) %>%
                     unnest(!!cols)
-                  
+
                   # Get which column is relative to feature or sample
-                  sample_columns = my_unnested_tibble %>% get_subset_columns(sample) 
-                  transcript_columns = my_unnested_tibble %>% get_subset_columns(feature)
-                  source_column = 
+                  sample_columns = my_unnested_tibble %>% get_subset_columns(!!sample_symbol)
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(!!feature_symbol)
+                  source_column =
                     c(
-                      rep("sample", length(sample_columns)) %>% setNames(sample_columns),
-                      rep("feature", length(transcript_columns)) %>% setNames(transcript_columns)
+                      rep(sample_name, length(sample_columns)) %>% setNames(sample_columns),
+                      rep(feature_name, length(transcript_columns)) %>% setNames(transcript_columns)
                     )
-                  
+
                   # Do my trick to unnest
                   mutate(., !!cols := imap(
                     !!cols, ~ .x %>%
                       bind_cols_internal(
-                        
+
                         # Attach back the columns used for nesting
                         .data_ %>%
-                          select(-!!cols, -suppressWarnings( one_of("sample", "feature"))) %>%
+                          select(-!!cols, -suppressWarnings( one_of(sample_name, feature_name))) %>%
                           slice(rep(.y, ncol(.x) * nrow(.x))),
-                        
+
                         # Column sample-wise or feature-wise
-                        column_belonging = 
+                        column_belonging =
                           source_column[
                             .data_ %>%
-                              select(-!!cols, -suppressWarnings( one_of("sample", "feature"))) %>%
+                              select(-!!cols, -suppressWarnings( one_of(sample_name, feature_name))) %>%
                               colnames()
                           ]
                       )
                   )) %>%
                     pull(!!cols) %>%
-                    
+
                     # See if split by feature or sample
                     when(
                       is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and feature-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
@@ -123,7 +123,7 @@ unnest.tidySummarizedExperiment_nested <-
                 },
 
             # Else do normal stuff
-            ~ (.) %>% 
+            ~ (.) %>%
                 drop_class("tidySummarizedExperiment_nested") %>%
                 tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
                 add_class("tidySummarizedExperiment_nested")
@@ -143,7 +143,7 @@ unnest.tidySummarizedExperiment_nested <-
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     nest(data=-condition)
 #'
 #' @rdname tidyr-methods
@@ -163,51 +163,51 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     cols <- enquos(...)
     col_name_data <- names(cols)
 
-    my_data__nested = 
+    my_data__nested =
       my_data__ %>%
 
         # This is needed otherwise nest goes into loop and fails
         as_tibble() %>%
         tidyr::nest(...) %>%
-        
+
         # Check that sample or feature are in the nesting
         {
-            if(c("sample", "feature") %>% intersect(colnames(.)) %>% length() %>% `>` (0))
+            if(c(sample_name, feature_name) %>% intersect(colnames(.)) %>% length() %>% `>` (0))
                 stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting")
             (.)
-        } 
-    
+        }
+
     my_data__nested %>%
-        
+
         mutate(
             !!as.symbol(col_name_data) := pmap(
-              
+
               # Add sample feature to map if nesting by those
                 list(!!as.symbol(col_name_data)) %>%
-                  
+
                   # Check if nested by sample
-                  when("sample" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("sample"))), ~ (.)) %>%
-                  
+                  when(sample_name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(sample_name))), ~ (.)) %>%
+
                   # Check if nested by feature
-                  when("feature" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("feature"))), ~ (.)) , ~ {
-                  
+                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(feature_name))), ~ (.)) , ~ {
+
                     # Check if nested by sample
-                    if("sample" %in% colnames(my_data__nested)) { my_samples=..2 } 
-                    else {my_samples=..1$sample}
-                    
+                    if(sample_name %in% colnames(my_data__nested)) { my_samples=..2 }
+                    else {my_samples=pull(..1,!!sample_symbol)}
+
                     # Check if nested by feature
-                    if("sample" %in% colnames(my_data__nested) & "feature" %in% colnames(my_data__nested)) {my_transcripts=..3}
-                    else if("feature" %in% colnames(my_data__nested)) my_transcripts=..2
-                    else my_transcripts=..1$feature
-                 
+                    if(sample_name %in% colnames(my_data__nested) & feature_name %in% colnames(my_data__nested)) {my_transcripts=..3}
+                    else if(feature_name %in% colnames(my_data__nested)) my_transcripts=..2
+                    else my_transcripts=pull(..1,!!feature_symbol)
+
                   my_data__ %>%
-                    
+
                     # Subset cells
-                    filter(sample %in% my_samples & feature %in% my_transcripts) %>%
-                    
+                    filter(!!sample_symbol %in% my_samples & !!feature_symbol %in% my_transcripts) %>%
+
                     # Subset columns
-                    select(colnames(..1) %>% c("sample", "feature") %>% unique)
-                } 
+                    select(colnames(..1) %>% c(sample_name, feature_name) %>% unique)
+                }
             )
         ) %>%
 
@@ -251,7 +251,7 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
 #' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
@@ -381,7 +381,7 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
 #'
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     pivot_longer(c(condition, type), names_to="name", values_to="value")
 NULL
 
@@ -476,7 +476,7 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'   This can be a named list if you want to apply different aggregations
 #'   to different value columns.
 #' @param ... Additional arguments passed on to methods.
-#' 
+#'
 #' @importFrom tidyr pivot_wider
 #' @rdname tidyr-methods
 #' @name pivot_wider
@@ -488,7 +488,7 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     pivot_wider(names_from=feature, values_from=counts)
 NULL
 
@@ -509,9 +509,9 @@ pivot_wider.SummarizedExperiment <- function(data,
   id_cols <- enquo(id_cols)
   name = enquo(names_from)
   value = enquo(values_from)
-  
+
   message(data_frame_returned_message)
-  
+
   data %>%
     as_tibble(skip_GRanges = T) %>%
     tidyr::pivot_wider( id_cols = !!id_cols,
@@ -562,7 +562,7 @@ pivot_wider.SummarizedExperiment <- function(data,
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     unite("group", c(condition, type))
 NULL
 
@@ -646,7 +646,7 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
 #' @examples
 #'
 #' un <- tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     unite("group", c(condition, type))
 #' un %>% separate(col=group, into=c("condition", "type"))
 NULL

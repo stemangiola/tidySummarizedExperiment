@@ -9,11 +9,11 @@ tt <-
     tidySummarizedExperiment::mutate(col2 = "other_col")
 
 test_that("nest_unnest", {
-    col_names <- tt %>% colData %>% colnames() %>% c("sample")
+    col_names <- tt %>% colData %>% colnames() %>% c(".sample")
     library(magrittr)
 
     y <- tibble::tibble(
-        sample = c(
+        .sample = c(
             "untrt1",
             "untrt2",
             "untrt3",
@@ -29,7 +29,7 @@ test_that("nest_unnest", {
         nest(data = -condition) %>%
         unnest(data) %>%
         head(n = 1) %>%
-        select(sample, counts)
+        select(.sample, counts)
 
 
     expect_equal(x, y)
@@ -62,7 +62,7 @@ test_that("unite separate", {
         )
 
     se %>%
-        tidySummarizedExperiment::select(sample) %>%
+        tidySummarizedExperiment::select(.sample) %>%
         ncol() %>%
         expect_equal(1)
 })
@@ -80,7 +80,7 @@ test_that("extract", {
 
 test_that("pivot_longer", {
     tt %>%
-        tidySummarizedExperiment::pivot_longer(c(sample, condition),
+        tidySummarizedExperiment::pivot_longer(c(.sample, condition),
                              names_to = "name",
                              values_to = "value") %>%
         class() %>%

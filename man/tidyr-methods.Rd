@@ -235,38 +235,38 @@ under active development.
 \examples{
 
 tidySummarizedExperiment::pasilla \%>\%
-    
+
     nest(data=-condition) \%>\%
     unnest(data)
 
 
 tidySummarizedExperiment::pasilla \%>\%
-    
+
     nest(data=-condition)
 
 
 tidySummarizedExperiment::pasilla \%>\%
-    
+
     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
 # See vignette("pivot") for examples and explanation
 
 library(dplyr)
 tidySummarizedExperiment::pasilla \%>\%
-    
+
     pivot_longer(c(condition, type), names_to="name", values_to="value")
 # See vignette("pivot") for examples and explanation
 
 library(dplyr)
 tidySummarizedExperiment::pasilla \%>\%
-    
+
     pivot_wider(names_from=feature, values_from=counts)
 
 tidySummarizedExperiment::pasilla \%>\%
-    
+
     unite("group", c(condition, type))
 
 un <- tidySummarizedExperiment::pasilla \%>\%
-    
+
     unite("group", c(condition, type))
 un \%>\% separate(col=group, into=c("condition", "type"))
 }
