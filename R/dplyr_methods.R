@@ -752,20 +752,9 @@ NULL
 #' @export
 left_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
-    x %>%
-        as_tibble(skip_GRanges  = T) %>%
-        dplyr::left_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
-        when(
-
-            # If duplicated sample-feature pair returns tibble
-            !is_not_duplicated(.) ~ {
-                message(duplicated_cell_names)
-                (.)
-            },
-
-            # Otherwise return updated tidySummarizedExperiment
-            ~ update_SE_from_tibble(., x)
-        )
+  
+  join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::left_join, ...)
+  
 }
 
 #' Inner join datasets
@@ -796,21 +785,9 @@ NULL
 
 #' @export
 inner_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
-    x %>%
-        as_tibble(skip_GRanges  = T) %>%
-        dplyr::inner_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
-        when(
+  
+  join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::inner_join, ...)
 
-            # If duplicated sample-feature pair returns tibble
-
-            !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message(duplicated_cell_names)
-                (.)
-            },
-
-            # Otherwise return updated tidySummarizedExperiment
-            ~ update_SE_from_tibble(., x)
-        )
 }
 
 #' Right join datasets
@@ -845,20 +822,8 @@ NULL
 #' @export
 right_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
-    x %>%
-        as_tibble(skip_GRanges  = T) %>%
-        dplyr::right_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
-        when(
-
-            # If duplicated sample-feature pair returns tibble
-            !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message(duplicated_cell_names)
-                (.)
-            },
-
-            # Otherwise return updated tidySummarizedExperiment
-            ~ update_SE_from_tibble(., x)
-        )
+  
+  join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::right_join, ...)
 }
 
 
@@ -894,20 +859,7 @@ NULL
 #' @export
 full_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
-    x %>%
-        as_tibble(skip_GRanges  = T) %>%
-        dplyr::full_join(y, by=by, copy=copy, suffix=suffix, ...) %>%
-        when(
-
-            # If duplicated sample-feature pair returns tibble
-            !is_not_duplicated(.) | !is_rectangular(.) ~ {
-                message(duplicated_cell_names)
-                (.)
-            },
-
-            # Otherwise return updated tidySummarizedExperiment
-            ~ update_SE_from_tibble(., x)
-        )
+  join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::full_join, ...)
 }
 
 #' Subset rows using their positions
