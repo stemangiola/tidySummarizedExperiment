@@ -1009,22 +1009,100 @@ NULL
 
 #' @export
 select.SummarizedExperiment <- function(.data, ...) {
+  
+  
+  
+  # colnames_col <- get_colnames_col(.data)
+  # colnames_row <- get_rownames_col(.data)
+  # colnames_assay = .data@assays@data %>% names
+  
+  # See if join done by sample, feature or both
+  columns_query = 
     .data %>%
-        as_tibble(skip_GRanges = T) %>%
-        select_helper(...) %>%
-        when(
-
-            # If key columns are missing
-            (get_special_columns(.data) %>% c(get_needed_columns()) %in% colnames(.)) %>%
-                all() %>%
-                `!`() ~ {
-                message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
-                (.)
-            },
-
-            # If valid SummarizedExperiment meta data
-            ~ update_SE_from_tibble(., .data)
-        )
+    .[1,1, drop=FALSE] %>% 
+    as_tibble() %>% 
+    select_helper(...) %>% 
+    colnames()
+  
+  
+  row_data_tibble = 
+    rowData(.data) %>% 
+    as_tibble(rownames = feature_name) 
+  
+  row_data_DF =
+    row_data_tibble %>% 
+    select(one_of(columns_query), !!feature_symbol) %>%
+    suppressWarnings() %>% 
+    data.frame(row.names=pull(., !!feature_symbol)) %>%
+    select(-!!feature_symbol) %>%
+    DataFrame()
+  
+  rowData(.data) = row_data_tibble
+  
+  col_data_tibble = 
+    colData(.data) %>% 
+    as_tibble(rownames = sample_name) 
+  
+  col_data_DF = 
+    col_data_tibble %>%  
+    select(one_of(columns_query), !!sample_symbol) %>%
+    suppressWarnings() %>% 
+    data.frame(row.names=pull(., !!sample_symbol)) %>%
+    select(-!!sample_symbol) %>%
+    DataFrame()
+  
+  count_data = 
+    assays(.data)@listData %>% .[names(assays(.data)@listData) %in% columns_query]
+  
+  
+  
+  columns_query %>%
+    when(
+      
+      # If it's just col data
+     ncol(row_data_DF) == 0 & !feature_name %in% columns_query & length(count_data) == 0 & ncol(col_data_DF) > 0  ~ {
+       message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
+       
+       col_data_tibble %>% 
+         select_helper(...) %>% 
+         slice(rep(1:n(), each=nrow(!!.data) ))
+          
+        },
+      
+     # If it's just row data
+     ncol(row_data_DF) > 0 & length(count_data) == 0 & ncol(col_data_DF) == 0 & !sample_name %in% columns_query   ~ {
+       message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
+       
+       row_data_tibble %>% 
+         select_helper(...) %>% 
+         slice(rep(1:n(), ncol(!!.data)  ))
+       
+     },
+     
+     
+     !all(c(get_needed_columns()) %in% .)  ~ {
+       message("tidySummarizedExperiment says: You are doing a complex selection both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your selects sample-wise OR feature-wise.")
+       message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
+       
+       .data %>%
+         as_tibble(skip_GRanges = T) %>%
+         select_helper(...) 
+     },
+  
+    ~ {
+      rowData(.data) = row_data_DF
+      colData(.data) = col_data_DF
+      assays(.data) = count_data
+      .data
+      
+    } 
+    )
+  # ,
+  #     
+  #     ~ stop("tidySummarizedExperiment says: ERROR FOR DEVELOPERS: this option should not exist. In join utility.")
+  #     
+  #   )
+   
 }
 
 

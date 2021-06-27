@@ -491,6 +491,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
   SummarizedExperiment_object %>%
     rowRanges() %>%
     when( 
+      
       # If no ranges
       as.data.frame(.) %>%
       nrow() %>%
@@ -505,6 +506,9 @@ get_special_datasets <- function(SummarizedExperiment_object) {
       
       # If standard GRanges (one feature per line)
       ~ {
+        
+        rr = .
+        
         transcript_column = 
           rowRanges(SummarizedExperiment_object) %>% 
           as.data.frame() %>% 
@@ -519,19 +523,21 @@ get_special_datasets <- function(SummarizedExperiment_object) {
           
           # If transcript_column exists all good 
           when(
-            !is.null(transcript_column) ~  tibble::as_tibble(.) %>%
+            !is.null(rr@ranges@NAMES) ~ tibble::as_tibble(.) %>%
+              
               #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              mutate(!!feature_symbol := !!transcript_column[1]) ,
+              mutate(!!feature_symbol := rr@ranges@NAMES) ,
             
             # If transcript_column is NULL add numeric column
             ~ tibble::as_tibble(.) %>%
+              
               #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              rowid_to_column(var = feature_name) %>%
-              mutate(!!feature_symbol := as.character(!!feature_symbol))
-            ) %>%
-          
-          # Always nest
-          nest(coordinate = -!!feature_symbol)
+              mutate(!!feature_symbol := 1:n())
+            ) 
+        # %>%
+        #   
+        #   # Always nest
+        #   nest(coordinate = -!!feature_symbol)
        
       }
     ) %>%
@@ -564,7 +570,15 @@ get_count_datasets <- function(SummarizedExperiment_object) {
       gather(!!sample_symbol, count,-!!feature_symbol) %>%
       rename(!!.y := count)
   ) %>%
-    reduce(left_join, by = c(feature_name, sample_name))
+    when(
+      length(.)>0 ~ reduce(., left_join, by = c(feature_name, sample_name)),
+      ~ expand.grid(
+        rownames(SummarizedExperiment_object), colnames(SummarizedExperiment_object)
+        ) %>% 
+        setNames(c(feature_name, sample_name)) %>%
+        tibble::as_tibble()
+    )
+    
 }
 
 get_needed_columns <- function() {
@@ -794,22 +808,17 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
   . <- NULL 
   
   # Get the colnames of samples and feature datasets
-  colnames_col <- 
-    colnames(colData(x)) %>% 
-    c("sample") 
-  
-  colnames_row <- x %>%
-    when(
-      .hasSlot(., "rowData") | .hasSlot(., "elementMetadata") ~ colnames(rowData(.)), 
-      TRUE ~ c()
-    ) %>% 
-    c("feature") 
+  colnames_col <- get_colnames_col(x)
+  colnames_row <- get_rownames_col(x)
   
   # See if join done by sample, feature or both
-  columns_query = by %>% when(!is.null(.) ~ by, ~ colnames(y))
+  columns_query = by %>% when(
+    !is.null(.) ~ sapply(., function(.x) ifelse(!is.null(names(.x)), names(.x), .x)), 
+    ~ colnames(y)
+  )
   
-  match = 
-    columns_query %>%
+ 
+columns_query %>%
     when(
       
       # Complex join that it is not efficient yet
@@ -822,7 +831,7 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
         # Needed for internal recurrency if outcome is not valid
         force_tibble_route ~ {
           
-          message("tidySummarizedExperiment says: either you rsulting dataset is not a valid SummarizedExperiment or you are joining a dataframe both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
+          message("tidySummarizedExperiment says: either your resulting dataset is not a valid SummarizedExperiment or you are joining a dataframe both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
           x %>%
             as_tibble(skip_GRanges  = T) %>%
             join_function(y, by=by, copy=copy, suffix=suffix, ...) %>%
@@ -845,20 +854,20 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
         
         row_data_tibble = 
           rowData(x) %>% 
-          as_tibble(rownames = "feature") %>%  
+          as_tibble(rownames = feature_name) %>%  
           join_function(y, by=by, copy=copy, suffix=suffix, ...) 
         
         # Check if the result is not SE then take the tibble route
         if(
-          is.na(row_data_tibble$feature) %>% any | 
-          duplicated(row_data_tibble$feature) %>% any |
-          row_data_tibble$feature %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
+          is.na(pull(row_data_tibble, !!feature_symbol)) %>% any | 
+          duplicated(pull(row_data_tibble, !!feature_symbol)) %>% any |
+          pull(row_data_tibble, !!feature_symbol) %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
         ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
         
         row_data = 
           row_data_tibble %>% 
-          data.frame(row.names=.$feature) %>%
-          select(-feature) %>%
+          data.frame(row.names=pull(., !!feature_symbol)) %>%
+          select(-!!feature_symbol) %>%
           DataFrame()
         
         # Subset in case of an inner join, or a right join
@@ -876,20 +885,20 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
         
         col_data_tibble = 
           colData(x) %>% 
-          as_tibble(rownames = "sample") %>%  
+          as_tibble(rownames = sample_name) %>%  
           join_function(y, by=by, copy=copy, suffix=suffix, ...)
         
         # Check if the result is not SE then take the tibble route
         if(
-          is.na(col_data_tibble$sample) %>% any | 
-          duplicated(col_data_tibble$sample) %>% any |
-          col_data_tibble$sample %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
+          is.na(pull(col_data_tibble, !!sample_symbol)) %>% any | 
+          duplicated(pull(col_data_tibble, !!sample_symbol)) %>% any |
+          pull(col_data_tibble, !!sample_symbol) %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
         ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
           
        col_data = 
          col_data_tibble %>% 
-          data.frame(row.names=.$sample) %>%
-          select(-sample) %>%
+          data.frame(row.names=pull(., !!sample_symbol)) %>%
+          select(-!!sample_symbol) %>%
           DataFrame()
         
           
@@ -907,6 +916,25 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
       
     )
   
+}
+
+get_ellipse_colnames = function(...){
+  
+  (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+}
+
+get_colnames_col = function(x){
+  colnames(colData(x)) %>% 
+    c(sample_name) 
+}
+
+get_rownames_col = function(x){
+  x %>%
+    when(
+      .hasSlot(., "rowData") | .hasSlot(., "elementMetadata") ~ colnames(rowData(.)), 
+      TRUE ~ c()
+    ) %>% 
+    c(feature_name) 
 }
 
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
