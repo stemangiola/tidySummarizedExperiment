@@ -500,7 +500,7 @@ get_special_datasets <- function(SummarizedExperiment_object) {
       equals(0) ~ tibble(),
       
       # If it is a range list (multiple rows per feature)
-      class(.) %>% equals("CompressedGRangesList") ~ {
+      is(., "CompressedGRangesList") ~ {
         
         # If GRanges does not have row names
         if(is.null(rr@partitioning@NAMES)) rr@partitioning@NAMES = as.character(1:nrow(SummarizedExperiment_object))
