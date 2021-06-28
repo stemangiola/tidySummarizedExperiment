@@ -520,12 +520,12 @@ get_special_datasets <- function(SummarizedExperiment_object) {
           # If transcript_column exists all good 
           when(
             !is.null(transcript_column) ~  tibble::as_tibble(.) %>%
-              eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              rename(feature := !!transcript_column) ,
+              #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
+              mutate(feature := !!transcript_column[1]) ,
             
             # If transcript_column is NULL add numeric column
             ~ tibble::as_tibble(.) %>%
-              eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
+              #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
               rowid_to_column(var = "feature") %>%
               mutate(feature = as.character(feature))
             ) %>%
@@ -783,6 +783,131 @@ change_reserved_column_names = function(.data){
         str_replace("^sample$", "sample.x") %>% 
         str_replace("^coordinate$", "coordinate.x")
     ) 
+  
+}
+
+#' @importFrom purrr when
+join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), join_function, force_tibble_route = FALSE,
+                                  ...) {
+  
+  
+  
+  # Comply to CRAN notes 
+  . <- NULL 
+  
+  # Get the colnames of samples and feature datasets
+  colnames_col <- 
+    colnames(colData(x)) %>% 
+    c("sample") 
+  
+  colnames_row <- x %>%
+    when(
+      .hasSlot(., "rowData") | .hasSlot(., "elementMetadata") ~ colnames(rowData(.)), 
+      TRUE ~ c()
+    ) %>% 
+    c("feature") 
+  
+  # See if join done by sample, feature or both
+  columns_query = by %>% when(!is.null(.) ~ by, ~ colnames(y))
+  
+  match = 
+    columns_query %>%
+    when(
+      
+      # Complex join that it is not efficient yet
+      (any(columns_query %in% colnames_row) & any(columns_query %in% colnames_col)) |
+        
+        # If join is with something else, the inefficient generic solution might work, 
+        # or delegate the proper error downstream
+        (!any(columns_query %in% colnames_row) & !any(columns_query %in% colnames_col)) |
+        
+        # Needed for internal recurrency if outcome is not valid
+        force_tibble_route ~ {
+          
+          message("tidySummarizedExperiment says: either you rsulting dataset is not a valid SummarizedExperiment or you are joining a dataframe both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
+          x %>%
+            as_tibble(skip_GRanges  = T) %>%
+            join_function(y, by=by, copy=copy, suffix=suffix, ...) %>%
+            when(
+              
+              # If duplicated sample-feature pair returns tibble
+              !is_not_duplicated(.) ~ {
+                message(duplicated_cell_names)
+                (.)
+              },
+              
+              # Otherwise return updated tidySummarizedExperiment
+              ~ update_SE_from_tibble(., x)
+            )
+          
+        },
+      
+      # Join only feature-wise
+      any(columns_query %in% colnames_row) & !any(columns_query %in% colnames_col) ~ {
+        
+        row_data_tibble = 
+          rowData(x) %>% 
+          as_tibble(rownames = "feature") %>%  
+          join_function(y, by=by, copy=copy, suffix=suffix, ...) 
+        
+        # Check if the result is not SE then take the tibble route
+        if(
+          is.na(row_data_tibble$feature) %>% any | 
+          duplicated(row_data_tibble$feature) %>% any |
+          row_data_tibble$feature %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
+        ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
+        
+        row_data = 
+          row_data_tibble %>% 
+          data.frame(row.names=.$feature) %>%
+          select(-feature) %>%
+          DataFrame()
+        
+        # Subset in case of an inner join, or a right join
+        x = x[rownames(row_data),]  
+        
+        # Tranfer annotation
+        rowData(x) = row_data
+        
+        # Return
+        x
+      },
+      
+      # Join only sample-wise
+      any(columns_query %in% colnames_col) & !any(columns_query %in% colnames_row) ~ {
+        
+        col_data_tibble = 
+          colData(x) %>% 
+          as_tibble(rownames = "sample") %>%  
+          join_function(y, by=by, copy=copy, suffix=suffix, ...)
+        
+        # Check if the result is not SE then take the tibble route
+        if(
+          is.na(col_data_tibble$sample) %>% any | 
+          duplicated(col_data_tibble$sample) %>% any |
+          col_data_tibble$sample %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
+        ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
+          
+       col_data = 
+         col_data_tibble %>% 
+          data.frame(row.names=.$sample) %>%
+          select(-sample) %>%
+          DataFrame()
+        
+          
+        # Subset in case of an inner join, or a right join
+        x = x[,rownames(col_data)]  
+        
+        # Tranfer annotation
+        colData(x) = col_data
+        
+        # Return
+        x
+      },
+      
+      ~ stop("tidySummarizedExperiment says: ERROR FOR DEVELOPERS: this option should not exist. In join utility.")
+      
+    )
   
 }
 
