@@ -488,8 +488,10 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' @noRd
 get_special_datasets <- function(SummarizedExperiment_object) {
   
-  SummarizedExperiment_object %>%
-    rowRanges() %>%
+  rr =  SummarizedExperiment_object %>%
+    rowRanges() 
+  
+  rr %>%
     when( 
       
       # If no ranges
@@ -498,48 +500,29 @@ get_special_datasets <- function(SummarizedExperiment_object) {
       equals(0) ~ tibble(),
       
       # If it is a range list (multiple rows per feature)
-      class(.) %>% equals("CompressedGRangesList") ~ 
-        tibble::as_tibble(.) %>%
-        eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-        nest(coordinate = -group_name) %>%
-        rename(!!feature_symbol := group_name),
+      class(.) %>% equals("CompressedGRangesList") ~ {
+        
+        # If GRanges does not have row names
+        if(is.null(rr@partitioning@NAMES)) rr@partitioning@NAMES = as.character(1:nrow(SummarizedExperiment_object))
+        
+        tibble::as_tibble(rr) %>%
+          #mutate(!!feature_symbol := rr@partitioning@NAMES)
+          eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
+          nest(GRangesList = -group_name) %>%
+          rename(!!feature_symbol := group_name)
+        
+      },
       
       # If standard GRanges (one feature per line)
       ~ {
         
-        rr = .
-        
-        transcript_column = 
-          rowRanges(SummarizedExperiment_object) %>% 
-          as.data.frame() %>% 
-          lapply(function(x) rownames(SummarizedExperiment_object)[1] %in% x) %>%
-          unlist() %>%
-          which() %>%
-          names() 
-        
-        
-        # Just rename
-        (.) %>%
-          
-          # If transcript_column exists all good 
-          when(
-            !is.null(rr@ranges@NAMES) ~ tibble::as_tibble(.) %>%
-              
-              #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              mutate(!!feature_symbol := rr@ranges@NAMES) ,
-            
-            # If transcript_column is NULL add numeric column
-            ~ tibble::as_tibble(.) %>%
-              
-              #eliminate_GRanges_metadata_columns_also_present_in_Rowdata(SummarizedExperiment_object) %>%
-              mutate(!!feature_symbol := 1:n())
-            ) 
-        # %>%
-        #   
-        #   # Always nest
-        #   nest(coordinate = -!!feature_symbol)
-       
+        # If GRanges does not have row names
+       if(is.null(rr@ranges@NAMES)) rr@ranges@NAMES = as.character(1:nrow(SummarizedExperiment_object))
+         
+        tibble::as_tibble(rr) %>% 
+        mutate(!!feature_symbol := rr@ranges@NAMES) 
       }
+
     ) %>%
     list()
   

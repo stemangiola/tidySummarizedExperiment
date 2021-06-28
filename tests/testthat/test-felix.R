@@ -60,3 +60,8 @@ test_that("Example 3", {
         ncol() %>%
         expect_equal(2) 
 })
+
+test_that("Example 4 from tidybulk", {
+    
+   x = se %>% as_tibble()
+})
