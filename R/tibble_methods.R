@@ -48,15 +48,21 @@ as_tibble.SummarizedExperiment <- function(x, ...,
 
 .as_tibble_optimised = function(x, skip_GRanges = F, .subset = NULL,
                                 .name_repair=c("check_unique", "unique", "universal", "minimal"),
-                                rownames=pkgconfig::get_config("tibble::rownames", NULL)){
+                                rownames=pkgconfig::get_config("tibble::rownames", NULL), 
+                                use_old_special_names = FALSE){
   
   .subset = enquo(.subset)
+  
+  if(use_old_special_names){
+    sample_name = "sample"
+    feature_name = "feature"
+  }
   
   sample_info <-
     colData(x) %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names() %>%
+    change_reserved_column_names(feature_name, sample_name) %>%
   
     # Convert to tibble
     tibble::as_tibble(rownames=sample_name)
@@ -70,10 +76,10 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     reduce(left_join, by="coordinate") 
     
   gene_info <-
-    rowData(x) %>%
+    rowData(x) %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names() %>%
+    change_reserved_column_names(feature_name, sample_name) %>%
   
     # Convert to tibble
     tibble::as_tibble(rownames=feature_name) 

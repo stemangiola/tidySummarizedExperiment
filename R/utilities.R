@@ -486,7 +486,7 @@ get_special_columns <- function(SummarizedExperiment_object) {
 #' @importFrom tibble rowid_to_column
 #' 
 #' @noRd
-get_special_datasets <- function(SummarizedExperiment_object) {
+get_special_datasets <- function(SummarizedExperiment_object, feature_name = feature_name, feature_symbol = feature_symbol, sample_name = sample_name, sample_symbol = sample_symbol) {
   
   SummarizedExperiment_object %>%
     rowRanges() %>%
@@ -771,7 +771,7 @@ subset_tibble_output = function(count_info, sample_info, gene_info, range_info, 
   
 }
 
-change_reserved_column_names = function(.data){
+change_reserved_column_names = function(.data, feature_name = feature_name, sample_name = sample_name){
   
   .data %>%
     
@@ -784,10 +784,47 @@ change_reserved_column_names = function(.data){
   
 }
 
+# This function is used for the change of special sample column to .sample
+# Check if "sample" is included in the query and is not part of any other existing annotation
+sample_deprecated_used = function(.data, user_columns, use_old_special_names = FALSE){
+  
+  old_standard_is_used_for_sample = 
+    (
+      any(str_detect(user_columns  , regex("\\W*sample\\W+"))) |
+      "sample" %in% user_columns 
+    ) & 
+    !"sample" %in% c(colnames(rowData(.data)), colnames(colData(.data)))
+  
+  old_standard_is_used_for_feature = 
+    (
+      any(str_detect(user_columns  , regex("\\W*feature\\W+"))) |
+        "feature" %in% user_columns 
+    ) & 
+    !"feature" %in% c(colnames(rowData(.data)), colnames(colData(.data)))
+  
+  old_standard_is_used = old_standard_is_used_for_sample | old_standard_is_used_for_feature
+  
+  if(old_standard_is_used){
+    warning("tidySummarizedExperiment says: from version 1.3.1, the special column including sample id (colnames(SummarizedExperiment_object)) has changed to \".sample\". Please update your future queries")
+    
+    use_old_special_names = TRUE
+  }
+  
+  use_old_special_names
+}
+
 data_frame_returned_message = "tidySummarizedExperiment says: A data frame is returned for independent data analysis."
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated feature names. A data frame is returned for independent data analysis."
 
 # Key column names
+
+get_special_column_name_symbol = function(name){
+  list(name = name, symbol = as.symbol(name))
+}
+
+feature__ = get_special_column_name_symbol(".feature")
+sample__ = get_special_column_name_symbol(".sample")
+
 feature_name = ".feature"
 sample_name = ".sample"
 feature_symbol = as.symbol(feature_name)
