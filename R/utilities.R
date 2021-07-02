@@ -907,8 +907,7 @@ get_ellipse_colnames = function(...){
   (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
 }
 
-
- = function(x){
+get_colnames_col = function(x){
   colnames(colData(x)) %>% 
     c(sample_name) 
 }
