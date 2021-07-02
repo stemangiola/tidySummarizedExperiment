@@ -459,7 +459,7 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
 #'
 get_special_columns <- function(.data) {
     colnames_special <-
-        get_special_datasets(se) %>%
+        get_special_datasets(.data) %>%
 
         # In case any of those have feature of sample in column names
         map(
@@ -471,7 +471,7 @@ get_special_columns <- function(.data) {
         as.character()
 
     colnames_counts <-
-        get_count_datasets(se) %>%
+        get_count_datasets(.data) %>%
         select(-!!f_(.data)$symbol, -!!s_(.data)$symbol) %>%
         colnames()
 
@@ -800,8 +800,15 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
     !is.null(.) ~ sapply(., function(.x) ifelse(!is.null(names(.x)), names(.x), .x)), 
     ~ colnames(y)
   )
+   
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    x, 
+    columns_query
+  )){
+    x= ping_old_special_column_into_metadata(x)
+  }
   
- 
 columns_query %>%
     when(
       
@@ -812,10 +819,14 @@ columns_query %>%
         # or delegate the proper error downstream
         (!any(columns_query %in% colnames_row) & !any(columns_query %in% colnames_col)) |
         
-        # Needed for internal recurrency if outcome is not valid
+        # Needed for internal recurrence if outcome is not valid
         force_tibble_route ~ {
           
-          message("tidySummarizedExperiment says: either your resulting dataset is not a valid SummarizedExperiment or you are joining a dataframe both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
+          message(data_frame_returned_message)
+          
+          # If I have a big dataset
+          if(ncol(x)>100) message("tidySummarizedExperiment says: if you are joining a dataframe both sample-wise and feature-wise, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
+          
           x %>%
             as_tibble(skip_GRanges  = T) %>%
             join_function(y, by=by, copy=copy, suffix=suffix, ...) %>%
@@ -945,7 +956,7 @@ is_sample_feature_deprecated_used = function(.data, user_columns, use_old_specia
   old_standard_is_used = old_standard_is_used_for_sample | old_standard_is_used_for_feature
   
   if(old_standard_is_used){
-    warning("tidySummarizedExperiment says: from version 1.3.1, the special column including sample id (colnames(se)) has changed to \".sample\". This dataset is returned with the old-style vocabulary (feature and sample), however we suggest to update your workflow to reflect the new vocabulary (.feature, .sample)")
+    warning("tidySummarizedExperiment says: from version 1.3.1, the special columns including sample/feature id (colnames(se), rownames(se)) has changed to \".sample\" and \".feature\". This dataset is returned with the old-style vocabulary (feature and sample), however we suggest to update your workflow to reflect the new vocabulary (.feature, .sample)")
     
     use_old_special_names = TRUE
   }

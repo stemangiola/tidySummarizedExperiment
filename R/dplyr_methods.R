@@ -360,6 +360,14 @@ NULL
 group_by.SummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
     message(data_frame_returned_message)
 
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    .data, 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+  )){
+    .data= ping_old_special_column_into_metadata(.data)
+  }
+  
     .data %>%
         as_tibble() %>%
         dplyr::group_by(..., .add=.add, .drop=.drop)
@@ -447,6 +455,14 @@ NULL
 summarise.SummarizedExperiment <- function(.data, ...) {
     message(data_frame_returned_message)
 
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    .data, 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+  )){
+    .data= ping_old_special_column_into_metadata(.data)
+  }
+  
   # If Ranges column not in query perform fast as_tibble
   skip_GRanges = 
     get_GRanges_colnames() %in% 
@@ -557,6 +573,14 @@ NULL
 mutate.SummarizedExperiment <- function(.data, ...) {
     # Check that we are not modifying a key column
     cols <- enquos(...) %>% names()
+    
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      .data, 
+      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    )){
+      .data= ping_old_special_column_into_metadata(.data)
+    }
     
     tst =
         intersect(
@@ -1034,12 +1058,22 @@ NULL
 
 #' @export
 select.SummarizedExperiment <- function(.data, ...) {
-  
+   
   
   
   # colnames_col <- get_colnames_col(.data)
   # colnames_row <- get_rownames_col(.data)
   # colnames_assay = .data@assays@data %>% names
+  
+
+  
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    .data, 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+  )){
+    .data= ping_old_special_column_into_metadata(.data)
+  }
   
   # See if join done by sample, feature or both
   columns_query = 
@@ -1048,7 +1082,6 @@ select.SummarizedExperiment <- function(.data, ...) {
     as_tibble() %>% 
     select_helper(...) %>% 
     colnames()
-  
   
   row_data_tibble = 
     rowData(.data) %>% 
@@ -1279,6 +1312,15 @@ count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by
 count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     message(data_frame_returned_message)
 
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    x, 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+  )){
+    x= ping_old_special_column_into_metadata(x)
+  }
+  
+  
   # If Ranges column not in query perform fast as_tibble
   skip_GRanges = 
     get_GRanges_colnames() %in% 
@@ -1334,6 +1376,14 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     var <- enquo(var)
     name <- enquo(name)
 
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      .data, 
+      quo_name(var)
+    )){
+      .data= ping_old_special_column_into_metadata(.data)
+    }
+    
     # If Ranges column not in query perform fast as_tibble
     skip_GRanges = 
       get_GRanges_colnames() %in% 

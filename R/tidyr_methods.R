@@ -161,10 +161,20 @@ NULL
 #'
 #' @export
 nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
-    my_data__ <- .data
     cols <- enquos(...)
     col_name_data <- names(cols)
 
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      .data, 
+      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    )){
+      .data= ping_old_special_column_into_metadata(.data)
+    }
+    
+    my_data__ <- .data 
+    
+    
     my_data__nested =
       my_data__ %>%
 
@@ -273,6 +283,14 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     convert=FALSE, ...) {
     col <- enquo(col)
 
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      c(quo_name(col), into)
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     tst =
         intersect(
             into %>% quo_names(),
@@ -411,6 +429,15 @@ pivot_longer.SummarizedExperiment <- function(data,
 
     message(data_frame_returned_message)
 
+    
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      c(quo_names(cols))
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     data %>%
         as_tibble(skip_GRanges = T) %>%
         tidyr::pivot_longer(!!cols,
@@ -519,6 +546,14 @@ pivot_wider.SummarizedExperiment <- function(data,
 
   message(data_frame_returned_message)
 
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    data, 
+    c(quo_names(id_cols), quo_names(names_from))
+  )){
+    data= ping_old_special_column_into_metadata(data)
+  }
+  
   data %>%
     as_tibble(skip_GRanges = T) %>%
     tidyr::pivot_wider( id_cols = !!id_cols,
@@ -579,6 +614,15 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
     # Check that we are not modifying a key column
     cols <- enquo(col)
 
+    # Deprecation of special column names
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     tst =
         intersect(
             cols %>% quo_names(),
@@ -665,6 +709,14 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     # Check that we are not modifying a key column
     cols <- enquo(col)
 
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      c(quo_names(cols))
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     tst =
         intersect(
             cols %>% quo_names(),

@@ -9,8 +9,6 @@ tt <-
     tidySummarizedExperiment::mutate(col2 = "other_col")
 
 test_that("nest_unnest", {
-    col_names <- tt %>% colData %>% colnames() %>% c(".sample")
-    library(magrittr)
 
     y <- tibble::tibble(
         .sample = c(
