@@ -173,19 +173,27 @@ bind_cols.SummarizedExperiment <- bind_cols_
 NULL
 
 #' @inheritParams distinct
+#' 
+#' 
 #' @export
 distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
     message(data_frame_returned_message)
 
+  distinct_columns = 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+  
   # If Ranges column not in query perform fast as_tibble
   skip_GRanges = 
     get_GRanges_colnames() %in% 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist) %>%
+    distinct_columns %>%
     not()
   
-    .data %>%
-        as_tibble(skip_GRanges = skip_GRanges) %>%
-        dplyr::distinct(..., .keep_all=.keep_all)
+  # Deprecation of special column names
+  use_old_special_names = sample_deprecated_used(.data, distinct_columns)
+  
+  .data %>%
+      as_tibble(skip_GRanges = skip_GRanges, use_old_special_names = use_old_special_names) %>%
+      dplyr::distinct(distinct_columns, .keep_all=.keep_all)
 }
 
 
@@ -263,8 +271,17 @@ NULL
 #' @export
 filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 
+  
+  
+  
+  # Deprecation of special column names
+  use_old_special_names = sample_deprecated_used(
+    .data, 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+  )
+  
     new_meta <- .data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = T, use_old_special_names = use_old_special_names) %>%
         dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
 
     new_meta %>%
