@@ -125,8 +125,8 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
 
             # If the column added are not sample-wise or feature-wise return tibble
             (colnames(tts[[2]]) %in% c(
-                get_subset_columns(., !!sample__$symbol),
-                get_subset_columns(., !!feature__$symbol)
+                get_subset_columns(., !!s_(tts[[1]])$symbol),
+                get_subset_columns(., !!f_(tts[[1]])$symbol)
             )
             ) %>% all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
 
@@ -189,10 +189,13 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
     not()
   
   # Deprecation of special column names
-  use_old_special_names = is_sample_feature_deprecated_used(.data, distinct_columns)
+  if(is_sample_feature_deprecated_used(.data, distinct_columns)){
+    .data= ping_old_special_column_into_metadata(.data)
+    
+  }
   
   .data %>%
-      as_tibble(skip_GRanges = skip_GRanges, use_old_special_names = use_old_special_names) %>%
+      as_tibble(skip_GRanges = skip_GRanges) %>%
       dplyr::distinct(..., .keep_all=.keep_all)
 }
 
@@ -275,13 +278,17 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   
   
   # Deprecation of special column names
-  use_old_special_names = is_sample_feature_deprecated_used(
+  if(is_sample_feature_deprecated_used(
     .data, 
     (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
-  )
+  )){
+    .data= ping_old_special_column_into_metadata(.data)
+  }
+  
+
   
     new_meta <- .data %>%
-        as_tibble(skip_GRanges = T, use_old_special_names = use_old_special_names) %>%
+        as_tibble(skip_GRanges = T) %>%
         dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
 
     new_meta %>%
@@ -289,9 +296,9 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
         when(
 
             # If rectangular
-            is_rectangular(.) ~ .data[
-                unique(pull(.,!!feature__$symbol)),
-                unique(pull(.,!!sample__$symbol))
+            is_rectangular(., .data) ~ .data[
+                unique(pull(.,!!f_(.data)$symbol)),
+                unique(pull(.,!!s_(.data)$symbol))
             ],
 
             # If not rectangular return just tibble
@@ -554,7 +561,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
     tst =
         intersect(
             cols,
-            get_special_columns(.data) %>% c(get_needed_columns())
+            get_special_columns(.data) %>% c(get_needed_columns(.data))
         ) %>%
         length() %>%
         gt(0)
@@ -563,7 +570,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
     if (tst) {
         columns =
             get_special_columns(.data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(.data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -663,7 +670,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
     tst =
         intersect(
             cols %>% names(),
-            get_special_columns(.data) %>% c(get_needed_columns())
+            get_special_columns(.data) %>% c(get_needed_columns(.data))
         ) %>%
         length() %>%
         gt(0)
@@ -672,7 +679,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
     if (tst) {
         columns =
             get_special_columns(.data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(.data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -962,7 +969,8 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
         when(
 
             # If duplicated sample-feature pair returns tibble
-            !is_not_duplicated(.) | !is_rectangular(.) ~ {
+            !is_not_duplicated(., .data) | 
+            !is_rectangular(., .data) ~ {
                 message(duplicated_cell_names)
                 (.)
             },
@@ -1044,28 +1052,28 @@ select.SummarizedExperiment <- function(.data, ...) {
   
   row_data_tibble = 
     rowData(.data) %>% 
-    as_tibble(rownames = feature__$name) 
+    as_tibble(rownames = f_(.data)$name) 
   
   row_data_DF =
     row_data_tibble %>% 
-    select(one_of(columns_query), !!feature__$symbol) %>%
+    select(one_of(columns_query), !!f_(.data)$symbol) %>%
     suppressWarnings() %>% 
-    data.frame(row.names=pull(., !!feature__$symbol)) %>%
-    select(-!!feature__$symbol) %>%
+    data.frame(row.names=pull(., !!f_(.data)$symbol)) %>%
+    select(-!!f_(.data)$symbol) %>%
     DataFrame()
   
   rowData(.data) = row_data_tibble
   
   col_data_tibble = 
     colData(.data) %>% 
-    as_tibble(rownames = sample__$name) 
+    as_tibble(rownames = s_(.data)$name) 
   
   col_data_DF = 
     col_data_tibble %>%  
-    select(one_of(columns_query), !!sample__$symbol) %>%
+    select(one_of(columns_query), !!s_(.data)$symbol) %>%
     suppressWarnings() %>% 
-    data.frame(row.names=pull(., !!sample__$symbol)) %>%
-    select(-!!sample__$symbol) %>%
+    data.frame(row.names=pull(., !!s_(.data)$symbol)) %>%
+    select(-!!s_(.data)$symbol) %>%
     DataFrame()
   
   count_data = 
@@ -1077,7 +1085,7 @@ select.SummarizedExperiment <- function(.data, ...) {
     when(
       
       # If it's just col data
-     ncol(row_data_DF) == 0 & !feature__$name %in% columns_query & length(count_data) == 0 & ncol(col_data_DF) > 0  ~ {
+     ncol(row_data_DF) == 0 & !f_(.data)$name %in% columns_query & length(count_data) == 0 & ncol(col_data_DF) > 0  ~ {
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        col_data_tibble %>% 
@@ -1087,7 +1095,7 @@ select.SummarizedExperiment <- function(.data, ...) {
         },
       
      # If it's just row data
-     ncol(row_data_DF) > 0 & length(count_data) == 0 & ncol(col_data_DF) == 0 & !sample__$name %in% columns_query   ~ {
+     ncol(row_data_DF) > 0 & length(count_data) == 0 & ncol(col_data_DF) == 0 & !s_(.data)$name %in% columns_query   ~ {
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        row_data_tibble %>% 
@@ -1097,7 +1105,7 @@ select.SummarizedExperiment <- function(.data, ...) {
      },
      
      
-     !all(c(get_needed_columns()) %in% .)  ~ {
+     !all(c(get_needed_columns(.data)) %in% .)  ~ {
        message("tidySummarizedExperiment says: You are doing a complex selection both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your selects sample-wise OR feature-wise.")
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        

@@ -75,23 +75,25 @@ unnest.tidySummarizedExperiment_nested <-
             pull(., !!cols) %>%
                 .[[1]] %>%
                 class() %>%
-                as.character() %>%
+                as.character() %>% 
                 eq("SummarizedExperiment") %>%
                 any() ~ {
 
+                  se = pull(., !!cols) %>% .[[1]] 
+                  
                   # Mark if columns belong to feature or sample
                   my_unnested_tibble =
                     mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-                    select(-suppressWarnings( one_of(sample__$name, feature__$name))) %>%
+                    select(-suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
                     unnest(!!cols)
 
                   # Get which column is relative to feature or sample
-                  sample_columns = my_unnested_tibble %>% get_subset_columns(!!sample__$symbol)
-                  transcript_columns = my_unnested_tibble %>% get_subset_columns(!!feature__$symbol)
+                  sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(se)$symbol)
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(se)$symbol)
                   source_column =
                     c(
-                      rep(sample__$name, length(sample_columns)) %>% setNames(sample_columns),
-                      rep(feature__$name, length(transcript_columns)) %>% setNames(transcript_columns)
+                      rep(s_(se)$name, length(sample_columns)) %>% setNames(sample_columns),
+                      rep(f_(se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
                     )
 
                   # Do my trick to unnest
@@ -101,14 +103,14 @@ unnest.tidySummarizedExperiment_nested <-
 
                         # Attach back the columns used for nesting
                         .data_ %>%
-                          select(-!!cols, -suppressWarnings( one_of(sample__$name, feature__$name))) %>%
+                          select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
                           slice(rep(.y, ncol(.x) * nrow(.x))),
 
                         # Column sample-wise or feature-wise
                         column_belonging =
                           source_column[
                             .data_ %>%
-                              select(-!!cols, -suppressWarnings( one_of(sample__$name, feature__$name))) %>%
+                              select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
                               colnames()
                           ]
                       )
@@ -172,11 +174,16 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 
         # Check that sample or feature are in the nesting
         {
-            if(c(sample__$name, feature__$name) %>% intersect(colnames(.)) %>% length() %>% `>` (0))
+            if(c(s_(.data)$name, f_(.data)$name) %>% intersect(colnames(.)) %>% length() %>% `>` (0))
                 stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting")
             (.)
         }
 
+    sample_name = s_(my_data__)$name
+    feature_name = f_(my_data__)$name
+    sample_symbol = s_(my_data__)$symbol
+    feature_symbol = f_(my_data__)$symbol
+    
     my_data__nested %>%
 
         mutate(
@@ -186,27 +193,27 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                 list(!!as.symbol(col_name_data)) %>%
 
                   # Check if nested by sample
-                  when(sample__$name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(sample__$name))), ~ (.)) %>%
+                  when(sample_name %in% colnames(my_data__nested) ~ c(., list(!!sample_symbol)), ~ (.)) %>%
 
                   # Check if nested by feature
-                  when(feature__$name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(feature__$name))), ~ (.)) , ~ {
+                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ {
 
                     # Check if nested by sample
-                    if(sample__$name %in% colnames(my_data__nested)) { my_samples=..2 }
-                    else {my_samples=pull(..1,!!sample__$symbol)}
+                    if(sample_name %in% colnames(my_data__nested)) { my_samples=..2 }
+                    else {my_samples=pull(..1,!!sample_symbol)}
 
                     # Check if nested by feature
-                    if(sample__$name %in% colnames(my_data__nested) & feature__$name %in% colnames(my_data__nested)) {my_transcripts=..3}
-                    else if(feature__$name %in% colnames(my_data__nested)) my_transcripts=..2
-                    else my_transcripts=pull(..1,!!feature__$symbol)
+                    if(sample_name %in% colnames(my_data__nested) & feature_name %in% colnames(my_data__nested)) {my_transcripts=..3}
+                    else if(feature_name %in% colnames(my_data__nested)) my_transcripts=..2
+                    else my_transcripts=pull(..1,!!feature_symbol)
 
                   my_data__ %>%
 
                     # Subset cells
-                    filter(!!sample__$symbol %in% my_samples & !!feature__$symbol %in% my_transcripts) %>%
+                    filter(!!sample_symbol %in% my_samples & !!feature_symbol %in% my_transcripts) %>%
 
                     # Subset columns
-                    select(colnames(..1) %>% c(sample__$name, feature__$name) %>% unique)
+                    select(colnames(..1) %>% c(sample_name, feature_name) %>% unique)
                 }
             )
         ) %>%
@@ -269,7 +276,7 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     tst =
         intersect(
             into %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns())
+            get_special_columns(data) %>% c(get_needed_columns(data))
         ) %>%
         length() %>%
         gt(0) &
@@ -279,7 +286,7 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     if (tst) {
         columns =
             get_special_columns(data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -575,7 +582,7 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
     tst =
         intersect(
             cols %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns())
+            get_special_columns(data) %>% c(get_needed_columns(data))
         ) %>%
         length() %>%
         gt(0) &
@@ -585,7 +592,7 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
     if (tst) {
         columns =
             get_special_columns(data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -661,7 +668,7 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     tst =
         intersect(
             cols %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns())
+            get_special_columns(data) %>% c(get_needed_columns(data))
         ) %>%
         length() %>%
         gt(0) &
@@ -671,7 +678,7 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     if (tst) {
         columns =
             get_special_columns(data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
