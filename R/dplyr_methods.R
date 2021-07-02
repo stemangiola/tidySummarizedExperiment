@@ -125,8 +125,8 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
 
             # If the column added are not sample-wise or feature-wise return tibble
             (colnames(tts[[2]]) %in% c(
-                get_subset_columns(., !!sample_symbol),
-                get_subset_columns(., !!feature_symbol)
+                get_subset_columns(., !!sample__$symbol),
+                get_subset_columns(., !!feature__$symbol)
             )
             ) %>% all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
 
@@ -290,8 +290,8 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 
             # If rectangular
             is_rectangular(.) ~ .data[
-                unique(pull(.,!!feature_symbol)),
-                unique(pull(.,!!sample_symbol))
+                unique(pull(.,!!feature__$symbol)),
+                unique(pull(.,!!sample__$symbol))
             ],
 
             # If not rectangular return just tibble
@@ -1044,28 +1044,28 @@ select.SummarizedExperiment <- function(.data, ...) {
   
   row_data_tibble = 
     rowData(.data) %>% 
-    as_tibble(rownames = feature_name) 
+    as_tibble(rownames = feature__$name) 
   
   row_data_DF =
     row_data_tibble %>% 
-    select(one_of(columns_query), !!feature_symbol) %>%
+    select(one_of(columns_query), !!feature__$symbol) %>%
     suppressWarnings() %>% 
-    data.frame(row.names=pull(., !!feature_symbol)) %>%
-    select(-!!feature_symbol) %>%
+    data.frame(row.names=pull(., !!feature__$symbol)) %>%
+    select(-!!feature__$symbol) %>%
     DataFrame()
   
   rowData(.data) = row_data_tibble
   
   col_data_tibble = 
     colData(.data) %>% 
-    as_tibble(rownames = sample_name) 
+    as_tibble(rownames = sample__$name) 
   
   col_data_DF = 
     col_data_tibble %>%  
-    select(one_of(columns_query), !!sample_symbol) %>%
+    select(one_of(columns_query), !!sample__$symbol) %>%
     suppressWarnings() %>% 
-    data.frame(row.names=pull(., !!sample_symbol)) %>%
-    select(-!!sample_symbol) %>%
+    data.frame(row.names=pull(., !!sample__$symbol)) %>%
+    select(-!!sample__$symbol) %>%
     DataFrame()
   
   count_data = 
@@ -1077,7 +1077,7 @@ select.SummarizedExperiment <- function(.data, ...) {
     when(
       
       # If it's just col data
-     ncol(row_data_DF) == 0 & !feature_name %in% columns_query & length(count_data) == 0 & ncol(col_data_DF) > 0  ~ {
+     ncol(row_data_DF) == 0 & !feature__$name %in% columns_query & length(count_data) == 0 & ncol(col_data_DF) > 0  ~ {
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        col_data_tibble %>% 
@@ -1087,7 +1087,7 @@ select.SummarizedExperiment <- function(.data, ...) {
         },
       
      # If it's just row data
-     ncol(row_data_DF) > 0 & length(count_data) == 0 & ncol(col_data_DF) == 0 & !sample_name %in% columns_query   ~ {
+     ncol(row_data_DF) > 0 & length(count_data) == 0 & ncol(col_data_DF) == 0 & !sample__$name %in% columns_query   ~ {
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        row_data_tibble %>% 

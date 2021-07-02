@@ -54,18 +54,18 @@ as_tibble.SummarizedExperiment <- function(x, ...,
   .subset = enquo(.subset)
   
   if(use_old_special_names){
-    sample_name = "sample"
-    feature_name = "feature"
+    sample__$name = "sample"
+    feature__$name = "feature"
   }
   
   sample_info <-
     colData(x) %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names(feature_name, sample_name) %>%
+    change_reserved_column_names(feature__, sample__) %>%
   
     # Convert to tibble
-    tibble::as_tibble(rownames=sample_name)
+    tibble::as_tibble(rownames=sample__$name)
   
   range_info <-
     skip_GRanges %>%
@@ -79,10 +79,10 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     rowData(x) %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names(feature_name, sample_name) %>%
+    change_reserved_column_names(feature__, sample__) %>%
   
     # Convert to tibble
-    tibble::as_tibble(rownames=feature_name) 
+    tibble::as_tibble(rownames=feature__$name) 
   
   count_info <- get_count_datasets(x)
   
@@ -91,8 +91,8 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     when(
       quo_is_null(.) ~ 
         count_info %>%
-        left_join(sample_info, by=sample_name) %>%
-        left_join(gene_info, by=feature_name) %>%
+        left_join(sample_info, by=sample__$name) %>%
+        left_join(gene_info, by=feature__$name) %>%
         when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) ,
       ~ subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
     )

@@ -82,16 +82,16 @@ unnest.tidySummarizedExperiment_nested <-
                   # Mark if columns belong to feature or sample
                   my_unnested_tibble =
                     mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-                    select(-suppressWarnings( one_of(sample_name, feature_name))) %>%
+                    select(-suppressWarnings( one_of(sample__$name, feature__$name))) %>%
                     unnest(!!cols)
 
                   # Get which column is relative to feature or sample
-                  sample_columns = my_unnested_tibble %>% get_subset_columns(!!sample_symbol)
-                  transcript_columns = my_unnested_tibble %>% get_subset_columns(!!feature_symbol)
+                  sample_columns = my_unnested_tibble %>% get_subset_columns(!!sample__$symbol)
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(!!feature__$symbol)
                   source_column =
                     c(
-                      rep(sample_name, length(sample_columns)) %>% setNames(sample_columns),
-                      rep(feature_name, length(transcript_columns)) %>% setNames(transcript_columns)
+                      rep(sample__$name, length(sample_columns)) %>% setNames(sample_columns),
+                      rep(feature__$name, length(transcript_columns)) %>% setNames(transcript_columns)
                     )
 
                   # Do my trick to unnest
@@ -101,14 +101,14 @@ unnest.tidySummarizedExperiment_nested <-
 
                         # Attach back the columns used for nesting
                         .data_ %>%
-                          select(-!!cols, -suppressWarnings( one_of(sample_name, feature_name))) %>%
+                          select(-!!cols, -suppressWarnings( one_of(sample__$name, feature__$name))) %>%
                           slice(rep(.y, ncol(.x) * nrow(.x))),
 
                         # Column sample-wise or feature-wise
                         column_belonging =
                           source_column[
                             .data_ %>%
-                              select(-!!cols, -suppressWarnings( one_of(sample_name, feature_name))) %>%
+                              select(-!!cols, -suppressWarnings( one_of(sample__$name, feature__$name))) %>%
                               colnames()
                           ]
                       )
@@ -172,7 +172,7 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 
         # Check that sample or feature are in the nesting
         {
-            if(c(sample_name, feature_name) %>% intersect(colnames(.)) %>% length() %>% `>` (0))
+            if(c(sample__$name, feature__$name) %>% intersect(colnames(.)) %>% length() %>% `>` (0))
                 stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting")
             (.)
         }
@@ -186,27 +186,27 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                 list(!!as.symbol(col_name_data)) %>%
 
                   # Check if nested by sample
-                  when(sample_name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(sample_name))), ~ (.)) %>%
+                  when(sample__$name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(sample__$name))), ~ (.)) %>%
 
                   # Check if nested by feature
-                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(feature_name))), ~ (.)) , ~ {
+                  when(feature__$name %in% colnames(my_data__nested) ~ c(., list(!!as.symbol(feature__$name))), ~ (.)) , ~ {
 
                     # Check if nested by sample
-                    if(sample_name %in% colnames(my_data__nested)) { my_samples=..2 }
-                    else {my_samples=pull(..1,!!sample_symbol)}
+                    if(sample__$name %in% colnames(my_data__nested)) { my_samples=..2 }
+                    else {my_samples=pull(..1,!!sample__$symbol)}
 
                     # Check if nested by feature
-                    if(sample_name %in% colnames(my_data__nested) & feature_name %in% colnames(my_data__nested)) {my_transcripts=..3}
-                    else if(feature_name %in% colnames(my_data__nested)) my_transcripts=..2
-                    else my_transcripts=pull(..1,!!feature_symbol)
+                    if(sample__$name %in% colnames(my_data__nested) & feature__$name %in% colnames(my_data__nested)) {my_transcripts=..3}
+                    else if(feature__$name %in% colnames(my_data__nested)) my_transcripts=..2
+                    else my_transcripts=pull(..1,!!feature__$symbol)
 
                   my_data__ %>%
 
                     # Subset cells
-                    filter(!!sample_symbol %in% my_samples & !!feature_symbol %in% my_transcripts) %>%
+                    filter(!!sample__$symbol %in% my_samples & !!feature__$symbol %in% my_transcripts) %>%
 
                     # Subset columns
-                    select(colnames(..1) %>% c(sample_name, feature_name) %>% unique)
+                    select(colnames(..1) %>% c(sample__$name, feature__$name) %>% unique)
                 }
             )
         ) %>%

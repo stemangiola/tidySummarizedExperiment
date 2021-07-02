@@ -3,14 +3,14 @@
 is_rectangular <- function(.data) {
     is_rectangular_sample <-
         .data %>%
-        count(!!sample_symbol ) %>%
+        count(!!sample__$symbol ) %>%
         count(n, name="nn") %>%
         nrow() %>%
         equals(1)
 
     is_rectangular_transcript <-
         .data %>%
-        count(!!feature_symbol) %>%
+        count(!!feature__$symbol) %>%
         count(n, name="nn") %>%
         nrow() %>%
         equals(1)
@@ -20,7 +20,7 @@ is_rectangular <- function(.data) {
 
 is_not_duplicated <- function(.data) {
     .data %>%
-        count(!!sample_symbol , !!feature_symbol) %>%
+        count(!!sample__$symbol , !!feature__$symbol) %>%
         filter(n > 1) %>%
         nrow() %>%
         equals(0)
