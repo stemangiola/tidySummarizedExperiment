@@ -189,11 +189,11 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
     not()
   
   # Deprecation of special column names
-  use_old_special_names = sample_deprecated_used(.data, distinct_columns)
+  use_old_special_names = is_sample_feature_deprecated_used(.data, distinct_columns)
   
   .data %>%
       as_tibble(skip_GRanges = skip_GRanges, use_old_special_names = use_old_special_names) %>%
-      dplyr::distinct(distinct_columns, .keep_all=.keep_all)
+      dplyr::distinct(..., .keep_all=.keep_all)
 }
 
 
@@ -275,7 +275,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   
   
   # Deprecation of special column names
-  use_old_special_names = sample_deprecated_used(
+  use_old_special_names = is_sample_feature_deprecated_used(
     .data, 
     (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
   )
