@@ -768,14 +768,15 @@ subset_tibble_output = function(.data, count_info, sample_info, gene_info, range
   
 }
 
+#' @importFrom stringr str_replace
 change_reserved_column_names = function(col_data, .data ){
   
   col_data %>%
     
     setNames(
       colnames(.) %>% 
-        str_replace(f_(.data)$name, sprintf("%s.x", f_(.data)$name)) %>% 
-        str_replace(s_(.data)$name, sprintf("%s.x", s_(.data)$name)) %>% 
+        sapply(function(x) if(x==f_(.data)$name) sprintf("%s.x", f_(.data)$name) else x) %>% 
+        sapply(function(x) if(x==s_(.data)$name) sprintf("%s.x", s_(.data)$name) else x) %>% 
         str_replace("^coordinate$", "coordinate.x")
     ) 
   

@@ -32,6 +32,11 @@ test_that("mutate", {
     pasilla %>%
         mutate(condition = sample) %>%
         expect_warning(warning_message)
+    
+    pasilla %>%
+        mutate(sample_name=toupper(sample)) %>%
+        select(sample, sample_name) %>%
+        expect_warning(warning_message)
 })
 
 test_that("left_join", {
@@ -155,3 +160,5 @@ test_that("pivot_longer", {
         .[1] %>%
         expect_equal("tbl_df")
 })
+
+
