@@ -1118,7 +1118,7 @@ select.SummarizedExperiment <- function(.data, ...) {
     when(
       
       # If it's just col data
-     ncol(row_data_DF) == 0 & !f_(.data)$name %in% columns_query & length(count_data) == 0 & ncol(col_data_DF) > 0  ~ {
+     ncol(row_data_DF) == 0 & !f_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(col_data_DF) > 0 | s_(.data)$name %in% columns_query)  ~ {
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        col_data_tibble %>% 
@@ -1128,7 +1128,7 @@ select.SummarizedExperiment <- function(.data, ...) {
         },
       
      # If it's just row data
-     ncol(row_data_DF) > 0 & length(count_data) == 0 & ncol(col_data_DF) == 0 & !s_(.data)$name %in% columns_query   ~ {
+     ncol(col_data_DF) == 0 & !s_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(row_data_DF) > 0 | f_(.data)$name %in% columns_query) ~ {
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        row_data_tibble %>% 

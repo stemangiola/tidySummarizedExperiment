@@ -53,13 +53,14 @@ as_tibble.SummarizedExperiment <- function(x, ...,
   .subset = enquo(.subset)
   
   sample_info <-
-    colData(x) %>% 
+    colData(x)  %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names(x) %>%
-  
+    change_reserved_column_names(x) %>% 
+    
     # Convert to tibble
-    tibble::as_tibble(rownames=s_(x)$name)
+    tibble::as_tibble(rownames=s_(x)$name) %>% 
+    setNames(c(s_(x)$name, colnames(colData(x))))
   
   range_info <-
     skip_GRanges %>%
@@ -70,25 +71,29 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     reduce(left_join, by="coordinate") 
     
   gene_info <-
-    rowData(x) %>% 
+    rowData(x)  %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names(x) %>%
+    change_reserved_column_names(x)%>% 
   
     # Convert to tibble
-    tibble::as_tibble(rownames=f_(x)$name) 
+    tibble::as_tibble(rownames=f_(x)$name) %>% 
+    setNames(c(f_(x)$name, colnames(rowData(x))))
+  
   
   count_info <- get_count_datasets(x)
   
   # Return 
-  .subset %>%
-    when(
-      quo_is_null(.) ~ 
-        count_info %>%
-        left_join(sample_info, by=s_(x)$name) %>%
-        left_join(gene_info, by=f_(x)$name) %>%
-        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) ,
-      ~ subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
-    )
+  if(quo_is_null(.subset))
+    
+    # If I want to return all columns
+    count_info %>%
+      inner_join(sample_info, by=s_(x)$name) %>%
+      inner_join(gene_info, by=f_(x)$name) %>%
+      when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) 
+    
+  # This function outputs a tibble after subsetting the columns
+  else subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
+
   
 }

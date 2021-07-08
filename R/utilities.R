@@ -338,48 +338,60 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
       # where a unique value cannot be linked to sample or feature
       c(names(column_belonging[column_belonging==f_(se)$name]))
     
+    new_colnames_col = 
+      .data_mutated %>%
+      select_if(!colnames(.) %in% setdiff(colnames_col, s_(se)$name)) %>% 
+      
+      # Eliminate special columns that are read only. Assays
+      select_if(!colnames(.) %in% get_special_columns(se)) %>%
+      select_if(!colnames(.) %in% colnames_row) %>%
+      # Replace for subset
+      select(!!s_(se)$symbol,     get_subset_columns(., !!s_(se)$symbol)   ) %>% 
+      colnames()
+     
     col_data <-
         .data_mutated %>%
       
-        # Eliminate special columns that are read only. Assays
-        select_if(!colnames(.) %in% get_special_columns(se)) %>%
-
-        # Replace for subset
-        select(!!s_(se)$symbol, 
-            get_subset_columns(., !!s_(se)$symbol) %>%
-                 
-           # Eliminate feature column
-             setdiff(colnames_row)
-           
-        ) %>%
-        distinct() %>%
-
+        select(c(colnames_col,new_colnames_col)) %>%
+      
+        # Make fast distinct()
+        filter(pull(., !!s_(se)$symbol) %>% duplicated() %>%  not()) %>% 
+      
         # In case unitary SE subset does not work
-        select_if(!colnames(.) %in% colnames_row) %>%
-        data.frame(row.names=pull(., !!s_(se)$symbol)) %>%
+        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
         select(-!!s_(se)$symbol) %>%
-        DataFrame()
+        DataFrame(check.names = FALSE)
 
+    # This to avoid the mismatch between missing column names for counts 
+    # and numerical row names for colData
+    row_names_col = 
+      col_data %>%
+      rownames() %>%
+      when(
+        colnames(se) %>% is.null ~ as.integer(.),
+        ~ (.)
+      )
+    
     row_data <-
         .data_mutated %>%
       
        # Eliminate special columns that are read only 
         select_if(!colnames(.) %in% get_special_columns(se)) %>%
+      
+        #eliminate sample columns directly
+        select_if(!colnames(.) %in% colnames(col_data)) %>%
 
+        # select(one_of(colnames(rowData(se))))
         # Replace for subset
-        select(!!f_(se)$symbol, 
-               get_subset_columns(., !!f_(se)$symbol) %>%
-                 
-                 # Eliminate sample column
-                 setdiff(colnames_col)
-        ) %>%
-        distinct() %>%
+        select(!!f_(se)$symbol,  get_subset_columns(., !!f_(se)$symbol) ) %>%
+      
+        # Make fast distinct()
+        filter(pull(., !!f_(se)$symbol) %>% duplicated() %>%  not()) %>% 
 
         # In case unitary SE subset does not work because all same
-        select_if(!colnames(.) %in% c(colnames_col, colnames(col_data))) %>%
-        data.frame(row.names=pull(.,f_(se)$symbol)) %>%
+        data.frame(row.names=pull(.,f_(se)$symbol), check.names = FALSE) %>%
         select(-!!f_(se)$symbol) %>%
-        DataFrame()
+        DataFrame(check.names = FALSE)
     
     # This to avoid the mismatch between missing row names for counts 
     # and numerical row names for rowData
@@ -391,16 +403,6 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
         ~ (.)
       )
     
-    # This to avoid the mismatch between missing column names for counts 
-    # and numerical row names for colData
-    row_names_col = 
-      col_data %>%
-      rownames() %>%
-      when(
-        colnames(se) %>% is.null ~ as.integer(.),
-        ~ (.)
-      )
-    
     # Subset if needed. This function is used by many dplyr utilities
     se <- se[row_names_row, row_names_col]
 
@@ -408,9 +410,10 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
     colData(se) <- col_data
     rowData(se) <- row_data
     
+    # Count-like data that is NOT in the assay slot already 
     colnames_assay <-
       colnames(.data_mutated) %>% 
-      setdiff(c(f_(se)$name, s_(se)$name, get_GRanges_colnames())) %>%
+      setdiff(c(f_(se)$name, s_(se)$name, colnames(as.data.frame(rowRanges(se)[1])) )) %>%
       setdiff(colnames(col_data)) %>% 
       setdiff(colnames(row_data)) %>%
       setdiff(assays(se) %>% names)
@@ -506,7 +509,6 @@ get_special_datasets <- function(se) {
         if(is.null(rr@partitioning@NAMES)) rr@partitioning@NAMES = as.character(1:nrow(se))
         
         tibble::as_tibble(rr) %>%
-          #mutate(!!f_(se)$symbol := rr@partitioning@NAMES)
           eliminate_GRanges_metadata_columns_also_present_in_Rowdata(se) %>%
           nest(GRangesList = -group_name) %>%
           rename(!!f_(se)$symbol := group_name)
@@ -520,6 +522,7 @@ get_special_datasets <- function(se) {
        if(is.null(rr@ranges@NAMES)) rr@ranges@NAMES = as.character(1:nrow(se))
          
         tibble::as_tibble(rr) %>% 
+          eliminate_GRanges_metadata_columns_also_present_in_Rowdata(se) %>% 
         mutate(!!f_(se)$symbol := rr@ranges@NAMES) 
       }
 
@@ -536,7 +539,7 @@ get_special_datasets <- function(se) {
 #' @importFrom SummarizedExperiment assays
 #' 
 #' @noRd
-get_count_datasets <- function(se) {
+get_count_datasets <- function(se) { 
   map2(
     assays(se) %>% as.list(),
     names(assays(se)),
@@ -550,8 +553,10 @@ get_count_datasets <- function(se) {
       ~ (.)
     ) %>%
       
-      gather(!!s_(se)$symbol, count,-!!f_(se)$symbol) %>%
-      rename(!!.y := count)
+      gather(!!s_(se)$symbol, !!.y,-!!f_(se)$symbol) 
+    
+    #%>%
+    #  rename(!!.y := count)
   ) %>%
     when(
       length(.)>0 ~ reduce(., left_join, by = c(f_(se)$name, s_(se)$name)),
@@ -560,8 +565,15 @@ get_count_datasets <- function(se) {
         ) %>% 
         setNames(c(f_(se)$name, s_(se)$name)) %>%
         tibble::as_tibble()
-    )
+    ) %>% 
     
+    # Add dummy sample or feature if we have empty assay. 
+    # This is needed for a correct isualisation of the tibble form
+    when(
+      f_(se)$name %in% colnames(.) %>% not ~ mutate(., !!f_(se)$symbol := as.character(NA)),
+      s_(se)$name %in% colnames(.) %>% not ~ mutate(., !!s_(se)$symbol := as.character(NA)),
+      ~ (.)
+    )
 }
 
 get_needed_columns <- function(.data) {
@@ -620,7 +632,7 @@ get_subset_columns <- function(.data, .col) {
 
     # Make col names
     .col <- enquo(.col)
-
+ 
     # x-annotation df
     n_x <- .data %>%
         distinct_at(vars(!!.col)) %>%
@@ -688,7 +700,7 @@ eliminate_GRanges_metadata_columns_also_present_in_Rowdata = function(.my_data, 
 }
 
 subset_tibble_output = function(.data, count_info, sample_info, gene_info, range_info, .subset){
-  
+  # This function outputs a tibble after subsetting the columns
   .subset = enquo(.subset)
   
   # Build template of the output
@@ -801,7 +813,7 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
     !is.null(.) ~ sapply(., function(.x) ifelse(!is.null(names(.x)), names(.x), .x)), 
     ~ colnames(y)
   )
-   
+  
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     x, 
@@ -810,107 +822,106 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
     x= ping_old_special_column_into_metadata(x)
   }
   
-columns_query %>%
-    when(
-      
-      # Complex join that it is not efficient yet
-      (any(columns_query %in% colnames_row) & any(columns_query %in% colnames_col)) |
+  if(
+    
+    # Complex join that it is not efficient yet
+    (any(columns_query %in% colnames_row) & any(columns_query %in% colnames_col)) |
+    
+    # If join is with something else, the inefficient generic solution might work, 
+    # or delegate the proper error downstream
+    (!any(columns_query %in% colnames_row) & !any(columns_query %in% colnames_col)) |
+    
+    # Needed for internal recurrence if outcome is not valid
+    force_tibble_route) {
+    
+    message(data_frame_returned_message)
+    
+    # If I have a big dataset
+    if(ncol(x)>100) message("tidySummarizedExperiment says: if you are joining a dataframe both sample-wise and feature-wise, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
+    
+    x %>%
+      as_tibble(skip_GRanges  = T) %>%
+      join_function(y, by=by, copy=copy, suffix=suffix, ...) %>%
+      when(
         
-        # If join is with something else, the inefficient generic solution might work, 
-        # or delegate the proper error downstream
-        (!any(columns_query %in% colnames_row) & !any(columns_query %in% colnames_col)) |
-        
-        # Needed for internal recurrence if outcome is not valid
-        force_tibble_route ~ {
-          
-          message(data_frame_returned_message)
-          
-          # If I have a big dataset
-          if(ncol(x)>100) message("tidySummarizedExperiment says: if you are joining a dataframe both sample-wise and feature-wise, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
-          
-          x %>%
-            as_tibble(skip_GRanges  = T) %>%
-            join_function(y, by=by, copy=copy, suffix=suffix, ...) %>%
-            when(
-              
-              # If duplicated sample-feature pair returns tibble
-              !is_not_duplicated(., x) ~ {
-                message(duplicated_cell_names)
-                (.)
-              },
-              
-              # Otherwise return updated tidySummarizedExperiment
-              ~ update_SE_from_tibble(., x)
-            )
-          
+        # If duplicated sample-feature pair returns tibble
+        !is_not_duplicated(., x) ~ {
+          message(duplicated_cell_names)
+          (.)
         },
-      
-      # Join only feature-wise
-      any(columns_query %in% colnames_row) & !any(columns_query %in% colnames_col) ~ {
         
-        row_data_tibble = 
-          rowData(x) %>% 
-          as_tibble(rownames = f_(x)$name) %>%  
-          join_function(y, by=by, copy=copy, suffix=suffix, ...) 
-        
-        # Check if the result is not SE then take the tibble route
-        if(
-          is.na(pull(row_data_tibble, !!f_(x)$symbol)) %>% any | 
-          duplicated(pull(row_data_tibble, !!f_(x)$symbol)) %>% any |
-          pull(row_data_tibble, !!f_(x)$symbol) %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
-        ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
-        
-        row_data = 
-          row_data_tibble %>% 
-          data.frame(row.names=pull(., !!f_(x)$symbol)) %>%
-          select(-!!f_(x)$symbol) %>%
-          DataFrame()
-        
-        # Subset in case of an inner join, or a right join
-        x = x[rownames(row_data),]  
-        
-        # Tranfer annotation
-        rowData(x) = row_data
-        
-        # Return
-        x
-      },
-      
-      # Join only sample-wise
-      any(columns_query %in% colnames_col) & !any(columns_query %in% colnames_row) ~ {
-        
-        col_data_tibble = 
-          colData(x) %>% 
-          as_tibble(rownames = s_(x)$name) %>%  
-          join_function(y, by=by, copy=copy, suffix=suffix, ...)
-        
-        # Check if the result is not SE then take the tibble route
-        if(
-          is.na(pull(col_data_tibble, !!s_(x)$symbol)) %>% any | 
-          duplicated(pull(col_data_tibble, !!s_(x)$symbol)) %>% any |
-          pull(col_data_tibble, !!s_(x)$symbol) %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
-        ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
-          
-       col_data = 
-         col_data_tibble %>% 
-          data.frame(row.names=pull(., !!s_(x)$symbol)) %>%
-          select(-!!s_(x)$symbol) %>%
-          DataFrame()
-        
-          
-        # Subset in case of an inner join, or a right join
-        x = x[,rownames(col_data)]  
-        
-        # Tranfer annotation
-        colData(x) = col_data
-        
-        # Return
-        x
-      },
-      
-      ~ stop("tidySummarizedExperiment says: ERROR FOR DEVELOPERS: this option should not exist. In join utility.")
-      
-    )
+        # Otherwise return updated tidySummarizedExperiment
+        ~ update_SE_from_tibble(., x)
+      )
+    
+  }
+  
+  # Join only feature-wise
+  else if(any(columns_query %in% colnames_row) & !any(columns_query %in% colnames_col)) {
+    
+    row_data_tibble = 
+      rowData(x) %>% 
+      as_tibble(rownames = f_(x)$name) %>%  
+      join_function(y, by=by, copy=copy, suffix=suffix, ...) 
+    
+    # Check if the result is not SE then take the tibble route
+    if(
+      is.na(pull(row_data_tibble, !!f_(x)$symbol)) %>% any | 
+      duplicated(pull(row_data_tibble, !!f_(x)$symbol)) %>% any |
+      pull(row_data_tibble, !!f_(x)$symbol) %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
+    ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
+    
+    row_data = 
+      row_data_tibble %>% 
+      data.frame(row.names=pull(., !!f_(x)$symbol)) %>%
+      select(-!!f_(x)$symbol) %>%
+      DataFrame()
+    
+    # Subset in case of an inner join, or a right join
+    x = x[rownames(row_data),]  
+    
+    # Tranfer annotation
+    rowData(x) = row_data
+    
+    # Return
+    x
+  }
+  
+  # Join only sample-wise
+  else if(any(columns_query %in% colnames_col) & !any(columns_query %in% colnames_row)) {
+    
+    col_data_tibble = 
+      colData(x) %>% 
+      as_tibble(rownames = s_(x)$name) %>%  
+      join_function(y, by=by, copy=copy, suffix=suffix, ...)
+    
+    # Check if the result is not SE then take the tibble route
+    if(
+      is.na(pull(col_data_tibble, !!s_(x)$symbol)) %>% any | 
+      duplicated(pull(col_data_tibble, !!s_(x)$symbol)) %>% any |
+      pull(col_data_tibble, !!s_(x)$symbol) %>% setdiff(rownames(colData(x))) %>% length() %>% gt(0)
+    ) return(join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, join_function, force_tibble_route = TRUE, ...))
+    
+    col_data = 
+      col_data_tibble %>% 
+      data.frame(row.names=pull(., !!s_(x)$symbol)) %>%
+      select(-!!s_(x)$symbol) %>%
+      DataFrame()
+    
+    
+    # Subset in case of an inner join, or a right join
+    x = x[,rownames(col_data)]  
+    
+    # Tranfer annotation
+    colData(x) = col_data
+    
+    # Return
+    x
+  }
+  
+  else stop("tidySummarizedExperiment says: ERROR FOR DEVELOPERS: this option should not exist. In join utility.")
+  
+  
   
 }
 
