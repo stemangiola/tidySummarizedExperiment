@@ -313,6 +313,34 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
         )
     }
 
+    # Subset column annotation
+    if(all(quo_names(col) %in% colnames(colData(data))) & !s_(se)$name %in% into){
+      colData(data) = 
+        colData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = s_(data)$name) %>% 
+        tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>% 
+        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
+        select(-!!s_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+     
+    # Subset row annotation
+    if(all(quo_names(col) %in% colnames(rowData(data)))& !f_(se)$name %in% into){
+      rowData(data) = 
+        rowData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = f_(data)$name) %>% 
+        tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>% 
+        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
+        select(-!!f_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
     data %>%
         as_tibble(skip_GRanges = T) %>%
         tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>%
@@ -645,8 +673,37 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
         )
     }
 
+    columns_to_unite = data[1,1] %>% select(...) %>% colnames()
+    
+    # Subset column annotation
+    if(all(columns_to_unite %in% colnames(colData(data))) & !s_(se)$name %in% col){
+      colData(data) = 
+        colData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = s_(data)$name) %>% 
+        tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
+        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
+        select(-!!s_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
+    # Subset row annotation
+    if(all(columns_to_unite %in% colnames(rowData(data)))& !f_(se)$name %in% col){
+      rowData(data) = 
+        rowData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = f_(data)$name) %>% 
+        tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
+        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
+        select(-!!f_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
 
-
+    # Otherwise go simple and slow
     data %>%
         as_tibble(skip_GRanges = T) %>%
         tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
@@ -739,7 +796,37 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
         )
     }
 
-
+    columns_to_unite = data[1,1] %>% select(...) %>% colnames()
+    
+    # Subset column annotation
+    if(all(columns_to_unite %in% colnames(colData(data))) & !s_(se)$name %in% col){
+      colData(data) = 
+        colData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = s_(data)$name) %>% 
+        tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
+        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
+        select(-!!s_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
+    # Subset row annotation
+    if(all(columns_to_unite %in% colnames(rowData(data)))& !f_(se)$name %in% col){
+      rowData(data) = 
+        rowData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = f_(data)$name) %>% 
+        tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
+        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
+        select(-!!f_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
+    # Otherwise go simple and slow
     data %>%
         as_tibble(skip_GRanges = T) %>%
         tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
