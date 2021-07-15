@@ -379,7 +379,7 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
         select_if(!colnames(.) %in% get_special_columns(se)) %>%
       
         #eliminate sample columns directly
-        select_if(!colnames(.) %in% colnames(col_data)) %>%
+        select_if(!colnames(.) %in% c(s_(se)$name, colnames(col_data))) %>%
 
         # select(one_of(colnames(rowData(se))))
         # Replace for subset
@@ -448,6 +448,28 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
     
     # return
     se
+}
+
+slice_optimised <- function(.data, ..., .preserve=FALSE) {
+  
+  # This simulated tibble only gets samples and features so we know those that have been completely omitted already
+  # In order to save time for the as_tibble conversion
+  simulated_slice = 
+    simulate_feature_sample_from_tibble(.data) %>% 
+    dplyr::slice(..., .preserve=.preserve)
+  
+  .data %>%
+    
+    # Subset the object for samples and features present in the simulated data
+    .[rownames(.) %in% simulated_slice[,f_(.)$name], colnames(.) %in% simulated_slice[,s_(.)$name]] %>% 
+    inner_join(simulated_slice, by = c(f_(.)$name, s_(.)$name)) %>% 
+    
+    # If order do not match with the one proposed by slice convert to tibble
+    when(
+      pull(., !!f_(.)$symbol, !!s_(.)$symbol) %>% identical(simulated_slice) ~ (.),
+      left_join(simulated_slice, as_tibble(.), by = c(f_(.)$name, s_(.)$name))
+    )
+  
 }
 
 
@@ -811,7 +833,7 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
   # See if join done by sample, feature or both
   columns_query = by %>% when(
     !is.null(.) ~ sapply(., function(.x) ifelse(!is.null(names(.x)), names(.x), .x)), 
-    ~ colnames(y)
+    ~ colnames(y) %>% intersect(c(colnames_col, colnames_row))
   )
   
   # Deprecation of special column names
@@ -834,7 +856,7 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
     # Needed for internal recurrence if outcome is not valid
     force_tibble_route) {
     
-    message(data_frame_returned_message)
+    
     
     # If I have a big dataset
     if(ncol(x)>100) message("tidySummarizedExperiment says: if you are joining a dataframe both sample-wise and feature-wise, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
@@ -845,8 +867,9 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
       when(
         
         # If duplicated sample-feature pair returns tibble
-        !is_not_duplicated(., x) ~ {
+        !is_not_duplicated(., x) | !is_rectangular(., x) ~ {
           message(duplicated_cell_names)
+          message(data_frame_returned_message)
           (.)
         },
         
@@ -991,6 +1014,20 @@ ping_old_special_column_into_metadata = function(.data){
 get_special_column_name_symbol = function(name){
   list(name = name, symbol = as.symbol(name))
 }
+
+# This function produce artificially the feature ans sample column, 
+# to make optimisation before as_tibble is called
+# for big datasets
+simulate_feature_sample_from_tibble = function(.data){
+  
+  r = rownames(.data) %>% .[rep(1:length(.), ncol(.data) )]
+  c = colnames(.data) %>% .[rep(1:length(.), each=nrow(.data) )]
+  
+    tibble(!!f_(.data)$symbol := r,  !!s_(.data)$symbol := c)
+  
+}
+
+
 
 feature__ =  get_special_column_name_symbol(".feature")
 sample__ = get_special_column_name_symbol(".sample")

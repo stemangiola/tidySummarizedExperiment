@@ -42,8 +42,9 @@ tcga_her2 <- clinical_patient_brca %>%
   filter(her2_group %in% groups) %>%
   select(bcr_patient_barcode, her2_group)
 
-tcga_her2
+tcga_joined <- 
+  counts_se %>% 
+  extract(barcode, "barcode", "(.+-.+-.+).+")
+  inner_join(tcga_her2, by = c("barcode" = "bcr_patient_barcode"))
 
-tcga_joined <- inner_join(counts_se, tcga_her2, by = c("barcode" = "bcr_patient_barcode"))
-
-counts_se %>% select(barcode)
+counts_se %>% select(.sample)

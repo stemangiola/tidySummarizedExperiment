@@ -987,21 +987,24 @@ NULL
 
 #' @export
 slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
-    .data %>%
-        as_tibble(skip_GRanges = T) %>%
-        dplyr::slice(..., .preserve=.preserve) %>%
-        when(
-
-            # If duplicated sample-feature pair returns tibble
-            !is_not_duplicated(., .data) | 
-            !is_rectangular(., .data) ~ {
-                message(duplicated_cell_names)
-                (.)
-            },
-
-            # Otherwise return updated tidySummarizedExperiment
-            ~ update_SE_from_tibble(., .data)
-        )
+  
+  slice_optimised(.data, ..., .preserve=.preserve)
+    
+    # .data %>%
+    #     as_tibble(skip_GRanges = T) %>%
+    #     dplyr::slice(..., .preserve=.preserve) %>%
+    #     when(
+    # 
+    #         # If duplicated sample-feature pair returns tibble
+    #         !is_not_duplicated(., .data) | 
+    #         !is_rectangular(., .data) ~ {
+    #             message(duplicated_cell_names)
+    #             (.)
+    #         },
+    # 
+    #         # Otherwise return updated tidySummarizedExperiment
+    #         ~ update_SE_from_tibble(., .data)
+    #     )
 }
 
 #' Subset columns using their names and types
@@ -1390,6 +1393,26 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
       quo_name(var) %>%
       not()
     
+    # Subset column annotation
+    if(quo_name(var) %in% colnames(colData(.data)))
+      return( colData(.data)[,quo_name(var)] %>% .[rep(1:length(.), each=nrow(.data) )])
+    
+    # Subset row annotation
+    if(quo_name(var) %in% colnames(rowData(.data)))
+      return( colData(.data)[,quo_name(var)] %>% .[rep(1:length(.), ncol(.data) )])
+    
+    # This returns a vector column wise. With the first sample and all features, second sample and all features, etc..
+    if(quo_name(var) %in% names(.data@assays@data))
+      return(.data@assays@data[[quo_name(var)]] %>% as.vector()) 
+    
+    # Subset rowranges
+    if(quo_name(var) %in% colnames(as.data.frame(rowRanges(.data))))
+      return( as.data.frame(rowRanges(.data))[,quo_name(var)] %>% .[rep(1:length(.), ncol(.data) )])
+    
+    # Otherwise (SHOULD NOT HAPPEN) use the long general procedure
+    colData(.data) = colData(.data)[,colnames(colData(.data)) == quo_name(var), drop=FALSE ]
+    rowData(.data) = rowData(.data)[,colnames(rowData(.data)) == quo_name(var), drop=FALSE ]
+  
     .data %>%
         as_tibble(skip_GRanges = skip_GRanges) %>%
         dplyr::pull(var=!!var, name=!!name, ...)
