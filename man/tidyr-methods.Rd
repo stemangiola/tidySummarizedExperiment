@@ -248,12 +248,14 @@ tidySummarizedExperiment::pasilla \%>\%
 tidySummarizedExperiment::pasilla \%>\%
 
     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
+    
 # See vignette("pivot") for examples and explanation
 
 library(dplyr)
 tidySummarizedExperiment::pasilla \%>\%
 
     pivot_longer(c(condition, type), names_to="name", values_to="value")
+    
 # See vignette("pivot") for examples and explanation
 
 library(dplyr)

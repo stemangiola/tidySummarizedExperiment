@@ -270,6 +270,7 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 #' tidySummarizedExperiment::pasilla %>%
 #'
 #'     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
+#'     
 #' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @importFrom tidyr extract
@@ -436,6 +437,7 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
 #' tidySummarizedExperiment::pasilla %>%
 #'
 #'     pivot_longer(c(condition, type), names_to="name", values_to="value")
+#'     
 NULL
 
 #' @export
@@ -577,7 +579,7 @@ pivot_wider.SummarizedExperiment <- function(data,
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     data, 
-    c(quo_names(id_cols), quo_names(names_from))
+    c(quo_names(id_cols), quo_names(name), quo_names(value))
   )){
     data= ping_old_special_column_into_metadata(data)
   }
@@ -753,10 +755,10 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
 #' @export
 #' @examples
 #'
-#' un <- tidySummarizedExperiment::pasilla %>%
-#'
-#'     unite("group", c(condition, type))
-#' un %>% separate(col=group, into=c("condition", "type"))
+# un <- tidySummarizedExperiment::pasilla %>%
+# 
+#     unite("group", c(condition, type))
+# un %>% separate(col=group, into=c("condition", "type"))
 NULL
 
 #' @export

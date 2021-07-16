@@ -161,4 +161,10 @@ test_that("pivot_longer", {
         expect_equal("tbl_df")
 })
 
-
+test_that("pivot_wider", {
+    tt %>%
+        tidySummarizedExperiment::pivot_wider(names_from=feature, values_from=counts) %>%
+        class() %>%
+        .[1] %>%
+        expect_equal("tbl_df")
+})
