@@ -1,3 +1,41 @@
+#' Drop attribute to abject
+#'
+#' @keywords internal
+#'
+#'
+#' @param var A tibble
+#' @param name A character name of the attribute
+#' 
+#' @noRd
+#'
+#' @return A tibble with an additional attribute
+drop_attr = function(var, name) {
+  attr(var, name) <- NULL
+  var
+}
+
+#' Drop all attribute to abject
+#'
+#' @keywords internal
+#'
+#'
+#' @param var A tibble
+#' @param name A character name of the attribute
+#'
+#' @noRd
+#' 
+#' @return A tibble with an additional attribute
+drop_all_attr = function(var) {
+  
+  N = var %>% attributes() %>% names()
+  
+  for(n in N){
+    var = var %>% drop_attr(n)
+  }
+
+  var
+}
+
 #' Get matrix from tibble
 #'
 #' @keywords internal
@@ -458,18 +496,27 @@ slice_optimised <- function(.data, ..., .preserve=FALSE) {
     simulate_feature_sample_from_tibble(.data) %>% 
     dplyr::slice(..., .preserve=.preserve)
   
-  .data %>%
+  .data = 
+    .data %>%
     
     # Subset the object for samples and features present in the simulated data
     .[rownames(.) %in% simulated_slice[,f_(.)$name], colnames(.) %in% simulated_slice[,s_(.)$name]] %>% 
-    inner_join(simulated_slice, by = c(f_(.)$name, s_(.)$name)) %>% 
-    
-    # If order do not match with the one proposed by slice convert to tibble
-    when(
-      pull(., !!f_(.)$symbol, !!s_(.)$symbol) %>% identical(simulated_slice) ~ (.),
-      left_join(simulated_slice, as_tibble(.), by = c(f_(.)$name, s_(.)$name))
-    )
+    inner_join(simulated_slice, by = c(f_(.)$name, s_(.)$name)) 
   
+  # If order do not match with the one proposed by slice convert to tibble
+  if(.data %>% is("tbl") %>% not()){
+    .data_for_match = .data %>%  select(!!f_(.data)$symbol, !!s_(.data)$symbol) %>% as_tibble() 
+    
+    x = c(pull(.data_for_match, !!f_(.data)$symbol), pull(.data_for_match, !!s_(.data)$symbol))
+    y =  c(pull(simulated_slice, !!f_(.data)$symbol), pull(simulated_slice, !!s_(.data)$symbol))
+    
+    if( identical(x, y) %>% not())
+      left_join(simulated_slice, as_tibble(.data), by = c(f_(.data)$name, s_(.data)$name))
+    else
+      .data
+  }
+  
+ 
 }
 
 
@@ -822,9 +869,14 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
                                   ...) {
   
   
-  
+   
   # Comply to CRAN notes 
   . <- NULL 
+  
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used( x, when(by, !is.null(.) ~ by, ~ colnames(y)))){
+    x= ping_old_special_column_into_metadata(x)
+  }
   
   # Get the colnames of samples and feature datasets
   colnames_col <- get_colnames_col(x)
@@ -835,14 +887,6 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
     !is.null(.) ~ sapply(., function(.x) ifelse(!is.null(names(.x)), names(.x), .x)), 
     ~ colnames(y) %>% intersect(c(colnames_col, colnames_row))
   )
-  
-  # Deprecation of special column names
-  if(is_sample_feature_deprecated_used(
-    x, 
-    columns_query
-  )){
-    x= ping_old_special_column_into_metadata(x)
-  }
   
   if(
     

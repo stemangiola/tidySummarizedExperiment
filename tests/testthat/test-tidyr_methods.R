@@ -55,7 +55,7 @@ test_that("unite separate", {
         un %>%
         separate(
             col = new_col,
-            into = c("orig.ident", "condition"),
+            into = c( "condition", "col2"),
             sep = ":"
         )
 

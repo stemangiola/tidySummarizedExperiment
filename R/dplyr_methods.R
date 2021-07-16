@@ -1098,8 +1098,6 @@ select.SummarizedExperiment <- function(.data, ...) {
     select(-!!f_(.data)$symbol) %>%
     DataFrame()
   
-  rowData(.data) = row_data_tibble
-  
   col_data_tibble = 
     colData(.data) %>% 
     as_tibble(rownames = s_(.data)$name) 
@@ -1114,8 +1112,6 @@ select.SummarizedExperiment <- function(.data, ...) {
   
   count_data = 
     assays(.data)@listData %>% .[names(assays(.data)@listData) %in% columns_query]
-  
-  
   
   columns_query %>%
     when(
@@ -1142,7 +1138,7 @@ select.SummarizedExperiment <- function(.data, ...) {
      
      
      !all(c(get_needed_columns(.data)) %in% .)  ~ {
-       message("tidySummarizedExperiment says: You are doing a complex selection both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your selects sample-wise OR feature-wise.")
+       if(ncol(.data)>100) message("tidySummarizedExperiment says: You are doing a complex selection both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your selects sample-wise OR feature-wise.")
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        .data %>%
@@ -1379,6 +1375,8 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     var <- enquo(var)
     name <- enquo(name)
 
+    quo_name_name = name %>% when(quo_is_null(.) ~ NULL, quo_name(name))
+    
     # Deprecation of special column names
     if(is_sample_feature_deprecated_used(
       .data, 
@@ -1394,24 +1392,24 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
       not()
     
     # Subset column annotation
-    if(quo_name(var) %in% colnames(colData(.data)))
-      return( colData(.data)[,quo_name(var)] %>% .[rep(1:length(.), each=nrow(.data) )])
+    if(all(c(quo_names(var), quo_name_name) %in% colnames(colData(.data))))
+      return( colData(.data)[,quo_names(var)] %>% .[rep(1:length(.), each=nrow(.data) )])
     
     # Subset row annotation
-    if(quo_name(var) %in% colnames(rowData(.data)))
-      return( colData(.data)[,quo_name(var)] %>% .[rep(1:length(.), ncol(.data) )])
+    if(all(c(quo_names(var), quo_name_name) %in% colnames(rowData(.data))))
+      return( colData(.data)[,quo_names(var)] %>% .[rep(1:length(.), ncol(.data) )])
     
     # This returns a vector column wise. With the first sample and all features, second sample and all features, etc..
-    if(quo_name(var) %in% names(.data@assays@data))
-      return(.data@assays@data[[quo_name(var)]] %>% as.vector()) 
+    if(all(c(quo_names(var), quo_name_name) %in% names(.data@assays@data)))
+      return(.data@assays@data[[quo_names(var)]] %>% as.vector()) 
     
     # Subset rowranges
-    if(quo_name(var) %in% colnames(as.data.frame(rowRanges(.data))))
-      return( as.data.frame(rowRanges(.data))[,quo_name(var)] %>% .[rep(1:length(.), ncol(.data) )])
+    if(all(c(quo_names(var), quo_name_name) %in% colnames(as.data.frame(rowRanges(.data)))))
+      return( as.data.frame(rowRanges(.data))[,quo_names(var)] %>% .[rep(1:length(.), ncol(.data) )])
     
     # Otherwise (SHOULD NOT HAPPEN) use the long general procedure
-    colData(.data) = colData(.data)[,colnames(colData(.data)) == quo_name(var), drop=FALSE ]
-    rowData(.data) = rowData(.data)[,colnames(rowData(.data)) == quo_name(var), drop=FALSE ]
+    colData(.data) = colData(.data)[,colnames(colData(.data)) %in% c(quo_names(var), quo_name_name), drop=FALSE ]
+    rowData(.data) = rowData(.data)[,colnames(rowData(.data)) %in% c(quo_names(var), quo_name_name), drop=FALSE ]
   
     .data %>%
         as_tibble(skip_GRanges = skip_GRanges) %>%

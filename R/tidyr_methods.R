@@ -782,7 +782,7 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
         length() %>%
         gt(0) &
         remove
-
+ 
 
     if (tst) {
         columns =
@@ -796,10 +796,10 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
         )
     }
 
-    columns_to_unite = data[1,1] %>% select(...) %>% colnames()
+    columns_to_unite = data[1,1] %>% select(!!cols) %>% suppressMessages() %>%  colnames()
     
     # Subset column annotation
-    if(all(columns_to_unite %in% colnames(colData(data))) & !s_(se)$name %in% col){
+    if(all(columns_to_unite %in% colnames(colData(data))) & (!s_(se)$name %in% into)){
       colData(data) = 
         colData(data) %>% 
         as.data.frame() %>% 
@@ -813,7 +813,7 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     }
     
     # Subset row annotation
-    if(all(columns_to_unite %in% colnames(rowData(data)))& !f_(se)$name %in% col){
+    if(all(columns_to_unite %in% colnames(rowData(data)))& (!f_(se)$name %in% into)){
       rowData(data) = 
         rowData(data) %>% 
         as.data.frame() %>% 
