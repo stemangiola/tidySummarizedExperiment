@@ -267,10 +267,6 @@ tidySummarizedExperiment::pasilla \%>\%
 
     unite("group", c(condition, type))
 
-un <- tidySummarizedExperiment::pasilla \%>\%
-
-    unite("group", c(condition, type))
-un \%>\% separate(col=group, into=c("condition", "type"))
 }
 \seealso{
 \code{\link[=separate]{separate()}} to split up by a separator.
