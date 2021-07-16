@@ -46,7 +46,7 @@ as_tibble.SummarizedExperiment <- function(x, ...,
 
 }
 
-.as_tibble_optimised = function(x, skip_GRanges = F, .subset = NULL,
+.as_tibble_optimised = function(x, skip_GRanges = FALSE, .subset = NULL,
                                 .name_repair=c("check_unique", "unique", "universal", "minimal"),
                                 rownames=pkgconfig::get_config("tibble::rownames", NULL)){
   

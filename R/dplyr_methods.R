@@ -119,7 +119,7 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
     tts[[1]] %>% 
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         dplyr::bind_cols(tts[[2]], .id=.id) %>%
         when(
 
@@ -288,7 +288,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 
   
     new_meta <- .data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
 
     new_meta %>%

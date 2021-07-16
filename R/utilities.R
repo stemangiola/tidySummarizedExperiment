@@ -909,7 +909,7 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
     if(ncol(x)>100) message("tidySummarizedExperiment says: if you are joining a dataframe both sample-wise and feature-wise, for efficiency (until further development), it is better to separate your joins and join datasets sample-wise OR feature-wise.")
     
     x %>%
-      as_tibble(skip_GRanges  = T) %>%
+      as_tibble(skip_GRanges  = TRUE) %>%
       join_function(y, by=by, copy=copy, suffix=suffix, ...) %>%
       when(
         

@@ -343,7 +343,7 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     }
     
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>%
         update_SE_from_tibble(data)
 }
@@ -469,7 +469,7 @@ pivot_longer.SummarizedExperiment <- function(data,
     }
     
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::pivot_longer(!!cols,
             names_to=names_to,
             names_prefix=names_prefix,
@@ -585,7 +585,7 @@ pivot_wider.SummarizedExperiment <- function(data,
   }
   
   data %>%
-    as_tibble(skip_GRanges = T) %>%
+    as_tibble(skip_GRanges = TRUE) %>%
     tidyr::pivot_wider( id_cols = !!id_cols,
                         names_from = !!name,
                         names_prefix = names_prefix,
@@ -707,7 +707,7 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
 
     # Otherwise go simple and slow
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
         update_SE_from_tibble(data)
 }
@@ -830,7 +830,7 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     
     # Otherwise go simple and slow
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
         update_SE_from_tibble(data)
 }
