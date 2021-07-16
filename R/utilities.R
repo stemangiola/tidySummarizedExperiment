@@ -820,10 +820,13 @@ subset_tibble_output = function(.data, count_info, sample_info, gene_info, range
   
   
   if(
-    !is.null(sample_info) & !is.null(gene_info) | 
+    !is.null(count_info) & 
+    (
+      !is.null(sample_info) & !is.null(gene_info) | 
     
-    # Make exception for weirs cases (e.g. c(sample, counts))
-    (colnames(count_info) %>% outersect(c(f_(.data)$name, s_(.data)$name)) %>% length() %>% gt(0))
+      # Make exception for weirs cases (e.g. c(sample, counts))
+      (colnames(count_info) %>% outersect(c(f_(.data)$name, s_(.data)$name)) %>% length() %>% gt(0))
+    )
   ) {
     output_df = 
       count_info %>%

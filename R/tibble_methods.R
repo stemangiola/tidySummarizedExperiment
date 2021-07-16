@@ -93,7 +93,7 @@ as_tibble.SummarizedExperiment <- function(x, ...,
       when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) 
     
   # This function outputs a tibble after subsetting the columns
-  else subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
+  else subset_tibble_output(x, count_info, sample_info, gene_info, range_info, !!.subset)
 
   
 }
