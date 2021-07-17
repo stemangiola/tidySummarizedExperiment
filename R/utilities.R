@@ -1052,6 +1052,7 @@ duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to d
 
 # Key column names
 #' @importFrom S4Vectors metadata
+#' @importFrom S4Vectors metadata<-
 ping_old_special_column_into_metadata = function(.data){
   
   metadata(.data)$feature__ = get_special_column_name_symbol("feature")
