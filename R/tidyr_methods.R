@@ -42,7 +42,7 @@
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     nest(data=-condition) %>%
 #'     unnest(data)
 #'
@@ -65,56 +65,58 @@ unnest.tidySummarizedExperiment_nested <-
     .data_ <- data
 
     cols <- enquo(cols)
-    
-    
 
-    .data_ %>% 
+
+
+    .data_ %>%
         when(
 
             # If my only column to unnest is tidySummarizedExperiment
             pull(., !!cols) %>%
                 .[[1]] %>%
                 class() %>%
-                as.character() %>%
+                as.character() %>% 
                 eq("SummarizedExperiment") %>%
                 any() ~ {
+
+                  se = pull(., !!cols) %>% .[[1]] 
                   
                   # Mark if columns belong to feature or sample
-                  my_unnested_tibble = 
+                  my_unnested_tibble =
                     mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-                    select(-suppressWarnings( one_of("sample", "feature"))) %>%
+                    select(-suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
                     unnest(!!cols)
-                  
+
                   # Get which column is relative to feature or sample
-                  sample_columns = my_unnested_tibble %>% get_subset_columns(sample) 
-                  transcript_columns = my_unnested_tibble %>% get_subset_columns(feature)
-                  source_column = 
+                  sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(se)$symbol)
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(se)$symbol)
+                  source_column =
                     c(
-                      rep("sample", length(sample_columns)) %>% setNames(sample_columns),
-                      rep("feature", length(transcript_columns)) %>% setNames(transcript_columns)
+                      rep(s_(se)$name, length(sample_columns)) %>% setNames(sample_columns),
+                      rep(f_(se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
                     )
-                  
+
                   # Do my trick to unnest
                   mutate(., !!cols := imap(
                     !!cols, ~ .x %>%
                       bind_cols_internal(
-                        
+
                         # Attach back the columns used for nesting
                         .data_ %>%
-                          select(-!!cols, -suppressWarnings( one_of("sample", "feature"))) %>%
+                          select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
                           slice(rep(.y, ncol(.x) * nrow(.x))),
-                        
+
                         # Column sample-wise or feature-wise
-                        column_belonging = 
+                        column_belonging =
                           source_column[
                             .data_ %>%
-                              select(-!!cols, -suppressWarnings( one_of("sample", "feature"))) %>%
+                              select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
                               colnames()
                           ]
                       )
                   )) %>%
                     pull(!!cols) %>%
-                    
+
                     # See if split by feature or sample
                     when(
                       is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and feature-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
@@ -123,7 +125,7 @@ unnest.tidySummarizedExperiment_nested <-
                 },
 
             # Else do normal stuff
-            ~ (.) %>% 
+            ~ (.) %>%
                 drop_class("tidySummarizedExperiment_nested") %>%
                 tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
                 add_class("tidySummarizedExperiment_nested")
@@ -143,7 +145,7 @@ unnest.tidySummarizedExperiment_nested <-
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     nest(data=-condition)
 #'
 #' @rdname tidyr-methods
@@ -159,55 +161,70 @@ NULL
 #'
 #' @export
 nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
-    my_data__ <- .data
     cols <- enquos(...)
     col_name_data <- names(cols)
 
-    my_data__nested = 
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      .data, 
+      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    )){
+      .data= ping_old_special_column_into_metadata(.data)
+    }
+    
+    my_data__ <- .data 
+    
+    
+    my_data__nested =
       my_data__ %>%
 
         # This is needed otherwise nest goes into loop and fails
         as_tibble() %>%
         tidyr::nest(...) %>%
-        
+
         # Check that sample or feature are in the nesting
         {
-            if(c("sample", "feature") %>% intersect(colnames(.)) %>% length() %>% `>` (0))
+            if(c(s_(.data)$name, f_(.data)$name) %>% intersect(colnames(.)) %>% length() %>% `>` (0))
                 stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting")
             (.)
-        } 
+        }
+
+    sample_name = s_(my_data__)$name
+    feature_name = f_(my_data__)$name
+    sample_symbol = s_(my_data__)$symbol
+    feature_symbol = f_(my_data__)$symbol
     
     my_data__nested %>%
-        
+
         mutate(
             !!as.symbol(col_name_data) := pmap(
-              
+
               # Add sample feature to map if nesting by those
                 list(!!as.symbol(col_name_data)) %>%
-                  
+
                   # Check if nested by sample
-                  when("sample" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("sample"))), ~ (.)) %>%
-                  
+                  when(sample_name %in% colnames(my_data__nested) ~ c(., list(!!sample_symbol)), ~ (.)) %>%
+
                   # Check if nested by feature
-                  when("feature" %in% colnames(my_data__nested) ~ c(., list(!!as.symbol("feature"))), ~ (.)) , ~ {
-                  
+                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ {
+
                     # Check if nested by sample
-                    if("sample" %in% colnames(my_data__nested)) { my_samples=..2 } 
-                    else {my_samples=..1$sample}
-                    
+                    if(sample_name %in% colnames(my_data__nested)) { my_samples=..2 }
+                    else {my_samples=pull(..1,!!sample_symbol)}
+
                     # Check if nested by feature
-                    if("sample" %in% colnames(my_data__nested) & "feature" %in% colnames(my_data__nested)) {my_transcripts=..3}
-                    else if("feature" %in% colnames(my_data__nested)) my_transcripts=..2
-                    else my_transcripts=..1$feature
-                 
+                    if(sample_name %in% colnames(my_data__nested) & feature_name %in% colnames(my_data__nested)) {my_transcripts=..3}
+                    else if(feature_name %in% colnames(my_data__nested)) my_transcripts=..2
+                    else my_transcripts=pull(..1,!!feature_symbol)
+
                   my_data__ %>%
-                    
+
                     # Subset cells
-                    filter(sample %in% my_samples & feature %in% my_transcripts) %>%
-                    
+                    filter(!!sample_symbol %in% my_samples & !!feature_symbol %in% my_transcripts) %>%
+
                     # Subset columns
-                    select(colnames(..1) %>% c("sample", "feature") %>% unique)
-                } 
+                    select(colnames(..1) %>% c(sample_name, feature_name) %>% unique)
+                }
             )
         ) %>%
 
@@ -251,8 +268,9 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
+#'     
 #' @return A tidySummarizedExperiment objector a tibble depending on input
 #'
 #' @importFrom tidyr extract
@@ -266,10 +284,18 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     convert=FALSE, ...) {
     col <- enquo(col)
 
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      c(quo_name(col), into)
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     tst =
         intersect(
             into %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns())
+            get_special_columns(data) %>% c(get_needed_columns(data))
         ) %>%
         length() %>%
         gt(0) &
@@ -279,7 +305,7 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     if (tst) {
         columns =
             get_special_columns(data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -288,8 +314,36 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
         )
     }
 
+    # Subset column annotation
+    if(all(quo_names(col) %in% colnames(colData(data))) & !s_(se)$name %in% into){
+      colData(data) = 
+        colData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = s_(data)$name) %>% 
+        tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>% 
+        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
+        select(-!!s_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+     
+    # Subset row annotation
+    if(all(quo_names(col) %in% colnames(rowData(data)))& !f_(se)$name %in% into){
+      rowData(data) = 
+        rowData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = f_(data)$name) %>% 
+        tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>% 
+        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
+        select(-!!f_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>%
         update_SE_from_tibble(data)
 }
@@ -381,8 +435,9 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
 #'
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     pivot_longer(c(condition, type), names_to="name", values_to="value")
+#'     
 NULL
 
 #' @export
@@ -404,8 +459,17 @@ pivot_longer.SummarizedExperiment <- function(data,
 
     message(data_frame_returned_message)
 
+    
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      c(quo_names(cols))
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::pivot_longer(!!cols,
             names_to=names_to,
             names_prefix=names_prefix,
@@ -476,7 +540,7 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'   This can be a named list if you want to apply different aggregations
 #'   to different value columns.
 #' @param ... Additional arguments passed on to methods.
-#' 
+#'
 #' @importFrom tidyr pivot_wider
 #' @rdname tidyr-methods
 #' @name pivot_wider
@@ -488,7 +552,7 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     pivot_wider(names_from=feature, values_from=counts)
 NULL
 
@@ -509,11 +573,19 @@ pivot_wider.SummarizedExperiment <- function(data,
   id_cols <- enquo(id_cols)
   name = enquo(names_from)
   value = enquo(values_from)
-  
+
   message(data_frame_returned_message)
+
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    data, 
+    c(quo_names(id_cols), quo_names(name), quo_names(value))
+  )){
+    data= ping_old_special_column_into_metadata(data)
+  }
   
   data %>%
-    as_tibble(skip_GRanges = T) %>%
+    as_tibble(skip_GRanges = TRUE) %>%
     tidyr::pivot_wider( id_cols = !!id_cols,
                         names_from = !!name,
                         names_prefix = names_prefix,
@@ -562,7 +634,7 @@ pivot_wider.SummarizedExperiment <- function(data,
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
-#'     
+#'
 #'     unite("group", c(condition, type))
 NULL
 
@@ -572,10 +644,19 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
     # Check that we are not modifying a key column
     cols <- enquo(col)
 
+    # Deprecation of special column names
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     tst =
         intersect(
             cols %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns())
+            get_special_columns(data) %>% c(get_needed_columns(data))
         ) %>%
         length() %>%
         gt(0) &
@@ -585,7 +666,7 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
     if (tst) {
         columns =
             get_special_columns(data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -594,10 +675,39 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
         )
     }
 
+    columns_to_unite = data[1,1] %>% select(...) %>% colnames()
+    
+    # Subset column annotation
+    if(all(columns_to_unite %in% colnames(colData(data))) & !s_(se)$name %in% col){
+      colData(data) = 
+        colData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = s_(data)$name) %>% 
+        tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
+        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
+        select(-!!s_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
+    # Subset row annotation
+    if(all(columns_to_unite %in% colnames(rowData(data)))& !f_(se)$name %in% col){
+      rowData(data) = 
+        rowData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = f_(data)$name) %>% 
+        tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
+        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
+        select(-!!f_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
 
-
+    # Otherwise go simple and slow
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
         update_SE_from_tibble(data)
 }
@@ -645,10 +755,10 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
 #' @export
 #' @examples
 #'
-#' un <- tidySummarizedExperiment::pasilla %>%
-#'     
-#'     unite("group", c(condition, type))
-#' un %>% separate(col=group, into=c("condition", "type"))
+# un <- tidySummarizedExperiment::pasilla %>%
+# 
+#     unite("group", c(condition, type))
+# un %>% separate(col=group, into=c("condition", "type"))
 NULL
 
 #' @export
@@ -658,20 +768,28 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     # Check that we are not modifying a key column
     cols <- enquo(col)
 
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      data, 
+      c(quo_names(cols))
+    )){
+      data= ping_old_special_column_into_metadata(data)
+    }
+    
     tst =
         intersect(
             cols %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns())
+            get_special_columns(data) %>% c(get_needed_columns(data))
         ) %>%
         length() %>%
         gt(0) &
         remove
-
+ 
 
     if (tst) {
         columns =
             get_special_columns(data) %>%
-            c(get_needed_columns()) %>%
+            c(get_needed_columns(data)) %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -680,9 +798,39 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
         )
     }
 
-
+    columns_to_unite = data[1,1] %>% select(!!cols) %>% suppressMessages() %>%  colnames()
+    
+    # Subset column annotation
+    if(all(columns_to_unite %in% colnames(colData(data))) & (!s_(se)$name %in% into)){
+      colData(data) = 
+        colData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = s_(data)$name) %>% 
+        tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
+        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
+        select(-!!s_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
+    # Subset row annotation
+    if(all(columns_to_unite %in% colnames(rowData(data)))& (!f_(se)$name %in% into)){
+      rowData(data) = 
+        rowData(data) %>% 
+        as.data.frame() %>% 
+        as_tibble(rownames = f_(data)$name) %>% 
+        tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
+        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
+        select(-!!f_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+      
+      return(data)
+    }
+    
+    # Otherwise go simple and slow
     data %>%
-        as_tibble(skip_GRanges = T) %>%
+        as_tibble(skip_GRanges = TRUE) %>%
         tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
         update_SE_from_tibble(data)
 }

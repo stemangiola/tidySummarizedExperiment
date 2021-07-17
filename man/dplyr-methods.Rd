@@ -427,18 +427,18 @@ to renaming a set of variables with a function.
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
     
-    distinct(sample)
+    distinct(.sample)
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
     
-    filter(sample == "untrt1")
+    filter(.sample == "untrt1")
 
 # Learn more in ?dplyr_tidy_eval
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
     
-    group_by(sample)
+    group_by(.sample)
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
     
@@ -481,7 +481,7 @@ tidySummarizedExperiment::pasilla \%>\%
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
     
-    select(sample, feature, counts)
+    select(.sample, .feature, counts)
 
 `\%>\%` <- magrittr::`\%>\%`
 tidySummarizedExperiment::pasilla \%>\%
