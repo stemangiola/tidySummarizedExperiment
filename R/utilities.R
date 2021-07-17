@@ -488,6 +488,7 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
     se
 }
 
+#' @importFrom methods is
 slice_optimised <- function(.data, ..., .preserve=FALSE) {
   
   # This simulated tibble only gets samples and features so we know those that have been completely omitted already
@@ -1050,6 +1051,7 @@ data_frame_returned_message = "tidySummarizedExperiment says: A data frame is re
 duplicated_cell_names = "tidySummarizedExperiment says: This operation lead to duplicated feature names. A data frame is returned for independent data analysis."
 
 # Key column names
+#' @importFrom S4Vectors metadata
 ping_old_special_column_into_metadata = function(.data){
   
   metadata(.data)$feature__ = get_special_column_name_symbol("feature")
@@ -1079,12 +1081,14 @@ simulate_feature_sample_from_tibble = function(.data){
 feature__ =  get_special_column_name_symbol(".feature")
 sample__ = get_special_column_name_symbol(".sample")
 
-
+#' @importFrom S4Vectors metadata
 f_ =  function(x){
   # Check if old deprecated columns are used
   if("feature__" %in% names(metadata(x))) feature__ = metadata(x)$feature__
   return(feature__)
 }
+
+#' @importFrom S4Vectors metadata
 s_ = function(x){
   if("sample__" %in% names(metadata(x))) sample__ = metadata(x)$sample__
   return(sample__)
