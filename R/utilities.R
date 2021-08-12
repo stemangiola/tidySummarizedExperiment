@@ -869,8 +869,8 @@ change_reserved_column_names = function(col_data, .data ){
 
 choose_name_if_present = function(x){
   columns_query = c()
-  for(i in length(x)){
-    if(is.null(names(x[1]))) columns_query[i] = x[i]
+  for(i in 1:length(x)){
+    if(is.null(names(x[i]))) columns_query[i] = x[i]
     else columns_query[i] = names(x[i])
   }
   
