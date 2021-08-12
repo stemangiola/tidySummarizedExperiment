@@ -867,6 +867,15 @@ change_reserved_column_names = function(col_data, .data ){
   
 }
 
+choose_name_if_present = function(x){
+  columns_query = c()
+  for(i in length(x)){
+    if(is.null(names(x[1]))) columns_query[i] = x[i]
+    else columns_query[i] = names(x[i])
+  }
+  
+  columns_query
+}
 
 #' @importFrom purrr when
 join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), join_function, force_tibble_route = FALSE,
@@ -888,7 +897,7 @@ join_efficient_for_SE <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"
   
   # See if join done by sample, feature or both
   columns_query = by %>% when(
-    !is.null(.) ~ sapply(., function(.x) ifelse(!is.null(names(.x)), names(.x), .x)), 
+    !is.null(.) ~ choose_name_if_present(.), 
     ~ colnames(y) %>% intersect(c(colnames_col, colnames_row))
   )
   
