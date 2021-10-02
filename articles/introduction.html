@@ -82,7 +82,7 @@
       <h1 data-toc-skip>Overview of the tidySummarizedExperiment package</h1>
                         <h4 class="author">Stefano Mangiola</h4>
             
-            <h4 class="date">2021-07-05</h4>
+            <h4 class="date">2021-10-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/stemangiola/tidySummarizedExperiment/blob/master/vignettes/introduction.Rmd"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -208,18 +208,18 @@
 <code class="sourceCode R"><span class="va">pasilla_tidy</span></code></pre></div>
 <pre><code>## # A SummarizedExperiment-tibble abstraction: 102,193 x 5
 ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
-##    feature     sample counts condition type      
-##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
-##  1 FBgn0000003 untrt1      0 untreated single_end
-##  2 FBgn0000008 untrt1     92 untreated single_end
-##  3 FBgn0000014 untrt1      5 untreated single_end
-##  4 FBgn0000015 untrt1      0 untreated single_end
-##  5 FBgn0000017 untrt1   4664 untreated single_end
-##  6 FBgn0000018 untrt1    583 untreated single_end
-##  7 FBgn0000022 untrt1      0 untreated single_end
-##  8 FBgn0000024 untrt1     10 untreated single_end
-##  9 FBgn0000028 untrt1      0 untreated single_end
-## 10 FBgn0000032 untrt1   1446 untreated single_end
+##    .feature    .sample counts condition type      
+##    &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+##  1 FBgn0000003 untrt1       0 untreated single_end
+##  2 FBgn0000008 untrt1      92 untreated single_end
+##  3 FBgn0000014 untrt1       5 untreated single_end
+##  4 FBgn0000015 untrt1       0 untreated single_end
+##  5 FBgn0000017 untrt1    4664 untreated single_end
+##  6 FBgn0000018 untrt1     583 untreated single_end
+##  7 FBgn0000022 untrt1       0 untreated single_end
+##  8 FBgn0000024 untrt1      10 untreated single_end
+##  9 FBgn0000028 untrt1       0 untreated single_end
+## 10 FBgn0000032 untrt1    1446 untreated single_end
 ## # … with 40 more rows</code></pre>
 <p><strong>But it is a SummarizedExperiment object after all</strong></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -238,27 +238,27 @@
     <span class="fu"><a href="../reference/bind_rows.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A SummarizedExperiment-tibble abstraction: 1 x 5
 ## [90m# Transcripts=1 | Samples=1 | Assays=counts[39m
-##   feature     sample counts condition type      
-##   &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
-## 1 FBgn0000003 untrt1      0 untreated single_end</code></pre>
+##   .feature    .sample counts condition type      
+##   &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+## 1 FBgn0000003 untrt1       0 untreated single_end</code></pre>
 <p>We can use <code>filter</code> to choose rows by criteria.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/bind_rows.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A SummarizedExperiment-tibble abstraction: 58,396 x 5
 ## [90m# Transcripts=14599 | Samples=4 | Assays=counts[39m
-##    feature     sample counts condition type      
-##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
-##  1 FBgn0000003 untrt1      0 untreated single_end
-##  2 FBgn0000008 untrt1     92 untreated single_end
-##  3 FBgn0000014 untrt1      5 untreated single_end
-##  4 FBgn0000015 untrt1      0 untreated single_end
-##  5 FBgn0000017 untrt1   4664 untreated single_end
-##  6 FBgn0000018 untrt1    583 untreated single_end
-##  7 FBgn0000022 untrt1      0 untreated single_end
-##  8 FBgn0000024 untrt1     10 untreated single_end
-##  9 FBgn0000028 untrt1      0 untreated single_end
-## 10 FBgn0000032 untrt1   1446 untreated single_end
+##    .feature    .sample counts condition type      
+##    &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+##  1 FBgn0000003 untrt1       0 untreated single_end
+##  2 FBgn0000008 untrt1      92 untreated single_end
+##  3 FBgn0000014 untrt1       5 untreated single_end
+##  4 FBgn0000015 untrt1       0 untreated single_end
+##  5 FBgn0000017 untrt1    4664 untreated single_end
+##  6 FBgn0000018 untrt1     583 untreated single_end
+##  7 FBgn0000022 untrt1       0 untreated single_end
+##  8 FBgn0000024 untrt1      10 untreated single_end
+##  9 FBgn0000028 untrt1       0 untreated single_end
+## 10 FBgn0000032 untrt1    1446 untreated single_end
 ## # … with 40 more rows</code></pre>
 <p>We can use <code>select</code> to choose columns.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -312,18 +312,18 @@
     <span class="fu"><a href="../reference/bind_rows.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A SummarizedExperiment-tibble abstraction: 102,193 x 5
 ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
-##    feature     sample counts condition sequencing
-##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
-##  1 FBgn0000003 untrt1      0 untreated single_end
-##  2 FBgn0000008 untrt1     92 untreated single_end
-##  3 FBgn0000014 untrt1      5 untreated single_end
-##  4 FBgn0000015 untrt1      0 untreated single_end
-##  5 FBgn0000017 untrt1   4664 untreated single_end
-##  6 FBgn0000018 untrt1    583 untreated single_end
-##  7 FBgn0000022 untrt1      0 untreated single_end
-##  8 FBgn0000024 untrt1     10 untreated single_end
-##  9 FBgn0000028 untrt1      0 untreated single_end
-## 10 FBgn0000032 untrt1   1446 untreated single_end
+##    .feature    .sample counts condition sequencing
+##    &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;     
+##  1 FBgn0000003 untrt1       0 untreated single_end
+##  2 FBgn0000008 untrt1      92 untreated single_end
+##  3 FBgn0000014 untrt1       5 untreated single_end
+##  4 FBgn0000015 untrt1       0 untreated single_end
+##  5 FBgn0000017 untrt1    4664 untreated single_end
+##  6 FBgn0000018 untrt1     583 untreated single_end
+##  7 FBgn0000022 untrt1       0 untreated single_end
+##  8 FBgn0000024 untrt1      10 untreated single_end
+##  9 FBgn0000028 untrt1       0 untreated single_end
+## 10 FBgn0000032 untrt1    1446 untreated single_end
 ## # … with 40 more rows</code></pre>
 <p>We could use <code>mutate</code> to create a column. For example, we could create a new type column that contains single and paired instead of single_end and paired_end.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
@@ -331,18 +331,18 @@
     <span class="fu"><a href="../reference/bind_rows.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A SummarizedExperiment-tibble abstraction: 102,193 x 5
 ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
-##    feature     sample counts condition type  
-##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; 
-##  1 FBgn0000003 untrt1      0 untreated single
-##  2 FBgn0000008 untrt1     92 untreated single
-##  3 FBgn0000014 untrt1      5 untreated single
-##  4 FBgn0000015 untrt1      0 untreated single
-##  5 FBgn0000017 untrt1   4664 untreated single
-##  6 FBgn0000018 untrt1    583 untreated single
-##  7 FBgn0000022 untrt1      0 untreated single
-##  8 FBgn0000024 untrt1     10 untreated single
-##  9 FBgn0000028 untrt1      0 untreated single
-## 10 FBgn0000032 untrt1   1446 untreated single
+##    .feature    .sample counts condition type  
+##    &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; 
+##  1 FBgn0000003 untrt1       0 untreated single
+##  2 FBgn0000008 untrt1      92 untreated single
+##  3 FBgn0000014 untrt1       5 untreated single
+##  4 FBgn0000015 untrt1       0 untreated single
+##  5 FBgn0000017 untrt1    4664 untreated single
+##  6 FBgn0000018 untrt1     583 untreated single
+##  7 FBgn0000022 untrt1       0 untreated single
+##  8 FBgn0000024 untrt1      10 untreated single
+##  9 FBgn0000028 untrt1       0 untreated single
+## 10 FBgn0000032 untrt1    1446 untreated single
 ## # … with 40 more rows</code></pre>
 <p>We could use <code>unite</code> to combine multiple columns into a single column.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -350,18 +350,18 @@
     <span class="fu"><a href="../reference/unnest.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A SummarizedExperiment-tibble abstraction: 102,193 x 4
 ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
-##    feature     sample counts group               
-##    &lt;chr&gt;       &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;               
-##  1 FBgn0000003 untrt1      0 untreated_single_end
-##  2 FBgn0000008 untrt1     92 untreated_single_end
-##  3 FBgn0000014 untrt1      5 untreated_single_end
-##  4 FBgn0000015 untrt1      0 untreated_single_end
-##  5 FBgn0000017 untrt1   4664 untreated_single_end
-##  6 FBgn0000018 untrt1    583 untreated_single_end
-##  7 FBgn0000022 untrt1      0 untreated_single_end
-##  8 FBgn0000024 untrt1     10 untreated_single_end
-##  9 FBgn0000028 untrt1      0 untreated_single_end
-## 10 FBgn0000032 untrt1   1446 untreated_single_end
+##    .feature    .sample counts group               
+##    &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;               
+##  1 FBgn0000003 untrt1       0 untreated_single_end
+##  2 FBgn0000008 untrt1      92 untreated_single_end
+##  3 FBgn0000014 untrt1       5 untreated_single_end
+##  4 FBgn0000015 untrt1       0 untreated_single_end
+##  5 FBgn0000017 untrt1    4664 untreated_single_end
+##  6 FBgn0000018 untrt1     583 untreated_single_end
+##  7 FBgn0000022 untrt1       0 untreated_single_end
+##  8 FBgn0000024 untrt1      10 untreated_single_end
+##  9 FBgn0000028 untrt1       0 untreated_single_end
+## 10 FBgn0000032 untrt1    1446 untreated_single_end
 ## # … with 40 more rows</code></pre>
 <p>We can also combine commands with the tidyverse pipe <code><a href="../reference/%&gt;%.html">%&gt;%</a></code>.</p>
 <p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
@@ -427,7 +427,7 @@
 <p>Here we plot the distribution of counts per sample.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">%&gt;%</span>
-    <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="../reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">+</span> <span class="fl">1</span>, group<span class="op">=</span><span class="va">sample</span>, color<span class="op">=</span><span class="va">`type`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="../reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">+</span> <span class="fl">1</span>, group<span class="op">=</span><span class="va">.sample</span>, color<span class="op">=</span><span class="va">`type`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
     <span class="va">my_theme</span></code></pre></div>
