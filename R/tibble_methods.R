@@ -46,25 +46,22 @@ as_tibble.SummarizedExperiment <- function(x, ...,
 
 }
 
-.as_tibble_optimised = function(x, skip_GRanges = F, .subset = NULL,
+.as_tibble_optimised = function(x, skip_GRanges = FALSE, .subset = NULL,
                                 .name_repair=c("check_unique", "unique", "universal", "minimal"),
                                 rownames=pkgconfig::get_config("tibble::rownames", NULL)){
   
   .subset = enquo(.subset)
   
   sample_info <-
-    colData(x) %>% 
+    colData(x)  %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names() %>%
-  
+    change_reserved_column_names(x) %>% 
+    
     # Convert to tibble
-    tibble::as_tibble(rownames="sample")
+    tibble::as_tibble(rownames=s_(x)$name) %>% 
+    setNames(c(s_(x)$name, colnames(colData(x))))
   
-  # range_info =
-  #     x@rowRanges %>%
-  #     as.data.frame %>%
-  #     tibble::as_tibble(rownames="feature")
   range_info <-
     skip_GRanges %>%
     when(
@@ -74,25 +71,29 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     reduce(left_join, by="coordinate") 
     
   gene_info <-
-    rowData(x) %>%
+    rowData(x)  %>% 
     
     # If reserved column names are present add .x
-    change_reserved_column_names() %>%
+    change_reserved_column_names(x)%>% 
   
     # Convert to tibble
-    tibble::as_tibble(rownames="feature") 
+    tibble::as_tibble(rownames=f_(x)$name) %>% 
+    setNames(c(f_(x)$name, colnames(rowData(x))))
+  
   
   count_info <- get_count_datasets(x)
   
   # Return 
-  .subset %>%
-    when(
-      quo_is_null(.) ~ 
-        count_info %>%
-        left_join(sample_info, by="sample") %>%
-        left_join(gene_info, by="feature") %>%
-        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) ,
-      ~ subset_tibble_output(count_info, sample_info, gene_info, range_info, !!.subset)
-    )
+  if(quo_is_null(.subset))
+    
+    # If I want to return all columns
+    count_info %>%
+      inner_join(sample_info, by=s_(x)$name) %>%
+      inner_join(gene_info, by=f_(x)$name) %>%
+      when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) 
+    
+  # This function outputs a tibble after subsetting the columns
+  else subset_tibble_output(x, count_info, sample_info, gene_info, range_info, !!.subset)
+
   
 }
