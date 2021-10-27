@@ -451,7 +451,7 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
     # Count-like data that is NOT in the assay slot already 
     colnames_assay <-
       colnames(.data_mutated) %>% 
-      setdiff(c(f_(se)$name, s_(se)$name, colnames(as.data.frame(rowRanges(se)[1])) )) %>%
+      setdiff(c(f_(se)$name, s_(se)$name, colnames(as.data.frame(head(rowRanges(se), 1))) )) %>%
       setdiff(colnames(col_data)) %>% 
       setdiff(colnames(row_data)) %>%
       setdiff(assays(se) %>% names)
@@ -610,10 +610,21 @@ get_special_datasets <- function(se) {
 #' 
 #' @noRd
 get_count_datasets <- function(se) { 
-  map2(
+  map2( 
     assays(se) %>% as.list(),
     names(assays(se)),
-    ~ .x %>%
+    ~ {
+      
+      # If the counts are in a sparse matrix convert to a matrix
+      # This might happen because the user loaded tidySummarizedExperiment and is 
+      # print a SingleCellExperiment
+      if(is(.x, "dgCMatrix")) {
+        .x = as.matrix(.x) 
+      }
+      
+      .x %>%
+      # matrix() %>%
+      # as.data.frame() %>% 
       tibble::as_tibble(rownames = f_(se)$name, .name_repair = "minimal") %>%
       
       # If the matrix does not have sample names, fix column names
@@ -627,7 +638,7 @@ get_count_datasets <- function(se) {
     
     #%>%
     #  rename(!!.y := count)
-  ) %>%
+  }) %>%
     when(
       length(.)>0 ~ reduce(., left_join, by = c(f_(se)$name, s_(se)$name)),
       ~ expand.grid(

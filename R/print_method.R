@@ -62,6 +62,12 @@ NULL
 #' @export
 print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
+  # From BioC 3_14 SingleCellExperiment is SummarizedExperiment and 
+  # we don't want to process with tidySummarizedExperiment
+  if(is(x, "SingleCellExperiment")) {
+    warning("tidySummarizedExperiment says: a SingleCellExperiment has been evaluated with tidySummarizedExperiment loaded but not tidySingleCellExperiment. Please load tidySingleCellExperiment as such library(tidySingleCellExperiment)")
+  }
+  
   # Getting print formatting
   formatted = 
     x %>%
