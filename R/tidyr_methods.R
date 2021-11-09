@@ -190,12 +190,12 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     if(
       
       # Check column intersection
-      c(s_(.data)$name, f_(.data)$name) %>% intersect(colnames(my_test_nest)) %>% length() %>% `>` (0) &
+      c(f_(.data)$name) %>% intersect(colnames(my_test_nest)) %>% length() %>% `>` (0) &
       
       # Check that other column are there
       length(colnames(my_test_nest)) > 2
     )
-    stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting mixed with other nesting for efficiency reasons. Please consider to convert to_tibble() first. We are working for optimising a generalised solution of nest().")
+    stop("tidySummarizedExperiment says: You cannot have the columns feature among the nesting mixed with other nesting for efficiency reasons. Please consider to convert to_tibble() first. We are working for optimising a generalised solution of nest().")
 
     my_data__nested =
       my_data__ %>%
@@ -229,7 +229,7 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                   when(sample_name %in% colnames(my_data__nested) ~ c(., list(!!sample_symbol)), ~ (.)) %>%
 
                   # Check if nested by feature
-                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ { browser()
+                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ { 
 
                     # Check if nested by sample
                     if(sample_name %in% colnames(my_data__nested)) { my_samples=..2 }
