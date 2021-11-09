@@ -174,25 +174,48 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     
     my_data__ <- .data 
     
-    
-    my_data__nested =
-      my_data__ %>%
-
-        # This is needed otherwise nest goes into loop and fails
-        as_tibble() %>%
-        tidyr::nest(...) %>%
-
-        # Check that sample or feature are in the nesting
-        {
-            if(c(s_(.data)$name, f_(.data)$name) %>% intersect(colnames(.)) %>% length() %>% `>` (0))
-                stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting")
-            (.)
-        }
-
+    # Names
     sample_name = s_(my_data__)$name
     feature_name = f_(my_data__)$name
     sample_symbol = s_(my_data__)$symbol
     feature_symbol = f_(my_data__)$symbol
+    
+    # Check if the nesting is too complicated for the moment without optimisation
+    my_test_nest = 
+      my_data__[1,1] %>%
+      as_tibble() %>%
+      tidyr::nest(...) 
+
+    # Check that sample or feature are in the nesting
+    if(
+      
+      # Check column intersection
+      c(s_(.data)$name, f_(.data)$name) %>% intersect(colnames(my_test_nest)) %>% length() %>% `>` (0) &
+      
+      # Check that other column are there
+      length(colnames(my_test_nest)) > 2
+    )
+    stop("tidySummarizedExperiment says: You cannot have the columns sample or feature among the nesting mixed with other nesting for efficiency reasons. Please consider to convert to_tibble() first. We are working for optimising a generalised solution of nest().")
+
+    my_data__nested =
+      my_data__ %>%
+      
+      # This is needed otherwise nest goes into loop and fails
+      as_tibble() %>%
+      tidyr::nest(...)
+     
+    # If I nest only for .feature -> THIS WORKS ONLY WITH THE CHECK ABOVE
+    if(feature_name %in% colnames(my_data__nested))
+     return(
+       my_data__nested %>% 
+         mutate(
+           !!as.symbol(col_name_data) := 
+             split_SummarizedExperiment_by_feature_to_list(!!.data)
+        ) %>%
+         
+         # Coerce to tidySummarizedExperiment_nested for unnesting
+         add_class("tidySummarizedExperiment_nested")
+     ) 
     
     my_data__nested %>%
 
@@ -206,13 +229,13 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                   when(sample_name %in% colnames(my_data__nested) ~ c(., list(!!sample_symbol)), ~ (.)) %>%
 
                   # Check if nested by feature
-                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ {
+                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ { browser()
 
                     # Check if nested by sample
                     if(sample_name %in% colnames(my_data__nested)) { my_samples=..2 }
                     else {my_samples=pull(..1,!!sample_symbol)}
 
-                    # Check if nested by feature
+                    # Check if nested by feature and sample
                     if(sample_name %in% colnames(my_data__nested) & feature_name %in% colnames(my_data__nested)) {my_transcripts=..3}
                     else if(feature_name %in% colnames(my_data__nested)) my_transcripts=..2
                     else my_transcripts=pull(..1,!!feature_symbol)

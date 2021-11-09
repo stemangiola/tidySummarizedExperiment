@@ -1114,3 +1114,9 @@ s_ = function(x){
   if("sample__" %in% names(metadata(x))) sample__ = metadata(x)$sample__
   return(sample__)
 }
+
+split_SummarizedExperiment_by_feature_to_list = function(.data){
+  if(nrow(.data)>1000)
+    message("tidySummarizedExperiment says: grouping a SummarizedExperiment by feature takes 1 minute for ~ 10,000 features.")
+  map(1:nrow(.data), ~ .data[.x,])
+}
