@@ -344,6 +344,7 @@ get_abundance_sc_long <- function(.data, transcripts=NULL, all=FALSE, exclude_ze
 #' @importFrom SummarizedExperiment rowData
 #' @importFrom SummarizedExperiment colData<-
 #' @importFrom SummarizedExperiment rowData<-
+#' @importFrom S4Vectors head 
 #'
 #' @keywords internal
 #'
