@@ -75,8 +75,8 @@ unnest.tidySummarizedExperiment_nested <-
             pull(., !!cols) %>%
                 .[[1]] %>%
                 class() %>%
-                as.character() %>% 
-                eq("SummarizedExperiment") %>%
+                as.character() %in% 
+                c("SummarizedExperiment", "RangedSummarizedExperiment") %>%
                 any() ~ {
 
                   se = pull(., !!cols) %>% .[[1]] 
