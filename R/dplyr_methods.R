@@ -321,15 +321,23 @@ filter_ <- function(.data, ..., .preserve=FALSE) {
     as_tibble(skip_GRanges = TRUE) %>%
     dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
   
+  
+  
   new_meta %>%
     
     when(
       
       # If rectangular
-      is_rectangular(., .data) ~ .data[
-        unique(pull(.,!!f_(.data)$symbol)),
-        unique(pull(.,!!s_(.data)$symbol))
-      ],
+      is_rectangular(., .data) ~ 
+        {
+          rn = pull(.,!!f_(.data)$symbol) %>% 
+              when(rownames(.data) %>% is.null() ~ as.integer(.), ~ (.))
+          
+          cn = pull(.,!!s_(.data)$symbol) %>% 
+            when(colnames(.data) %>% is.null() ~ as.integer(.), ~ (.))
+          
+          .data[unique(rn), unique(cn)]
+        },
       
       # If not rectangular return just tibble
       ~ {
@@ -1200,6 +1208,9 @@ select_ <- function(.data, ...) {
     select(-!!f_(.data)$symbol) %>%
     DataFrame()
   
+  # Fix if data has no colnames
+  if(is.null(rownames(.data))) rownames(row_data_DF) = NULL
+  
   col_data_tibble = 
     colData(.data) %>% 
     as_tibble(rownames = s_(.data)$name) 
@@ -1211,6 +1222,9 @@ select_ <- function(.data, ...) {
     data.frame(row.names=pull(., !!s_(.data)$symbol)) %>%
     select(-!!s_(.data)$symbol) %>%
     DataFrame()
+  
+    # Fix if data has no colnames
+    if(is.null(colnames(.data))) rownames(col_data_DF) = NULL
   
   count_data = 
     assays(.data)@listData %>% .[names(assays(.data)@listData) %in% columns_query]
