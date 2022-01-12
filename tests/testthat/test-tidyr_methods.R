@@ -33,6 +33,30 @@ test_that("nest_unnest", {
     expect_equal(x, y)
 })
 
+test_that("other nest_unnest", {
+  
+  tt %>% 
+    nest(data = -.feature) %>% 
+    mutate(new = 1) %>% 
+    unnest(data)
+  
+  tt %>% 
+    nest(data = -.sample) %>% 
+    mutate(new = 1) %>% 
+    unnest(data)
+  
+  tt %>% 
+    nest(data = -condition ) %>% 
+    mutate(new = 1) %>% 
+    unnest(data)
+  
+  tt %>% 
+    nest(data = -c(.feature, .sample) ) %>% 
+    mutate(new = 1) %>% 
+    unnest(data)
+  
+})
+
 test_that("nest_unnest_slice_1",{
     
     tt %>%
