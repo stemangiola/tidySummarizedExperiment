@@ -50,10 +50,6 @@ test_that("other nest_unnest", {
     mutate(new = 1) %>% 
     unnest(data)
   
-  tt %>% 
-    nest(data = -c(.feature, .sample) ) %>% 
-    mutate(new = 1) %>% 
-    unnest(data)
   
 })
 
