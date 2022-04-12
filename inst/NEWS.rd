@@ -8,4 +8,8 @@
     \item Improved all method for large-scale datasets.
 }}
 
-
+\section{Changes in version 1.5.3, Bioconductor 3.15 Release}{
+\itemize{
+    \item Speed-up nest.
+    \item Adaptation to Ranged-SummarizedExperiment.
+}}
