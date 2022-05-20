@@ -25,6 +25,7 @@ Imports:
     S4Vectors,
     tidyselect,
     ellipsis,
+    vctrs,
     pillar,
     stringr,
     cli,

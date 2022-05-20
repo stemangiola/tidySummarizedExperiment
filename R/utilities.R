@@ -1121,3 +1121,19 @@ split_SummarizedExperiment_by_feature_to_list = function(.data){
     message("tidySummarizedExperiment says: grouping a SummarizedExperiment by feature takes 1 minute for ~ 10,000 features.")
   map(1:nrow(.data), ~ .data[.x,])
 }
+
+#' Add attribute to abject
+#'
+#' @keywords internal
+#' @noRd
+#'
+#'
+#' @param var A tibble
+#' @param attribute An object
+#' @param name A character name of the attribute
+#'
+#' @return A tibble with an additional attribute
+add_attr = function(var, attribute, name) {
+  attr(var, name) <- attribute
+  var
+}
