@@ -635,10 +635,20 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'   defines a pivotting specification.
 #' @inheritParams pivot_longer
 #' @param id_cols <[`tidy-select`][tidyr_tidy_select]> A set of columns that
-#'   uniquely identifies each observation. Defaults to all columns in `data`
-#'   except for the columns specified in `names_from` and `values_from`.
-#'   Typically used when you have redundant variables, i.e. variables whose
-#'   values are perfectly correlated with existing variables.
+#'   uniquely identify each observation. Typically used when you have
+#'   redundant variables, i.e. variables whose values are perfectly correlated
+#'   with existing variables.
+#'
+#'   Defaults to all columns in `data` except for the columns specified through
+#'   `names_from` and `values_from`. If a tidyselect expression is supplied, it
+#'   will be evaluated on `data` after removing the columns specified through
+#'   `names_from` and `values_from`.
+#' @param id_expand Should the values in the `id_cols` columns be expanded by
+#'   [expand()] before pivoting? This results in more rows, the output will
+#'   contain a complete expansion of all possible values in `id_cols`. Implicit
+#'   factor levels that aren't represented in the data will become explicit.
+#'   Additionally, the row values corresponding to the expanded `id_cols` will
+#'   be sorted.
 #' @param names_from,values_from <[`tidy-select`][tidyr_tidy_select]> A pair of
 #'   arguments describing which column (or columns) to get the name of the
 #'   output column (`names_from`), and which column (or columns) to get the
@@ -657,19 +667,51 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'   `.value`) to create custom column names.
 #' @param names_sort Should the column names be sorted? If `FALSE`, the default,
 #'   column names are ordered by first appearance.
+#' @param names_vary When `names_from` identifies a column (or columns) with
+#'   multiple unique values, and multiple `values_from` columns are provided,
+#'   in what order should the resulting column names be combined?
+#'
+#'   - `"fastest"` varies `names_from` values fastest, resulting in a column
+#'     naming scheme of the form: `value1_name1, value1_name2, value2_name1,
+#'     value2_name2`. This is the default.
+#'
+#'   - `"slowest"` varies `names_from` values slowest, resulting in a column
+#'     naming scheme of the form: `value1_name1, value2_name1, value1_name2,
+#'     value2_name2`.
+#' @param names_expand Should the values in the `names_from` columns be expanded
+#'   by [expand()] before pivoting? This results in more columns, the output
+#'   will contain column names corresponding to a complete expansion of all
+#'   possible values in `names_from`. Implicit factor levels that aren't
+#'   represented in the data will become explicit. Additionally, the column
+#'   names will be sorted, identical to what `names_sort` would produce.
 #' @param values_fill Optionally, a (scalar) value that specifies what each
 #'   `value` should be filled in with when missing.
 #'
-#'   This can be a named list if you want to apply different aggregations
-#'   to different value columns.
-#' @param values_fn Optionally, a function applied to the `value` in each cell
+#'   This can be a named list if you want to apply different fill values to
+#'   different value columns.
+#' @param values_fn Optionally, a function applied to the value in each cell
 #'   in the output. You will typically use this when the combination of
-#'   `id_cols` and `value` column does not uniquely identify an observation.
+#'   `id_cols` and `names_from` columns does not uniquely identify an
+#'   observation.
 #'
 #'   This can be a named list if you want to apply different aggregations
-#'   to different value columns.
-#' @param ... Additional arguments passed on to methods.
+#'   to different `values_from` columns.
+#' @param unused_fn Optionally, a function applied to summarize the values from
+#'   the unused columns (i.e. columns not identified by `id_cols`,
+#'   `names_from`, or `values_from`).
 #'
+#'   The default drops all unused columns from the result.
+#'
+#'   This can be a named list if you want to apply different aggregations
+#'   to different unused columns.
+#'
+#'   `id_cols` must be supplied for `unused_fn` to be useful, since otherwise
+#'   all unspecified columns will be considered `id_cols`.
+#'
+#'   This is similar to grouping by the `id_cols` then summarizing the
+#'   unused columns using `unused_fn`.
+#' @param ... Additional arguments passed on to methods.
+#'   
 #' @importFrom tidyr pivot_wider
 #' @rdname tidyr-methods
 #' @name pivot_wider
@@ -687,17 +729,21 @@ NULL
 
 #' @export
 pivot_wider.SummarizedExperiment <- function(data,
-                                   id_cols = NULL,
-                                   names_from = name,
-                                   names_prefix = "",
-                                   names_sep = "_",
-                                   names_glue = NULL,
-                                   names_sort = FALSE,
-                                   names_repair = "check_unique",
-                                   values_from = value,
-                                   values_fill = NULL,
-                                   values_fn = NULL,
-                                   ...
+                                             id_cols = NULL,
+                                             id_expand = FALSE,
+                                             names_from = name,
+                                             names_prefix = "",
+                                             names_sep = "_",
+                                             names_glue = NULL,
+                                             names_sort = FALSE,
+                                             names_vary = "fastest",
+                                             names_expand = FALSE,
+                                             names_repair = "check_unique",
+                                             values_from = value,
+                                             values_fill = NULL,
+                                             values_fn = NULL,
+                                             unused_fn = NULL,
+                                             ...
 ) {
   id_cols <- enquo(id_cols)
   name = enquo(names_from)
@@ -715,17 +761,22 @@ pivot_wider.SummarizedExperiment <- function(data,
   
   data %>%
     as_tibble(skip_GRanges = TRUE) %>%
-    tidyr::pivot_wider( id_cols = !!id_cols,
-                        names_from = !!name,
-                        names_prefix = names_prefix,
-                        names_sep = names_sep,
-                        names_glue = names_glue,
-                        names_sort = names_sort,
-                        names_repair = names_repair,
-                        values_from = !!value,
-                        values_fill = values_fill,
-                        values_fn = values_fn,
-                        ...
+    tidyr::pivot_wider( 
+      id_cols = !!id_cols,
+      id_expand = id_expand,
+      names_from = !!name,
+      names_prefix = names_prefix,
+      names_sep = names_sep,
+      names_glue = names_glue,
+      names_sort = names_sort,
+      names_vary = "fastest",
+      names_expand = names_expand,
+      names_repair = names_repair,
+      values_from = !!value,
+      values_fill = values_fill,
+      values_fn = values_fn,
+      unused_fn = unused_fn,
+      ...
     )
 }
 

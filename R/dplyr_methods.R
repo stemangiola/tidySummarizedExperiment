@@ -1258,7 +1258,7 @@ select_ <- function(.data, ...) {
        message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
        
        .data %>%
-         as_tibble(skip_GRanges = T) %>%
+         as_tibble(skip_GRanges = TRUE) %>%
          select_helper(...) 
      },
   
