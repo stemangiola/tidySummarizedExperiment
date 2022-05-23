@@ -693,7 +693,6 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'   in the output. You will typically use this when the combination of
 #'   `id_cols` and `names_from` columns does not uniquely identify an
 #'   observation.
-<<<<<<< HEAD
 #'
 #'   This can be a named list if you want to apply different aggregations
 #'   to different `values_from` columns.
@@ -712,14 +711,6 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'   This is similar to grouping by the `id_cols` then summarizing the
 #'   unused columns using `unused_fn`.
 #' @param ... Additional arguments passed on to methods.
-=======
-#'
-#'   This can be a named list if you want to apply different aggregations
-#'   to different `values_from` columns.
-#' @param unused_fn Optionally, a function applied to summarize the values from
-#'   the unused columns (i.e. columns not identified by `id_cols`,
-#'   `names_from`, or `values_from`).
->>>>>>> b0ee3c5... fix print and pivot wider
 #'
 #'   The default drops all unused columns from the result.
 #'
@@ -764,11 +755,7 @@ pivot_wider.SummarizedExperiment <- function(data,
                                              values_fill = NULL,
                                              values_fn = NULL,
                                              unused_fn = NULL,
-<<<<<<< HEAD
-                                   ...
-=======
                                              ...
->>>>>>> b0ee3c5... fix print and pivot wider
 ) {
   id_cols <- enquo(id_cols)
   name = enquo(names_from)
@@ -786,7 +773,6 @@ pivot_wider.SummarizedExperiment <- function(data,
   
   data %>%
     as_tibble(skip_GRanges = TRUE) %>%
-<<<<<<< HEAD
     tidyr::pivot_wider( id_cols = !!id_cols,
                         id_expand = id_expand,
                         names_from = !!name,
@@ -802,24 +788,6 @@ pivot_wider.SummarizedExperiment <- function(data,
                         values_fn = values_fn,
                         unused_fn = unused_fn,
                         ...
-=======
-    tidyr::pivot_wider( 
-      id_cols = !!id_cols,
-      id_expand = id_expand,
-      names_from = !!name,
-      names_prefix = names_prefix,
-      names_sep = names_sep,
-      names_glue = names_glue,
-      names_sort = names_sort,
-      names_vary = "fastest",
-      names_expand = names_expand,
-      names_repair = names_repair,
-      values_from = !!value,
-      values_fill = values_fill,
-      values_fn = values_fn,
-      unused_fn = unused_fn,
-      ...
->>>>>>> b0ee3c5... fix print and pivot wider
     )
 }
 
