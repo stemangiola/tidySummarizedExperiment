@@ -119,21 +119,21 @@ We can use `select` to choose columns.
 
 ```{r}
 pasilla_tidy %>%
-    select(sample)
+    select(.sample)
 ```
 
 We can use `count` to count how many rows we have for each sample.
 
 ```{r}
 pasilla_tidy %>%
-    count(sample)
+    count(.sample)
 ```
 
 We can use `distinct` to see what distinct sample information we have.
 
 ```{r}
 pasilla_tidy %>%
-    distinct(sample, condition, type)
+    distinct(.sample, condition, type)
 ```
 
 We could use `rename` to rename a column. For example, to modify the type column name.
@@ -164,7 +164,7 @@ For example, we could combine `group_by` and `summarise` to get the total counts
 
 ```{r}
 pasilla_tidy %>%
-    group_by(sample) %>%
+    group_by(.sample) %>%
     summarise(total_counts=sum(counts))
 ```
 
@@ -172,7 +172,7 @@ We could combine `group_by`, `mutate` and `filter` to get the transcripts with m
 
 ```{r}
 pasilla_tidy %>%
-    group_by(feature) %>%
+    group_by(.feature) %>%
     mutate(mean_count=mean(counts)) %>%
     filter(mean_count > 0)
 ```

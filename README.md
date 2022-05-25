@@ -166,59 +166,59 @@ We can use `select` to choose columns.
 
 ``` r
 pasilla_tidy %>%
-    select(sample)
+    select(.sample)
 ```
 
     ## # A tibble: 102,193 × 1
-    ##    sample
-    ##    <chr> 
-    ##  1 untrt1
-    ##  2 untrt1
-    ##  3 untrt1
-    ##  4 untrt1
-    ##  5 untrt1
-    ##  6 untrt1
-    ##  7 untrt1
-    ##  8 untrt1
-    ##  9 untrt1
-    ## 10 untrt1
+    ##    .sample
+    ##    <chr>  
+    ##  1 untrt1 
+    ##  2 untrt1 
+    ##  3 untrt1 
+    ##  4 untrt1 
+    ##  5 untrt1 
+    ##  6 untrt1 
+    ##  7 untrt1 
+    ##  8 untrt1 
+    ##  9 untrt1 
+    ## 10 untrt1 
     ## # … with 102,183 more rows
 
 We can use `count` to count how many rows we have for each sample.
 
 ``` r
 pasilla_tidy %>%
-    count(sample)
+    count(.sample)
 ```
 
     ## # A tibble: 7 × 2
-    ##   sample     n
-    ##   <chr>  <int>
-    ## 1 trt1   14599
-    ## 2 trt2   14599
-    ## 3 trt3   14599
-    ## 4 untrt1 14599
-    ## 5 untrt2 14599
-    ## 6 untrt3 14599
-    ## 7 untrt4 14599
+    ##   .sample     n
+    ##   <chr>   <int>
+    ## 1 trt1    14599
+    ## 2 trt2    14599
+    ## 3 trt3    14599
+    ## 4 untrt1  14599
+    ## 5 untrt2  14599
+    ## 6 untrt3  14599
+    ## 7 untrt4  14599
 
 We can use `distinct` to see what distinct sample information we have.
 
 ``` r
 pasilla_tidy %>%
-    distinct(sample, condition, type)
+    distinct(.sample, condition, type)
 ```
 
     ## # A tibble: 7 × 3
-    ##   sample condition type      
-    ##   <chr>  <chr>     <chr>     
-    ## 1 untrt1 untreated single_end
-    ## 2 untrt2 untreated single_end
-    ## 3 untrt3 untreated paired_end
-    ## 4 untrt4 untreated paired_end
-    ## 5 trt1   treated   single_end
-    ## 6 trt2   treated   paired_end
-    ## 7 trt3   treated   paired_end
+    ##   .sample condition type      
+    ##   <chr>   <chr>     <chr>     
+    ## 1 untrt1  untreated single_end
+    ## 2 untrt2  untreated single_end
+    ## 3 untrt3  untreated paired_end
+    ## 4 untrt4  untreated paired_end
+    ## 5 trt1    treated   single_end
+    ## 6 trt2    treated   paired_end
+    ## 7 trt3    treated   paired_end
 
 We could use `rename` to rename a column. For example, to modify the
 type column name.
@@ -299,45 +299,45 @@ total counts for each sample.
 
 ``` r
 pasilla_tidy %>%
-    group_by(sample) %>%
+    group_by(.sample) %>%
     summarise(total_counts=sum(counts))
 ```
 
     ## # A tibble: 7 × 2
-    ##   sample total_counts
-    ##   <chr>         <int>
-    ## 1 trt1       18670279
-    ## 2 trt2        9571826
-    ## 3 trt3       10343856
-    ## 4 untrt1     13972512
-    ## 5 untrt2     21911438
-    ## 6 untrt3      8358426
-    ## 7 untrt4      9841335
+    ##   .sample total_counts
+    ##   <chr>          <int>
+    ## 1 trt1        18670279
+    ## 2 trt2         9571826
+    ## 3 trt3        10343856
+    ## 4 untrt1      13972512
+    ## 5 untrt2      21911438
+    ## 6 untrt3       8358426
+    ## 7 untrt4       9841335
 
 We could combine `group_by`, `mutate` and `filter` to get the
 transcripts with mean count \> 0.
 
 ``` r
 pasilla_tidy %>%
-    group_by(feature) %>%
+    group_by(.feature) %>%
     mutate(mean_count=mean(counts)) %>%
     filter(mean_count > 0)
 ```
 
     ## # A tibble: 86,513 × 6
-    ## # Groups:   feature [12,359]
-    ##    feature     sample counts condition type       mean_count
-    ##    <chr>       <chr>   <int> <chr>     <chr>           <dbl>
-    ##  1 FBgn0000003 untrt1      0 untreated single_end      0.143
-    ##  2 FBgn0000008 untrt1     92 untreated single_end     99.6  
-    ##  3 FBgn0000014 untrt1      5 untreated single_end      1.43 
-    ##  4 FBgn0000015 untrt1      0 untreated single_end      0.857
-    ##  5 FBgn0000017 untrt1   4664 untreated single_end   4672.   
-    ##  6 FBgn0000018 untrt1    583 untreated single_end    461.   
-    ##  7 FBgn0000022 untrt1      0 untreated single_end      0.143
-    ##  8 FBgn0000024 untrt1     10 untreated single_end      7    
-    ##  9 FBgn0000028 untrt1      0 untreated single_end      0.429
-    ## 10 FBgn0000032 untrt1   1446 untreated single_end   1085.   
+    ## # Groups:   .feature [12,359]
+    ##    .feature    .sample counts condition type       mean_count
+    ##    <chr>       <chr>    <int> <chr>     <chr>           <dbl>
+    ##  1 FBgn0000003 untrt1       0 untreated single_end      0.143
+    ##  2 FBgn0000008 untrt1      92 untreated single_end     99.6  
+    ##  3 FBgn0000014 untrt1       5 untreated single_end      1.43 
+    ##  4 FBgn0000015 untrt1       0 untreated single_end      0.857
+    ##  5 FBgn0000017 untrt1    4664 untreated single_end   4672.   
+    ##  6 FBgn0000018 untrt1     583 untreated single_end    461.   
+    ##  7 FBgn0000022 untrt1       0 untreated single_end      0.143
+    ##  8 FBgn0000024 untrt1      10 untreated single_end      7    
+    ##  9 FBgn0000028 untrt1       0 untreated single_end      0.429
+    ## 10 FBgn0000032 untrt1    1446 untreated single_end   1085.   
     ## # … with 86,503 more rows
 
 # Plotting
