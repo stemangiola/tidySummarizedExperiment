@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,23 +34,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -62,7 +58,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/stemangiola/tidySummarizedExperiment/">
+  <a href="https://github.com/stemangiola/tidySummarizedExperiment/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -80,36 +76,36 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="tidysummarizedexperiment---part-of-tidytranscriptomics" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#tidysummarizedexperiment---part-of-tidytranscriptomics" class="anchor"></a>tidySummarizedExperiment - part of tidytranscriptomics</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="tidysummarizedexperiment---part-of-tidytranscriptomics">tidySummarizedExperiment - part of tidytranscriptomics<a class="anchor" aria-label="anchor" href="#tidysummarizedexperiment---part-of-tidytranscriptomics"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p><strong>Brings SummarizedExperiment to the tidyverse!</strong></p>
-<p>website: <a href="https://stemangiola.github.io/tidySummarizedExperiment/">stemangiola.github.io/tidySummarizedExperiment/</a></p>
+<p>website: <a href="https://stemangiola.github.io/tidySummarizedExperiment/" class="external-link">stemangiola.github.io/tidySummarizedExperiment/</a></p>
 <p>Please also have a look at</p>
 <ul>
 <li>
-<a href="https://stemangiola.github.io/tidySCE/">tidySCE</a> for tidy manipulation of Seurat objects</li>
+<a href="https://stemangiola.github.io/tidySCE/" class="external-link">tidySCE</a> for tidy manipulation of Seurat objects</li>
 <li>
-<a href="https://stemangiola.github.io/tidyseurat/">tidyseurat</a> for tidy manipulation of Seurat objects</li>
+<a href="https://stemangiola.github.io/tidyseurat/" class="external-link">tidyseurat</a> for tidy manipulation of Seurat objects</li>
 <li>
-<a href="https://stemangiola.github.io/tidybulk/">tidybulk</a> for tidy high-level data analysis and manipulation</li>
+<a href="https://stemangiola.github.io/tidybulk/" class="external-link">tidybulk</a> for tidy high-level data analysis and manipulation</li>
 <li>
-<a href="https://github.com/stemangiola/nanny">nanny</a> for tidy high-level data analysis and manipulation</li>
+<a href="https://github.com/stemangiola/nanny" class="external-link">nanny</a> for tidy high-level data analysis and manipulation</li>
 <li>
-<a href="https://github.com/stemangiola/tidygate">tidygate</a> for adding custom gate information to your tibble</li>
+<a href="https://github.com/stemangiola/tidygate" class="external-link">tidygate</a> for adding custom gate information to your tibble</li>
 <li>
-<a href="https://stemangiola.github.io/tidyHeatmap/">tidyHeatmap</a> for heatmaps produced with tidy principles</li>
+<a href="https://stemangiola.github.io/tidyHeatmap/" class="external-link">tidyHeatmap</a> for heatmaps produced with tidy principles</li>
 </ul>
 </div>
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>tidySummarizedExperiment provides a bridge between Bioconductor <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">SummarizedExperiment</a> <span class="math display">@<em>m</em><em>o</em><em>r</em><em>g</em><em>a</em><em>n</em>2020<em>s</em><em>u</em><em>m</em><em>m</em><em>a</em><em>r</em><em>i</em><em>z</em><em>e</em><em>d</em></span> and the tidyverse <span class="math display">@<em>w</em><em>i</em><em>c</em><em>k</em><em>h</em><em>a</em><em>m</em>2019<em>w</em><em>e</em><em>l</em><em>c</em><em>o</em><em>m</em><em>e</em></span>. It creates an invisible layer that enables viewing the Bioconductor <em>SummarizedExperiment</em> object as a tidyverse tibble, and provides SummarizedExperiment-compatible <em>dplyr</em>, <em>tidyr</em>, <em>ggplot</em> and <em>plotly</em> functions. This allows users to get the best of both Bioconductor and tidyverse worlds.</p>
-<div id="functionsutilities-available" class="section level2">
-<h2 class="hasAnchor">
-<a href="#functionsutilities-available" class="anchor"></a>Functions/utilities available</h2>
+<div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
+<p>tidySummarizedExperiment provides a bridge between Bioconductor <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html" class="external-link">SummarizedExperiment</a> [@morgan2020summarized] and the tidyverse [@wickham2019welcome]. It creates an invisible layer that enables viewing the Bioconductor <em>SummarizedExperiment</em> object as a tidyverse tibble, and provides SummarizedExperiment-compatible <em>dplyr</em>, <em>tidyr</em>, <em>ggplot</em> and <em>plotly</em> functions. This allows users to get the best of both Bioconductor and tidyverse worlds.</p>
+<div class="section level2">
+<h2 id="functionsutilities-available">Functions/utilities available<a class="anchor" aria-label="anchor" href="#functionsutilities-available"></a>
+</h2>
 <table class="table">
 <colgroup>
 <col width="39%">
@@ -172,9 +168,9 @@
 </tbody>
 </table>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>From Bioconductor (under submission)</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly=</span><span class="cn">TRUE</span>)) {</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
@@ -188,9 +184,9 @@
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidySummarizedExperiment)</span></code></pre></div>
 </div>
 </div>
-<div id="create-tidysummarizedexperiment-the-best-of-both-worlds" class="section level1">
-<h1 class="hasAnchor">
-<a href="#create-tidysummarizedexperiment-the-best-of-both-worlds" class="anchor"></a>Create <code>tidySummarizedExperiment</code>, the best of both worlds!</h1>
+<div class="section level1">
+<h1 id="create-tidysummarizedexperiment-the-best-of-both-worlds">Create <code>tidySummarizedExperiment</code>, the best of both worlds!<a class="anchor" aria-label="anchor" href="#create-tidysummarizedexperiment-the-best-of-both-worlds"></a>
+</h1>
 <p>This is a SummarizedExperiment object but it is evaluated as tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="ot">&lt;-</span> tidySummarizedExperiment<span class="sc">::</span>pasilla <span class="sc">%&gt;%</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>()</span></code></pre></div>
@@ -219,9 +215,9 @@
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="do">## List of length 1</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="do">## names(1): counts</span></span></code></pre></div>
 </div>
-<div id="tidyverse-commands" class="section level1">
-<h1 class="hasAnchor">
-<a href="#tidyverse-commands" class="anchor"></a>Tidyverse commands</h1>
+<div class="section level1">
+<h1 id="tidyverse-commands">Tidyverse commands<a class="anchor" aria-label="anchor" href="#tidyverse-commands"></a>
+</h1>
 <p>We can use tidyverse commands to explore the tidy SummarizedExperiment object.</p>
 <p>We can use <code>slice</code> to choose rows by position, for example to choose the first row.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
@@ -349,7 +345,7 @@
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated_single_end FBgn0000028      0</span></span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated_single_end FBgn0000032   1446</span></span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 102,183 more rows</span></span></code></pre></div>
-<p>We can also combine commands with the tidyverse pipe <code><a href="reference/%&gt;%.html">%&gt;%</a></code>.</p>
+<p>We can also combine commands with the tidyverse pipe <code>%&gt;%</code>.</p>
 <p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pasilla_tidy <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(sample) <span class="sc">%&gt;%</span></span>
@@ -386,9 +382,9 @@
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 untrt1 untreated single_end FBgn0000028      0      0.429</span></span>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 untrt1 untreated single_end FBgn0000032   1446   1085.   </span></span>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 86,503 more rows</span></span></code></pre></div>
-<div id="plotting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotting" class="anchor"></a>Plotting</h2>
+<div class="section level2">
+<h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h2>
 <div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_theme <span class="ot">&lt;-</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Set1"</span>),</span>
@@ -422,46 +418,56 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/tidySummarizedExperiment">https://​www.bioconductor.org/​packages/​tidySummarizedExperiment</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/stemangiola/tidySummarizedExperiment/">https://​github.com/​stemangiola/​tidySummarizedExperiment/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/stemangiola/tidySummarizedExperiment/issues">https://​github.com/​stemangiola/​tidySummarizedExperiment/​issues</a>
-</li>
+<li><a href="https://www.bioconductor.org/packages/tidySummarizedExperiment" class="external-link">View on Bioconductor</a></li>
+<li><a href="https://github.com/stemangiola/tidySummarizedExperiment/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/stemangiola/tidySummarizedExperiment/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing tidySummarizedExperiment</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Stefano Mangiola <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle:maturing"></a></li>
-<li><a href="https://github.com/stemangiola/tidySummarizedExperiment/actions"><img src="https://github.com/stemangiola/tidySummarizedExperiment/workflows/R-CMD-check-bioc/badge.svg" alt="R build status"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#maturing" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle:maturing"></a></li>
+<li><a href="https://github.com/stemangiola/tidySummarizedExperiment/actions" class="external-link"><img src="https://github.com/stemangiola/tidySummarizedExperiment/workflows/R-CMD-check-bioc/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Stefano Mangiola.</p>
+  <p></p>
+<p>Developed by Stefano Mangiola.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -469,6 +475,8 @@
 
   
 
+
+  
 
   </body>
 </html>
