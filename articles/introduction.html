@@ -96,14 +96,14 @@ Mangiola</h4>
 <p>Please also have a look at</p>
 <ul>
 <li>
-<a href="https://stemangiola.github.io/tidySCE/" class="external-link">tidySCE</a> for
-tidy manipulation of Seurat objects</li>
+<a href="https://stemangiola.github.io/tidySingleCellExperiment/" class="external-link">tidySingleCellExperiment</a>
+for tidy manipulation of SingleCellExperiment objects</li>
 <li>
 <a href="https://stemangiola.github.io/tidyseurat/" class="external-link">tidyseurat</a>
 for tidy manipulation of Seurat objects</li>
 <li>
 <a href="https://stemangiola.github.io/tidybulk/" class="external-link">tidybulk</a> for
-tidy high-level data analysis and manipulation</li>
+tidy analysis of RNA sequencing data</li>
 <li>
 <a href="https://github.com/stemangiola/nanny" class="external-link">nanny</a> for tidy
 high-level data analysis and manipulation</li>
@@ -170,26 +170,15 @@ SummarizedExperiment object, just better</td>
 </tbody>
 </table>
 <table class="table">
-<colgroup>
-<col width="48%">
-<col width="52%">
-</colgroup>
 <thead><tr class="header">
 <th>Utilities</th>
 <th>Description</th>
 </tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>tidy</code></td>
-<td>Add <code>tidySummarizedExperiment</code> invisible layer over a
-SummarizedExperiment object</td>
-</tr>
-<tr class="even">
+<tbody><tr class="odd">
 <td><code>as_tibble</code></td>
 <td>Convert cell-wise information to a <code>tbl_df</code>
 </td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 </div>
 <div class="section level3">
@@ -240,10 +229,9 @@ tidyverse APIs.</p>
 <p><strong>But it is a SummarizedExperiment object after
 all</strong></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/Assays-class.html" class="external-link">Assays</a></span><span class="op">(</span><span class="va">pasilla_tidy</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## An object of class "SimpleAssays"</span>
-<span class="co">## Slot "data":</span>
-<span class="co">## List of length 1</span></code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assays</a></span><span class="op">(</span><span class="va">pasilla_tidy</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## List of length 1</span>
+<span class="co">## names(1): counts</span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="tidyverse-commands">Tidyverse commands<a class="anchor" aria-label="anchor" href="#tidyverse-commands"></a>
@@ -282,51 +270,51 @@ to choose the first row.</p>
 <p>We can use <code>select</code> to choose columns.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="../reference/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 102,193 × 1</span></span>
-<span class="co">##    sample</span>
-<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">## <span style="color: #BCBCBC;"> 1</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 2</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 3</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 4</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 5</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 6</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 7</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 8</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 9</span> untrt1</span>
-<span class="co">## <span style="color: #BCBCBC;">10</span> untrt1</span>
+<span class="co">##    .sample</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> untrt1 </span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> untrt1 </span>
 <span class="co">## <span style="color: #949494;"># … with 102,183 more rows</span></span></code></pre>
 <p>We can use <code>count</code> to count how many rows we have for each
 sample.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/count.html">count</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="../reference/count.html">count</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 7 × 2</span></span>
-<span class="co">##   sample     n</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> trt1   <span style="text-decoration: underline;">14</span>599</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> trt2   <span style="text-decoration: underline;">14</span>599</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> trt3   <span style="text-decoration: underline;">14</span>599</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> untrt1 <span style="text-decoration: underline;">14</span>599</span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> untrt2 <span style="text-decoration: underline;">14</span>599</span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> untrt3 <span style="text-decoration: underline;">14</span>599</span>
-<span class="co">## <span style="color: #BCBCBC;">7</span> untrt4 <span style="text-decoration: underline;">14</span>599</span></code></pre>
+<span class="co">##   .sample     n</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> trt1    <span style="text-decoration: underline;">14</span>599</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> trt2    <span style="text-decoration: underline;">14</span>599</span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> trt3    <span style="text-decoration: underline;">14</span>599</span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> untrt1  <span style="text-decoration: underline;">14</span>599</span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> untrt2  <span style="text-decoration: underline;">14</span>599</span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> untrt3  <span style="text-decoration: underline;">14</span>599</span>
+<span class="co">## <span style="color: #BCBCBC;">7</span> untrt4  <span style="text-decoration: underline;">14</span>599</span></code></pre>
 <p>We can use <code>distinct</code> to see what distinct sample
 information we have.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/dplyr-methods.html">distinct</a></span><span class="op">(</span><span class="va">sample</span>, <span class="va">condition</span>, <span class="va">type</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="../reference/dplyr-methods.html">distinct</a></span><span class="op">(</span><span class="va">.sample</span>, <span class="va">condition</span>, <span class="va">type</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 7 × 3</span></span>
-<span class="co">##   sample condition type      </span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> untrt1 untreated single_end</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> untrt2 untreated single_end</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> untrt3 untreated paired_end</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> untrt4 untreated paired_end</span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> trt1   treated   single_end</span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> trt2   treated   paired_end</span>
-<span class="co">## <span style="color: #BCBCBC;">7</span> trt3   treated   paired_end</span></code></pre>
+<span class="co">##   .sample condition type      </span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> untrt1  untreated single_end</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> untrt2  untreated single_end</span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> untrt3  untreated paired_end</span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> untrt4  untreated paired_end</span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> trt1    treated   single_end</span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> trt2    treated   paired_end</span>
+<span class="co">## <span style="color: #BCBCBC;">7</span> trt3    treated   paired_end</span></code></pre>
 <p>We could use <code>rename</code> to rename a column. For example, to
 modify the type column name.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -394,39 +382,39 @@ single column.</p>
 <code>summarise</code> to get the total counts for each sample.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="../reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="../reference/dplyr-methods.html">summarise</a></span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 7 × 2</span></span>
-<span class="co">##   sample total_counts</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> trt1       18<span style="text-decoration: underline;">670</span>279</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> trt2        9<span style="text-decoration: underline;">571</span>826</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> trt3       10<span style="text-decoration: underline;">343</span>856</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> untrt1     13<span style="text-decoration: underline;">972</span>512</span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> untrt2     21<span style="text-decoration: underline;">911</span>438</span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> untrt3      8<span style="text-decoration: underline;">358</span>426</span>
-<span class="co">## <span style="color: #BCBCBC;">7</span> untrt4      9<span style="text-decoration: underline;">841</span>335</span></code></pre>
+<span class="co">##   .sample total_counts</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> trt1        18<span style="text-decoration: underline;">670</span>279</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> trt2         9<span style="text-decoration: underline;">571</span>826</span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> trt3        10<span style="text-decoration: underline;">343</span>856</span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> untrt1      13<span style="text-decoration: underline;">972</span>512</span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> untrt2      21<span style="text-decoration: underline;">911</span>438</span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> untrt3       8<span style="text-decoration: underline;">358</span>426</span>
+<span class="co">## <span style="color: #BCBCBC;">7</span> untrt4       9<span style="text-decoration: underline;">841</span>335</span></code></pre>
 <p>We could combine <code>group_by</code>, <code>mutate</code> and
 <code>filter</code> to get the transcripts with mean count &gt; 0.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">feature</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="../reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">.feature</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="../reference/dplyr-methods.html">mutate</a></span><span class="op">(</span>mean_count<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="../reference/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">mean_count</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 86,513 × 6</span></span>
-<span class="co">## <span style="color: #949494;"># Groups:   feature [12,359]</span></span>
-<span class="co">##    feature     sample counts condition type       mean_count</span>
-<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;"> 1</span> FBgn0000003 untrt1      0 untreated single_end      0.143</span>
-<span class="co">## <span style="color: #BCBCBC;"> 2</span> FBgn0000008 untrt1     92 untreated single_end     99.6  </span>
-<span class="co">## <span style="color: #BCBCBC;"> 3</span> FBgn0000014 untrt1      5 untreated single_end      1.43 </span>
-<span class="co">## <span style="color: #BCBCBC;"> 4</span> FBgn0000015 untrt1      0 untreated single_end      0.857</span>
-<span class="co">## <span style="color: #BCBCBC;"> 5</span> FBgn0000017 untrt1   <span style="text-decoration: underline;">4</span>664 untreated single_end   <span style="text-decoration: underline;">4</span>672.   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 6</span> FBgn0000018 untrt1    583 untreated single_end    461.   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 7</span> FBgn0000022 untrt1      0 untreated single_end      0.143</span>
-<span class="co">## <span style="color: #BCBCBC;"> 8</span> FBgn0000024 untrt1     10 untreated single_end      7    </span>
-<span class="co">## <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1      0 untreated single_end      0.429</span>
-<span class="co">## <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1   <span style="text-decoration: underline;">1</span>446 untreated single_end   <span style="text-decoration: underline;">1</span>085.   </span>
+<span class="co">## <span style="color: #949494;"># Groups:   .feature [12,359]</span></span>
+<span class="co">##    .feature    .sample counts condition type       mean_count</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> FBgn0000003 untrt1       0 untreated single_end      0.143</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> FBgn0000008 untrt1      92 untreated single_end     99.6  </span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> FBgn0000014 untrt1       5 untreated single_end      1.43 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> FBgn0000015 untrt1       0 untreated single_end      0.857</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> FBgn0000017 untrt1    <span style="text-decoration: underline;">4</span>664 untreated single_end   <span style="text-decoration: underline;">4</span>672.   </span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> FBgn0000018 untrt1     583 untreated single_end    461.   </span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> FBgn0000022 untrt1       0 untreated single_end      0.143</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> FBgn0000024 untrt1      10 untreated single_end      7    </span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0 untreated single_end      0.429</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446 untreated single_end   <span style="text-decoration: underline;">1</span>085.   </span>
 <span class="co">## <span style="color: #949494;"># … with 86,503 more rows</span></span></code></pre>
 </div>
 <div class="section level2">
