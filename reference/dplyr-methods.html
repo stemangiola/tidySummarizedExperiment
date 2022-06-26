@@ -177,6 +177,8 @@ name the output.</p>
     <h2>Arguments</h2>
     <dl><dt>...</dt>
 <dd><p>For use by methods.</p></dd>
+
+
 <dt>.id</dt>
 <dd><p>Data frame identifier.</p>
 <p>When <code>.id</code> is supplied, a new column of identifiers is
@@ -185,16 +187,24 @@ are taken from the named arguments to <code>bind_rows()</code>. When a
 list of data frames is supplied, the labels are taken from the
 names of the list. If no names are found a numeric sequence is
 used instead.</p></dd>
+
+
 <dt>add.cell.ids</dt>
 <dd><p>from SummarizedExperiment 3.0 A character vector of
 length(x=c(x, y)). Appends the corresponding values to the start of each
 objects' cell names.</p></dd>
+
+
 <dt>.keep_all</dt>
 <dd><p>If TRUE, keep all variables in .data. If a combination
 of ... is not distinct, this keeps the first row of values. (See dplyr)</p></dd>
+
+
 <dt>.preserve</dt>
 <dd><p>when <code>FALSE</code> (the default), the grouping structure
 is recalculated based on the resulting data, otherwise it is kept as is.</p></dd>
+
+
 <dt>.add</dt>
 <dd><p>When <code>FALSE</code>, the default, <code>group_by()</code> will
 override existing groups. To add to the existing groups, use
@@ -202,56 +212,91 @@ override existing groups. To add to the existing groups, use
 <p>This argument was previously called <code>add</code>, but that prevented
 creating a new grouping variable called <code>add</code>, and conflicts with
 our naming conventions.</p></dd>
+
+
 <dt>.drop</dt>
 <dd><p>When <code>.drop=TRUE</code>, empty groups are dropped. See
 <code>group_by_drop_default()</code> for what the default value is for this argument.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>Input data frame.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>tbls to join. (See dplyr)</p></dd>
+
+
 <dt>y</dt>
 <dd><p>tbls to join. (See dplyr)</p></dd>
+
+
 <dt>by</dt>
 <dd><p>A character vector of variables to join by. (See dplyr)</p></dd>
+
+
 <dt>copy</dt>
 <dd><p>If x and y are not from the same data source, and copy is TRUE,
 then y will be copied into the same src as x. (See dplyr)</p></dd>
+
+
 <dt>suffix</dt>
 <dd><p>If there are non-joined duplicate variables in x and y, these
 suffixes will be added to the output to disambiguate them. Should be a
 character vector of length 2. (See dplyr)</p></dd>
+
+
 <dt>tbl</dt>
 <dd><p>A data.frame.</p></dd>
+
+
 <dt>size</dt>
 <dd><p>&lt;<code>tidy-select</code>&gt;
 For <code>sample_n()</code>, the number of rows to select.
 For <code>sample_frac()</code>, the fraction of rows to select.
 If <code>tbl</code> is grouped, <code>size</code> applies to each group.</p></dd>
+
+
 <dt>replace</dt>
 <dd><p>Sample with or without replacement?</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>&lt;<code>tidy-select</code>&gt; Sampling weights.
 This must evaluate to a vector of non-negative numbers the same length as
 the input. Weights are automatically standardised to sum to 1.</p></dd>
+
+
 <dt>.env</dt>
 <dd><p>DEPRECATED.</p></dd>
+
+
 <dt>.data</dt>
 <dd><p>A tidySummarizedExperiment object or any data frame</p></dd>
+
+
 <dt>name</dt>
 <dd><p>An optional parameter that specifies the column to be used
 as names for a named vector. Specified in a similar manner as <code>var</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A tidySummarizedExperiment object
-An object of the same type as <code>.data</code>.</p><ul><li><p>Rows are a subset of the input, but appear in the same order.</p></li>
+    
+
+<p>A tidySummarizedExperiment object</p>
+
+
+<p>An object of the same type as <code>.data</code>.</p><ul><li><p>Rows are a subset of the input, but appear in the same order.</p></li>
 <li><p>Columns are not modified.</p></li>
 <li><p>The number of groups may be reduced (if <code>.preserve</code> is not <code>TRUE</code>).</p></li>
 <li><p>Data frame attributes are preserved.</p></li>
 </ul><p>A grouped data frame, unless the combination of
 <code>...</code> and <code>add</code> yields a non empty set of grouping columns, a
-regular (ungrouped) data frame otherwise.
-An object <em>usually</em> of the same type as <code>.data</code>.</p><ul><li><p>The rows come from the underlying <code>group_keys()</code>.</p></li>
+regular (ungrouped) data frame otherwise.</p>
+
+
+<p>An object <em>usually</em> of the same type as <code>.data</code>.</p><ul><li><p>The rows come from the underlying <code>group_keys()</code>.</p></li>
 <li><p>The columns are a combination of the grouping keys and the summary
 expressions that you provide.</p></li>
 <li><p>If <code>x</code> is grouped by more than one variable, the output will be another
@@ -260,8 +305,10 @@ grouped_df with the right-most group removed.</p></li>
 be a <a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a>.</p></li>
 <li><p>Data frame attributes are <strong>not</strong> preserved, because <code>summarise()</code>
 fundamentally creates a new data frame.</p></li>
-</ul><p>An object of the same type as <code>.data</code>.
-For <code>mutate()</code>:</p><ul><li><p>Rows are not affected.</p></li>
+</ul><p>An object of the same type as <code>.data</code>.</p>
+
+
+<p>For <code>mutate()</code>:</p><ul><li><p>Rows are not affected.</p></li>
 <li><p>Existing columns will be preserved unless explicitly modified.</p></li>
 <li><p>New columns will be added to the right of existing columns.</p></li>
 <li><p>Columns given value <code>NULL</code> will be removed</p></li>
@@ -277,11 +324,27 @@ explicitly kept.</p></li>
 <li><p>Column names are changed; column order is preserved</p></li>
 <li><p>Data frame attributes are preserved.</p></li>
 <li><p>Groups are updated to reflect new names.</p></li>
-</ul><p>A <code>tbl</code>A <code>tbl</code>A tidySummarizedExperiment object
-A tidySummarizedExperiment object
-A tidySummarizedExperiment object
-A tidySummarizedExperiment object
-An object of the same type as <code>.data</code>. The output has the following
+</ul><p>A <code>tbl</code></p>
+
+
+
+<p>A <code>tbl</code></p>
+
+
+
+<p>A tidySummarizedExperiment object</p>
+
+
+<p>A tidySummarizedExperiment object</p>
+
+
+<p>A tidySummarizedExperiment object</p>
+
+
+<p>A tidySummarizedExperiment object</p>
+
+
+<p>An object of the same type as <code>.data</code>. The output has the following
 properties:</p><ul><li><p>Each row may appear 0, 1, or many times in the output.</p></li>
 <li><p>Columns are not modified.</p></li>
 <li><p>Groups are not modified.</p></li>
@@ -292,8 +355,10 @@ properties:</p><ul><li><p>Rows are not affected.</p></li>
 order. Columns will be renamed if <code>new_name=old_name</code> form is used.</p></li>
 <li><p>Data frame attributes are preserved.</p></li>
 <li><p>Groups are maintained; you can't select off grouping variables.</p></li>
-</ul><p>A tidySummarizedExperiment object
-A vector the same size as <code>.data</code>.</p>
+</ul><p>A tidySummarizedExperiment object</p>
+
+
+<p>A vector the same size as <code>.data</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -668,16 +733,16 @@ to renaming a set of variables with a function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0030230 trt1      <span style="text-decoration: underline;">1</span>008 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0052104 untrt4     116 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0035097 untrt4       5 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0032447 trt1        65 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0039470 untrt3       0 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0037051 trt2      <span style="text-decoration: underline;">2</span>005 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0052283 trt1         0 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0038405 untrt1       3 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0025697 trt2        48 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0039638 untrt3     417 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0052511 trt2         1 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0260225 trt3         0 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0042129 untrt2       0 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0030348 trt1        29 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0051523 trt1      <span style="text-decoration: underline;">6</span>341 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0063375 untrt3       0 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0038934 untrt1       0 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0085366 trt2         0 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0010303 trt2      <span style="text-decoration: underline;">4</span>140 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0034082 untrt1      12 untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
 <span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">    </span>
@@ -686,16 +751,16 @@ to renaming a set of variables with a function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10,219 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0031323 trt2         0 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0027581 trt2      <span style="text-decoration: underline;">1</span>205 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0051716 trt2      <span style="text-decoration: underline;">1</span>725 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0033987 untrt4      29 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0034141 untrt1     824 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0029658 trt3        15 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0035949 untrt3      15 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0082953 trt2         2 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0036553 trt3         2 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0051611 untrt4       0 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0004427 trt2         0 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0036856 untrt3       0 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0047092 untrt3       1 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0039139 untrt2     369 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0035399 trt1         9 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0033121 untrt4     316 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0035888 untrt2     258 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0030996 untrt3     585 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0037877 trt1       645 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0038133 trt1         0 treated   single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 10,209 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">`%&gt;%`</span> <span class="op">&lt;-</span> <span class="fu">magrittr</span><span class="fu">::</span><span class="va">`%&gt;%`</span></span>
@@ -20718,7 +20783,7 @@ to renaming a set of variables with a function.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

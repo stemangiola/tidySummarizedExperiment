@@ -81,26 +81,37 @@ available by setting the options described below.</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Object to format or print.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed on to individual methods.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>Number of rows to show. If <code>NULL</code>, the default, will print all rows
 if less than option <code>tibble.print_max</code>. Otherwise, will print
 <code>tibble.print_min</code> rows.</p></dd>
+
+
 <dt>width</dt>
 <dd><p>Width of text output to generate. This defaults to <code>NULL</code>, which
 means use <code>getOption("tibble.width")</code> or (if also <code>NULL</code>)
 <code>getOption("width")</code>; the latter displays only the columns that fit on one
 screen. You can also set <code>options(tibble.width = Inf)</code> to override this
 default and always print all columns.</p></dd>
+
+
 <dt>n_extra</dt>
 <dd><p>Number of extra columns to print abbreviated information for,
 if the width is too small for the entire tibble. If <code>NULL</code>, the default,
 will print information about at most <code>tibble.max_extra_cols</code> extra columns.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Nothing</p>
+    
+
+<p>Nothing</p>
     </div>
     <div id="package-options">
     <h2>Package options</h2>
@@ -184,7 +195,7 @@ Default: 100.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

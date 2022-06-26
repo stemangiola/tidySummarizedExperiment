@@ -90,34 +90,58 @@ decreasing the number of rows. The inverse transformation is
     <h2>Arguments</h2>
     <dl><dt>keep_empty</dt>
 <dd><p>See tidyr::unnest</p></dd>
+
+
 <dt>ptype</dt>
 <dd><p>See tidyr::unnest</p></dd>
+
+
 <dt>.drop</dt>
 <dd><p>See tidyr::unnest</p></dd>
+
+
 <dt>.id</dt>
 <dd><p>tidyr::unnest</p></dd>
+
+
 <dt>.sep</dt>
 <dd><p>tidyr::unnest</p></dd>
+
+
 <dt>.preserve</dt>
 <dd><p>See tidyr::unnest</p></dd>
+
+
 <dt>.data</dt>
 <dd><p>A tbl. (See tidyr)</p></dd>
+
+
 <dt>.names_sep</dt>
 <dd><p>See ?tidyr::nest</p></dd>
+
+
 <dt>into</dt>
 <dd><p>Names of new variables to create as character vector.
 Use <code>NA</code> to omit the variable in the output.</p></dd>
+
+
 <dt>regex</dt>
 <dd><p>a regular expression used to extract the desired values.
 There should be one group (defined by <code>()</code>) for each element of <code>into</code>.</p></dd>
+
+
 <dt>convert</dt>
 <dd><p>If <code>TRUE</code>, will run <code><a href="https://rdrr.io/r/utils/type.convert.html" class="external-link">type.convert()</a></code> with
 <code>as.is=TRUE</code> on new columns. This is useful if the component
 columns are integer, numeric or logical.</p>
 <p>NB: this will cause string <code>"NA"</code>s to be converted to <code>NA</code>s.</p></dd>
+
+
 <dt>cols</dt>
 <dd><p>&lt;<code>tidy-select</code>&gt; Columns to pivot into
 longer format.</p></dd>
+
+
 <dt>names_to</dt>
 <dd><p>A string specifying the name of the column to create
 from the data stored in the column names of <code>data</code>.</p>
@@ -127,6 +151,8 @@ values you can take advantage of:</p><ul><li><p><code>NA</code> will discard tha
 <li><p><code>.value</code> indicates that component of the name defines the name of the
 column containing the cell values, overriding <code>values_to</code>.</p></li>
 </ul></dd>
+
+
 <dt>names_sep, names_pattern</dt>
 <dd><p>If <code>names_to</code> contains multiple values,
 these arguments control how the column name is broken up.</p>
@@ -138,28 +164,38 @@ expression containing matching groups (<code>()</code>).</p>
 <p>If these arguments do not give you enough control, use
 <code>pivot_longer_spec()</code> to create a spec object and process manually as
 needed.</p></dd>
+
+
 <dt>names_repair</dt>
 <dd><p>What happens if the output has invalid column names?
 The default, <code>"check_unique"</code> is to error if the columns are duplicated.
 Use <code>"minimal"</code> to allow duplicates in the output, or <code>"unique"</code> to
 de-duplicated by adding numeric suffixes. See <code><a href="https://vctrs.r-lib.org/reference/vec_as_names.html" class="external-link">vctrs::vec_as_names()</a></code>
 for more options.</p></dd>
+
+
 <dt>values_to</dt>
 <dd><p>A string specifying the name of the column to create
 from the data stored in cell values. If <code>names_to</code> is a character
 containing the special <code>.value</code> sentinel, this value will be ignored,
 and the name of the value column will be derived from part of the
 existing column names.</p></dd>
+
+
 <dt>values_drop_na</dt>
 <dd><p>If <code>TRUE</code>, will drop rows that contain only <code>NA</code>s
 in the <code>value_to</code> column. This effectively converts explicit missing values
 to implicit missing values, and should generally be used only when missing
 values in <code>data</code> were created by its structure.</p></dd>
+
+
 <dt>names_transform, values_transform</dt>
 <dd><p>A list of column name-function pairs.
 Use these arguments if you need to change the type of specific columns.
 For example, <code>names_transform=list(week=as.integer)</code> would convert
 a character week variable to an integer.</p></dd>
+
+
 <dt>names_ptypes, values_ptypes</dt>
 <dd><p>A list of column name-prototype pairs.
 A prototype (or ptype for short) is a zero-length vector (like <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer()</a></code>
@@ -169,6 +205,8 @@ you expect.</p>
 <p>If not specified, the type of the columns generated from <code>names_to</code> will
 be character, and the type of the variables generated from <code>values_to</code>
 will be the common type of the input columns used to generate them.</p></dd>
+
+
 <dt>id_cols</dt>
 <dd><p>&lt;<code>tidy-select</code>&gt; A set of columns that
 uniquely identify each observation. Typically used when you have
@@ -178,6 +216,8 @@ with existing variables.</p>
 <code>names_from</code> and <code>values_from</code>. If a tidyselect expression is supplied, it
 will be evaluated on <code>data</code> after removing the columns specified through
 <code>names_from</code> and <code>values_from</code>.</p></dd>
+
+
 <dt>id_expand</dt>
 <dd><p>Should the values in the <code>id_cols</code> columns be expanded by
 <code>expand()</code> before pivoting? This results in more rows, the output will
@@ -185,6 +225,8 @@ contain a complete expansion of all possible values in <code>id_cols</code>. Imp
 factor levels that aren't represented in the data will become explicit.
 Additionally, the row values corresponding to the expanded <code>id_cols</code> will
 be sorted.</p></dd>
+
+
 <dt>names_from, values_from</dt>
 <dd><p>&lt;<code>tidy-select</code>&gt; A pair of
 arguments describing which column (or columns) to get the name of the
@@ -192,21 +234,31 @@ output column (<code>names_from</code>), and which column (or columns) to get th
 cell values from (<code>values_from</code>).</p>
 <p>If <code>values_from</code> contains multiple values, the value will be added to the
 front of the output column.</p></dd>
+
+
 <dt>names_sep</dt>
 <dd><p>If <code>names_from</code> or <code>values_from</code> contains multiple
 variables, this will be used to join their values together into a single
 string to use as a column name.</p></dd>
+
+
 <dt>names_prefix</dt>
 <dd><p>String added to the start of every variable name. This is
 particularly useful if <code>names_from</code> is a numeric vector and you want to
 create syntactic variable names.</p></dd>
+
+
 <dt>names_glue</dt>
 <dd><p>Instead of <code>names_sep</code> and <code>names_prefix</code>, you can supply
 a glue specification that uses the <code>names_from</code> columns (and special
 <code>.value</code>) to create custom column names.</p></dd>
+
+
 <dt>names_sort</dt>
 <dd><p>Should the column names be sorted? If <code>FALSE</code>, the default,
 column names are ordered by first appearance.</p></dd>
+
+
 <dt>names_vary</dt>
 <dd><p>When <code>names_from</code> identifies a column (or columns) with
 multiple unique values, and multiple <code>values_from</code> columns are provided,
@@ -215,6 +267,8 @@ naming scheme of the form: <code>value1_name1, value1_name2, value2_name1, value
 <li><p><code>"slowest"</code> varies <code>names_from</code> values slowest, resulting in a column
 naming scheme of the form: <code>value1_name1, value2_name1, value1_name2, value2_name2</code>.</p></li>
 </ul></dd>
+
+
 <dt>names_expand</dt>
 <dd><p>Should the values in the <code>names_from</code> columns be expanded
 by <code>expand()</code> before pivoting? This results in more columns, the output
@@ -222,11 +276,15 @@ will contain column names corresponding to a complete expansion of all
 possible values in <code>names_from</code>. Implicit factor levels that aren't
 represented in the data will become explicit. Additionally, the column
 names will be sorted, identical to what <code>names_sort</code> would produce.</p></dd>
+
+
 <dt>values_fill</dt>
 <dd><p>Optionally, a (scalar) value that specifies what each
 <code>value</code> should be filled in with when missing.</p>
 <p>This can be a named list if you want to apply different fill values to
 different value columns.</p></dd>
+
+
 <dt>values_fn</dt>
 <dd><p>Optionally, a function applied to the value in each cell
 in the output. You will typically use this when the combination of
@@ -234,6 +292,8 @@ in the output. You will typically use this when the combination of
 observation.</p>
 <p>This can be a named list if you want to apply different aggregations
 to different <code>values_from</code> columns.</p></dd>
+
+
 <dt>unused_fn</dt>
 <dd><p>Optionally, a function applied to summarize the values from
 the unused columns (i.e. columns not identified by <code>id_cols</code>,
@@ -245,8 +305,12 @@ to different unused columns.</p>
 all unspecified columns will be considered <code>id_cols</code>.</p>
 <p>This is similar to grouping by the <code>id_cols</code> then summarizing the
 unused columns using <code>unused_fn</code>.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt>col</dt>
 <dd><p>The name of the new column, as a string or symbol.</p>
 <p>This argument is passed by expression and supports
@@ -255,13 +319,21 @@ and symbols). The name is captured from the expression with
 <code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">rlang::ensym()</a></code> (note that this kind of interface where
 symbols do not represent actual objects is now discouraged in the
 tidyverse; we support it here for backward compatibility).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>&lt;<code>tidy-select</code>&gt; Columns to unite</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>If <code>TRUE</code>, missing values will be remove prior to uniting
 each value.</p></dd>
+
+
 <dt>remove</dt>
 <dd><p>If <code>TRUE</code>, remove input columns from output data frame.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>Separator between columns.</p>
 <p>If character, <code>sep</code> is interpreted as a regular expression. The default
@@ -271,27 +343,44 @@ non-alphanumeric values.</p>
 values start at 1 at the far-left of the string; negative value start at -1 at
 the far-right of the string. The length of <code>sep</code> should be one less than
 <code>into</code>.</p></dd>
+
+
 <dt>extra</dt>
 <dd><p>If <code>sep</code> is a character vector, this controls what
 happens when there are too many pieces. There are three valid options:</p><ul><li><p>"warn" (the default): emit a warning and drop extra values.</p></li>
 <li><p>"drop": drop any extra values without a warning.</p></li>
 <li><p>"merge": only splits at most <code>length(into)</code> times</p></li>
 </ul></dd>
+
+
 <dt>fill</dt>
 <dd><p>If <code>sep</code> is a character vector, this controls what
 happens when there are not enough pieces. There are three valid options:</p><ul><li><p>"warn" (the default): emit a warning and fill from the right</p></li>
 <li><p>"right": fill with missing values on the right</p></li>
 <li><p>"left": fill with missing values on the left</p></li>
 </ul></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A tidySummarizedExperiment objector a tibble depending on input
-A tidySummarizedExperiment objector a tibble depending on input
-A tidySummarizedExperiment objector a tibble depending on input
-A tidySummarizedExperiment objector a tibble depending on input
-A tidySummarizedExperiment objector a tibble depending on input
-A tidySummarizedExperiment objector a tibble depending on input</p>
+    
+
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+
+
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+
+
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+
+
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+
+
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
+
+
+<p>A tidySummarizedExperiment objector a tibble depending on input</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -435,7 +524,7 @@ expression capturing groups.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
