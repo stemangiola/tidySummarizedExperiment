@@ -8,7 +8,7 @@ tidySummarizedExperiment - part of tidytranscriptomics
 status](https://github.com/stemangiola/tidySummarizedExperiment/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/stemangiola/tidySummarizedExperiment/actions)
 <!-- badges: end -->
 
-**Brings SummarizedExperiment to the tidyverse!**
+**Brings SummarizedExperiment to the tidyverse!** 
 
 website:
 [stemangiola.github.io/tidySummarizedExperiment/](https://stemangiola.github.io/tidySummarizedExperiment/)
