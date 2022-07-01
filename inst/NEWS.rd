@@ -13,3 +13,4 @@
     \item Speed-up nest.
     \item Adaptation to Ranged-SummarizedExperiment.
 }}
+

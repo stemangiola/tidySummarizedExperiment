@@ -66,169 +66,70 @@ unnest.tidySummarizedExperiment_nested <-
 
     cols <- enquo(cols)
 
-    # If the column is not SE do normal stuff
-    if(
-      data %>% 
-      pull(!!cols) %>%
-      .[[1]] %>%
-      class() %>%
-      as.character() %in% 
-      c("SummarizedExperiment", "RangedSummarizedExperiment") %>%
-      all() %>% 
-      not()
-    )
-      return(
-        data %>%
-          drop_class("tidySummarizedExperiment_nested") %>%
-          tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
-          add_class("tidySummarizedExperiment_nested")
-      )
-    
-    # If both nested by transcript and sample
-    if( s_(se)$name %in% colnames(data) & f_(se)$name %in% colnames(data) ){
-      stop("tidySummarizedExperiment says: for the moment nesting both by sample- and feature-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment")
-    }
-    
-    # If both nested not by transcript nor sample
-    if(! s_(se)$name  %in% colnames(data) & !f_(se)$name %in% colnames(data) ){
 
-      se = pull(data, !!cols) %>% .[[1]] 
 
-      # Mark if columns belong to feature or sample
-      my_unnested_tibble =
-        mutate(data, !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-        select(-suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
-        unnest(!!cols)
+    .data_ %>%
+        when(
 
-      # Get which column is relative to feature or sample
-      sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(se)$symbol)
-      transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(se)$symbol)
+            # If my only column to unnest is tidySummarizedExperiment
+            pull(., !!cols) %>%
+                .[[1]] %>%
+                class() %>%
+                as.character() %>% 
+                eq("SummarizedExperiment") %>%
+                any() ~ {
 
-      source_column =
-        c(
-          rep(s_(se)$name, length(sample_columns)) %>% setNames(sample_columns),
-          rep(f_(se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
+                  se = pull(., !!cols) %>% .[[1]] 
+                  
+                  # Mark if columns belong to feature or sample
+                  my_unnested_tibble =
+                    mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
+                    select(-suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
+                    unnest(!!cols)
+
+                  # Get which column is relative to feature or sample
+                  sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(se)$symbol)
+                  transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(se)$symbol)
+                  source_column =
+                    c(
+                      rep(s_(se)$name, length(sample_columns)) %>% setNames(sample_columns),
+                      rep(f_(se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
+                    )
+
+                  # Do my trick to unnest
+                  mutate(., !!cols := imap(
+                    !!cols, ~ .x %>%
+                      bind_cols_internal(
+
+                        # Attach back the columns used for nesting
+                        .data_ %>%
+                          select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
+                          slice(rep(.y, ncol(.x) * nrow(.x))),
+
+                        # Column sample-wise or feature-wise
+                        column_belonging =
+                          source_column[
+                            .data_ %>%
+                              select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
+                              colnames()
+                          ]
+                      )
+                  )) %>%
+                    pull(!!cols) %>%
+
+                    # See if split by feature or sample
+                    when(
+                      is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and feature-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
+                      ~ reduce(., bind_rows)
+                    )
+                },
+
+            # Else do normal stuff
+            ~ (.) %>%
+                drop_class("tidySummarizedExperiment_nested") %>%
+                tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
+                add_class("tidySummarizedExperiment_nested")
         )
-
-      # Do my trick to unnest
-      return(
-        mutate(data, !!cols := imap(
-        !!cols, ~ .x %>%
-          bind_cols_internal(
-            
-            # Attach back the columns used for nesting
-            .data_ %>%
-              select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
-              slice(rep(.y, ncol(.x) * nrow(.x))),
-            
-            # Column sample-wise or feature-wise
-            column_belonging =
-              source_column[
-                .data_ %>%
-                  select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
-                  colnames()
-              ]
-          )
-      )) %>%
-        pull(!!cols) %>% 
-        reduce(bind_rows)
-      )
-      
-    }
-    
-    # If column is SE nd only feature
-    if(f_(se)$name %in% colnames(data)){
-      
-      se = do.call(SummarizedExperiment::rbind, pull(data, !!cols))
-      rowData(se) = cbind( rowData(se), data %>% select(-!!cols, -!!f_(se)$symbol))
-      
-      return(se)
-    }
-
-    # If column is SE nd only sample
-    if(s_(se)$name %in% colnames(data)){
-      
-      se = do.call(SummarizedExperiment::cbind, pull(data, !!cols))
-      colData(se) = cbind( colData(se), data %>% select(-!!cols, -!!s_(se)$symbol))
-      
-      return(se)
-      
-  }
-    
-#     
-# 
-#     .data_ %>%
-#         when(
-# 
-#             # If my only column to unnest is tidySummarizedExperiment
-#             pull(., !!cols) %>%
-#                 .[[1]] %>%
-#                 class() %>%
-#                 as.character() %in% 
-#                 c("SummarizedExperiment", "RangedSummarizedExperiment") %>%
-#                 any() ~ {
-# tic()
-#                   se = pull(., !!cols) %>% .[[1]] 
-#                   toc()
-#                   tic()
-#                   # Mark if columns belong to feature or sample
-#                   my_unnested_tibble =
-#                     mutate(., !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-#                     select(-suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
-#                     unnest(!!cols)
-#                   toc()
-#                   tic()
-#                   # Get which column is relative to feature or sample
-#                   sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(se)$symbol)
-#                   transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(se)$symbol)
-#                   toc()
-#                   tic()
-#                   source_column =
-#                     c(
-#                       rep(s_(se)$name, length(sample_columns)) %>% setNames(sample_columns),
-#                       rep(f_(se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
-#                     )
-#                   toc()
-#                   tic()
-#                   # Do my trick to unnest
-#                  x = mutate(., !!cols := imap(
-#                     !!cols, ~ .x %>%
-#                       bind_cols_internal(
-# 
-#                         # Attach back the columns used for nesting
-#                         .data_ %>%
-#                           select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
-#                           slice(rep(.y, ncol(.x) * nrow(.x))),
-# 
-#                         # Column sample-wise or feature-wise
-#                         column_belonging =
-#                           source_column[
-#                             .data_ %>%
-#                               select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
-#                               colnames()
-#                           ]
-#                       )
-#                   )) %>%
-#                     pull(!!cols) 
-#                  toc()
-#                  tic()
-#                  x %>%
-# 
-#                     # See if split by feature or sample
-#                     when(
-#                       is_split_by_sample(.) & is_split_by_transcript(.) ~ stop("tidySummarizedExperiment says: for the moment nesting both by sample- and feature-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment"),
-#                       ~ reduce(., bind_rows)
-#                     )
-#                  toc()
-#                  tic()
-#                 },
-# 
-#             # Else do normal stuff
-#             ~ (.) %>%
-#                 drop_class("tidySummarizedExperiment_nested") %>%
-#                 tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
-#                 add_class("tidySummarizedExperiment_nested")
-#         )
 }
 
 #' nest
@@ -345,14 +246,7 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                     filter(!!sample_symbol %in% my_samples & !!feature_symbol %in% my_transcripts) %>%
 
                     # Subset columns
-                    select(
-                      colnames(..1) %>% 
-                        
-                        # Exclude special columns
-                        outersect(colnames(get_special_datasets(my_data__ )[[1]])) %>% 
-                        c(sample_name, feature_name) %>%
-                        unique
-                    )
+                    select(colnames(..1) %>% c(sample_name, feature_name) %>% unique)
                 }
             )
         ) %>%

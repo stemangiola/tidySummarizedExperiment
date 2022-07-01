@@ -58,7 +58,17 @@ bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
     dplyr::bind_rows(..., .id=.id)
 }
 
-bind_rows_ <- function(..., .id=NULL, add.cell.ids=NULL) {
+#' @importFrom rlang dots_values
+#' @importFrom rlang flatten_if
+#' @importFrom rlang is_spliced
+#' @importFrom SummarizedExperiment cbind
+#' @importFrom SummarizedExperiment assays
+#' @importFrom SummarizedExperiment assays<-
+#' @importFrom S4Vectors SimpleList
+#'
+#' @export
+#'
+bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     tts <- flatten_if(dots_values(...), is_spliced)
 
     new_obj <- 
@@ -90,32 +100,6 @@ bind_rows_ <- function(..., .id=NULL, add.cell.ids=NULL) {
 
     new_obj
 }
-
-#' @importFrom rlang dots_values
-#' @importFrom rlang flatten_if
-#' @importFrom rlang is_spliced
-#' @importFrom SummarizedExperiment cbind
-#' @importFrom SummarizedExperiment rbind
-#' @importFrom SummarizedExperiment assays
-#' @importFrom SummarizedExperiment assays<-
-#' @importFrom S4Vectors SimpleList
-#'
-#' @export
-#'
-bind_rows.SummarizedExperiment <- bind_rows_
-
-#' @importFrom rlang dots_values
-#' @importFrom rlang flatten_if
-#' @importFrom rlang is_spliced
-#' @importFrom SummarizedExperiment cbind
-#' @importFrom SummarizedExperiment rbind
-#' @importFrom SummarizedExperiment assays
-#' @importFrom SummarizedExperiment assays<-
-#' @importFrom S4Vectors SimpleList
-#'
-#' @export
-#'
-bind_rows.RangedSummarizedExperiment <- bind_rows_
 
 #' @export
 #'
@@ -164,14 +148,6 @@ bind_cols_ = function(..., .id=NULL) { bind_cols_internal(..., .id=NULL) }
 #'
 bind_cols.SummarizedExperiment <- bind_cols_
 
-#' @importFrom rlang dots_values
-#' @importFrom rlang flatten_if
-#' @importFrom rlang is_spliced
-#'
-#' @export
-#'
-bind_cols.RangedSummarizedExperiment <- bind_cols_
-
 #' distinct
 #'
 #'
@@ -196,9 +172,13 @@ bind_cols.RangedSummarizedExperiment <- bind_cols_
 #' @export
 NULL
 
-distinct_ <- function(.data, ..., .keep_all=FALSE) {
-  message(data_frame_returned_message)
-  
+#' @inheritParams distinct
+#' 
+#' 
+#' @export
+distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
+    message(data_frame_returned_message)
+
   distinct_columns = 
     (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
   
@@ -215,22 +195,10 @@ distinct_ <- function(.data, ..., .keep_all=FALSE) {
   }
   
   .data %>%
-    as_tibble(skip_GRanges = skip_GRanges) %>%
-    dplyr::distinct(..., .keep_all=.keep_all)
+      as_tibble(skip_GRanges = skip_GRanges) %>%
+      dplyr::distinct(..., .keep_all=.keep_all)
 }
 
-
-#' @inheritParams distinct
-#' 
-#' 
-#' @export
-distinct.SummarizedExperiment <- distinct_
-
-#' @inheritParams distinct
-#' 
-#' 
-#' @export
-distinct.RangedSummarizedExperiment <- distinct_
 
 #' Subset rows using column values
 #'
@@ -302,8 +270,10 @@ distinct.RangedSummarizedExperiment <- distinct_
 #' @export
 NULL
 
-filter_ <- function(.data, ..., .preserve=FALSE) {
-  
+#' @inheritParams filter
+#' @export
+filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
+
   
   
   
@@ -315,45 +285,30 @@ filter_ <- function(.data, ..., .preserve=FALSE) {
     .data= ping_old_special_column_into_metadata(.data)
   }
   
+
   
-  
-  new_meta <- .data %>%
-    as_tibble(skip_GRanges = TRUE) %>%
-    dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
-  
-  
-  
-  new_meta %>%
-    
-    when(
-      
-      # If rectangular
-      is_rectangular(., .data) ~ 
-        {
-          rn = pull(.,!!f_(.data)$symbol) %>% 
-              when(rownames(.data) %>% is.null() ~ as.integer(.), ~ (.))
-          
-          cn = pull(.,!!s_(.data)$symbol) %>% 
-            when(colnames(.data) %>% is.null() ~ as.integer(.), ~ (.))
-          
-          .data[unique(rn), unique(cn)]
-        },
-      
-      # If not rectangular return just tibble
-      ~ {
-        message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
-        (.)
-      }
-    )
+    new_meta <- .data %>%
+        as_tibble(skip_GRanges = TRUE) %>%
+        dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
+
+    new_meta %>%
+
+        when(
+
+            # If rectangular
+            is_rectangular(., .data) ~ .data[
+                unique(pull(.,!!f_(.data)$symbol)),
+                unique(pull(.,!!s_(.data)$symbol))
+            ],
+
+            # If not rectangular return just tibble
+            ~ {
+                message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
+                (.)
+            }
+        )
 }
 
-#' @inheritParams filter
-#' @export
-filter.SummarizedExperiment <- filter_
-
-#' @inheritParams filter
-#' @export
-filter.RangedSummarizedExperiment <- filter_
 
 #' Group by one or more variables
 #'
@@ -401,9 +356,10 @@ filter.RangedSummarizedExperiment <- filter_
 #' @export
 NULL
 
-group_by_ <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
-  message(data_frame_returned_message)
-  
+#' @export
+group_by.SummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)) {
+    message(data_frame_returned_message)
+
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     .data, 
@@ -412,18 +368,10 @@ group_by_ <- function(.data, ..., .add=FALSE, .drop=group_by_drop_default(.data)
     .data= ping_old_special_column_into_metadata(.data)
   }
   
-  .data %>%
-    as_tibble() %>%
-    dplyr::group_by(..., .add=.add, .drop=.drop)
+    .data %>%
+        as_tibble() %>%
+        dplyr::group_by(..., .add=.add, .drop=.drop)
 }
-
-
-#' @export
-group_by.SummarizedExperiment <- group_by_
-
-#' @export
-group_by.RangedSummarizedExperiment <- group_by_
-
 
 
 #' Summarise each group to fewer rows
@@ -503,9 +451,10 @@ group_by.RangedSummarizedExperiment <- group_by_
 #' @export
 NULL
 
-summarise_ <- function(.data, ...) {
-  message(data_frame_returned_message)
-  
+#' @export
+summarise.SummarizedExperiment <- function(.data, ...) {
+    message(data_frame_returned_message)
+
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     .data, 
@@ -519,18 +468,11 @@ summarise_ <- function(.data, ...) {
     get_GRanges_colnames() %in% 
     (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist) %>%
     not()
-  
-  .data %>%
-    as_tibble(skip_GRanges = skip_GRanges) %>%
-    dplyr::summarise(...)
+
+    .data %>%
+        as_tibble(skip_GRanges = skip_GRanges) %>%
+        dplyr::summarise(...)
 }
-
-
-#' @export
-summarise.SummarizedExperiment <- summarise_
-
-#' @export
-summarise.RangedSummarizedExperiment <- summarise_
 
 
 #' Create, modify, and delete columns
@@ -624,63 +566,54 @@ summarise.RangedSummarizedExperiment <- summarise_
 #' @export
 NULL
 
-mutate_ <- function(.data, ...) {
-  # Check that we are not modifying a key column
-  cols <- enquos(...) %>% names()
-  
-  # Deprecation of special column names
-  if(is_sample_feature_deprecated_used(
-    .data, 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
-  )){
-    .data= ping_old_special_column_into_metadata(.data)
-  }
-  
-  tst =
-    intersect(
-      cols,
-      get_special_columns(.data) %>% c(get_needed_columns(.data))
-    ) %>%
-    length() %>%
-    gt(0)
-  
-  
-  if (tst) {
-    columns =
-      get_special_columns(.data) %>%
-      c(get_needed_columns(.data)) %>%
-      paste(collapse=", ")
-    stop(
-      "tidySummarizedExperiment says: you are trying to rename a column that is view only",
-      columns,
-      "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
-    )
-  }
-  
-  # If Ranges column not in query perform fast as_tibble
-  skip_GRanges = 
-    get_GRanges_colnames() %in% 
-    cols %>%
-    not()
-  
-  .data %>%
-    as_tibble(skip_GRanges= skip_GRanges) %>%
-    dplyr::mutate(...) %>%
-    update_SE_from_tibble(.data)
+#' @importFrom dplyr mutate
+#' @importFrom rlang enquos
+#'
+#' @export
+mutate.SummarizedExperiment <- function(.data, ...) {
+    # Check that we are not modifying a key column
+    cols <- enquos(...) %>% names()
+    
+    # Deprecation of special column names
+    if(is_sample_feature_deprecated_used(
+      .data, 
+      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    )){
+      .data= ping_old_special_column_into_metadata(.data)
+    }
+    
+    tst =
+        intersect(
+            cols,
+            get_special_columns(.data) %>% c(get_needed_columns(.data))
+        ) %>%
+        length() %>%
+        gt(0)
+
+
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns(.data)) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
+    }
+
+    # If Ranges column not in query perform fast as_tibble
+    skip_GRanges = 
+      get_GRanges_colnames() %in% 
+      cols %>%
+      not()
+    
+    .data %>%
+        as_tibble(skip_GRanges= skip_GRanges) %>%
+        dplyr::mutate(...) %>%
+        update_SE_from_tibble(.data)
 }
-
-
-#' @importFrom dplyr mutate
-#' @importFrom rlang enquos
-#'
-#' @export
-mutate.SummarizedExperiment <- mutate_
-
-#' @importFrom dplyr mutate
-#' @importFrom rlang enquos
-#'
-#' @export
-mutate.RangedSummarizedExperiment <- mutate_
 
 
 
@@ -726,80 +659,69 @@ mutate.RangedSummarizedExperiment <- mutate_
 #' @export
 NULL
 
-rename_   <- function(.data, ...) {
-  
-  
-  # Cols data frame
-  cols_data_frame = 
-    bind_cols(
+#' @importFrom tidyselect eval_select
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment rowData
+#' @importFrom SummarizedExperiment colData<-
+#' @importFrom SummarizedExperiment rowData<-
+#' 
+#' @export
+rename.SummarizedExperiment <- function(.data, ...) {
+
+    
+    # Cols data frame
+    cols_data_frame = 
+      bind_cols(
       colData(.data) %>% as_tibble() %>% slice(0),
       rowData(.data) %>% as_tibble() %>% slice(0)
     )
   
-  # Check that we are not modifying a key column
-  cols <- tidyselect::eval_select(  expr(c(...)), cols_data_frame  )
-  
-  # Check if column is row-wise of column-wise
-  old_names = cols_data_frame[,cols] %>% colnames()
-  new_names = cols %>% names()
-  
-  # If renaming col and row data at the same time, it is too complicate, so error
-  if(
-    old_names %in% colnames(colData(.data)) %>% any() &
-    old_names %in% colnames(rowData(.data)) %>% any()
-  )
-    stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and feature-wise columns.")
-  
-  
-  tst =
-    intersect(
-      cols %>% names(),
-      get_special_columns(.data) %>% c(get_needed_columns(.data))
-    ) %>%
-    length() %>%
-    gt(0)
-  
-  # If column in view-only columns stop
-  if (tst) {
-    columns =
-      get_special_columns(.data) %>%
-      c(get_needed_columns(.data)) %>%
-      paste(collapse=", ")
-    stop(
-      "tidySummarizedExperiment says: you are trying to rename a column that is view only",
-      columns,
-      "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+    # Check that we are not modifying a key column
+    cols <- tidyselect::eval_select(  expr(c(...)), cols_data_frame  )
+
+    # Check if column is row-wise of column-wise
+    old_names = cols_data_frame[,cols] %>% colnames()
+    new_names = cols %>% names()
+    
+    # If renaming col and row data at the same time, it is too complicate, so error
+    if(
+      old_names %in% colnames(colData(.data)) %>% any() &
+      old_names %in% colnames(rowData(.data)) %>% any()
     )
-  }
-  
-  # Rename sample annotation
-  if(old_names %in% colnames(colData(.data)) %>% any())
-    colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()
-  
-  # Rename gene annotation
-  if(old_names %in% colnames(rowData(.data)) %>% any())
-    rowData(.data) <- dplyr::rename(rowData(.data) %>% as.data.frame(), ...) %>% DataFrame()
-  
-  .data
+      stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and feature-wise columns.")
+    
+    
+    tst =
+        intersect(
+            cols %>% names(),
+            get_special_columns(.data) %>% c(get_needed_columns(.data))
+        ) %>%
+        length() %>%
+        gt(0)
+
+    # If column in view-only columns stop
+    if (tst) {
+        columns =
+            get_special_columns(.data) %>%
+            c(get_needed_columns(.data)) %>%
+            paste(collapse=", ")
+        stop(
+            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
+            columns,
+            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+        )
+    }
+
+    # Rename sample annotation
+    if(old_names %in% colnames(colData(.data)) %>% any())
+      colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()
+
+    # Rename gene annotation
+    if(old_names %in% colnames(rowData(.data)) %>% any())
+      rowData(.data) <- dplyr::rename(rowData(.data) %>% as.data.frame(), ...) %>% DataFrame()
+    
+    .data
 }
-
-#' @importFrom tidyselect eval_select
-#' @importFrom SummarizedExperiment colData
-#' @importFrom SummarizedExperiment rowData
-#' @importFrom SummarizedExperiment colData<-
-#' @importFrom SummarizedExperiment rowData<-
-#' 
-#' @export
-rename.SummarizedExperiment <- rename_
-
-#' @importFrom tidyselect eval_select
-#' @importFrom SummarizedExperiment colData
-#' @importFrom SummarizedExperiment rowData
-#' @importFrom SummarizedExperiment colData<-
-#' @importFrom SummarizedExperiment rowData<-
-#' 
-#' @export
-rename.RangedSummarizedExperiment <- rename_
 
 
 #' Group input by rows
@@ -836,19 +758,14 @@ rename.RangedSummarizedExperiment <- rename_
 #' @export
 NULL
 
-rowwise_ <- function(data, ...) {
-  message(data_frame_returned_message)
-  
-  data %>%
-    as_tibble() %>%
-    dplyr::rowwise()
+#' @export
+rowwise.SummarizedExperiment <- function(data, ...) {
+    message(data_frame_returned_message)
+
+    data %>%
+        as_tibble() %>%
+        dplyr::rowwise()
 }
-
-#' @export
-rowwise.SummarizedExperiment <- rowwise_
-
-#' @export
-rowwise.RangedSummarizedExperiment <- rowwise_
 
 
 #' Left join datasets
@@ -880,19 +797,13 @@ rowwise.RangedSummarizedExperiment <- rowwise_
 #' tt %>% left_join(tt %>% distinct(condition) %>% mutate(new_column=1:2))
 NULL
 
-left_join_ <-  function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+#' @export
+left_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
   
   join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::left_join, ...)
   
 }
-
-#' @export
-left_join.SummarizedExperiment <- left_join_
-
-#' @export
-left_join.RangedSummarizedExperiment <- left_join_
-
 
 #' Inner join datasets
 #'
@@ -920,18 +831,12 @@ left_join.RangedSummarizedExperiment <- left_join_
 #' @export
 NULL
 
-inner_join_ <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
+#' @export
+inner_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"), ...) {
   
   join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::inner_join, ...)
 
 }
-
-#' @export
-inner_join.SummarizedExperiment <- inner_join_
-
-#' @export
-inner_join.RangedSummarizedExperiment <- inner_join_
-
 
 #' Right join datasets
 #'
@@ -962,18 +867,12 @@ inner_join.RangedSummarizedExperiment <- inner_join_
 #' @export
 NULL
 
-right_join_ <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
-                        ...) {
+#' @export
+right_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+    ...) {
   
   join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::right_join, ...)
 }
-
-#' @export
-right_join.SummarizedExperiment <- right_join_
-
-#' @export
-right_join.RangedSummarizedExperiment <- right_join_
-
 
 
 #' Full join datasets
@@ -1005,16 +904,11 @@ right_join.RangedSummarizedExperiment <- right_join_
 #' @export
 NULL
 
-full_join_ <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
+#' @export
+full_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(".x", ".y"),
     ...) {
   join_efficient_for_SE(x, y, by=by, copy=copy, suffix=suffix, dplyr::full_join, ...)
 }
-
-#' @export
-full_join.SummarizedExperiment <- full_join_
-
-#' @export
-full_join.RangedSummarizedExperiment <- full_join_
 
 #' Subset rows using their positions
 #'
@@ -1091,7 +985,8 @@ full_join.RangedSummarizedExperiment <- full_join_
 #'     slice(1)
 NULL
 
-slice_ <- function(.data, ..., .preserve=FALSE) {
+#' @export
+slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   
   slice_optimised(.data, ..., .preserve=.preserve)
     
@@ -1111,12 +1006,6 @@ slice_ <- function(.data, ..., .preserve=FALSE) {
     #         ~ update_SE_from_tibble(., .data)
     #     )
 }
-
-#' @export
-slice.SummarizedExperiment <- slice_
-
-#' @export
-slice.RangedSummarizedExperiment <- slice_
 
 #' Subset columns using their names and types
 #'
@@ -1170,7 +1059,8 @@ slice.RangedSummarizedExperiment <- slice_
 #' @export
 NULL
 
-select_ <- function(.data, ...) {
+#' @export
+select.SummarizedExperiment <- function(.data, ...) {
    
   
   
@@ -1208,9 +1098,6 @@ select_ <- function(.data, ...) {
     select(-!!f_(.data)$symbol) %>%
     DataFrame()
   
-  # Fix if data has no colnames
-  if(is.null(rownames(.data))) rownames(row_data_DF) = NULL
-  
   col_data_tibble = 
     colData(.data) %>% 
     as_tibble(rownames = s_(.data)$name) 
@@ -1222,9 +1109,6 @@ select_ <- function(.data, ...) {
     data.frame(row.names=pull(., !!s_(.data)$symbol)) %>%
     select(-!!s_(.data)$symbol) %>%
     DataFrame()
-  
-    # Fix if data has no colnames
-    if(is.null(colnames(.data))) rownames(col_data_DF) = NULL
   
   count_data = 
     assays(.data)@listData %>% .[names(assays(.data)@listData) %in% columns_query]
@@ -1278,11 +1162,6 @@ select_ <- function(.data, ...) {
    
 }
 
-#' @export
-select.SummarizedExperiment <- select_
-
-#' @export
-select.RangedSummarizedExperiment <- select_
 
 #' Sample n rows from a table
 #'
@@ -1337,7 +1216,8 @@ select.RangedSummarizedExperiment <- select_
 #' @export
 NULL
 
-sample_n_ <- function(tbl, size, replace=FALSE,
+#' @export
+sample_n.SummarizedExperiment <- function(tbl, size, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_n()", "slice_sample()")
 
@@ -1348,12 +1228,6 @@ sample_n_ <- function(tbl, size, replace=FALSE,
         dplyr::sample_n(size, replace=replace, weight=weight, .env=.env, ...)
 }
 
-#' @export
-sample_n.SummarizedExperiment <- sample_n_
-
-#' @export
-sample_n.RangedSummarizedExperiment <- sample_n_
-
 #' @importFrom dplyr sample_frac
 #'
 #' @rdname dplyr-methods
@@ -1362,7 +1236,8 @@ sample_n.RangedSummarizedExperiment <- sample_n_
 #' @export
 NULL
 
-sample_frac_ <- function(tbl, size=1, replace=FALSE,
+#' @export
+sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
     lifecycle::signal_superseded("1.0.0", "sample_frac()", "slice_sample()")
 
@@ -1372,12 +1247,6 @@ sample_frac_ <- function(tbl, size=1, replace=FALSE,
         as_tibble() %>%
         dplyr::sample_frac(size, replace=replace, weight=weight, .env=.env, ...)
 }
-
-#' @export
-sample_frac.SummarizedExperiment <- sample_frac_
-
-#' @export
-sample_frac.RangedSummarizedExperiment <- sample_frac_
 
 
 #' Count observations by group
@@ -1438,8 +1307,8 @@ count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by
     }
     out
 }
-
-count_ <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
+#' @export
+count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     message(data_frame_returned_message)
 
   # Deprecation of special column names
@@ -1462,11 +1331,6 @@ count_ <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_d
         dplyr::count(..., wt=!!enquo(wt), sort=sort, name=name, .drop=.drop)
 }
 
-#' @export
-count.SummarizedExperiment <- count_
-
-#' @export
-count.RangedSummarizedExperiment <- count_
 
 
 #' Extract a single column
@@ -1506,7 +1370,8 @@ count.RangedSummarizedExperiment <- count_
 #'     pull(feature)
 NULL
 
-pull_ <- function(.data, var=-1, name=NULL, ...) {
+#' @export
+pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     var <- enquo(var)
     name <- enquo(name)
 
@@ -1550,9 +1415,3 @@ pull_ <- function(.data, var=-1, name=NULL, ...) {
         as_tibble(skip_GRanges = skip_GRanges) %>%
         dplyr::pull(var=!!var, name=!!name, ...)
 }
-
-#' @export
-pull.SummarizedExperiment <- pull_
-
-#' @export
-pull.RangedSummarizedExperiment <- pull_
