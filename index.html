@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.2</span>
       </span>
     </div>
 
@@ -162,18 +162,18 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-      <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-  <span class="op">}</span>
-
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"tidySummarizedExperiment"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"tidySummarizedExperiment"</span><span class="op">)</span></span></code></pre></div>
 <p>From Github (development)</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"stemangiola/tidySummarizedExperiment"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"stemangiola/tidySummarizedExperiment"</span><span class="op">)</span></span></code></pre></div>
 <p>Load libraries used in the examples.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment" class="external-link">tidySummarizedExperiment</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment" class="external-link">tidySummarizedExperiment</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
@@ -181,10 +181,10 @@
 </h1>
 <p>This is a SummarizedExperiment object but it is evaluated as a tibble. So it is fully compatible both with SummarizedExperiment and tidyverse APIs.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="reference/pasilla.html">pasilla</a></span> </code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="reference/pasilla.html">pasilla</a></span> </span></code></pre></div>
 <p><strong>It looks like a tibble</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A SummarizedExperiment-tibble abstraction: 102,193 × 5</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    .feature    .sample counts condition type      </span></span>
@@ -202,7 +202,7 @@
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 40 more rows</span></span></code></pre></div>
 <p><strong>But it is a SummarizedExperiment object after all</strong></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assays</a></span><span class="op">(</span><span class="va">pasilla_tidy</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assays</a></span><span class="op">(</span><span class="va">pasilla_tidy</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## List of length 1</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="do">## names(1): counts</span></span></code></pre></div>
 </div>
@@ -212,8 +212,8 @@
 <p>We can use tidyverse commands to explore the tidy SummarizedExperiment object.</p>
 <p>We can use <code>slice</code> to choose rows by position, for example to choose the first row.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A SummarizedExperiment-tibble abstraction: 1 × 5</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [90m# Transcripts=1 | Samples=1 | Assays=counts[39m</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   .feature    .sample counts condition type      </span></span>
@@ -221,8 +221,8 @@
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 FBgn0000003 untrt1       0 untreated single_end</span></span></code></pre></div>
 <p>We can use <code>filter</code> to choose rows by criteria.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A SummarizedExperiment-tibble abstraction: 58,396 × 5</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [90m# Transcripts=14599 | Samples=4 | Assays=counts[39m</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    .feature    .sample counts condition type      </span></span>
@@ -240,8 +240,8 @@
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 40 more rows</span></span></code></pre></div>
 <p>We can use <code>select</code> to choose columns.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 102,193 × 1</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    .sample</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;  </span></span>
@@ -258,8 +258,8 @@
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 102,183 more rows</span></span></code></pre></div>
 <p>We can use <code>count</code> to count how many rows we have for each sample.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/count.html">count</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/count.html">count</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 × 2</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   .sample     n</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;   &lt;int&gt;</span></span>
@@ -272,8 +272,8 @@
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 untrt4  14599</span></span></code></pre></div>
 <p>We can use <code>distinct</code> to see what distinct sample information we have.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">distinct</a></span><span class="op">(</span><span class="va">.sample</span>, <span class="va">condition</span>, <span class="va">type</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">distinct</a></span><span class="op">(</span><span class="va">.sample</span>, <span class="va">condition</span>, <span class="va">type</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 × 3</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   .sample condition type      </span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;     </span></span>
@@ -286,8 +286,8 @@
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 trt3    treated   paired_end</span></span></code></pre></div>
 <p>We could use <code>rename</code> to rename a column. For example, to modify the type column name.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A SummarizedExperiment-tibble abstraction: 102,193 × 5</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    .feature    .sample counts condition sequencing</span></span>
@@ -305,8 +305,8 @@
 <span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 40 more rows</span></span></code></pre></div>
 <p>We could use <code>mutate</code> to create a column. For example, we could create a new type column that contains single and paired instead of single_end and paired_end.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A SummarizedExperiment-tibble abstraction: 102,193 × 5</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    .feature    .sample counts condition type  </span></span>
@@ -324,8 +324,8 @@
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 40 more rows</span></span></code></pre></div>
 <p>We could use <code>unite</code> to combine multiple columns into a single column.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/tidyr-methods.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/tidyr-methods.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A SummarizedExperiment-tibble abstraction: 102,193 × 4</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    .feature    .sample counts group               </span></span>
@@ -344,9 +344,9 @@
 <p>We can also combine commands with the tidyverse pipe <code>%&gt;%</code>.</p>
 <p>For example, we could combine <code>group_by</code> and <code>summarise</code> to get the total counts for each sample.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">summarise</a></span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">summarise</a></span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 × 2</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   .sample total_counts</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;          &lt;int&gt;</span></span>
@@ -359,10 +359,10 @@
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 untrt4       9841335</span></span></code></pre></div>
 <p>We could combine <code>group_by</code>, <code>mutate</code> and <code>filter</code> to get the transcripts with mean count &gt; 0.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">.feature</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">mutate</a></span><span class="op">(</span>mean_count<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="reference/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">mean_count</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">.feature</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">mutate</a></span><span class="op">(</span>mean_count<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="reference/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">mean_count</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb28"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 86,513 × 6</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="do">## # Groups:   .feature [12,359]</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    .feature    .sample counts condition type       mean_count</span></span>
@@ -383,32 +383,32 @@
 <h1 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
 </h1>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_theme</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Set1"</span><span class="op">)</span>,
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Set1"</span><span class="op">)</span>,
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
-                panel.border<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
-                axis.line<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span><span class="op">)</span>,
-                panel.grid.major<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">0.2</span><span class="op">)</span>,
-                panel.grid.minor<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span>,
-                text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">12</span><span class="op">)</span>,
-                legend.position<span class="op">=</span><span class="st">"bottom"</span>,
-                aspect.ratio<span class="op">=</span><span class="fl">1</span>,
-                strip.background<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
-                axis.title.x<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t<span class="op">=</span><span class="fl">10</span>, r<span class="op">=</span><span class="fl">10</span>, b<span class="op">=</span><span class="fl">10</span>, l<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>,
-                axis.title.y<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t<span class="op">=</span><span class="fl">10</span>, r<span class="op">=</span><span class="fl">10</span>, b<span class="op">=</span><span class="fl">10</span>, l<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>
-            <span class="op">)</span>
-    <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">my_theme</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Set1"</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Set1"</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>                panel.border<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                axis.line<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                panel.grid.major<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">0.2</span><span class="op">)</span>,</span>
+<span>                panel.grid.minor<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>                text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">12</span><span class="op">)</span>,</span>
+<span>                legend.position<span class="op">=</span><span class="st">"bottom"</span>,</span>
+<span>                aspect.ratio<span class="op">=</span><span class="fl">1</span>,</span>
+<span>                strip.background<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                axis.title.x<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t<span class="op">=</span><span class="fl">10</span>, r<span class="op">=</span><span class="fl">10</span>, b<span class="op">=</span><span class="fl">10</span>, l<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                axis.title.y<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t<span class="op">=</span><span class="fl">10</span>, r<span class="op">=</span><span class="fl">10</span>, b<span class="op">=</span><span class="fl">10</span>, l<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span>            <span class="op">)</span></span>
+<span>    <span class="op">)</span></span></code></pre></div>
 <p>We can treat <code>pasilla_tidy</code> as a normal tibble for plotting.</p>
 <p>Here we plot the distribution of counts per sample.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-    <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="reference/ggplot2-methods.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">+</span> <span class="fl">1</span>, group<span class="op">=</span><span class="va">.sample</span>, color<span class="op">=</span><span class="va">`type`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="va">my_theme</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="reference/ggplot2-methods.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">+</span> <span class="fl">1</span>, group<span class="op">=</span><span class="va">.sample</span>, color<span class="op">=</span><span class="va">`type`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="va">my_theme</span></span></code></pre></div>
 <p><img src="reference/figures/plot1-1.png"><!-- --></p>
 </div>
 

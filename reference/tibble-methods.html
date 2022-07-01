@@ -18,7 +18,7 @@ as_tibble() turns a SummarizedExperiment existing object into a so-called tibble
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.2</span>
       </span>
     </div>
 
@@ -81,9 +81,9 @@ as_tibble() turns a SummarizedExperiment existing object into a so-called tibble
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">    <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 102,193 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
@@ -98,9 +98,9 @@ as_tibble() turns a SummarizedExperiment existing object into a so-called tibble
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0 untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446 untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 102,183 more rows</span></span>
-<span class="r-in">    </span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">    <span class="fu">as_tibble</span><span class="op">(</span>.subset <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span>     </span>
+<span class="r-in"><span>    </span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu">as_tibble</span><span class="op">(</span>.subset <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span>     </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 102,193 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
@@ -115,9 +115,9 @@ as_tibble() turns a SummarizedExperiment existing object into a so-called tibble
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 102,183 more rows</span></span>
-<span class="r-in">    </span>
-<span class="r-in">    </span>
-<span class="r-in">    </span>
+<span class="r-in"><span>    </span></span>
+<span class="r-in"><span>    </span></span>
+<span class="r-in"><span>    </span></span>
 </code></pre></div>
     </div>
   </div>

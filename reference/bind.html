@@ -19,7 +19,7 @@ data frames into one."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.2</span>
       </span>
     </div>
 
@@ -108,10 +108,10 @@ appears in any of the inputs.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">`%&gt;%`</span> <span class="op">&lt;-</span> <span class="fu">magrittr</span><span class="fu">::</span><span class="va">`%&gt;%`</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> </span>
-<span class="r-in"><span class="fu"><a href="dplyr-methods.html">bind_rows</a></span><span class="op">(</span><span class="va">tt</span>, <span class="va">tt</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">`%&gt;%`</span> <span class="op">&lt;-</span> <span class="fu">magrittr</span><span class="fu">::</span><span class="va">`%&gt;%`</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="dplyr-methods.html">bind_rows</a></span><span class="op">(</span><span class="va">tt</span>, <span class="va">tt</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>tidySummarizedExperiment says: you have duplicated sample names, they will be made unique.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 204,386 × 14</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=14 | Assays=counts</span></span>
@@ -128,9 +128,9 @@ appears in any of the inputs.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0 untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446 untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">num_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="tibble-methods.html">as_tibble</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="dplyr-methods.html">bind_cols</a></span><span class="op">(</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>, <span class="va">num_rows</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">num_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="tibble-methods.html">as_tibble</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="dplyr-methods.html">bind_cols</a></span><span class="op">(</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>, <span class="va">num_rows</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type           a num_rows</span>

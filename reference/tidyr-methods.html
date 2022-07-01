@@ -30,7 +30,7 @@ separate() turns a single character column into multiple columns."><!-- mathjax 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.2</span>
       </span>
     </div>
 
@@ -405,11 +405,11 @@ expression capturing groups.</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in"></span>
-<span class="r-in">    <span class="fu">nest</span><span class="op">(</span>data<span class="op">=</span><span class="op">-</span><span class="va">condition</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">    <span class="fu">unnest</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu">nest</span><span class="op">(</span>data<span class="op">=</span><span class="op">-</span><span class="va">condition</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu">unnest</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts type       condition</span>
@@ -425,29 +425,29 @@ expression capturing groups.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0 single_end untreated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446 single_end untreated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in"></span>
-<span class="r-in">    <span class="fu">nest</span><span class="op">(</span>data<span class="op">=</span><span class="op">-</span><span class="va">condition</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu">nest</span><span class="op">(</span>data<span class="op">=</span><span class="op">-</span><span class="va">condition</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   condition data          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> untreated <span style="color: #949494;">&lt;SmmrzdEx[,4]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> treated   <span style="color: #949494;">&lt;SmmrzdEx[,3]&gt;</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in"></span>
-<span class="r-in">    <span class="fu">extract</span><span class="op">(</span><span class="va">type</span>, into<span class="op">=</span><span class="st">"sequencing"</span>, regex<span class="op">=</span><span class="st">"([a-z]*)_end"</span>, convert<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu">extract</span><span class="op">(</span><span class="va">type</span>, into<span class="op">=</span><span class="st">"sequencing"</span>, regex<span class="op">=</span><span class="st">"([a-z]*)_end"</span>, convert<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.vector(x, mode):</span> cannot coerce type 'closure' to vector of type 'any'</span>
-<span class="r-in">    </span>
-<span class="r-in"><span class="co"># See vignette("pivot") for examples and explanation</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in"></span>
-<span class="r-in">    <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span>, names_to<span class="op">=</span><span class="st">"name"</span>, values_to<span class="op">=</span><span class="st">"value"</span><span class="op">)</span></span>
+<span class="r-in"><span>    </span></span>
+<span class="r-in"><span><span class="co"># See vignette("pivot") for examples and explanation</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span>, names_to<span class="op">=</span><span class="st">"name"</span>, values_to<span class="op">=</span><span class="st">"value"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 204,386 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts name      value     </span>
@@ -463,13 +463,13 @@ expression capturing groups.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000017 untrt1    <span style="text-decoration: underline;">4</span>664 condition untreated </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000017 untrt1    <span style="text-decoration: underline;">4</span>664 type      single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 204,376 more rows</span></span>
-<span class="r-in">    </span>
-<span class="r-in"><span class="co"># See vignette("pivot") for examples and explanation</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in"></span>
-<span class="r-in">    <span class="fu">pivot_wider</span><span class="op">(</span>names_from<span class="op">=</span><span class="va">feature</span>, values_from<span class="op">=</span><span class="va">counts</span><span class="op">)</span></span>
+<span class="r-in"><span>    </span></span>
+<span class="r-in"><span><span class="co"># See vignette("pivot") for examples and explanation</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu">pivot_wider</span><span class="op">(</span>names_from<span class="op">=</span><span class="va">feature</span>, values_from<span class="op">=</span><span class="va">counts</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>tidySummarizedExperiment says: from version 1.3.1, the special columns including sample/feature id (colnames(se), rownames(se)) has changed to ".sample" and ".feature". This dataset is returned with the old-style vocabulary (feature and sample), however we suggest to update your workflow to reflect the new vocabulary (.feature, .sample)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 14,602</span></span>
@@ -489,10 +489,10 @@ expression capturing groups.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   FBgn0000046 &lt;int&gt;, FBgn0000047 &lt;int&gt;, FBgn0000052 &lt;int&gt;, FBgn0000053 &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   FBgn0000054 &lt;int&gt;, FBgn0000055 &lt;int&gt;, FBgn0000056 &lt;int&gt;, FBgn0000057 &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   FBgn0000061 &lt;int&gt;, FBgn0000063 &lt;int&gt;, FBgn0000064 &lt;int&gt;, …</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in"></span>
-<span class="r-in">    <span class="fu">unite</span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu">unite</span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span>
@@ -509,7 +509,7 @@ expression capturing groups.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0 untreated_single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446 untreated_single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
