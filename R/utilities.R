@@ -377,12 +377,18 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
       # where a unique value cannot be linked to sample or feature
       c(names(column_belonging[column_belonging==f_(se)$name]))
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      se[1:min(100, nrow(se)), 1:min(20, ncol(se))]
+    ) 
+    
     new_colnames_col = 
       .data_mutated %>%
       select_if(!colnames(.) %in% setdiff(colnames_col, s_(se)$name)) %>% 
       
       # Eliminate special columns that are read only. Assays
-      select_if(!colnames(.) %in% get_special_columns(se)) %>%
+      select_if(!colnames(.) %in% secial_columns) %>%
       select_if(!colnames(.) %in% colnames_row) %>%
       # Replace for subset
       select(!!s_(se)$symbol,     get_subset_columns(., !!s_(se)$symbol)   ) %>% 
@@ -415,7 +421,7 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
         .data_mutated %>%
       
        # Eliminate special columns that are read only 
-        select_if(!colnames(.) %in% get_special_columns(se)) %>%
+        select_if(!colnames(.) %in% secial_columns) %>%
       
         #eliminate sample columns directly
         select_if(!colnames(.) %in% c(s_(se)$name, colnames(col_data))) %>%
