@@ -5,6 +5,7 @@
 \alias{bind_cols}
 \alias{distinct}
 \alias{filter}
+\alias{filter.SummarizedExperiment}
 \alias{group_by}
 \alias{summarise}
 \alias{mutate}
@@ -24,6 +25,8 @@
 bind_rows(..., .id = NULL, add.cell.ids = NULL)
 
 bind_cols(..., .id = NULL)
+
+\method{filter}{SummarizedExperiment}(.data, ..., .preserve = FALSE)
 }
 \arguments{
 \item{...}{For use by methods.}
@@ -41,11 +44,13 @@ used instead.}
 length(x=c(x, y)). Appends the corresponding values to the start of each
 objects' cell names.}
 
-\item{.keep_all}{If TRUE, keep all variables in .data. If a combination
-of ... is not distinct, this keeps the first row of values. (See dplyr)}
+\item{.data}{A tidySummarizedExperiment object or any data frame}
 
 \item{.preserve}{when \code{FALSE} (the default), the grouping structure
 is recalculated based on the resulting data, otherwise it is kept as is.}
+
+\item{.keep_all}{If TRUE, keep all variables in .data. If a combination
+of ... is not distinct, this keeps the first row of values. (See dplyr)}
 
 \item{.drop}{When \code{.drop=TRUE}, empty groups are dropped. See
 \code{\link[=group_by_drop_default]{group_by_drop_default()}} for what the default value is for this argument.}
@@ -79,8 +84,6 @@ This must evaluate to a vector of non-negative numbers the same length as
 the input. Weights are automatically standardised to sum to 1.}
 
 \item{.env}{DEPRECATED.}
-
-\item{.data}{A tidySummarizedExperiment object or any data frame}
 
 \item{name}{An optional parameter that specifies the column to be used
 as names for a named vector. Specified in a similar manner as \code{var}.}
