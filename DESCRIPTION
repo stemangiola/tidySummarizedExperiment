@@ -8,7 +8,7 @@ Description: tidySummarizedExperiment is an adapter that abstracts the 'Summariz
     in the form of tibble and allows the data manipulation, plotting and nesting using 'tidyverse' 
 License: GPL-3
 Depends:
-    R (>= 4.0.0),
+    R (>= 4.1.0),
     SummarizedExperiment
 Imports:
     tibble (>= 3.0.4),
