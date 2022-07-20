@@ -380,7 +380,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
       dplyr::filter(..., .preserve=.preserve)
     
     # If data cannot be a SummarizedExperiment
-    if(!is_rectangular(., .data)){
+    if(!is_rectangular(new_meta, .data)){
       message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
       return(new_meta)
     } else {
