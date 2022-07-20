@@ -1143,3 +1143,14 @@ add_attr = function(var, attribute, name) {
   attr(var, name) <- attribute
   var
 }
+
+is_filer_columns_in_column_selection = function(.data, ...){
+  # columns = enquos(columns)
+  tryCatch({
+    .data |>
+      slice(0) |>
+      dplyr::filter(..., .preserve=.preserve)
+    TRUE
+  },
+  error = function(e) FALSE)
+}

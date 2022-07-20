@@ -5,6 +5,7 @@
 \alias{bind_cols}
 \alias{distinct}
 \alias{filter}
+\alias{filter.SummarizedExperiment}
 \alias{group_by}
 \alias{summarise}
 \alias{mutate}
@@ -24,6 +25,8 @@
 bind_rows(..., .id = NULL, add.cell.ids = NULL)
 
 bind_cols(..., .id = NULL)
+
+\method{filter}{SummarizedExperiment}(.data, ..., .preserve = FALSE)
 }
 \arguments{
 \item{...}{For use by methods.}
@@ -41,19 +44,13 @@ used instead.}
 length(x=c(x, y)). Appends the corresponding values to the start of each
 objects' cell names.}
 
-\item{.keep_all}{If TRUE, keep all variables in .data. If a combination
-of ... is not distinct, this keeps the first row of values. (See dplyr)}
+\item{.data}{A tidySummarizedExperiment object or any data frame}
 
 \item{.preserve}{when \code{FALSE} (the default), the grouping structure
 is recalculated based on the resulting data, otherwise it is kept as is.}
 
-\item{.add}{When \code{FALSE}, the default, \code{group_by()} will
-override existing groups. To add to the existing groups, use
-\code{.add=TRUE}.
-
-This argument was previously called \code{add}, but that prevented
-creating a new grouping variable called \code{add}, and conflicts with
-our naming conventions.}
+\item{.keep_all}{If TRUE, keep all variables in .data. If a combination
+of ... is not distinct, this keeps the first row of values. (See dplyr)}
 
 \item{.drop}{When \code{.drop=TRUE}, empty groups are dropped. See
 \code{\link[=group_by_drop_default]{group_by_drop_default()}} for what the default value is for this argument.}
@@ -87,8 +84,6 @@ This must evaluate to a vector of non-negative numbers the same length as
 the input. Weights are automatically standardised to sum to 1.}
 
 \item{.env}{DEPRECATED.}
-
-\item{.data}{A tidySummarizedExperiment object or any data frame}
 
 \item{name}{An optional parameter that specifies the column to be used
 as names for a named vector. Specified in a similar manner as \code{var}.}
@@ -190,10 +185,6 @@ A vector the same size as \code{.data}.
 \code{filter()} retains the rows where the conditions you provide a \code{TRUE}. Note
 that, unlike base subsetting with \code{[}, rows where the condition evaluates
 to \code{NA} are dropped.
-
-Most data operations are done on groups defined by variables.
-\code{group_by()} takes an existing tbl and converts it into a grouped tbl
-where operations are performed "by group". \code{ungroup()} removes grouping.
 
 \code{summarise()} creates a new data frame. It will have one (or more) rows for
 each combination of grouping variables; if there are no grouping variables,
@@ -499,6 +490,5 @@ tidySummarizedExperiment::pasilla \%>\%
 \seealso{
 \code{\link[=filter_all]{filter_all()}}, \code{\link[=filter_if]{filter_if()}} and \code{\link[=filter_at]{filter_at()}}.
 }
-\concept{grouping functions}
 \concept{single table verbs}
 \keyword{internal}
