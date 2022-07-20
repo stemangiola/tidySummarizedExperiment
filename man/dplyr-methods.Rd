@@ -47,14 +47,6 @@ of ... is not distinct, this keeps the first row of values. (See dplyr)}
 \item{.preserve}{when \code{FALSE} (the default), the grouping structure
 is recalculated based on the resulting data, otherwise it is kept as is.}
 
-\item{.add}{When \code{FALSE}, the default, \code{group_by()} will
-override existing groups. To add to the existing groups, use
-\code{.add=TRUE}.
-
-This argument was previously called \code{add}, but that prevented
-creating a new grouping variable called \code{add}, and conflicts with
-our naming conventions.}
-
 \item{.drop}{When \code{.drop=TRUE}, empty groups are dropped. See
 \code{\link[=group_by_drop_default]{group_by_drop_default()}} for what the default value is for this argument.}
 
@@ -190,10 +182,6 @@ A vector the same size as \code{.data}.
 \code{filter()} retains the rows where the conditions you provide a \code{TRUE}. Note
 that, unlike base subsetting with \code{[}, rows where the condition evaluates
 to \code{NA} are dropped.
-
-Most data operations are done on groups defined by variables.
-\code{group_by()} takes an existing tbl and converts it into a grouped tbl
-where operations are performed "by group". \code{ungroup()} removes grouping.
 
 \code{summarise()} creates a new data frame. It will have one (or more) rows for
 each combination of grouping variables; if there are no grouping variables,
@@ -499,6 +487,5 @@ tidySummarizedExperiment::pasilla \%>\%
 \seealso{
 \code{\link[=filter_all]{filter_all()}}, \code{\link[=filter_if]{filter_if()}} and \code{\link[=filter_at]{filter_at()}}.
 }
-\concept{grouping functions}
 \concept{single table verbs}
 \keyword{internal}

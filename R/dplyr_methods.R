@@ -353,7 +353,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   if(is_filter_from_samples & !is_filter_from_features){
     filtered_samples = 
       colData(.data) |> 
-      as_tibble(s_(.data)$name) |> 
+      as_tibble(rownames = s_(.data)$name) |> 
       dplyr::filter(..., .preserve=.preserve) |> 
       pull(!!s_(.data)$symbol)
     
@@ -364,7 +364,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   else if(!is_filter_from_samples & is_filter_from_features){
     filtered_features = 
       rowData(.data) |> 
-      as_tibble(f_(.data)$name) |> 
+      as_tibble(rownames = f_(.data)$name) |> 
       dplyr::filter(..., .preserve=.preserve) |> 
       pull(!!f_(.data)$symbol)
     
