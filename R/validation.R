@@ -6,14 +6,14 @@ is_rectangular <- function(.data, se) {
         count(!!s_(se)$symbol ) %>%
         count(n, name="nn") %>%
         nrow() %>%
-        equals(1)
+        st(2)
 
     is_rectangular_transcript <-
         .data %>%
         count(!!f_(se)$symbol) %>%
         count(n, name="nn") %>%
         nrow() %>%
-        equals(1)
+        st(2)
 
     is_rectangular_sample & is_rectangular_transcript
 }

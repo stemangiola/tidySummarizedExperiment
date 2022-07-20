@@ -177,7 +177,8 @@ NULL
 #' 
 #' @export
 distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
-    message(data_frame_returned_message)
+  
+  # message(data_frame_returned_message)
 
   distinct_columns = 
     (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
@@ -195,6 +196,7 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
   }
   
   .data %>%
+    select(...) |> 
       as_tibble(skip_GRanges = skip_GRanges) %>%
       dplyr::distinct(..., .keep_all=.keep_all)
 }
@@ -271,10 +273,12 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
 NULL
 
 #' @inheritParams filter
+#' 
+#' @rdname dplyr-methods
+#' @name filter
+#' 
 #' @export
 filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
-
-  
   
   
   # Deprecation of special column names
@@ -285,53 +289,54 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     .data= ping_old_special_column_into_metadata(.data)
   }
   
-
+  # Understand what the filtering is about
+  is_filter_from_samples = .data |> colData() |> as_tibble() |>  is_filer_columns_in_column_selection(...)
+  is_filter_from_features = .data |> rowData() |> as_tibble() |>  is_filer_columns_in_column_selection(...)
   
+  # Get the simpler route if filter is only on samples
+  if(is_filter_from_samples & !is_filter_from_features){
+    filtered_samples = 
+      colData(.data) |> 
+      as_tibble(rownames = s_(.data)$name) |> 
+      dplyr::filter(..., .preserve=.preserve) |> 
+      pull(!!s_(.data)$symbol)
+    
+    return(.data[,filtered_samples])
+  }
+  
+  # Get the simpler route if filter is only on features
+  else if(!is_filter_from_samples & is_filter_from_features){
+    filtered_features = 
+      rowData(.data) |> 
+      as_tibble(rownames = f_(.data)$name) |> 
+      dplyr::filter(..., .preserve=.preserve) |> 
+      pull(!!f_(.data)$symbol)
+    
+    return(.data[filtered_features,])
+  }  
+  
+  # If filtering is based on both features and samples
+  else{
+    
+    # Do filtering
     new_meta <- .data %>%
-        as_tibble(skip_GRanges = TRUE) %>%
-        dplyr::filter(..., .preserve=.preserve) # %>% update_SE_from_tibble(.data)
-
-    new_meta %>%
-
-        when(
-
-            # If rectangular
-            is_rectangular(., .data) ~ .data[
-                unique(pull(.,!!f_(.data)$symbol)),
-                unique(pull(.,!!s_(.data)$symbol))
-            ],
-
-            # If not rectangular return just tibble
-            ~ {
-                message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
-                (.)
-            }
-        )
+      as_tibble(skip_GRanges = TRUE) %>%
+      dplyr::filter(..., .preserve=.preserve)
+    
+    # If data cannot be a SummarizedExperiment
+    if(!is_rectangular(new_meta, .data)){
+      message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
+      return(new_meta)
+    } else {
+      return(.data[  
+        unique(pull(new_meta,!!f_(.data)$symbol)), 
+        unique(pull(new_meta,!!s_(.data)$symbol)) 
+      ])
+    }
+  }
+  
 }
 
-
-#' Group by one or more variables
-#'
-#' @importFrom dplyr group_by_drop_default
-#' @importFrom dplyr group_by
-#'
-#' @description
-#' Most data operations are done on groups defined by variables.
-#' `group_by()` takes an existing tbl and converts it into a grouped tbl
-#' where operations are performed "by group". `ungroup()` removes grouping.
-#'
-#' @family grouping functions
-#' @inheritParams arrange
-#' @param .data A tidySummarizedExperiment object or any data frame
-#' @param ... In `group_by()`, variables or computations to group by.
-#'   In `ungroup()`, variables to remove from the grouping.
-#' @param .add When `FALSE`, the default, `group_by()` will
-#'   override existing groups. To add to the existing groups, use
-#'   `.add=TRUE`.
-#'
-#'   This argument was previously called `add`, but that prevented
-#'   creating a new grouping variable called `add`, and conflicts with
-#'   our naming conventions.
 #' @param .drop When `.drop=TRUE`, empty groups are dropped. See
 #'   [group_by_drop_default()] for what the default value is for this argument.
 #' @return A [grouped data frame][grouped_df()], unless the combination of
@@ -582,10 +587,17 @@ mutate.SummarizedExperiment <- function(.data, ...) {
       .data= ping_old_special_column_into_metadata(.data)
     }
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      .data[1:min(100, nrow(.data)), 1:min(20, ncol(.data))]
+    ) |> 
+      c(get_needed_columns(.data))
+    
     tst =
         intersect(
             cols,
-            get_special_columns(.data) %>% c(get_needed_columns(.data))
+            secial_columns
         ) %>%
         length() %>%
         gt(0)
@@ -593,8 +605,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 
     if (tst) {
         columns =
-            get_special_columns(.data) %>%
-            c(get_needed_columns(.data)) %>%
+          secial_columns %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -690,11 +701,17 @@ rename.SummarizedExperiment <- function(.data, ...) {
     )
       stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and feature-wise columns.")
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      .data[1:min(100, nrow(.data)), 1:min(20, ncol(.data))]
+    ) |> 
+      c(get_needed_columns(.data))
     
     tst =
         intersect(
             cols %>% names(),
-            get_special_columns(.data) %>% c(get_needed_columns(.data))
+            secial_columns
         ) %>%
         length() %>%
         gt(0)
@@ -702,8 +719,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
     # If column in view-only columns stop
     if (tst) {
         columns =
-            get_special_columns(.data) %>%
-            c(get_needed_columns(.data)) %>%
+          secial_columns %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",

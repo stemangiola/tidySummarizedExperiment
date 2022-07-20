@@ -14,3 +14,11 @@
     \item Adaptation to Ranged-SummarizedExperiment.
 }}
 
+\section{Changes in version 1.7.3, Bioconductor 3.16 Release}{
+\itemize{
+    \item Fixed as_tibble edge case
+    \item Fixed print for DelayedArray
+    \item Improve performance for large-scale datasets
+    \items Fixed filter is the result is a no-gene dataset, and improve performance of filtering
+}}
+
