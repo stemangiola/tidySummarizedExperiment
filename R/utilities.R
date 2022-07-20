@@ -619,7 +619,7 @@ get_count_datasets <- function(se) {
       # If the counts are in a sparse matrix convert to a matrix
       # This might happen because the user loaded tidySummarizedExperiment and is 
       # print a SingleCellExperiment
-      if(is(.x, "dgCMatrix")) {
+      if(is(.x, "dgCMatrix") | is(.x, "DelayedArray")) {
         .x = as.matrix(.x) 
       }
       
