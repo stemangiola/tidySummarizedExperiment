@@ -315,21 +315,22 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
       data= ping_old_special_column_into_metadata(data)
     }
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
+    ) |> 
+      c(get_needed_columns(data))
+    
     tst =
-        intersect(
-            into %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns(data))
-        ) %>%
+        intersect( quo_names(into),  secial_columns ) %>%
         length() %>%
         gt(0) &
         remove
 
 
     if (tst) {
-        columns =
-            get_special_columns(data) %>%
-            c(get_needed_columns(data)) %>%
-            paste(collapse=", ")
+        columns = secial_columns |>  paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
             columns,
@@ -338,7 +339,13 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     }
 
     # Subset column annotation
-    if(all(quo_names(col) %in% colnames(colData(data))) & !s_(se)$name %in% into){
+    if(
+      (
+        all(quo_names(col) %in% colnames(colData(data))) |
+        ( quo_name(col) == s_(se)$name & !remove )
+      ) & 
+      !s_(se)$name %in% into
+    ){
       colData(data) = 
         colData(data) %>% 
         as.data.frame() %>% 
@@ -352,7 +359,13 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
     }
      
     # Subset row annotation
-    if(all(quo_names(col) %in% colnames(rowData(data)))& !f_(se)$name %in% into){
+    if(
+      (
+        all( quo_names(col) %in% colnames(rowData(data)) ) | 
+        ( quo_name(col) == f_(se)$name & !remove )
+      ) & 
+        !f_(se)$name %in% into
+      ){
       rowData(data) = 
         rowData(data) %>% 
         as.data.frame() %>% 
@@ -738,10 +751,17 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
       data= ping_old_special_column_into_metadata(data)
     }
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
+    ) |> 
+      c(get_needed_columns(data))
+    
     tst =
         intersect(
             cols %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns(data))
+            secial_columns
         ) %>%
         length() %>%
         gt(0) &
@@ -750,8 +770,7 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
 
     if (tst) {
         columns =
-            get_special_columns(data) %>%
-            c(get_needed_columns(data)) %>%
+          secial_columns %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -861,10 +880,17 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
       data= ping_old_special_column_into_metadata(data)
     }
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
+    ) |> 
+      c(get_needed_columns(data))
+    
     tst =
         intersect(
             cols %>% quo_names(),
-            get_special_columns(data) %>% c(get_needed_columns(data))
+            secial_columns
         ) %>%
         length() %>%
         gt(0) &
@@ -873,8 +899,7 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
 
     if (tst) {
         columns =
-            get_special_columns(data) %>%
-            c(get_needed_columns(data)) %>%
+          secial_columns %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",

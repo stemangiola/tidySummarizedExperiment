@@ -177,7 +177,8 @@ NULL
 #' 
 #' @export
 distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
-    message(data_frame_returned_message)
+  
+  # message(data_frame_returned_message)
 
   distinct_columns = 
     (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
@@ -195,6 +196,7 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
   }
   
   .data %>%
+    select(...) |> 
       as_tibble(skip_GRanges = skip_GRanges) %>%
       dplyr::distinct(..., .keep_all=.keep_all)
 }
@@ -582,10 +584,17 @@ mutate.SummarizedExperiment <- function(.data, ...) {
       .data= ping_old_special_column_into_metadata(.data)
     }
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      .data[1:min(100, nrow(.data)), 1:min(20, ncol(.data))]
+    ) |> 
+      c(get_needed_columns(.data))
+    
     tst =
         intersect(
             cols,
-            get_special_columns(.data) %>% c(get_needed_columns(.data))
+            secial_columns
         ) %>%
         length() %>%
         gt(0)
@@ -593,8 +602,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 
     if (tst) {
         columns =
-            get_special_columns(.data) %>%
-            c(get_needed_columns(.data)) %>%
+          secial_columns %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -690,11 +698,17 @@ rename.SummarizedExperiment <- function(.data, ...) {
     )
       stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and feature-wise columns.")
     
+    secial_columns = get_special_columns(
+      
+      # Decrease the size of the dataset
+      .data[1:min(100, nrow(.data)), 1:min(20, ncol(.data))]
+    ) |> 
+      c(get_needed_columns(.data))
     
     tst =
         intersect(
             cols %>% names(),
-            get_special_columns(.data) %>% c(get_needed_columns(.data))
+            secial_columns
         ) %>%
         length() %>%
         gt(0)
@@ -702,8 +716,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
     # If column in view-only columns stop
     if (tst) {
         columns =
-            get_special_columns(.data) %>%
-            c(get_needed_columns(.data)) %>%
+          secial_columns %>%
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
