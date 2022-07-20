@@ -332,6 +332,67 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #'   This argument was previously called `add`, but that prevented
 #'   creating a new grouping variable called `add`, and conflicts with
 #'   our naming conventions.
+#' @inheritParams filter
+#' @export
+filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
+  
+  
+  # Deprecation of special column names
+  if(is_sample_feature_deprecated_used(
+    .data, 
+    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+  )){
+    .data= ping_old_special_column_into_metadata(.data)
+  }
+  
+  # Understand what the filtering is about
+  is_filter_from_samples = .data |> colData() |> as_tibble() |>  is_filer_columns_in_column_selection(...)
+  is_filter_from_features = .data |> rowData() |> as_tibble() |>  is_filer_columns_in_column_selection(...)
+  
+  # Get the simpler route if filter is only on samples
+  if(is_filter_from_samples & !is_filter_from_features){
+    filtered_samples = 
+      colData(.data) |> 
+      as_tibble(s_(.data)$name) |> 
+      dplyr::filter(..., .preserve=.preserve) |> 
+      pull(!!s_(.data)$symbol)
+    
+    return(.data[,filtered_samples])
+  }
+  
+  # Get the simpler route if filter is only on features
+  else if(!is_filter_from_samples & is_filter_from_features){
+    filtered_features = 
+      rowData(.data) |> 
+      as_tibble(f_(.data)$name) |> 
+      dplyr::filter(..., .preserve=.preserve) |> 
+      pull(!!f_(.data)$symbol)
+    
+    return(.data[filtered_features,])
+  }  
+  
+  # If filtering is based on both features and samples
+  else{
+    
+    # Do filtering
+    new_meta <- .data %>%
+      as_tibble(skip_GRanges = TRUE) %>%
+      dplyr::filter(..., .preserve=.preserve)
+    
+    # If data cannot be a SummarizedExperiment
+    if(!is_rectangular(., .data)){
+      message("tidySummarizedExperiment says: The resulting data frame is not rectangular (all genes for all samples), a tibble is returned for independent data analysis.")
+      return(new_meta)
+    } else {
+      return(.data[  
+        unique(pull(new_meta,!!f_(.data)$symbol)), 
+        unique(pull(new_meta,!!s_(.data)$symbol)) 
+      ])
+    }
+  }
+  
+}
+
 #' @param .drop When `.drop=TRUE`, empty groups are dropped. See
 #'   [group_by_drop_default()] for what the default value is for this argument.
 #' @return A [grouped data frame][grouped_df()], unless the combination of
