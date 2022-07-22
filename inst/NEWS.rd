@@ -19,6 +19,6 @@
     \item Fixed as_tibble edge case
     \item Fixed print for DelayedArray
     \item Improve performance for large-scale datasets
-    \items Fixed filter is the result is a no-gene dataset, and improve performance of filtering
+    \item Fixed filter is the result is a no-gene dataset, and improve performance of filtering
 }}
 
