@@ -255,7 +255,12 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                     
                     ###
 
-                    my_data__[unique(my_transcripts),unique(my_samples)] |> select(-!!as.symbol(my_nesting_column))
+                    my_data__[unique(my_transcripts),unique(my_samples)] |>
+                      select(-one_of(
+                        my_nesting_column |> 
+                          setdiff(c(sample_name, feature_name))
+                      )) |> 
+                      suppressWarnings()
 
                  
                 }
