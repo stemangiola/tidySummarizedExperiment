@@ -129,7 +129,8 @@ NULL
 #' @export
 print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
-  x |>
+  my_tibble = 
+    x |>
     
     # If I have more than 30 genes select first sample
     when(
@@ -137,7 +138,9 @@ print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra =
       ~ .[, 1:min(20, ncol(x)), drop=FALSE]
     ) %>%
     
-    as_tibble() |>
+    as_tibble() 
+  
+  my_tibble |>
     new_data_frame(class = c("tidySummarizedExperiment", "tbl")) %>%
     add_attr( nrow(x),  "number_of_features") %>%
     add_attr( ncol(x),  "number_of_samples") %>%
@@ -149,7 +152,7 @@ print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra =
         "%s %s %s", 
         x %>% dim %>% {(.)[1] * (.)[2]} %>% format(format="f", big.mark=",", digits=1),
         cli::symbol$times,
-        ncol(x)
+        ncol(my_tibble)
       ) %>%
         setNames("A SummarizedExperiment-tibble abstraction"), 
       "named_header"
