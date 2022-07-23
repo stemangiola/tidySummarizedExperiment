@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.4</span>
       </span>
     </div>
 
@@ -211,7 +211,7 @@ tidyverse APIs.</p>
 <p><strong>It looks like a tibble</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pasilla_tidy</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 7</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 5</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span></span>
 <span><span class="co">##    .feature    .sample counts condition type      </span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
@@ -244,7 +244,7 @@ to choose the first row.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/dplyr-methods.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 1 × 1</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 1 × 5</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># </span><span style="color: #555555;">Features=1 | Samples=1 | Assays=counts</span></span></span>
 <span><span class="co">##   .feature    .sample counts condition type      </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
@@ -253,7 +253,7 @@ to choose the first row.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"untreated"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 58,396 × 4</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 58,396 × 5</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=4 | Assays=counts</span></span></span>
 <span><span class="co">##    .feature    .sample counts condition type      </span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
@@ -323,7 +323,7 @@ modify the type column name.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/dplyr-methods.html">rename</a></span><span class="op">(</span>sequencing<span class="op">=</span><span class="va">type</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 7</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 5</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span></span>
 <span><span class="co">##    .feature    .sample counts condition sequencing</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
@@ -345,7 +345,7 @@ of single_end and paired_end.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/dplyr-methods.html">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_end"</span>, <span class="st">""</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 7</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 5</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span></span>
 <span><span class="co">##    .feature    .sample counts condition type  </span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
@@ -366,7 +366,7 @@ single column.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pasilla_tidy</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/tidyr-methods.html">unite</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">condition</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 7</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 4</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span></span>
 <span><span class="co">##    .feature    .sample counts group               </span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
@@ -483,7 +483,7 @@ plotting.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] tidySummarizedExperiment_1.7.3 SummarizedExperiment_1.26.1   </span></span>
+<span><span class="co">##  [1] tidySummarizedExperiment_1.7.4 SummarizedExperiment_1.26.1   </span></span>
 <span><span class="co">##  [3] Biobase_2.56.0                 GenomicRanges_1.48.0          </span></span>
 <span><span class="co">##  [5] GenomeInfoDb_1.32.2            IRanges_2.30.0                </span></span>
 <span><span class="co">##  [7] S4Vectors_0.34.0               BiocGenerics_0.42.0           </span></span>
