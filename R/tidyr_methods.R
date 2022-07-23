@@ -186,6 +186,9 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
       as_tibble() %>%
       tidyr::nest(...) 
 
+    # Understand what the nesting is about
+    my_nesting_column = my_test_nest |> select(-!!as.symbol(col_name_data)) |> colnames()
+
     # Check that sample or feature are in the nesting
     if(
       
@@ -197,17 +200,21 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     )
     stop("tidySummarizedExperiment says: You cannot have the columns feature among the nesting mixed with other nesting for efficiency reasons. Please consider to convert to_tibble() first. We are working for optimising a generalised solution of nest().")
 
-    my_data__nested =
-      my_data__ %>%
-      
-      # This is needed otherwise nest goes into loop and fails
-      as_tibble() %>%
-      tidyr::nest(...)
+    # my_data__nested =
+      # my_data__ %>%
+      # 
+      # # This is needed otherwise nest goes into loop and fails
+      # as_tibble() %>%
+      # tidyr::nest(...)
      
     # If I nest only for .feature -> THIS WORKS ONLY WITH THE CHECK ABOVE
-    if(feature_name %in% colnames(my_data__nested))
+    if(feature_name %in% colnames(my_test_nest))
      return(
-       my_data__nested %>% 
+       my_data__ %>%
+         
+         # This is needed otherwise nest goes into loop and fails
+         as_tibble() %>%
+         tidyr::nest(...) %>% 
          mutate(
            !!as.symbol(col_name_data) := 
              split_SummarizedExperiment_by_feature_to_list(!!.data)
@@ -217,7 +224,11 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
          add_class("tidySummarizedExperiment_nested")
      ) 
     
-    my_data__nested %>%
+
+    my_data__ %>%
+      select(!!sample_symbol, !!feature_symbol, my_nesting_column) |> 
+      as_tibble() %>%
+      tidyr::nest(...) |> 
 
         mutate(
             !!as.symbol(col_name_data) := pmap(
@@ -226,27 +237,32 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                 list(!!as.symbol(col_name_data)) %>%
 
                   # Check if nested by sample
-                  when(sample_name %in% colnames(my_data__nested) ~ c(., list(!!sample_symbol)), ~ (.)) %>%
+                  when(sample_name %in% colnames(my_test_nest) ~ c(., list(!!sample_symbol)), ~ (.)) %>%
 
                   # Check if nested by feature
-                  when(feature_name %in% colnames(my_data__nested) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ { 
-
+                  when(feature_name %in% colnames(my_test_nest) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ { 
+                    
+                    # VERY COMPLICATE WAY TO DO THIS. SIMPLIFY IN THE FUTURE
+                    
                     # Check if nested by sample
-                    if(sample_name %in% colnames(my_data__nested)) { my_samples=..2 }
+                    if(sample_name %in% colnames(my_test_nest)) { my_samples=..2 }
                     else {my_samples=pull(..1,!!sample_symbol)}
 
                     # Check if nested by feature and sample
-                    if(sample_name %in% colnames(my_data__nested) & feature_name %in% colnames(my_data__nested)) {my_transcripts=..3}
-                    else if(feature_name %in% colnames(my_data__nested)) my_transcripts=..2
+                    if(sample_name %in% colnames(my_test_nest) & feature_name %in% colnames(my_test_nest)) {my_transcripts=..3}
+                    else if(feature_name %in% colnames(my_test_nest)) my_transcripts=..2
                     else my_transcripts=pull(..1,!!feature_symbol)
+                    
+                    ###
 
-                  my_data__ %>%
+                    my_data__[unique(my_transcripts),unique(my_samples)] |>
+                      select(-one_of(
+                        my_nesting_column |> 
+                          setdiff(c(sample_name, feature_name))
+                      )) |> 
+                      suppressWarnings()
 
-                    # Subset cells
-                    filter(!!sample_symbol %in% my_samples & !!feature_symbol %in% my_transcripts) %>%
-
-                    # Subset columns
-                    select(colnames(..1) %>% c(sample_name, feature_name) %>% unique)
+                 
                 }
             )
         ) %>%
