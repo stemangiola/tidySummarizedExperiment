@@ -13,6 +13,8 @@ status](https://github.com/stemangiola/tidySummarizedExperiment/workflows/R-CMD-
 website:
 [stemangiola.github.io/tidySummarizedExperiment/](https://stemangiola.github.io/tidySummarizedExperiment/)
 
+Another [nice introduction](https://carpentries-incubator.github.io/bioc-intro/60-next-steps/index.html) by carpentries-incubator.
+
 Please also have a look at
 
 -   [tidySingleCellExperiment](https://stemangiola.github.io/tidySingleCellExperiment/)
