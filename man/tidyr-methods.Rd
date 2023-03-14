@@ -10,6 +10,11 @@
 \alias{separate}
 \title{unnest}
 \arguments{
+\item{cols}{<\code{\link[=tidyr_tidy_select]{tidy-select}}> Columns to unnest.
+If you \code{unnest()} multiple columns, parallel entries must be of
+compatible sizes, i.e. they're either equal or length 1 (following the
+standard tidyverse recycling rules).}
+
 \item{keep_empty}{See tidyr::unnest}
 
 \item{ptype}{See tidyr::unnest}
@@ -38,19 +43,23 @@ columns are integer, numeric or logical.
 
 NB: this will cause string \code{"NA"}s to be converted to \code{NA}s.}
 
-\item{cols}{<\code{\link[=tidyr_tidy_select]{tidy-select}}> Columns to pivot into
-longer format.}
-
-\item{names_to}{A string specifying the name of the column to create
-from the data stored in the column names of \code{data}.
-
-Can be a character vector, creating multiple columns, if \code{names_sep}
-or \code{names_pattern} is provided. In this case, there are two special
+\item{names_to}{A character vector specifying the new column or columns to
+create from the information stored in the column names of \code{data} specified
+by \code{cols}.
+\itemize{
+\item If length 0, or if \code{NULL} is supplied, no columns will be created.
+\item If length 1, a single column will be created which will contain the
+column names specified by \code{cols}.
+\item If length >1, multiple columns will be created. In this case, one of
+\code{names_sep} or \code{names_pattern} must be supplied to specify how the
+column names should be split. There are also two additional character
 values you can take advantage of:
 \itemize{
-\item \code{NA} will discard that component of the name.
-\item \code{.value} indicates that component of the name defines the name of the
-column containing the cell values, overriding \code{values_to}.
+\item \code{NA} will discard the corresponding component of the column name.
+\item \code{".value"} indicates that the corresponding component of the column
+name defines the name of the output column containing the cell values,
+overriding \code{values_to} entirely.
+}
 }}
 
 \item{names_sep, names_pattern}{If \code{names_to} contains multiple values,
@@ -84,20 +93,24 @@ in the \code{value_to} column. This effectively converts explicit missing values
 to implicit missing values, and should generally be used only when missing
 values in \code{data} were created by its structure.}
 
-\item{names_transform, values_transform}{A list of column name-function pairs.
-Use these arguments if you need to change the type of specific columns.
-For example, \code{names_transform=list(week=as.integer)} would convert
-a character week variable to an integer.}
-
-\item{names_ptypes, values_ptypes}{A list of column name-prototype pairs.
-A prototype (or ptype for short) is a zero-length vector (like \code{integer()}
-or \code{numeric()}) that defines the type, class, and attributes of a vector.
-Use these arguments to confirm that the created columns are the types that
-you expect.
+\item{names_transform, values_transform}{Optionally, a list of column
+name-function pairs. Alternatively, a single function can be supplied,
+which will be applied to all columns. Use these arguments if you need to
+change the types of specific columns. For example, \code{names_transform = list(week = as.integer)} would convert a character variable called \code{week}
+to an integer.
 
 If not specified, the type of the columns generated from \code{names_to} will
 be character, and the type of the variables generated from \code{values_to}
 will be the common type of the input columns used to generate them.}
+
+\item{names_ptypes, values_ptypes}{Optionally, a list of column name-prototype
+pairs. Alternatively, a single empty prototype can be supplied, which will
+be applied to all columns. A prototype (or ptype for short) is a
+zero-length vector (like \code{integer()} or \code{numeric()}) that defines the type,
+class, and attributes of a vector. Use these arguments if you want to
+confirm that the created columns are the types that you expect. Note that
+if you want to change (instead of confirm) the types of specific columns,
+you should use \code{names_transform} or \code{values_transform} instead.}
 
 \item{id_cols}{<\code{\link[=tidyr_tidy_select]{tidy-select}}> A set of columns that
 uniquely identify each observation. Typically used when you have
@@ -248,12 +261,6 @@ Given a regular expression with capturing groups, \code{extract()} turns
 each group into a new column. If the groups don't match, or the input
 is NA, the output will be NA.
 
-\code{pivot_longer()} "lengthens" data, increasing the number of rows and
-decreasing the number of columns. The inverse transformation is
-\code{pivot_wider()}
-
-Learn more in \code{vignette("pivot")}.
-
 \code{pivot_wider()} "widens" data, increasing the number of columns and
 decreasing the number of rows. The inverse transformation is
 \code{\link[=pivot_longer]{pivot_longer()}}.
@@ -266,11 +273,6 @@ Given either a regular expression or a vector of character positions,
 \code{separate()} turns a single character column into multiple columns.
 }
 \details{
-\code{pivot_longer()} is an updated approach to \code{\link[=gather]{gather()}}, designed to be both
-simpler to use and to handle more use cases. We recommend you use
-\code{pivot_longer()} for new code; \code{gather()} isn't going away but is no longer
-under active development.
-
 \code{pivot_wider()} is an updated approach to \code{\link[=spread]{spread()}}, designed to be both
 simpler to use and to handle more use cases. We recommend you use
 \code{pivot_wider()} for new code; \code{spread()} isn't going away but is no longer
@@ -310,7 +312,6 @@ tidySummarizedExperiment::pasilla \%>\%
 tidySummarizedExperiment::pasilla \%>\%
 
     unite("group", c(condition, type))
-
 }
 \seealso{
 \code{\link[=separate]{separate()}} to split up by a separator.
