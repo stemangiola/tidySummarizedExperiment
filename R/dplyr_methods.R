@@ -1095,7 +1095,7 @@ select.SummarizedExperiment <- function(.data, ...) {
   }
   
   # Warning if column names of assays do not overlap
-  if(  check_if_assays_are_consistently_ordered(.data)  ){
+  if(  check_if_assays_are_NOT_consistently_ordered(.data)  ){
     
     warning(
       "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names,
@@ -1427,7 +1427,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     if(all(c(quo_names(var), quo_name_name) %in% names(.data@assays@data))){
       
       # Warning if column names of assays do not overlap
-      if( check_if_assays_are_consistently_ordered(.data) ){
+      if( check_if_assays_are_NOT_consistently_ordered(.data) ){
         
         warning( 
           "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 

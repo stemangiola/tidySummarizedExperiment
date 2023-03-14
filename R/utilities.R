@@ -633,7 +633,7 @@ get_special_datasets <- function(se) {
 get_count_datasets <- function(se) { 
   
   # Stop if column names of assays do not overlap
-  if( check_if_assays_are_consistently_overlapped(se) ) 
+  if( check_if_assays_are_NOT_overlapped(se) ) 
     stop( 
     "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
 but their order is not the same, and they not completely overlap." 
@@ -1186,10 +1186,20 @@ is_filer_columns_in_column_selection = function(.data, ...){
   error = function(e) FALSE)
 }
 
-check_if_assays_are_consistently_ordered = function(se){
+check_if_assays_are_NOT_consistently_ordered = function(se){
   
   # If I have any assay at all
   assays(se) |> length() |> gt(0) &&
+    
+    # If I have more than one assay with colnames
+    Filter(
+      Negate(is.null),
+      assays(se, withDimnames = FALSE) |>  
+        as.list() |> 
+        map(colnames)
+    ) |> 
+    length() |>
+    gt(0) &&
     
   # If I have lack of consistency
   se |> 
@@ -1202,10 +1212,20 @@ check_if_assays_are_consistently_ordered = function(se){
     not()
 }
 
-check_if_assays_are_consistently_overlapped = function(se){
+check_if_assays_are_NOT_overlapped = function(se){
   
   # If I have any assay at all
   assays(se) |> length() |> gt(0) &&
+    
+    # If I have more than one assay with colnames
+    Filter(
+      Negate(is.null),
+      assays(se, withDimnames = FALSE) |>  
+        as.list() |> 
+        map(colnames)
+    ) |> 
+    length() |>
+    gt(0) &&
     
     # If I have lack of consistency
     assays(se, withDimnames = FALSE) |>  
