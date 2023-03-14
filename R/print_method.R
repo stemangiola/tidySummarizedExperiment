@@ -129,6 +129,20 @@ NULL
 #' @export
 print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
+  
+  # Stop if column names of assays do not overlap
+  if( check_if_assays_are_NOT_overlapped(se) ) 
+    stop( 
+      "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
+but their order is not the same, and they not completely overlap." 
+    )
+  
+  # reorder assay colnames before printing
+  # Rearrange if assays has colnames and rownames
+  x = order_assays_internally_to_be_consistent(x)
+    
+  
+
   my_tibble = 
     x |>
     

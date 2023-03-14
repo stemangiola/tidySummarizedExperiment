@@ -464,8 +464,8 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
       setdiff(assays(se) %>% names)
     
     if(length(colnames_assay)>0)
-      assays(se, withDimnames=FALSE) = 
-        assays(se) %>% c(
+      assays(se) = #, withDimnames=FALSE) = 
+        assays(se, withDimnames = FALSE) %>% c(
           .data_mutated %>% 
             
             # Select assays column
@@ -478,12 +478,25 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
             # Convert to matrix and to named list
             mutate(data___ = map2(
               data___, name,
-              ~ .x %>%
-                spread(!!s_(se)$symbol, value) %>% 
-                as_matrix(rownames = !!f_(se)$symbol)  %>% 
-                suppressWarnings() %>%
+              ~ {
+                .x = 
+                  .x %>%
+                  spread(!!s_(se)$symbol, value) %>% 
+            
+                  
+                  as_matrix(rownames = !!f_(se)$symbol)  %>% 
+                  suppressWarnings()
+                
+                # Rearrange if assays has colnames and rownames
+                if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
+                if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
+
+                
+              .x %>%
+                
                 list() %>%
                 setNames(.y)
+              }
             )) %>%
             
             # Create correct list
@@ -614,11 +627,21 @@ get_special_datasets <- function(se) {
 #' @importFrom tibble as_tibble
 #' @importFrom purrr reduce
 #' @importFrom SummarizedExperiment assays
+#' @importFrom magrittr equals
 #' 
 #' @noRd
 get_count_datasets <- function(se) { 
+  
+  # Stop if column names of assays do not overlap
+  if( check_if_assays_are_NOT_overlapped(se) ) 
+    stop( 
+    "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
+but their order is not the same, and they not completely overlap." 
+  )
+
+  # Join assays
   map2( 
-    assays(se) %>% as.list(),
+    assays(se, withDimnames = FALSE) %>% as.list(),
     names(assays(se)),
     ~ {
       
@@ -629,13 +652,22 @@ get_count_datasets <- function(se) {
         .x = as.matrix(.x) 
       }
       
+      # Rearrange if assays has colnames and rownames
+      if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
+      if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
+
+      # If I don't have assay colnames and rownames add them
+      if(!is.null(rownames(se)) & is.null(rownames(.x))) rownames(.x) = rownames(se) 
+      if(!is.null(colnames(se)) & is.null(colnames(.x))) colnames(.x) = colnames(se) 
+      
       .x %>%
       # matrix() %>%
       # as.data.frame() %>% 
+        
       tibble::as_tibble(rownames = f_(se)$name, .name_repair = "minimal") %>%
       
       # If the matrix does not have sample names, fix column names
-      when(colnames(.x) %>% is.null() ~ setNames(., c(
+      when(colnames(.x) %>% is.null() & is.null(colnames(se)) ~ setNames(., c(
         f_(se)$name,  seq_len(ncol(.x)) 
       )),
       ~ (.)
@@ -647,7 +679,10 @@ get_count_datasets <- function(se) {
     #  rename(!!.y := count)
   }) %>%
     when(
-      length(.)>0 ~ bind_cols(.,  .name_repair = c("minimal")) %>% .[!duplicated(colnames(.))], # reduce(., left_join, by = c(f_(se)$name, s_(se)$name)),
+      length(.)>0 ~ 
+        
+        # reduce(., left_join, by = c(f_(se)$name, s_(se)$name)),
+        bind_cols(.,  .name_repair = c("minimal")) %>% .[!duplicated(colnames(.))], 
       ~ expand.grid(
         rownames(se), colnames(se)
         ) %>% 
@@ -1153,4 +1188,75 @@ is_filer_columns_in_column_selection = function(.data, ...){
     TRUE
   },
   error = function(e) FALSE)
+}
+
+check_if_assays_are_NOT_consistently_ordered = function(se){
+  
+  # If I have any assay at all
+  assays(se) |> length() |> gt(0) &&
+    
+    # If I have more than one assay with colnames
+    Filter(
+      Negate(is.null),
+      assays(se, withDimnames = FALSE) |>  
+        as.list() |> 
+        map(colnames)
+    ) |> 
+    length() |>
+    gt(0) &&
+    
+  # If I have lack of consistency
+  se |> 
+    assays(withDimnames = FALSE) |>
+    as.list() |>
+    purrr::map_dfr(colnames) |>
+    apply(1, function(x) x |> unique() |> length()) |>
+    equals(1) |>
+    all() |>  
+    not()
+}
+
+check_if_assays_are_NOT_overlapped = function(se){
+  
+  # If I have any assay at all
+  assays(se) |> length() |> gt(0) &&
+    
+    # If I have more than one assay with colnames
+    Filter(
+      Negate(is.null),
+      assays(se, withDimnames = FALSE) |>  
+        as.list() |> 
+        map(colnames)
+    ) |> 
+    length() |>
+    gt(0) &&
+    
+    # If I have lack of consistency
+    assays(se, withDimnames = FALSE) |>  
+    as.list() |> 
+    map(colnames) |> 
+    reduce(intersect) |> 
+    length() |> 
+    equals(ncol(se)) |> 
+    not()
+}
+
+
+order_assays_internally_to_be_consistent = function(se){
+
+  se |> 
+    assays(withDimnames = FALSE) =
+      map2(
+        assays(se, withDimnames = FALSE) %>% as.list(),
+        names(assays(se)),
+        ~ {
+          
+          if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
+          if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
+          
+          .x
+          
+        })
+    
+    se
 }
