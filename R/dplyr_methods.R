@@ -1415,9 +1415,10 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     if(all(c(quo_names(var), quo_name_name) %in% colnames(rowData(.data))))
       return( colData(.data)[,quo_names(var)] %>% .[rep(1:length(.), ncol(.data) )])
     
-    # This returns a vector column wise. With the first sample and all features, second sample and all features, etc..
+    # This returns a vector column wise. With the first sample and all features, 
+    # second sample and all features, etc..
     if(all(c(quo_names(var), quo_name_name) %in% names(.data@assays@data)))
-      return(.data@assays@data[[quo_names(var)]] %>% as.vector()) 
+      return(assay(.data, quo_names(var)) |> as.matrix() |> as.vector()) 
     
     # Subset rowranges
     if(all(c(quo_names(var), quo_name_name) %in% colnames(as.data.frame(rowRanges(.data)))))
