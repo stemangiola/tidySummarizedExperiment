@@ -139,3 +139,16 @@ test_that("count", {
         nrow() %>%
         expect_equal(2)
 })
+
+test_that("mutate counts", {
+  
+  se = tidySummarizedExperiment::pasilla |> mutate(counts_2 = counts) 
+
+  se |> 
+    pull(counts) |> 
+    expect_equal(
+      se |> pull(counts_2)
+    )
+  
+
+  })
