@@ -71,7 +71,7 @@ name the output."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.5</span>
       </span>
     </div>
 
@@ -580,15 +580,15 @@ to renaming a set of variables with a function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts logcounts condition type      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0000003 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0000008 untrt1      92      7.13 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0000014 untrt1       5      2    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0000015 untrt1       0      0    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0000017 untrt1    <span style="text-decoration: underline;">4</span>664     12.6  untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0000018 untrt1     583      9.50 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0000008 untrt1      92      6.52 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0000014 untrt1       5      2.32 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0000015 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0000017 untrt1    <span style="text-decoration: underline;">4</span>664     12.2  untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0000018 untrt1     583      9.19 untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0000022 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0000024 untrt1      10      3.32 untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446     10.7  untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446     10.5  untreated single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">`%&gt;%`</span> <span class="op">&lt;-</span> <span class="fu">magrittr</span><span class="fu">::</span><span class="va">`%&gt;%`</span></span></span>
@@ -601,7 +601,7 @@ to renaming a set of variables with a function.</p>
 <span class="r-in"><span><span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> </span></span>
 <span class="r-in"><span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">left_join</span><span class="op">(</span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">distinct</span><span class="op">(</span><span class="va">condition</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>new_column<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining, by = "condition"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(condition)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type       new_column</span>
@@ -622,7 +622,7 @@ to renaming a set of variables with a function.</p>
 <span class="r-in"><span><span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> </span></span>
 <span class="r-in"><span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">inner_join</span><span class="op">(</span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">distinct</span><span class="op">(</span><span class="va">condition</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>new_column<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">slice</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining, by = "condition"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(condition)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 58,396 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=4 | Assays=counts</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type       new_column</span>
@@ -644,7 +644,7 @@ to renaming a set of variables with a function.</p>
 <span class="r-in"><span><span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> </span></span>
 <span class="r-in"><span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">right_join</span><span class="op">(</span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">distinct</span><span class="op">(</span><span class="va">condition</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>new_column<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">slice</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining, by = "condition"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(condition)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 58,396 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=4 | Assays=counts</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type       new_column</span>
@@ -665,7 +665,7 @@ to renaming a set of variables with a function.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> </span></span>
 <span class="r-in"><span><span class="va">tt</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">full_join</span><span class="op">(</span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>condition<span class="op">=</span><span class="st">"treated"</span>, dose<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining, by = "condition"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(condition)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type        dose</span>
@@ -721,16 +721,16 @@ to renaming a set of variables with a function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0000451 untrt2       2 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0040786 untrt2      56 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0000024 untrt4       3 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0014024 trt1      <span style="text-decoration: underline;">1</span>911 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0033547 untrt4      71 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0004049 trt1      <span style="text-decoration: underline;">1</span>729 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0039495 untrt3       5 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0053208 trt3      <span style="text-decoration: underline;">1</span>755 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0036070 untrt3       0 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0037153 trt2       140 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0033624 untrt3     380 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0003250 untrt1       1 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0031545 trt1         7 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0039338 trt1      <span style="text-decoration: underline;">4</span>438 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0033453 untrt1     773 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0259975 trt1         0 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0036578 trt1       481 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0015831 trt3         0 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0037263 trt2         9 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0037547 trt2         0 treated   paired_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
 <span class="r-in"><span><span class="fu">tidySummarizedExperiment</span><span class="fu">::</span><span class="va"><a href="pasilla.html">pasilla</a></span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    </span></span>
@@ -739,16 +739,16 @@ to renaming a set of variables with a function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10,219 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts condition type      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0022800 trt1       105 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0030376 untrt4       0 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0036595 trt2         0 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0053803 trt1         0 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0015031 trt2       909 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0026326 trt1       915 treated   single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0040637 untrt4       0 untreated paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0032787 trt2       156 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0037151 trt3       132 treated   paired_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0034756 trt3        51 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0052407 trt3        49 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0039099 trt2        24 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0038110 trt1       766 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0259739 untrt2      43 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0036793 trt2         0 treated   paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0050486 untrt3       1 untreated paired_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0037174 untrt2       1 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0031051 trt1      <span style="text-decoration: underline;">2</span>612 treated   single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0052438 untrt2    <span style="text-decoration: underline;">1</span>821 untreated single_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0051116 trt1       366 treated   single_end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 10,209 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">`%&gt;%`</span> <span class="op">&lt;-</span> <span class="fu">magrittr</span><span class="fu">::</span><span class="va">`%&gt;%`</span></span></span>
