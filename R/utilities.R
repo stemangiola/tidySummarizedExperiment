@@ -480,8 +480,14 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
               data___, name,
               ~ .x %>%
                 spread(!!s_(se)$symbol, value) %>% 
+          
+                
                 as_matrix(rownames = !!f_(se)$symbol)  %>% 
                 suppressWarnings() %>%
+                
+                # Rearrange column names as the original assay
+                .[rownames(assays(se)[[1]]), colnames(assays(se)[[1]])] |> 
+                
                 list() %>%
                 setNames(.y)
             )) %>%
