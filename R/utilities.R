@@ -478,18 +478,25 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
             # Convert to matrix and to named list
             mutate(data___ = map2(
               data___, name,
-              ~ .x %>%
-                spread(!!s_(se)$symbol, value) %>% 
-          
+              ~ {
+                .x = 
+                  .x %>%
+                  spread(!!s_(se)$symbol, value) %>% 
+            
+                  
+                  as_matrix(rownames = !!f_(se)$symbol)  %>% 
+                  suppressWarnings()
                 
-                as_matrix(rownames = !!f_(se)$symbol)  %>% 
-                suppressWarnings() %>%
+                # Rearrange if assays has colnames and rownames
+                if(!is.null(rownames(assays(se)[[1]])) & !is.null(rownames(.x))) .x = .x[rownames(assays(se)[[1]]),,drop=FALSE]
+                if(!is.null(colnames(assays(se)[[1]])) & !is.null(colnames(.x))) .x = .x[,colnames(assays(se)[[1]]),drop=FALSE]
+
                 
-                # Rearrange column names as the original assay
-                .[rownames(assays(se)[[1]]), colnames(assays(se)[[1]])] |> 
+              .x %>%
                 
                 list() %>%
                 setNames(.y)
+              }
             )) %>%
             
             # Create correct list
@@ -623,6 +630,10 @@ get_special_datasets <- function(se) {
 #' 
 #' @noRd
 get_count_datasets <- function(se) { 
+  
+  
+  
+  
   map2( 
     assays(se) %>% as.list(),
     names(assays(se)),
@@ -635,9 +646,14 @@ get_count_datasets <- function(se) {
         .x = as.matrix(.x) 
       }
       
+      # Rearrange if assays has colnames and rownames
+      if(!is.null(rownames(assays(se)[[1]])) & !is.null(rownames(.x))) .x = .x[rownames(assays(se)[[1]]),,drop=FALSE]
+      if(!is.null(colnames(assays(se)[[1]])) & !is.null(colnames(.x))) .x = .x[,colnames(assays(se)[[1]]),drop=FALSE]
+
       .x %>%
       # matrix() %>%
       # as.data.frame() %>% 
+        
       tibble::as_tibble(rownames = f_(se)$name, .name_repair = "minimal") %>%
       
       # If the matrix does not have sample names, fix column names
@@ -653,7 +669,10 @@ get_count_datasets <- function(se) {
     #  rename(!!.y := count)
   }) %>%
     when(
-      length(.)>0 ~ bind_cols(.,  .name_repair = c("minimal")) %>% .[!duplicated(colnames(.))], # reduce(., left_join, by = c(f_(se)$name, s_(se)$name)),
+      length(.)>0 ~ 
+        
+        # reduce(., left_join, by = c(f_(se)$name, s_(se)$name)),
+        bind_cols(.,  .name_repair = c("minimal")) %>% .[!duplicated(colnames(.))], 
       ~ expand.grid(
         rownames(se), colnames(se)
         ) %>% 
