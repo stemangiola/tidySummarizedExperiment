@@ -150,5 +150,13 @@ test_that("mutate counts", {
       se |> pull(counts_2)
     )
   
-
+  se = tidySummarizedExperiment::pasilla 
+  assays(se, withDimnames = FALSE)$counts_2 = assays(se)$counts[,7:1]
+  
+  se |> 
+    pull(counts) |> 
+    expect_equal(
+      se |> pull(counts_2)
+    )
+  
   })

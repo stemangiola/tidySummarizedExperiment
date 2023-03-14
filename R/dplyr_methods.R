@@ -1094,6 +1094,22 @@ select.SummarizedExperiment <- function(.data, ...) {
     .data= ping_old_special_column_into_metadata(.data)
   }
   
+  # Warning if column names of assays do not overlap
+  if(  check_if_assays_are_consistently_ordered(.data)  ){
+    
+    warning(
+      "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names,
+  but their order is not the same. Assays were internally reordered to be consistent with each other.
+  To avoid unwanted behaviour it is highly reccomended to have assays with the same order of colnames and rownames"
+    )
+    
+    
+    # reorder assay colnames before printing
+    # Rearrange if assays has colnames and rownames
+    .data = order_assays_internally_to_be_consistent(.data)
+    
+  }
+
   # See if join done by sample, feature or both
   columns_query = 
     .data %>%
@@ -1125,56 +1141,47 @@ select.SummarizedExperiment <- function(.data, ...) {
     data.frame(row.names=pull(., !!s_(.data)$symbol)) %>%
     select(-!!s_(.data)$symbol) %>%
     DataFrame()
+
   
   count_data = 
     assays(.data)@listData %>% .[names(assays(.data)@listData) %in% columns_query]
   
-  columns_query %>%
-    when(
-      
-      # If it's just col data
-     ncol(row_data_DF) == 0 & !f_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(col_data_DF) > 0 | s_(.data)$name %in% columns_query)  ~ {
-       message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
-       
-       col_data_tibble %>% 
-         select_helper(...) %>% 
-         slice(rep(1:n(), each=nrow(!!.data) ))
-          
-        },
-      
-     # If it's just row data
-     ncol(col_data_DF) == 0 & !s_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(row_data_DF) > 0 | f_(.data)$name %in% columns_query) ~ {
-       message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
-       
-       row_data_tibble %>% 
-         select_helper(...) %>% 
-         slice(rep(1:n(), ncol(!!.data)  ))
-       
-     },
-     
-     
-     !all(c(get_needed_columns(.data)) %in% .)  ~ {
-       if(ncol(.data)>100) message("tidySummarizedExperiment says: You are doing a complex selection both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your selects sample-wise OR feature-wise.")
-       message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
-       
-       .data %>%
-         as_tibble(skip_GRanges = TRUE) %>%
-         select_helper(...) 
-     },
+  # If it's just col data
+  if(ncol(row_data_DF) == 0 & !f_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(col_data_DF) > 0 | s_(.data)$name %in% columns_query) ) {
+    message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
+    
+    col_data_tibble %>% 
+      select_helper(...) %>% 
+      slice(rep(1:n(), each=nrow(!!.data) ))
+    
+  } 
   
-    ~ {
-      rowData(.data) = row_data_DF
-      colData(.data) = col_data_DF
-      assays(.data) = count_data
-      .data
-      
-    } 
-    )
-  # ,
-  #     
-  #     ~ stop("tidySummarizedExperiment says: ERROR FOR DEVELOPERS: this option should not exist. In join utility.")
-  #     
-  #   )
+  # If it's just row data
+  else if(ncol(col_data_DF) == 0 & !s_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(row_data_DF) > 0 | f_(.data)$name %in% columns_query)){
+    message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
+    
+    row_data_tibble %>% 
+      select_helper(...) %>% 
+      slice(rep(1:n(), ncol(!!.data)  ))
+    
+  }
+  
+  else if(!all(c(get_needed_columns(.data)) %in% columns_query)){
+    if(ncol(.data)>100) message("tidySummarizedExperiment says: You are doing a complex selection both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your selects sample-wise OR feature-wise.")
+    message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
+    
+    .data %>%
+      as_tibble(skip_GRanges = TRUE) %>%
+      select_helper(...) 
+  }
+  
+  else {
+    rowData(.data) = row_data_DF
+    colData(.data) = col_data_DF
+    assays(.data) = count_data
+    .data
+    
+  } 
    
 }
 
@@ -1417,8 +1424,27 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     
     # This returns a vector column wise. With the first sample and all features, 
     # second sample and all features, etc..
-    if(all(c(quo_names(var), quo_name_name) %in% names(.data@assays@data)))
+    if(all(c(quo_names(var), quo_name_name) %in% names(.data@assays@data))){
+      
+      # Warning if column names of assays do not overlap
+      if( check_if_assays_are_consistently_ordered(.data) ){
+        
+        warning( 
+          "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
+  but their order is not the same. Pulling assays can return data in a order you don't expect. 
+  To avoid unwanted behaviour it is highly reccomended to have assays with the same order of colnames and rownames" 
+        )
+        
+        # reorder assay colnames before printing
+        # Rearrange if assays has colnames and rownames
+        .data = order_assays_internally_to_be_consistent(.data)
+        
+      }
+       
+      
       return(assay(.data, quo_names(var)) |> as.matrix() |> as.vector()) 
+      
+    }
     
     # Subset rowranges
     if(all(c(quo_names(var), quo_name_name) %in% colnames(as.data.frame(rowRanges(.data)))))

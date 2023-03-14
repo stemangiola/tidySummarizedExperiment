@@ -465,7 +465,7 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
     
     if(length(colnames_assay)>0)
       assays(se) = #, withDimnames=FALSE) = 
-        assays(se) %>% c(
+        assays(se, withDimnames = FALSE) %>% c(
           .data_mutated %>% 
             
             # Select assays column
@@ -488,8 +488,8 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
                   suppressWarnings()
                 
                 # Rearrange if assays has colnames and rownames
-                if(!is.null(rownames(assays(se)[[1]])) & !is.null(rownames(.x))) .x = .x[rownames(assays(se)[[1]]),,drop=FALSE]
-                if(!is.null(colnames(assays(se)[[1]])) & !is.null(colnames(.x))) .x = .x[,colnames(assays(se)[[1]]),drop=FALSE]
+                if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
+                if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
 
                 
               .x %>%
@@ -627,15 +627,21 @@ get_special_datasets <- function(se) {
 #' @importFrom tibble as_tibble
 #' @importFrom purrr reduce
 #' @importFrom SummarizedExperiment assays
+#' @importFrom magrittr equals
 #' 
 #' @noRd
 get_count_datasets <- function(se) { 
   
-  
-  
-  
+  # Stop if column names of assays do not overlap
+  if( check_if_assays_are_consistently_overlapped(se) ) 
+    stop( 
+    "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
+but their order is not the same, and they not completely overlap." 
+  )
+
+  # Join assays
   map2( 
-    assays(se) %>% as.list(),
+    assays(se, withDimnames = FALSE) %>% as.list(),
     names(assays(se)),
     ~ {
       
@@ -647,8 +653,8 @@ get_count_datasets <- function(se) {
       }
       
       # Rearrange if assays has colnames and rownames
-      if(!is.null(rownames(assays(se)[[1]])) & !is.null(rownames(.x))) .x = .x[rownames(assays(se)[[1]]),,drop=FALSE]
-      if(!is.null(colnames(assays(se)[[1]])) & !is.null(colnames(.x))) .x = .x[,colnames(assays(se)[[1]]),drop=FALSE]
+      if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
+      if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
 
       .x %>%
       # matrix() %>%
@@ -1178,4 +1184,55 @@ is_filer_columns_in_column_selection = function(.data, ...){
     TRUE
   },
   error = function(e) FALSE)
+}
+
+check_if_assays_are_consistently_ordered = function(se){
+  
+  # If I have any assay at all
+  assays(se) |> length() |> gt(0) &&
+    
+  # If I have lack of consistency
+  se |> 
+    assays(withDimnames = FALSE) |>
+    as.list() |>
+    purrr::map_dfr(colnames) |>
+    apply(1, function(x) x |> unique() |> length()) |>
+    equals(1) |>
+    all() |>  
+    not()
+}
+
+check_if_assays_are_consistently_overlapped = function(se){
+  
+  # If I have any assay at all
+  assays(se) |> length() |> gt(0) &&
+    
+    # If I have lack of consistency
+    assays(se, withDimnames = FALSE) |>  
+    as.list() |> 
+    map(colnames) |> 
+    reduce(intersect) |> 
+    length() |> 
+    equals(ncol(se)) |> 
+    not()
+}
+
+
+order_assays_internally_to_be_consistent = function(se){
+
+  se |> 
+    assays(withDimnames = FALSE) =
+      map2(
+        assays(se, withDimnames = FALSE) %>% as.list(),
+        names(assays(se)),
+        ~ {
+          
+          if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
+          if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
+          
+          .x
+          
+        })
+    
+    se
 }
