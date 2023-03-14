@@ -656,6 +656,10 @@ but their order is not the same, and they not completely overlap."
       if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
       if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
 
+      # If I don't have assay colnames and rownames add them
+      if(!is.null(rownames(se)) & is.null(rownames(.x))) rownames(.x) = rownames(se) 
+      if(!is.null(colnames(se)) & is.null(colnames(.x))) colnames(.x) = colnames(se) 
+      
       .x %>%
       # matrix() %>%
       # as.data.frame() %>% 
@@ -663,7 +667,7 @@ but their order is not the same, and they not completely overlap."
       tibble::as_tibble(rownames = f_(se)$name, .name_repair = "minimal") %>%
       
       # If the matrix does not have sample names, fix column names
-      when(colnames(.x) %>% is.null() ~ setNames(., c(
+      when(colnames(.x) %>% is.null() & is.null(colnames(se)) ~ setNames(., c(
         f_(se)$name,  seq_len(ncol(.x)) 
       )),
       ~ (.)
