@@ -40,8 +40,6 @@ drop_all_attr = function(var) {
 #'
 #' @keywords internal
 #' 
-#' @import dplyr
-#' @import tidyr
 #' @importFrom magrittr set_rownames
 #' @importFrom rlang quo_is_null
 #'

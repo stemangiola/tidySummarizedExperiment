@@ -17,7 +17,7 @@
 #'
 #'   When column-binding, rows are matched by position, so all data
 #'   frames must have the same number of rows. To match by value, not
-#'   position, see [mutate-joins].
+#'   position, see mutate-joins.
 #' @param .id Data frame identifier.
 #'
 #'   When `.id` is supplied, a new column of identifiers is
@@ -26,37 +26,22 @@
 #'   list of data frames is supplied, the labels are taken from the
 #'   names of the list. If no names are found a numeric sequence is
 #'   used instead.
-#' @param add.cell.ids from SummarizedExperiment 3.0 A character vector of
-#'   length(x=c(x, y)). Appends the corresponding values to the start of each
-#'   objects' cell names.
+#' @param add.cell.ids from Seurat 3.0 A character vector of length(x = c(x, y)). Appends the corresponding values to the start of each objects' cell names.
+#'
+#' @importFrom ttservice bind_rows
 #'
 #' @return `bind_rows()` and `bind_cols()` return the same type as
 #'   the first input, either a data frame, `tbl_df`, or `grouped_df`.
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#' library(tibble)
-#' tt <- tidySummarizedExperiment::pasilla 
-#' bind_rows(tt, tt)
+#' `%>%` = magrittr::`%>%`
+#' tt = pbmc_small
+#' bind_rows(    tt, tt  )
 #'
-#' num_rows <- nrow(tidySummarizedExperiment::as_tibble(tt))
-#' tt %>% bind_cols(tibble(a=0, num_rows))
+#' tt_bind = tt %>% select(nCount_RNA ,nFeature_RNA)
+#' tt %>% bind_cols(tt_bind)
+#'
 #' @name bind
 NULL
-
-#' @rdname dplyr-methods
-#'
-#' @inheritParams bind
-#'
-#' @export
-#'
-bind_rows <- function(..., .id=NULL, add.cell.ids=NULL) {
-    UseMethod("bind_rows")
-}
-
-#' @export
-bind_rows.default <- function(..., .id=NULL, add.cell.ids=NULL) {
-    dplyr::bind_rows(..., .id=.id)
-}
 
 #' @importFrom rlang dots_values
 #' @importFrom rlang flatten_if
@@ -103,17 +88,11 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
 
 #' @export
 #'
+#' @importFrom ttservice bind_cols
 #' @inheritParams bind
 #'
 #' @rdname dplyr-methods
-bind_cols <- function(..., .id=NULL) {
-    UseMethod("bind_cols")
-}
-
-#' @export
-bind_cols.default <- function(..., .id=NULL) {
-    dplyr::bind_cols(..., .id=.id)
-}
+NULL
 
 bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
@@ -348,6 +327,9 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' individual methods for extra arguments and differences in behaviour.
 #'
 #' Methods available in currently loaded packages:
+#'
+#' @importFrom dplyr group_by_drop_default
+#' @importFrom dplyr group_by
 #'
 #' @rdname dplyr-methods
 #' @name group_by
@@ -1274,6 +1256,8 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 
 #' Count observations by group
 #'
+#' @importFrom dplyr count
+#'
 #' @description
 #' `count()` lets you quickly count the unique values of one or more variables:
 #' `df %>% count(a, b)` is roughly equivalent to
@@ -1306,30 +1290,19 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #' An object of the same type as `.data`. `count()` and `add_count()`
 #' group transiently, so the output has the same groups as the input.
 #' @export
+#'
+#' @rdname dplyr-methods
+#' @name count
+#'
 #' @examples
 #'
+#'
 #' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     count(.sample)
-count <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
-    UseMethod("count")
-}
+#' pbmc_small %>%
+#'
+#'     count(groups)
+NULL
 
-#' @export
-count.default <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
-    if (!missing(...)) {
-        out <- dplyr::group_by(x, ..., .add=TRUE, .drop=.drop)
-    }
-    else {
-        out <- x
-    }
-    out <- dplyr::tally(out, wt=!!enquo(wt), sort=sort, name=name)
-    if (is.data.frame(x)) {
-        out <- dplyr::dplyr_reconstruct(out, x)
-    }
-    out
-}
 #' @export
 count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
     message(data_frame_returned_message)

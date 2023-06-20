@@ -14,7 +14,7 @@ columns will be filled with NA.
 
 When column-binding, rows are matched by position, so all data
 frames must have the same number of rows. To match by value, not
-position, see \link{mutate-joins}.}
+position, see mutate-joins.}
 
 \item{.id}{Data frame identifier.
 
@@ -25,9 +25,7 @@ list of data frames is supplied, the labels are taken from the
 names of the list. If no names are found a numeric sequence is
 used instead.}
 
-\item{add.cell.ids}{from SummarizedExperiment 3.0 A character vector of
-length(x=c(x, y)). Appends the corresponding values to the start of each
-objects' cell names.}
+\item{add.cell.ids}{from Seurat 3.0 A character vector of length(x = c(x, y)). Appends the corresponding values to the start of each objects' cell names.}
 }
 \value{
 \code{bind_rows()} and \code{bind_cols()} return the same type as
@@ -43,11 +41,11 @@ The output of \code{bind_rows()} will contain a column if that column
 appears in any of the inputs.
 }
 \examples{
-`\%>\%` <- magrittr::`\%>\%`
-library(tibble)
-tt <- tidySummarizedExperiment::pasilla 
-bind_rows(tt, tt)
+`\%>\%` = magrittr::`\%>\%`
+tt = pbmc_small
+bind_rows(    tt, tt  )
 
-num_rows <- nrow(tidySummarizedExperiment::as_tibble(tt))
-tt \%>\% bind_cols(tibble(a=0, num_rows))
+tt_bind = tt \%>\% select(nCount_RNA ,nFeature_RNA)
+tt \%>\% bind_cols(tt_bind)
+
 }
