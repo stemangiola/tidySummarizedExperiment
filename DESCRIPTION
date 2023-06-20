@@ -9,7 +9,8 @@ Description: tidySummarizedExperiment is an adapter that abstracts the 'Summariz
 License: GPL-3
 Depends:
     R (>= 4.1.0),
-    SummarizedExperiment
+    SummarizedExperiment,
+    ttservice
 Imports:
     tibble (>= 3.0.4),
     dplyr,
