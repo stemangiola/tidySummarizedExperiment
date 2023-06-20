@@ -15,3 +15,5 @@ dev/*pdf
 dev/dplyr-master/*
 tidySummarizedExperiment.Rproj
 GDCdata
+/doc/
+/Meta/
