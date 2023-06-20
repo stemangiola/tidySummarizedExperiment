@@ -929,6 +929,9 @@ NULL
 separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
     convert=FALSE, extra="warn", fill="warn", ...) {
 
+  # Fix NOTEs
+  . = NULL
+  
     # Check that we are not modifying a key column
     cols <- enquo(col)
 
@@ -971,7 +974,7 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     columns_to_unite = data[1,1] %>% select(!!cols) %>% suppressMessages() %>%  colnames()
     
     # Subset column annotation
-    if(all(columns_to_unite %in% colnames(colData(data))) & (!s_(se)$name %in% into)){
+    if(all(columns_to_unite %in% colnames(colData(data))) & (!s_(data)$name %in% into)){
       colData(data) = 
         colData(data) %>% 
         as.data.frame() %>% 
@@ -985,14 +988,14 @@ separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", 
     }
     
     # Subset row annotation
-    if(all(columns_to_unite %in% colnames(rowData(data)))& (!f_(se)$name %in% into)){
+    if(all(columns_to_unite %in% colnames(rowData(data)))& (!f_(data)$name %in% into)){
       rowData(data) = 
         rowData(data) %>% 
         as.data.frame() %>% 
         as_tibble(rownames = f_(data)$name) %>% 
         tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
         data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
-        select(-!!f_(se)$symbol) %>%
+        select(-!!f_(data)$symbol) %>%
         DataFrame(check.names = FALSE)
       
       return(data)
