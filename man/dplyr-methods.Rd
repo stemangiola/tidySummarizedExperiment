@@ -241,10 +241,10 @@ undocumented.
 }
 
 \code{count()} lets you quickly count the unique values of one or more variables:
-\code{df \%>\% count(a, b)} is roughly equivalent to
-\code{df \%>\% group_by(a, b) \%>\% summarise(n=n())}.
+\code{df |> count(a, b)} is roughly equivalent to
+\code{df |> group_by(a, b) |> summarise(n=n())}.
 \code{count()} is paired with \code{tally()}, a lower-level helper that is equivalent
-to \code{df \%>\% summarise(n=n())}. Supply \code{wt} to perform weighted counts,
+to \code{df |> summarise(n=n())}. Supply \code{wt} to perform weighted counts,
 switching the summary from \code{n=n()} to \code{n=sum(wt)}.
 
 \code{add_count()} are \code{add_tally()} are equivalents to \code{count()} and \code{tally()}
@@ -422,81 +422,78 @@ to renaming a set of variables with a function.
 
 \examples{
 
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
-    
-    distinct(.sample)
+data(pasilla)
+pasilla |> distinct(.sample)
 
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
-    
-    filter(.sample == "untrt1")
+
+data(pasilla)
+pasilla |>  filter(.sample == "untrt1")
 
 # Learn more in ?dplyr_tidy_eval
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
-    
-    group_by(.sample)
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
-    
-    summarise(mean(counts))
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
-    
-    mutate(logcounts=log2(counts))
-
-`\%>\%` <- magrittr::`\%>\%`
-# tidySummarizedExperiment::pasilla \%>\%
-#     
-#     rename(cond=condition)
-`\%>\%` <- magrittr::`\%>\%`
-`\%>\%` <- magrittr::`\%>\%`
-
-tt <- tidySummarizedExperiment::pasilla 
-tt \%>\% left_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2))
-`\%>\%` <- magrittr::`\%>\%`
-
-tt <- tidySummarizedExperiment::pasilla 
-tt \%>\% inner_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2) \%>\% slice(1))
-
-`\%>\%` <- magrittr::`\%>\%`
-
-tt <- tidySummarizedExperiment::pasilla 
-tt \%>\% right_join(tt \%>\% distinct(condition) \%>\% mutate(new_column=1:2) \%>\% slice(1))
-
-`\%>\%` <- magrittr::`\%>\%`
-
-tt <- tidySummarizedExperiment::pasilla 
-tt \%>\% full_join(tibble::tibble(condition="treated", dose=10))
 
 
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
-    
-    slice(1)
+data(pasilla)
+pasilla  |> group_by(.sample)
 
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
-    
-    select(.sample, .feature, counts)
 
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
+data(pasilla)
+pasilla |> summarise(mean(counts))
+
+data(pasilla)
+pasilla |> mutate(logcounts=log2(counts))
+
+
+data(pasilla)
+pasilla |> rename(cond=condition)
+
+print("To come...")
+
+data(pasilla)
+
+tt <- pasilla 
+tt |> left_join(tt |> distinct(condition) |> mutate(new_column=1:2))
+
+data(pasilla)
+
+tt <- pasilla 
+tt |> inner_join(tt |> distinct(condition) |> mutate(new_column=1:2) |> slice(1))
+
+
+data(pasilla)
+
+tt <- pasilla
+tt |> right_join(tt |> distinct(condition) |> mutate(new_column=1:2) |> slice(1))
+
+
+data(pasilla)
+
+tt <- pasilla
+tt |> full_join(tibble::tibble(condition="treated", dose=10))
+
+
+data(pasilla)
+
+pasilla |> slice(1)
+
+data(pasilla)
+
+pasilla |> select(.sample, .feature, counts)
+
+
+data(pasilla)
+
+pasilla |>
     
     sample_n(50)
-tidySummarizedExperiment::pasilla \%>\%
+pasilla |>
     
     sample_frac(0.1)
 
+se |> count(dex)
 
-`\%>\%` <- magrittr::`\%>\%`
-pbmc_small \%>\%
 
-    count(groups)
-
-`\%>\%` <- magrittr::`\%>\%`
-tidySummarizedExperiment::pasilla \%>\%
+data(pasilla)
+pasilla |>
     
     pull(feature)
 }

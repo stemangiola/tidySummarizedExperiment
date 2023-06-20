@@ -4,7 +4,7 @@ library(tidySummarizedExperiment)
 
 
 test_that("bind_rows", {
-    pasilla_bind <- tidySummarizedExperiment::bind_rows(pasilla, pasilla)
+    pasilla_bind <- bind_rows(pasilla, pasilla)
 
     pasilla_bind %>%
         count(.sample, .feature) %>%

@@ -907,6 +907,9 @@ subset_tibble_output = function(.data, count_info, sample_info, gene_info, range
 #' @importFrom stringr str_replace
 change_reserved_column_names = function(col_data, .data ){
   
+  # Fix  NOTEs
+  . = NULL
+  
   col_data %>%
     
     setNames(
@@ -1182,7 +1185,7 @@ is_filer_columns_in_column_selection = function(.data, ...){
   tryCatch({
     .data |>
       slice(0) |>
-      dplyr::filter(..., .preserve=.preserve)
+      dplyr::filter(...)
     TRUE
   },
   error = function(e) FALSE)

@@ -126,12 +126,16 @@ NULL
 #' @importFrom cli cat_line
 #' @importFrom vctrs new_data_frame
 #' @importFrom cli symbol
+#' @importFrom stats setNames
+#' 
 #' @export
 print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) {
 
+  # Fix NOTEs
+  . = NULL
   
   # Stop if column names of assays do not overlap
-  if( check_if_assays_are_NOT_overlapped(se) ) 
+  if( check_if_assays_are_NOT_overlapped(x) ) 
     stop( 
       "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
 but their order is not the same, and they not completely overlap." 

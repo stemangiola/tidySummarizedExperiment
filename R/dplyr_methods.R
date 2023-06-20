@@ -33,14 +33,16 @@
 #' @return `bind_rows()` and `bind_cols()` return the same type as
 #'   the first input, either a data frame, `tbl_df`, or `grouped_df`.
 #' @examples
-#' `%>%` = magrittr::`%>%`
-#' tt = pbmc_small
-#' bind_rows(    tt, tt  )
+#' 
+#' data(se)
+#' bind_rows(    se, se  )
 #'
-#' tt_bind = tt %>% select(nCount_RNA ,nFeature_RNA)
-#' tt %>% bind_cols(tt_bind)
+#' se_bind = se |> select(dex,  albut)
+#' se |> bind_cols(se_bind)
 #'
-#' @name bind
+#' @export
+#' 
+#' @name bind_rows
 NULL
 
 #' @importFrom rlang dots_values
@@ -69,7 +71,7 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     
 
     # If duplicated sample names
-    if (new_obj %>% colnames() %>% duplicated() %>% which() %>% length() %>% gt(0)) {
+    if (new_obj |> colnames() |> duplicated() |> which() |> length() |> gt(0)) {
         warning("tidySummarizedExperiment says: you have duplicated sample names, they will be made unique.")
     }
     unique_colnames <- make.unique(colnames(new_obj), sep="_")
@@ -77,10 +79,10 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     colnames(new_obj) <- unique_colnames
 
     # Change also all assays colnames
-    assays(new_obj) <- assays(new_obj)@listData %>% map(~ {
+    assays(new_obj) <- assays(new_obj)@listData |> map(~ {
         colnames(.x) <- unique_colnames
         .x
-    }) %>% 
+    }) |> 
       SimpleList()
 
     new_obj
@@ -89,16 +91,20 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
 #' @export
 #'
 #' @importFrom ttservice bind_cols
-#' @inheritParams bind
+#' 
+#' @inheritParams bind_cols
 #'
 #' @rdname dplyr-methods
 NULL
 
+#' @importFrom rlang dots_values
+#' @importFrom rlang flatten_if
+#' @importFrom rlang is_spliced
 bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
-    tts[[1]] %>% 
-        as_tibble(skip_GRanges = TRUE) %>%
+    tts[[1]] |> 
+        as_tibble(skip_GRanges = TRUE) |>
         dplyr::bind_cols(tts[[2]], .id=.id) %>%
         when(
 
@@ -107,7 +113,7 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
                 get_subset_columns(., !!s_(tts[[1]])$symbol),
                 get_subset_columns(., !!f_(tts[[1]])$symbol)
             )
-            ) %>% all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
+            ) |> all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
 
             # Return tiblle
             ~ {
@@ -119,13 +125,13 @@ bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
 
 bind_cols_ = function(..., .id=NULL) { bind_cols_internal(..., .id=NULL) }
 
-#' @importFrom rlang dots_values
-#' @importFrom rlang flatten_if
-#' @importFrom rlang is_spliced
-#'
 #' @export
 #'
 bind_cols.SummarizedExperiment <- bind_cols_
+
+#' @export
+#'
+bind_cols.RangedSummarizedExperiment <- bind_cols_
 
 #' distinct
 #'
@@ -143,11 +149,10 @@ bind_cols.SummarizedExperiment <- bind_cols_
 #' @name distinct
 #'
 #' @examples
-#'
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     distinct(.sample)
+#' 
+#' data(pasilla)
+#' pasilla |> distinct(.sample)
+#' 
 #' @export
 NULL
 
@@ -160,12 +165,12 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
   # message(data_frame_returned_message)
 
   distinct_columns = 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist())
   
   # If Ranges column not in query perform fast as_tibble
   skip_GRanges = 
     get_GRanges_colnames() %in% 
-    distinct_columns %>%
+    distinct_columns |>
     not()
   
   # Deprecation of special column names
@@ -174,9 +179,9 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
     
   }
   
-  .data %>%
+  .data |>
     select(...) |> 
-      as_tibble(skip_GRanges = skip_GRanges) %>%
+      as_tibble(skip_GRanges = skip_GRanges) |>
       dplyr::distinct(..., .keep_all=.keep_all)
 }
 
@@ -242,12 +247,11 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
 #' @export
 #' @examples
 #'
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     filter(.sample == "untrt1")
+#' data(pasilla)
+#' pasilla |>  filter(.sample == "untrt1")
 #'
 #' # Learn more in ?dplyr_tidy_eval
+#' 
 #' @export
 NULL
 
@@ -263,7 +267,7 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     .data, 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist())
   )){
     .data= ping_old_special_column_into_metadata(.data)
   }
@@ -298,8 +302,8 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   else{
     
     # Do filtering
-    new_meta <- .data %>%
-      as_tibble(skip_GRanges = TRUE) %>%
+    new_meta <- .data |>
+      as_tibble(skip_GRanges = TRUE) |>
       dplyr::filter(..., .preserve=.preserve)
     
     # If data cannot be a SummarizedExperiment
@@ -334,12 +338,11 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' @rdname dplyr-methods
 #' @name group_by
 #'
-#' @export
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     group_by(.sample)
+#' 
+#' data(pasilla)
+#' pasilla  |> group_by(.sample)
+#' 
 #' @export
 NULL
 
@@ -350,13 +353,13 @@ group_by.SummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     .data, 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist())
   )){
     .data= ping_old_special_column_into_metadata(.data)
   }
   
-    .data %>%
-        as_tibble() %>%
+    .data |>
+        as_tibble() |>
         dplyr::group_by(..., .add=.add, .drop=.drop)
 }
 
@@ -431,10 +434,9 @@ group_by.SummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by
 #'
 #' The following methods are currently available in loaded packages:
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     summarise(mean(counts))
+#' 
+#' data(pasilla)
+#' pasilla |> summarise(mean(counts))
 #' @export
 NULL
 
@@ -445,7 +447,7 @@ summarise.SummarizedExperiment <- function(.data, ...) {
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     .data, 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist())
   )){
     .data= ping_old_special_column_into_metadata(.data)
   }
@@ -453,11 +455,11 @@ summarise.SummarizedExperiment <- function(.data, ...) {
   # If Ranges column not in query perform fast as_tibble
   skip_GRanges = 
     get_GRanges_colnames() %in% 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist) %>%
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist()) |>
     not()
 
-    .data %>%
-        as_tibble(skip_GRanges = skip_GRanges) %>%
+    .data |>
+        as_tibble(skip_GRanges = skip_GRanges) |>
         dplyr::summarise(...)
 }
 
@@ -542,10 +544,9 @@ summarise.SummarizedExperiment <- function(.data, ...) {
 #' Methods available in currently loaded packages:
 #'
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     mutate(logcounts=log2(counts))
+#' 
+#' data(pasilla)
+#' pasilla |> mutate(logcounts=log2(counts))
 #'
 #' @rdname dplyr-methods
 #' @name mutate
@@ -559,12 +560,12 @@ NULL
 #' @export
 mutate.SummarizedExperiment <- function(.data, ...) {
     # Check that we are not modifying a key column
-    cols <- enquos(...) %>% names()
+    cols <- enquos(...) |> names()
     
     # Deprecation of special column names
     if(is_sample_feature_deprecated_used(
       .data, 
-      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+      (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist())
     )){
       .data= ping_old_special_column_into_metadata(.data)
     }
@@ -580,14 +581,14 @@ mutate.SummarizedExperiment <- function(.data, ...) {
         intersect(
             cols,
             secial_columns
-        ) %>%
-        length() %>%
+        ) |>
+        length() |>
         gt(0)
 
 
     if (tst) {
         columns =
-          secial_columns %>%
+          secial_columns |>
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -599,12 +600,12 @@ mutate.SummarizedExperiment <- function(.data, ...) {
     # If Ranges column not in query perform fast as_tibble
     skip_GRanges = 
       get_GRanges_colnames() %in% 
-      cols %>%
+      cols |>
       not()
     
-    .data %>%
-        as_tibble(skip_GRanges= skip_GRanges) %>%
-        dplyr::mutate(...) %>%
+    .data |>
+        as_tibble(skip_GRanges= skip_GRanges) |>
+        dplyr::mutate(...) |>
         update_SE_from_tibble(.data)
 }
 
@@ -645,10 +646,9 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 #'
 #' @export
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#' # tidySummarizedExperiment::pasilla %>%
-#' #     
-#' #     rename(cond=condition)
+#' 
+#' data(pasilla)
+#' pasilla |> rename(cond=condition)
 #' @export
 NULL
 
@@ -665,21 +665,21 @@ rename.SummarizedExperiment <- function(.data, ...) {
     # Cols data frame
     cols_data_frame = 
       bind_cols(
-      colData(.data) %>% as_tibble() %>% slice(0),
-      rowData(.data) %>% as_tibble() %>% slice(0)
+      colData(.data) |> as_tibble() |> slice(0),
+      rowData(.data) |> as_tibble() |> slice(0)
     )
   
     # Check that we are not modifying a key column
     cols <- tidyselect::eval_select(  expr(c(...)), cols_data_frame  )
 
     # Check if column is row-wise of column-wise
-    old_names = cols_data_frame[,cols] %>% colnames()
-    new_names = cols %>% names()
+    old_names = cols_data_frame[,cols] |> colnames()
+    new_names = cols |> names()
     
     # If renaming col and row data at the same time, it is too complicate, so error
     if(
-      old_names %in% colnames(colData(.data)) %>% any() &
-      old_names %in% colnames(rowData(.data)) %>% any()
+      old_names %in% colnames(colData(.data)) |> any() &
+      old_names %in% colnames(rowData(.data)) |> any()
     )
       stop("tidySummarizedExperiment says: renaming columns from both colData and rowData at the same time is an unfeasible abstraction using dplyr. Please run two `rename` commands for sample-wise and feature-wise columns.")
     
@@ -692,16 +692,16 @@ rename.SummarizedExperiment <- function(.data, ...) {
     
     tst =
         intersect(
-            cols %>% names(),
+            cols |> names(),
             secial_columns
-        ) %>%
-        length() %>%
+        ) |>
+        length() |>
         gt(0)
 
     # If column in view-only columns stop
     if (tst) {
         columns =
-          secial_columns %>%
+          secial_columns |>
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says: you are trying to rename a column that is view only",
@@ -711,12 +711,12 @@ rename.SummarizedExperiment <- function(.data, ...) {
     }
 
     # Rename sample annotation
-    if(old_names %in% colnames(colData(.data)) %>% any())
-      colData(.data) <- dplyr::rename(colData(.data) %>% as.data.frame(), ...) %>% DataFrame()
+    if(old_names %in% colnames(colData(.data)) |> any())
+      colData(.data) <- dplyr::rename(colData(.data) |> as.data.frame(), ...) |> DataFrame()
 
     # Rename gene annotation
-    if(old_names %in% colnames(rowData(.data)) %>% any())
-      rowData(.data) <- dplyr::rename(rowData(.data) %>% as.data.frame(), ...) %>% DataFrame()
+    if(old_names %in% colnames(rowData(.data)) |> any())
+      rowData(.data) <- dplyr::rename(rowData(.data) |> as.data.frame(), ...) |> DataFrame()
     
     .data
 }
@@ -752,7 +752,9 @@ rename.SummarizedExperiment <- function(.data, ...) {
 #'
 #' @export
 #' @examples
-#' `%>%` <- magrittr::`%>%`
+#' 
+#' print("To come...")
+#' 
 #' @export
 NULL
 
@@ -760,8 +762,8 @@ NULL
 rowwise.SummarizedExperiment <- function(data, ...) {
     message(data_frame_returned_message)
 
-    data %>%
-        as_tibble() %>%
+    data |>
+        as_tibble() |>
         dplyr::rowwise()
 }
 
@@ -789,10 +791,10 @@ rowwise.SummarizedExperiment <- function(data, ...) {
 #' @export
 #'
 #' @examples
-#' `%>%` <- magrittr::`%>%`
+#' data(pasilla)
 #'
-#' tt <- tidySummarizedExperiment::pasilla 
-#' tt %>% left_join(tt %>% distinct(condition) %>% mutate(new_column=1:2))
+#' tt <- pasilla 
+#' tt |> left_join(tt |> distinct(condition) |> mutate(new_column=1:2))
 NULL
 
 #' @export
@@ -818,10 +820,11 @@ left_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c("
 #' @return A tidySummarizedExperiment object
 #'
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#'
-#' tt <- tidySummarizedExperiment::pasilla 
-#' tt %>% inner_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
+#' 
+#' data(pasilla)
+#' 
+#' tt <- pasilla 
+#' tt |> inner_join(tt |> distinct(condition) |> mutate(new_column=1:2) |> slice(1))
 #'
 #' @rdname dplyr-methods
 #' @name inner_join
@@ -854,10 +857,11 @@ inner_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(
 #' @return A tidySummarizedExperiment object
 #'
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#'
-#' tt <- tidySummarizedExperiment::pasilla 
-#' tt %>% right_join(tt %>% distinct(condition) %>% mutate(new_column=1:2) %>% slice(1))
+#' 
+#' data(pasilla)
+#' 
+#' tt <- pasilla
+#' tt |> right_join(tt |> distinct(condition) |> mutate(new_column=1:2) |> slice(1))
 #'
 #' @rdname dplyr-methods
 #' @name right_join
@@ -891,10 +895,11 @@ right_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(
 #' @return A tidySummarizedExperiment object
 #'
 #' @examples
-#' `%>%` <- magrittr::`%>%`
-#'
-#' tt <- tidySummarizedExperiment::pasilla 
-#' tt %>% full_join(tibble::tibble(condition="treated", dose=10))
+#' 
+#' data(pasilla)
+#' 
+#' tt <- pasilla
+#' tt |> full_join(tibble::tibble(condition="treated", dose=10))
 #'
 #' @rdname dplyr-methods
 #' @name full_join
@@ -975,12 +980,12 @@ full_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c("
 #' @name slice
 #'
 #' @export
+#' 
 #' @examples
 #'
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     slice(1)
+#' data(pasilla)
+#' 
+#' pasilla |> slice(1)
 NULL
 
 #' @export
@@ -988,8 +993,8 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   
   slice_optimised(.data, ..., .preserve=.preserve)
     
-    # .data %>%
-    #     as_tibble(skip_GRanges = T) %>%
+    # .data |>
+    #     as_tibble(skip_GRanges = T) |>
     #     dplyr::slice(..., .preserve=.preserve) %>%
     #     when(
     # 
@@ -1045,10 +1050,10 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #'
 #' @examples
 #'
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
-#'     
-#'     select(.sample, .feature, counts)
+#' data(pasilla)
+#' 
+#' pasilla |> select(.sample, .feature, counts)
+#' 
 #' @family single table verbs
 #'
 #' @rdname dplyr-methods
@@ -1064,14 +1069,14 @@ select.SummarizedExperiment <- function(.data, ...) {
   
   # colnames_col <- get_colnames_col(.data)
   # colnames_row <- get_rownames_col(.data)
-  # colnames_assay = .data@assays@data %>% names
+  # colnames_assay = .data@assays@data |> names()
   
 
   
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     .data, 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist())
   )){
     .data= ping_old_special_column_into_metadata(.data)
   }
@@ -1095,33 +1100,33 @@ select.SummarizedExperiment <- function(.data, ...) {
   # See if join done by sample, feature or both
   columns_query = 
     .data %>%
-    .[1,1, drop=FALSE] %>% 
-    as_tibble() %>% 
-    select_helper(...) %>% 
+    .[1,1, drop=FALSE] |> 
+    as_tibble() |> 
+    select_helper(...) |> 
     colnames()
   
   row_data_tibble = 
-    rowData(.data) %>% 
+    rowData(.data) |> 
     as_tibble(rownames = f_(.data)$name) 
   
   row_data_DF =
-    row_data_tibble %>% 
-    select(one_of(columns_query), !!f_(.data)$symbol) %>%
+    row_data_tibble |> 
+    select(one_of(columns_query), !!f_(.data)$symbol) |>
     suppressWarnings() %>% 
-    data.frame(row.names=pull(., !!f_(.data)$symbol)) %>%
-    select(-!!f_(.data)$symbol) %>%
+    data.frame(row.names=pull(., !!f_(.data)$symbol)) |>
+    select(-!!f_(.data)$symbol) |>
     DataFrame()
   
   col_data_tibble = 
-    colData(.data) %>% 
+    colData(.data) |> 
     as_tibble(rownames = s_(.data)$name) 
   
   col_data_DF = 
-    col_data_tibble %>%  
-    select(one_of(columns_query), !!s_(.data)$symbol) %>%
+    col_data_tibble |>  
+    select(one_of(columns_query), !!s_(.data)$symbol) |>
     suppressWarnings() %>% 
-    data.frame(row.names=pull(., !!s_(.data)$symbol)) %>%
-    select(-!!s_(.data)$symbol) %>%
+    data.frame(row.names=pull(., !!s_(.data)$symbol)) |>
+    select(-!!s_(.data)$symbol) |>
     DataFrame()
 
   
@@ -1132,8 +1137,8 @@ select.SummarizedExperiment <- function(.data, ...) {
   if(ncol(row_data_DF) == 0 & !f_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(col_data_DF) > 0 | s_(.data)$name %in% columns_query) ) {
     message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
     
-    col_data_tibble %>% 
-      select_helper(...) %>% 
+    col_data_tibble |> 
+      select_helper(...) |> 
       slice(rep(1:n(), each=nrow(!!.data) ))
     
   } 
@@ -1142,8 +1147,8 @@ select.SummarizedExperiment <- function(.data, ...) {
   else if(ncol(col_data_DF) == 0 & !s_(.data)$name %in% columns_query & length(count_data) == 0 & ( ncol(row_data_DF) > 0 | f_(.data)$name %in% columns_query)){
     message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
     
-    row_data_tibble %>% 
-      select_helper(...) %>% 
+    row_data_tibble |> 
+      select_helper(...) |> 
       slice(rep(1:n(), ncol(!!.data)  ))
     
   }
@@ -1152,8 +1157,8 @@ select.SummarizedExperiment <- function(.data, ...) {
     if(ncol(.data)>100) message("tidySummarizedExperiment says: You are doing a complex selection both sample-wise and feature-wise. In the latter case, for efficiency (until further development), it is better to separate your selects sample-wise OR feature-wise.")
     message("tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.")
     
-    .data %>%
-      as_tibble(skip_GRanges = TRUE) %>%
+    .data |>
+      as_tibble(skip_GRanges = TRUE) |>
       select_helper(...) 
   }
   
@@ -1206,11 +1211,12 @@ select.SummarizedExperiment <- function(.data, ...) {
 #' @param ... ignored
 #' @examples
 #'
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
+#' data(pasilla)
+#' 
+#' pasilla |>
 #'     
 #'     sample_n(50)
-#' tidySummarizedExperiment::pasilla %>%
+#' pasilla |>
 #'     
 #'     sample_frac(0.1)
 #' @return A tidySummarizedExperiment object
@@ -1228,8 +1234,8 @@ sample_n.SummarizedExperiment <- function(tbl, size, replace=FALSE,
 
     message(data_frame_returned_message)
 
-    tbl %>%
-        as_tibble() %>%
+    tbl |>
+        as_tibble() |>
         dplyr::sample_n(size, replace=replace, weight=weight, .env=.env, ...)
 }
 
@@ -1248,8 +1254,8 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 
     message(data_frame_returned_message)
 
-    tbl %>%
-        as_tibble() %>%
+    tbl |>
+        as_tibble() |>
         dplyr::sample_frac(size, replace=replace, weight=weight, .env=.env, ...)
 }
 
@@ -1260,10 +1266,10 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #'
 #' @description
 #' `count()` lets you quickly count the unique values of one or more variables:
-#' `df %>% count(a, b)` is roughly equivalent to
-#' `df %>% group_by(a, b) %>% summarise(n=n())`.
+#' `df |> count(a, b)` is roughly equivalent to
+#' `df |> group_by(a, b) |> summarise(n=n())`.
 #' `count()` is paired with `tally()`, a lower-level helper that is equivalent
-#' to `df %>% summarise(n=n())`. Supply `wt` to perform weighted counts,
+#' to `df |> summarise(n=n())`. Supply `wt` to perform weighted counts,
 #' switching the summary from `n=n()` to `n=sum(wt)`.
 #'
 #' `add_count()` are `add_tally()` are equivalents to `count()` and `tally()`
@@ -1289,6 +1295,7 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #' @return
 #' An object of the same type as `.data`. `count()` and `add_count()`
 #' group transiently, so the output has the same groups as the input.
+#' 
 #' @export
 #'
 #' @rdname dplyr-methods
@@ -1296,11 +1303,8 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #'
 #' @examples
 #'
-#'
-#' `%>%` <- magrittr::`%>%`
-#' pbmc_small %>%
-#'
-#'     count(groups)
+#' se |> count(dex)
+#' 
 NULL
 
 #' @export
@@ -1310,7 +1314,7 @@ count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .
   # Deprecation of special column names
   if(is_sample_feature_deprecated_used(
     x, 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist())
   )){
     x= ping_old_special_column_into_metadata(x)
   }
@@ -1319,11 +1323,11 @@ count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .
   # If Ranges column not in query perform fast as_tibble
   skip_GRanges = 
     get_GRanges_colnames() %in% 
-    (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist) %>%
+    (enquos(..., .ignore_empty = "all") |> map(~ quo_name(.x)) |> unlist()) |>
     not()
   
-    x %>%
-        as_tibble(skip_GRanges = skip_GRanges) %>%
+    x |>
+        as_tibble(skip_GRanges = skip_GRanges) |>
         dplyr::count(..., wt=!!enquo(wt), sort=sort, name=name, .drop=.drop)
 }
 
@@ -1360,14 +1364,18 @@ count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .
 #' @export
 #' @examples
 #'
-#' `%>%` <- magrittr::`%>%`
-#' tidySummarizedExperiment::pasilla %>%
+#' data(pasilla)
+#' pasilla |>
 #'     
 #'     pull(feature)
 NULL
 
 #' @export
 pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
+  
+  # Fix NOTEs
+  . = NULL
+  
     var <- enquo(var)
     name <- enquo(name)
 
@@ -1384,7 +1392,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     # If Ranges column not in query perform fast as_tibble
     skip_GRanges = 
       get_GRanges_colnames() %in% 
-      quo_name(var) %>%
+      quo_name(var) |>
       not()
     
     # Subset column annotation
@@ -1427,7 +1435,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     colData(.data) = colData(.data)[,colnames(colData(.data)) %in% c(quo_names(var), quo_name_name), drop=FALSE ]
     rowData(.data) = rowData(.data)[,colnames(rowData(.data)) %in% c(quo_names(var), quo_name_name), drop=FALSE ]
   
-    .data %>%
-        as_tibble(skip_GRanges = skip_GRanges) %>%
+    .data |>
+        as_tibble(skip_GRanges = skip_GRanges) |>
         dplyr::pull(var=!!var, name=!!name, ...)
 }

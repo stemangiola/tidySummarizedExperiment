@@ -1,11 +1,18 @@
 Type: Package
 Package: tidySummarizedExperiment
 Title: Brings SummarizedExperiment to the Tidyverse 
-Version: 1.9.6
+Version: 1.9.7
 Authors@R: c(person("Stefano", "Mangiola", email = "mangiolastefano@gmail.com",
                   role = c("aut", "cre")) )
-Description: tidySummarizedExperiment is an adapter that abstracts the 'SummarizedExperiment' container 
-    in the form of tibble and allows the data manipulation, plotting and nesting using 'tidyverse' 
+Description: The tidySummarizedExperiment package provides a set of tools for creating and
+  manipulating tidy data representations of SummarizedExperiment objects. SummarizedExperiment
+  is a widely used data structure in bioinformatics for storing high-throughput genomic data, 
+  such as gene expression or DNA sequencing data. 
+  The tidySummarizedExperiment package introduces a tidy framework for working with SummarizedExperiment objects. 
+  It allows users to convert their data into a tidy format, where each observation is a row 
+  and each variable is a column. This tidy representation simplifies data manipulation, 
+  integration with other tidyverse packages, and enables seamless integration with the broader 
+  ecosystem of tidy tools for data analysis.
 License: GPL-3
 Depends:
     R (>= 4.1.0),
@@ -30,7 +37,8 @@ Imports:
     pillar,
     stringr,
     cli,
-    fansi
+    fansi,
+    stats
 Suggests:
     BiocStyle,
     testthat,
