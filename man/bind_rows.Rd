@@ -48,4 +48,5 @@ bind_rows(    se, se  )
 se_bind = se |> select(dex,  albut)
 se |> bind_cols(se_bind)
 
+
 }

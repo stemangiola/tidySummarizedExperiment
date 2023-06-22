@@ -40,7 +40,6 @@
 #' se_bind = se |> select(dex,  albut)
 #' se |> bind_cols(se_bind)
 #'
-#' @export
 #' 
 #' @name bind_rows
 NULL
@@ -88,7 +87,7 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     new_obj
 }
 
-#' @export
+
 #'
 #' @importFrom ttservice bind_cols
 #' 
@@ -153,7 +152,6 @@ bind_cols.RangedSummarizedExperiment <- bind_cols_
 #' data(pasilla)
 #' pasilla |> distinct(.sample)
 #' 
-#' @export
 NULL
 
 #' @inheritParams distinct
@@ -244,7 +242,6 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
 #' @rdname dplyr-methods
 #' @name filter
 #'
-#' @export
 #' @examples
 #'
 #' data(pasilla)
@@ -252,7 +249,6 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
 #'
 #' # Learn more in ?dplyr_tidy_eval
 #' 
-#' @export
 NULL
 
 #' @inheritParams filter
@@ -343,7 +339,6 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' data(pasilla)
 #' pasilla  |> group_by(.sample)
 #' 
-#' @export
 NULL
 
 #' @export
@@ -404,7 +399,6 @@ group_by.SummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by
 #' @rdname dplyr-methods
 #' @name summarise
 #'
-#' @export
 #' @inheritParams arrange
 #' @param ... <[`tidy-eval`][dplyr_tidy_eval]> Name-value pairs of summary
 #'   functions. The name will be the name of the variable in the result.
@@ -437,7 +431,6 @@ group_by.SummarizedExperiment <- function(.data, ..., .add=FALSE, .drop=group_by
 #' 
 #' data(pasilla)
 #' pasilla |> summarise(mean(counts))
-#' @export
 NULL
 
 #' @export
@@ -502,7 +495,6 @@ summarise.SummarizedExperiment <- function(.data, ...) {
 #' The former normalises `mass` by the global average whereas the
 #' latter normalises by the averages within gender levels.
 #'
-#' @export
 #' @inheritParams arrange
 #' @param ... <[`tidy-eval`][dplyr_tidy_eval]> Name-value pairs.
 #'   The name gives the name of the column in the output.
@@ -550,8 +542,7 @@ summarise.SummarizedExperiment <- function(.data, ...) {
 #'
 #' @rdname dplyr-methods
 #' @name mutate
-#'
-#' @export
+#' 
 NULL
 
 #' @importFrom dplyr mutate
@@ -644,12 +635,10 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 #' @rdname dplyr-methods
 #' @name rename
 #'
-#' @export
 #' @examples
 #' 
 #' data(pasilla)
 #' pasilla |> rename(cond=condition)
-#' @export
 NULL
 
 #' @importFrom tidyselect eval_select
@@ -750,12 +739,10 @@ rename.SummarizedExperiment <- function(.data, ...) {
 #' @rdname dplyr-methods
 #' @name rowwise
 #'
-#' @export
 #' @examples
 #' 
 #' print("To come...")
 #' 
-#' @export
 NULL
 
 #' @export
@@ -788,7 +775,6 @@ rowwise.SummarizedExperiment <- function(data, ...) {
 #' @rdname dplyr-methods
 #' @name left_join
 #'
-#' @export
 #'
 #' @examples
 #' data(pasilla)
@@ -829,7 +815,6 @@ left_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c("
 #' @rdname dplyr-methods
 #' @name inner_join
 #'
-#' @export
 NULL
 
 #' @export
@@ -866,7 +851,6 @@ inner_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(
 #' @rdname dplyr-methods
 #' @name right_join
 #'
-#' @export
 NULL
 
 #' @export
@@ -904,7 +888,6 @@ right_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c(
 #' @rdname dplyr-methods
 #' @name full_join
 #'
-#' @export
 NULL
 
 #' @export
@@ -979,7 +962,6 @@ full_join.SummarizedExperiment <- function(x, y, by=NULL, copy=FALSE, suffix=c("
 #' @rdname dplyr-methods
 #' @name slice
 #'
-#' @export
 #' 
 #' @examples
 #'
@@ -1059,7 +1041,6 @@ slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #' @rdname dplyr-methods
 #' @name select
 #'
-#' @export
 NULL
 
 #' @export
@@ -1224,7 +1205,6 @@ select.SummarizedExperiment <- function(.data, ...) {
 #' @rdname dplyr-methods
 #' @name sample_n
 #'
-#' @export
 NULL
 
 #' @export
@@ -1244,7 +1224,6 @@ sample_n.SummarizedExperiment <- function(tbl, size, replace=FALSE,
 #' @rdname dplyr-methods
 #' @name sample_frac
 #'
-#' @export
 NULL
 
 #' @export
@@ -1296,7 +1275,6 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #' An object of the same type as `.data`. `count()` and `add_count()`
 #' group transiently, so the output has the same groups as the input.
 #' 
-#' @export
 #'
 #' @rdname dplyr-methods
 #' @name count
@@ -1361,7 +1339,6 @@ count.SummarizedExperiment <- function(x, ..., wt=NULL, sort=FALSE, name=NULL, .
 #' @rdname dplyr-methods
 #' @name pull
 #'
-#' @export
 #' @examples
 #'
 #' data(pasilla)

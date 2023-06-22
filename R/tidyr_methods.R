@@ -49,14 +49,12 @@
 #' @rdname tidyr-methods
 #' @name unnest
 #'
-#' @export
 NULL
 
 #' @importFrom rlang quo_name
 #' @importFrom purrr imap
 #'
 #' @export
-
 unnest.tidySummarizedExperiment_nested <-
   function(data, cols, ..., keep_empty=FALSE, ptype=NULL, names_sep=NULL, names_repair="check_unique", .drop, .id, .sep, .preserve) {
     
@@ -175,7 +173,6 @@ unnest.tidySummarizedExperiment_nested <-
 #' @rdname tidyr-methods
 #' @name nest
 #'
-#' @export
 NULL
 
 #' @importFrom rlang enquos
@@ -327,7 +324,6 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 #' @rdname tidyr-methods
 #' @name extract
 #'
-#' @export
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
@@ -338,7 +334,6 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
 #'
 #' @importFrom tidyr extract
 #'
-#' @export
 NULL
 
 #' @importFrom rlang enquo
@@ -530,7 +525,6 @@ extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)"
 #' @rdname tidyr-methods
 #' @name pivot_longer
 #'
-#' @export
 #' @examples
 #' # See vignette("pivot") for examples and explanation
 #'
@@ -695,7 +689,6 @@ pivot_longer.SummarizedExperiment <- function(data,
 #' @name pivot_wider
 #'
 #'
-#' @export
 #' @examples
 #' # See vignette("pivot") for examples and explanation
 #'
@@ -788,7 +781,6 @@ pivot_wider.SummarizedExperiment <- function(data,
 #' @rdname tidyr-methods
 #' @name unite
 #'
-#' @export
 #' @examples
 #'
 #' tidySummarizedExperiment::pasilla %>%
@@ -916,7 +908,6 @@ unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.
 #' @rdname tidyr-methods
 #' @name separate
 #'
-#' @export
 #' @examples
 #'
 # un <- tidySummarizedExperiment::pasilla %>%

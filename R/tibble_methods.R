@@ -17,7 +17,6 @@
 #' @rdname tibble-methods
 #' @name as_tibble
 #'
-#' @export
 #' @examples
 #' 
 #' tidySummarizedExperiment::pasilla %>%
