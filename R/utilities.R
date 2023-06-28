@@ -507,7 +507,7 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
 }
 
 #' @importFrom methods is
-slice_optimised <- function(.data, ..., .preserve=FALSE) {
+slice_optimised <- function(.data, ..., .by = NULL, .preserve = FALSE) {
   
   # This simulated tibble only gets samples and features so we know those that have been completely omitted already
   # In order to save time for the as_tibble conversion

@@ -21,12 +21,14 @@
 \alias{pull}
 \title{distinct}
 \usage{
-\method{filter}{SummarizedExperiment}(.data, ..., .preserve = FALSE)
+\method{filter}{SummarizedExperiment}(.data, ..., .by = NULL, .preserve = FALSE)
 }
 \arguments{
 \item{.data}{A tidySummarizedExperiment object or any data frame}
 
 \item{...}{For use by methods.}
+
+\item{.by}{A character vector of variables to join by. (See dplyr)}
 
 \item{.preserve}{when \code{FALSE} (the default), the grouping structure
 is recalculated based on the resulting data, otherwise it is kept as is.}
@@ -450,12 +452,12 @@ print("To come...")
 
 data(pasilla)
 
-tt <- pasilla 
+tt <- pasilla
 tt |> left_join(tt |> distinct(condition) |> mutate(new_column=1:2))
 
 data(pasilla)
 
-tt <- pasilla 
+tt <- pasilla
 tt |> inner_join(tt |> distinct(condition) |> mutate(new_column=1:2) |> slice(1))
 
 
@@ -483,10 +485,10 @@ pasilla |> select(.sample, .feature, counts)
 data(pasilla)
 
 pasilla |>
-    
+
     sample_n(50)
 pasilla |>
-    
+
     sample_frac(0.1)
 
 se |> count(dex)
@@ -494,7 +496,7 @@ se |> count(dex)
 
 data(pasilla)
 pasilla |>
-    
+
     pull(feature)
 }
 \seealso{
