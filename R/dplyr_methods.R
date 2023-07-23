@@ -1100,7 +1100,11 @@ select.SummarizedExperiment <- function(.data, ...) {
   # See if join done by sample, feature or both
   columns_query = 
     .data %>%
-    .[1,1, drop=FALSE] |> 
+    
+    {
+      if(ncol(.) > 0) .[1,1, drop=FALSE]
+      else (.)
+    } |>
     as_tibble() |> 
     select_helper(...) |> 
     colnames()
