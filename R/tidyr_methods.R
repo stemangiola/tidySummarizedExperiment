@@ -177,9 +177,16 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
         rep(f_(se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
       )
     
+    # Drop if SE is null
+    if(data |> filter(map_lgl(!!cols, is.null)) |> nrow() > 0){
+      warning("tidySummarizedcExperiment says: some SummarizedExperiment objects to unnest were <NULL>, and were elminated")
+      data = data |> filter(!map_lgl(!!cols, is.null))
+    }
+    
     # Do my trick to unnest
-    return(
-      mutate(data, !!cols := imap(
+    data = 
+      data |>
+      mutate(!!cols := imap(
         !!cols, ~ .x %>%
           bind_cols_internal(
             
@@ -196,10 +203,10 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
                   colnames()
               ]
           )
-      )) %>%
-        pull(!!cols) %>% 
-        reduce(bind_rows)
-    )
+      ))
+    
+    # Bind
+    return( do.call(cbind, data |> pull(!!cols)) )
     
   }
   
