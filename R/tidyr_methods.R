@@ -75,6 +75,7 @@ unnest.tidySummarizedExperiment_nested <-
 #' @importFrom purrr when
 #' @importFrom rlang quo_name
 #' @importFrom purrr imap
+#' @importFrom purrr map_lgl
 #'
 #' @param data A tbl. (See tidyr)
 #' @param cols <[`tidy-select`][tidyr_tidy_select]> Columns to unnest.
