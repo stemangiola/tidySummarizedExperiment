@@ -160,11 +160,11 @@ test_that("mutate counts", {
     )
   
   se |> 
-  tidySummarizedExperiment:::check_if_assays_are_NOT_overlapped() |> 
+  tidySummarizedExperiment:::check_if_assays_are_NOT_overlapped(dim = "cols") |> 
     expect_equal(FALSE)
   
   se[,1] |> 
-    tidySummarizedExperiment:::check_if_assays_are_NOT_overlapped() |> 
+    tidySummarizedExperiment:::check_if_assays_are_NOT_overlapped(dim = "cols") |> 
     expect_equal(TRUE)
   
   })
