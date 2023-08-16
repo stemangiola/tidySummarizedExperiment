@@ -1417,7 +1417,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
         warning( 
           "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
   but their order is not the same. Pulling assays can return data in a order you don't expect. 
-  To avoid unwanted behaviour it is highly reccomended to have assays with the same order of colnames and rownames" 
+  To avoid unwanted behaviour it is highly recommended to have assays with the same order of colnames and rownames" 
         )
         
         # reorder assay colnames before printing
