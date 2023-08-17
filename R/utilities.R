@@ -1259,11 +1259,11 @@ check_if_assays_are_NOT_consistently_ordered <- function(se) {
 check_if_assays_are_NOT_overlapped <- function(se, dim = "cols") {
     stopifnot(dim %in% c("rows", "cols"))
     if (dim == "rows") {
-        namefcn <- rownames
-        dimfcn <- nrow
+        dimnames_function <- rownames
+        length_function <- nrow
     } else {
-        namefcn <- colnames
-        dimfcn <- ncol
+        dimnames_function <- colnames
+        length_function <- ncol
     }
     
     # If I have any assay at all
@@ -1274,7 +1274,7 @@ check_if_assays_are_NOT_overlapped <- function(se, dim = "cols") {
             Negate(is.null),
             assays(se, withDimnames = FALSE) |>  
                 as.list() |> 
-                map(namefcn)
+                map(dimnames_function)
         ) |> 
         length() |>
         gt(0) &&
@@ -1283,10 +1283,10 @@ check_if_assays_are_NOT_overlapped <- function(se, dim = "cols") {
         # This will be TRUE also if some assays have dimnames and other don't
         assays(se, withDimnames = FALSE) |>  
         as.list() |> 
-        map(namefcn) |> 
+        map(dimnames_function) |> 
         reduce(intersect) |> 
         length() |> 
-        equals(dimfcn(se)) |> 
+        equals(length_function(se)) |> 
         not()
 }
 
