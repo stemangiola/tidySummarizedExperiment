@@ -16,10 +16,7 @@
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/reference/bind.html</loc>
-  </url>
-  <url>
-    <loc>/reference/count.html</loc>
+    <loc>/reference/bind_rows.html</loc>
   </url>
   <url>
     <loc>/reference/dplyr-methods.html</loc>

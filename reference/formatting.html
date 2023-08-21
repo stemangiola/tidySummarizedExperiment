@@ -27,7 +27,7 @@ available by setting the options described below."><!-- mathjax --><script src="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.11.1</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@ will print information about at most <code>tibble.max_extra_cols</code> extra co
 
 <p>The following options are used by the tibble and pillar packages
 to format and print <code>tbl_df</code> objects.
-Used by the formatting workhorse <code><a href="https://tibble.tidyverse.org/reference/trunc_mat.html" class="external-link">trunc_mat()</a></code> and, therefore,
+Used by the formatting workhorse <code>trunc_mat()</code> and, therefore,
 indirectly, by <code>print.tbl()</code>.</p><ul><li><p><code>tibble.print_max</code>: Row number threshold: Maximum number of rows printed.
 Set to <code>Inf</code> to always print all rows.  Default: 20.</p></li>
 <li><p><code>tibble.print_min</code>: Number of rows printed if row number threshold is
@@ -135,9 +135,12 @@ Default: 100.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:tidySummarizedExperiment’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:tidySummarizedExperiment’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     bind_cols, bind_rows, count</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     bind_rows</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:ttservice’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     bind_cols, bind_rows</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:Biobase’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     combine</span>
