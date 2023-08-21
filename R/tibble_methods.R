@@ -88,8 +88,8 @@ as_tibble.SummarizedExperiment <- function(x, ...,
     
     # If I want to return all columns
     count_info %>%
-      inner_join(sample_info, by=s_(x)$name) %>%
-      inner_join(gene_info, by=f_(x)$name) %>%
+      full_join(sample_info, by=s_(x)$name) %>%
+      full_join(gene_info, by=f_(x)$name) %>%
       when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info) %>% suppressMessages(), ~ (.)) 
     
   # This function outputs a tibble after subsetting the columns
