@@ -158,22 +158,25 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
   # If both nested not by transcript nor sample
   if(! s_(se)$name  %in% colnames(data) & !f_(se)$name %in% colnames(data) ){
     
-    se = pull(data, !!cols) %>% .[[1]] 
+    my_se = pull(.data_, !!cols) %>% .[[1]] 
+
     
     # Mark if columns belong to feature or sample
     my_unnested_tibble =
       mutate(data, !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-      select(-suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
+
+      select(-suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
       unnest(!!cols)
     
     # Get which column is relative to feature or sample
-    sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(se)$symbol)
-    transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(se)$symbol)
+    sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(my_se)$symbol)
+    transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(my_se)$symbol)
     
     source_column =
       c(
-        rep(s_(se)$name, length(sample_columns)) %>% setNames(sample_columns),
-        rep(f_(se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
+        rep(s_(my_se)$name, length(sample_columns)) %>% setNames(sample_columns),
+        rep(f_(my_se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
+
       )
     
     # Drop if SE is null
@@ -191,14 +194,14 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
             
             # Attach back the columns used for nesting
             .data_ %>%
-              select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
+              select(-!!cols, -suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
               slice(rep(.y, ncol(.x) * nrow(.x))),
             
             # Column sample-wise or feature-wise
             column_belonging =
               source_column[
                 .data_ %>%
-                  select(-!!cols, -suppressWarnings( one_of(s_(se)$name, f_(se)$name))) %>%
+                  select(-!!cols, -suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
                   colnames()
               ]
           )
