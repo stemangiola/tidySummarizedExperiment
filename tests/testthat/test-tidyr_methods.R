@@ -112,3 +112,29 @@ test_that("pivot_longer", {
         .[1] %>%
         expect_equal("tbl_df")
 })
+
+test_that("nest_unnest_by_feature_chunk", {
+  
+  chunks =
+    tibble::tibble(.feature = rownames(tt)) |>
+    mutate(chunk___ = c( 
+      rep(1, times = floor(dplyr::n()/2)), 
+      rep(2, times = ceiling(dplyr::n()/2))
+    ))
+  
+  statistics_for_features = 
+    tibble::tibble(.feature = rownames(tt)) |>
+    mutate(pvalue = runif( dplyr::n(), min = 0, max = 1))
+  
+  tt = tt |> left_join(statistics_for_features)
+    
+  tt_unnested = 
+    tt |> 
+    left_join(chunks) |>
+    nest(se_chunk = -chunk___) |> 
+    unnest(se_chunk) |> 
+    select(-chunk___)
+  
+  identical(tt, tt_unnested)
+  
+})

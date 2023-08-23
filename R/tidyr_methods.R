@@ -207,9 +207,24 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
           )
       ))
     
-    # Bind
-    return( do.call(cbind, data |> pull(!!cols)) )
+    # Understand if split was done feature 
+    if(identical(
+      data |> pull(!!cols) |> magrittr::extract2(1) |> colnames() |> sort(),
+      data |> pull(!!cols) |> map(colnames) |> reduce(intersect) |> sort()
+    ))
+      return(data |> pull(!!cols) |> reduce_rbind_se())
     
+    # Understand if split was done sample 
+    else if(identical(
+      data |> pull(!!cols) |> magrittr::extract2(1) |> rownames() |> sort(),
+      data |> pull(!!cols) |> map(rownames) |> reduce(intersect) |> sort()
+    ))
+      return(data |> pull(!!cols) |> reduce_cbind_se())
+    
+    # If neither there is something wrong
+    else
+      stop("tidybulk says: not the sample names nor the feature names overlap through your nesting. The nesting (due to the underlying SummarizedExperiment::cbind and SummarizedExperiment::rbind requirements) needs to be rectangular.)")
+
   }
   
   # If column is SE nd only feature
@@ -224,13 +239,14 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
   # If column is SE nd only sample
   if(s_(se)$name %in% colnames(data)){
     
-    se = do.call(SummarizedExperiment::cbind, pull(data, !!cols))
+    se = data |> pull(!!cols) |> reduce_cbind_se()
     colData(se) = cbind( colData(se), data %>% select(-!!cols, -!!s_(se)$symbol))
     
     return(se)
     
   }
 }
+
 
 
 #' nest

@@ -1326,3 +1326,34 @@ order_assays_internally_to_be_consistent <- function(se) {
         
         se
 }
+
+#' @importFrom SummarizedExperiment cbind
+reduce_cbind_se = function(se_list){
+  
+  do.call(cbind, se_list)
+}
+
+#' @importFrom purrr reduce
+#' @importFrom purrr map
+#' @importFrom SummarizedExperiment rbind
+reduce_rbind_se = function(se_list){
+  
+  # rbind does not accept elementMetadata so I merge and take it off
+  element_metadata = se_list %>% map(elementMetadata) |> reduce(rbind)
+  
+  # Drop elementMetadata
+  se_list = se_list |> map(~{
+    elementMetadata(.x) = NULL
+    .x
+  })
+  
+  # Bind
+  se = do.call(rbind, se_list)
+  rm(se_list)
+  
+  # Put elementMetadata back in - THE (safe) ASSUMPTION IS THAT THE ORDER DOES NOT CHANGE
+  elementMetadata(se)  = element_metadata
+  
+  # Return
+  se
+}

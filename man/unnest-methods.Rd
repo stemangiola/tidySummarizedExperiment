@@ -70,10 +70,8 @@ unnest_summarized_experiment
 }
 \examples{
 
-library(dplyr)
-pbmc_small \%>\%
-
-    nest(data=-groups) \%>\%
+tidySummarizedExperiment::pasilla  |>
+    nest(data=-condition) |>
     unnest_summarized_experiment(data)
 
 }
