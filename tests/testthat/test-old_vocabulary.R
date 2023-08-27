@@ -110,8 +110,7 @@ library(tidySummarizedExperiment)
 
 tt <-
     pasilla %>%
-    
-    tidySummarizedExperiment::mutate(col2 = "other_col")
+    mutate(col2 = "other_col")
 
 test_that("nest_unnest", {
     

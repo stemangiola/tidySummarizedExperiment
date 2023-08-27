@@ -18,7 +18,7 @@ is_rectangular <- function(.data, se) {
     is_rectangular_sample & is_rectangular_transcript
 }
 
-is_not_duplicated <- function(.data, se ) {
+is_not_duplicated <- function(.data, se) {
     .data %>%
         count(!!s_(se)$symbol , !!f_(se)$symbol) %>%
         filter(n > 1) %>%

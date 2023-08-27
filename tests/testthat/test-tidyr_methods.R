@@ -5,8 +5,7 @@ library(tidySummarizedExperiment)
 
 tt <-
     pasilla %>%
-    
-    tidySummarizedExperiment::mutate(col2 = "other_col")
+    mutate(col2="other_col")
 
 # Create SummarizedExperiment object for testing
 nrows <- 200
@@ -73,7 +72,7 @@ test_that("unite separate", {
     un <- tt %>% unite("new_col", c(condition, col2), sep = ":")
 
     un %>%
-        tidySummarizedExperiment::select(new_col) %>%
+        select(new_col) %>%
         slice(1) %>%
         pull(new_col) %>%
         expect_equal("untreated:other_col")
@@ -87,7 +86,7 @@ test_that("unite separate", {
         )
 
     se %>%
-        tidySummarizedExperiment::select(.sample) %>%
+        select(.sample) %>%
         ncol() %>%
         expect_equal(1)
 })
@@ -98,7 +97,7 @@ test_that("extract", {
                         into = "g",
                         regex = "other_([a-z]+)",
                         convert = TRUE) %>%
-        tidySummarizedExperiment::pull(g) %>%
+        pull(g) %>%
         class() %>%
         expect_equal("character")
 })
