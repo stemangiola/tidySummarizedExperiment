@@ -2,7 +2,12 @@
 % Please edit documentation in R/print_method.R
 \name{formatting}
 \alias{formatting}
+\alias{print.SummarizedExperiment}
+\alias{print}
 \title{Printing tibbles}
+\usage{
+\method{print}{SummarizedExperiment}(x, ..., n = NULL, width = NULL, n_extra = NULL)
+}
 \arguments{
 \item{x}{Object to format or print.}
 
@@ -24,6 +29,9 @@ will print information about at most \code{tibble.max_extra_cols} extra columns.
 }
 \value{
 Nothing
+
+Prints a message to the console describing
+the contents of the \code{tidyseurat}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
@@ -61,4 +69,5 @@ Default: 100.
 \examples{
 library(dplyr)
 pasilla  \%>\% print()
+
 }

@@ -1,21 +1,20 @@
 setMethod(
-    f = "show",
-    signature = "SummarizedExperiment",
-    definition = function(object) {
-        if (
-          isTRUE(x = getOption(x = "restore_SummarizedExperiment_show", default = FALSE)) |
-          
-          # If the object is a SingleCellExperiment
-          # # From BioC 3_14 SingleCellExperiment is SummarizedExperiment and 
-          # # we don't want to process with tidySummarizedExperiment
-          is(object, "SingleCellExperiment")
+    f="show",
+    signature="SummarizedExperiment",
+    definition=function(object) {
+        if (isTRUE(x=getOption(x="restore_SummarizedExperiment_show",
+            default = FALSE)) |         
+            # If the object is a SingleCellExperiment
+            # # From BioC 3_14 SingleCellExperiment is SummarizedExperiment and 
+            # # we don't want to process with tidySummarizedExperiment
+            is(object, "SingleCellExperiment")
         ) {
             f <- getMethod(
-                f = "show",
-                signature = "SummarizedExperiment",
-                where = asNamespace(ns = "SummarizedExperiment")
+                f="show",
+                signature="SummarizedExperiment",
+                where=asNamespace(ns="SummarizedExperiment")
             )
-            f(object = object)
+            f(object=object)
         } else {
             object %>%
                 print()
@@ -23,25 +22,19 @@ setMethod(
     }
 )
 
-
 setClass("tidySummarizedExperiment", contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
 
-
-#' tidy for SummarizedExperiment
-#'
-#' @param object A SummarizedExperiment object
-#'
-#' @return A tidySummarizedExperiment object
-#' 
-#' @description 
-#' 
-#' DEPRECATED. Not needed any more.
-#'
 #' @name tidy
+#' @rdname tidy
+#' @title tidy for `Seurat`
+#'
+#' @param object A `Seurat` object.
+#' @return A `tidyseurat` object.
 #'
 #' @examples
+#' data(pasilla)
+#' pasilla %>% tidy()
 #'
-#' tidySummarizedExperiment::pasilla %>% tidy()
 #' @export
 tidy <- function(object) {
     UseMethod("tidy", object)

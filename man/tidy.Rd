@@ -2,20 +2,21 @@
 % Please edit documentation in R/methods.R
 \name{tidy}
 \alias{tidy}
-\title{tidy for SummarizedExperiment}
+\title{tidy for \code{Seurat}}
 \usage{
 tidy(object)
 }
 \arguments{
-\item{object}{A SummarizedExperiment object}
+\item{object}{A \code{Seurat} object.}
 }
 \value{
-A tidySummarizedExperiment object
+A \code{tidyseurat} object.
 }
 \description{
-DEPRECATED. Not needed any more.
+tidy for \code{Seurat}
 }
 \examples{
+data(pasilla)
+pasilla \%>\% tidy()
 
-tidySummarizedExperiment::pasilla \%>\% tidy()
 }
