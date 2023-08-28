@@ -1350,14 +1350,14 @@ check_if_assays_are_NOT_overlapped <- function(se, dim = "cols") {
         # This will be TRUE also if some assays have dimnames and other don't
         # For each assay, sort the dimnames, then check that they are all the 
         # same. Can't check for unique length, since some names may be repeated
+        # If they're not all the same, the reduce() step will return FALSE; 
+        # otherwise, returns the (shared) dimnames
         assays(se, withDimnames = FALSE) |>  
         as.list() |> 
         map(dimnames_function) |> 
         map(sort) |>
         reduce(is_identical_for_reduce) |> 
-        length() |>
-        equals(length_function(se)) |> 
-        not()
+        is.logical()
 }
 
 
