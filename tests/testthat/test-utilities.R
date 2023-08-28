@@ -286,8 +286,8 @@ test_that("get_count_datasets works", {
     se1 <- se
     rownames(se1) <- paste0("G", c(1, 2, 1))
     expect_error(cds <- get_count_datasets(se1), "some row names are duplicated")
-    expect_true(check_if_any_dimnames_duplicated(se1, dim = "cols"))
-    expect_false(check_if_any_dimnames_duplicated(se1, dim = "rows"))
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "cols"))
+    expect_true(check_if_any_dimnames_duplicated(se1, dim = "rows"))
     
     # All assays + SE have duplicated colnames
     se1 <- se
