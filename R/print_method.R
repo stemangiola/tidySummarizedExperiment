@@ -42,81 +42,24 @@ tbl_format_header.tidySummarizedExperiment <- function(x, setup, ...) {
     style_subtle(pillar___format_comment(header, width=setup$width))
 }
 
-#' Printing tibbles
-#'
-#' @description
-#' `r lifecycle::badge("maturing")`
-#'
-#' One of the main features of the `tbl_df` class is the printing:
-#'
-#' * Tibbles only print as many rows and columns as fit on one screen,
-#'   supplemented by a summary of the remaining rows and columns.
-#' * Tibble reveals the type of each column, which keeps the user informed about
-#'   whether a variable is, e.g., `<chr>` or `<fct>` (character versus factor).
-#'
-#' Printing can be tweaked for a one-off call by calling `print()` explicitly
-#' and setting arguments like `n` and `width`. More persistent control is
-#' available by setting the options described below.
-#'
-#' @inheritSection pillar::`pillar-package` Package options
-#' @section Package options:
-#'
-#' The following options are used by the tibble and pillar packages
-#' to format and print `tbl_df` objects.
-#' Used by the formatting workhorse `trunc_mat()` and, therefore,
-#' indirectly, by `print.tbl()`.
-#'
-#' * `tibble.print_max`: Row number threshold: Maximum number of rows printed.
-#'   Set to `Inf` to always print all rows.  Default: 20.
-#' * `tibble.print_min`: Number of rows printed if row number threshold is
-#'   exceeded. Default: 10.
-#' * `tibble.width`: Output width. Default: `NULL` (use `width` option).
-#' * `tibble.max_extra_cols`: Number of extra columns printed in reduced form.
-#'   Default: 100.
-#'
-
-#'
-#' @param x Object to format or print.
-#' @param ... Other arguments passed on to individual methods.
-#' @param n Number of rows to show. If `NULL`, the default, will print all rows
-#'   if less than option `tibble.print_max`. Otherwise, will print
-#'   `tibble.print_min` rows.
-#' @param width Width of text output to generate. This defaults to `NULL`, which
-#'   means use `getOption("tibble.width")` or (if also `NULL`)
-#'   `getOption("width")`; the latter displays only the columns that fit on one
-#'   screen. You can also set `options(tibble.width = Inf)` to override this
-#'   default and always print all columns.
-#' @param n_extra Number of extra columns to print abbreviated information for,
-#'   if the width is too small for the entire tibble. If `NULL`, the default,
-#'   will print information about at most `tibble.max_extra_cols` extra columns.
-#'
-#' @return Nothing
-#'
-#' @examples
-
-#' @name formatting
-NULL
-
-
-
 #' @name formatting
 #' @rdname formatting
 #' @aliases print
 #' @inherit tibble::formatting
 #' @return Prints a message to the console describing
-#'   the contents of the `tidyseurat`.
-#'
+#'   the contents of the `tidySingleCellExperiment`.
+#' 
 #' @param n_extra Number of extra columns to print abbreviated information for,
 #'   if the width is too small for the entire tibble. If `NULL`, the default,
 #'   will print information about at most `tibble.max_extra_cols` extra columns.
 #' 
 #' @examples
-#' library(dplyr)
-#' pasilla  %>% print()
+#' data(pasilla)
+#' print(pasilla)
 #' 
 #' @importFrom vctrs new_data_frame
-#' @importFrom rlang is_empty
-#' @importFrom stringr str_replace
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom stats setNames
 #' @export
 print.SummarizedExperiment <- function(x, ..., n=NULL,
     width=NULL, n_extra=NULL) {
@@ -149,9 +92,9 @@ print.SummarizedExperiment <- function(x, ..., n=NULL,
   
     my_tibble |>
         new_data_frame(class=c("tidySummarizedExperiment", "tbl")) %>%
-        add_attr( nrow(x),  "number_of_features") %>%
-        add_attr( ncol(x),  "number_of_samples") %>%
-        add_attr( assays(x) %>% names , "assay_names") %>%
+        add_attr(nrow(x),  "number_of_features") %>%
+        add_attr(ncol(x),  "number_of_samples") %>%
+        add_attr(assays(x) %>% names , "assay_names") %>%
     
     # Set fake dimensions for efficiancy
     add_attr(

@@ -38,7 +38,8 @@ Imports:
     stringr,
     cli,
     fansi,
-    stats
+    stats,
+    pkgconfig
 Suggests:
     BiocStyle,
     testthat,

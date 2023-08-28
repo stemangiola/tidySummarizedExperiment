@@ -1,3 +1,4 @@
+#' @importFrom methods getMethod
 setMethod(
     f="show",
     signature="SummarizedExperiment",
@@ -22,7 +23,8 @@ setMethod(
     }
 )
 
-setClass("tidySummarizedExperiment", contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
+setClass("tidySummarizedExperiment",
+    contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
 
 #' @name tidy
 #' @rdname tidy
@@ -54,15 +56,13 @@ tidy_ <- function(object) {
 }
 
 #' @importFrom methods as
-#'
+#' @rdname tidy
 #' @param object A SummarizedExperiment object
-#'
 #' @export
 tidy.SummarizedExperiment <- tidy_
 
 #' @importFrom methods as
-#'
+#' @rdname tidy
 #' @param object A SummarizedExperiment object
-#'
 #' @export
 tidy.RangedSummarizedExperiment <- tidy_

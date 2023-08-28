@@ -91,22 +91,20 @@ test_that("unite separate", {
         expect_equal(1)
 })
 
-test_that("extract", {
+test_that("extract()", {
     tt %>%
-        tidySummarizedExperiment::extract(col2,
-                        into = "g",
-                        regex = "other_([a-z]+)",
-                        convert = TRUE) %>%
+        extract(col2,
+            into="g", regex="other_([a-z]+)",
+            convert = TRUE) %>%
         pull(g) %>%
         class() %>%
         expect_equal("character")
 })
 
-test_that("pivot_longer", {
+test_that("pivot_longer()", {
     tt %>%
-        tidySummarizedExperiment::pivot_longer(c(.sample, condition),
-                             names_to = "name",
-                             values_to = "value") %>%
+        pivot_longer(c(.sample, condition), names_to = "name",
+            values_to = "value") %>%
         class() %>%
         .[1] %>%
         expect_equal("tbl_df")

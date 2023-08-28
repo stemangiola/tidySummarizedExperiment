@@ -581,7 +581,8 @@ select.SummarizedExperiment <- function(.data, ...) {
     # colnames_col <- get_colnames_col(.data)
     # colnames_row <- get_rownames_col(.data)
     # colnames_assay = .data@assays@data |> names()
-  
+    
+    . <- NULL
     # Deprecation of special column names
     .cols <- enquos(..., .ignore_empty="all") %>% 
         map(~ quo_name(.x)) %>% unlist()
@@ -783,6 +784,7 @@ count.SummarizedExperiment <- function(x, ..., wt=NULL,
 #'     
 #' @importFrom ellipsis check_dots_used
 #' @importFrom dplyr pull
+#' @importFrom SummarizedExperiment assay
 #' @export
 pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
   
@@ -799,7 +801,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
         .data, 
         quo_name(var)
     )) {
-        .data= ping_old_special_column_into_metadata(.data)
+        .data <- ping_old_special_column_into_metadata(.data)
     }
     
     # If Ranges column not in query perform fast as_tibble
@@ -810,7 +812,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
     
     # Subset column annotation
     if (all(c(quo_names(var), quo_name_name) %in% colnames(colData(.data)))) {
-        return(colData(.data)[,quo_names(var)] %>%
+        return(colData(.data)[, quo_names(var)] %>%
             .[rep(1:length(.), each=nrow(.data) )])
     }
     
@@ -837,7 +839,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
             
             # reorder assay colnames before printing
             # Rearrange if assays has colnames and rownames
-            .data = order_assays_internally_to_be_consistent(.data)
+            .data <- order_assays_internally_to_be_consistent(.data)
         
         }
         return(assay(.data, quo_names(var)) |> as.matrix() |> as.vector())       

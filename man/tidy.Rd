@@ -2,12 +2,18 @@
 % Please edit documentation in R/methods.R
 \name{tidy}
 \alias{tidy}
+\alias{tidy.SummarizedExperiment}
+\alias{tidy.RangedSummarizedExperiment}
 \title{tidy for \code{Seurat}}
 \usage{
 tidy(object)
+
+\method{tidy}{SummarizedExperiment}(object)
+
+\method{tidy}{RangedSummarizedExperiment}(object)
 }
 \arguments{
-\item{object}{A \code{Seurat} object.}
+\item{object}{A SummarizedExperiment object}
 }
 \value{
 A \code{tidyseurat} object.

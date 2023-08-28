@@ -143,18 +143,18 @@ test_that("unite separate", {
 
 test_that("extract", {
     tt %>%
-        tidySummarizedExperiment::extract(sample,
-                                          into = "g",
-                                          regex = "other_([a-z]+)",
-                                          convert = TRUE, remove=FALSE) %>% 
+        extract(sample,
+            into = "g",
+            regex = "other_([a-z]+)",
+            convert = TRUE, remove=FALSE) %>% 
         expect_warning(warning_message)
 })
 
 test_that("pivot_longer", {
     tt %>%
-        tidySummarizedExperiment::pivot_longer(c(sample, condition),
-                                               names_to = "name",
-                                               values_to = "value") %>%
+        pivot_longer(c(sample, condition),
+            names_to = "name",
+            values_to = "value") %>%
         class() %>%
         .[1] %>%
         expect_equal("tbl_df")
@@ -162,7 +162,7 @@ test_that("pivot_longer", {
 
 test_that("pivot_wider", {
     tt %>%
-        tidySummarizedExperiment::pivot_wider(names_from=feature, values_from=counts) %>%
+        pivot_wider(names_from=feature, values_from=counts) %>%
         class() %>%
         .[1] %>%
         expect_equal("tbl_df")
