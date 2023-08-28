@@ -134,12 +134,27 @@ print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra =
   # Fix NOTEs
   . = NULL
   
+  # Stop if any column or row names are duplicated
+  if (check_if_any_dimnames_duplicated(x, dim = "cols")) {
+      stop("tidySummarizedExperiment says: some column names are duplicated")
+  }
+  if (check_if_any_dimnames_duplicated(x, dim = "rows")) {
+      stop("tidySummarizedExperiment says: some row names are duplicated")
+  }
   # Stop if column names of assays do not overlap
-  if( check_if_assays_are_NOT_overlapped(x) ) 
-    stop( 
-      "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
-but their order is not the same, and they not completely overlap." 
-    )
+  if (check_if_assays_are_NOT_overlapped(x, dim = "cols")) { 
+      stop( 
+          "tidySummarizedExperiment says: the assays in your SummarizedExperiment have column names, 
+but they do not completely overlap." 
+      )
+  }
+  if (check_if_assays_are_NOT_overlapped(x, dim = "rows")) { 
+      stop( 
+          "tidySummarizedExperiment says: the assays in your SummarizedExperiment have row names, 
+but they do not completely overlap." 
+      )
+  }
+  
   
   # reorder assay colnames before printing
   # Rearrange if assays has colnames and rownames

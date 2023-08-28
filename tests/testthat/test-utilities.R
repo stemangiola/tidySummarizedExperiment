@@ -247,6 +247,44 @@ test_that("get_count_datasets works", {
     expect_equal(cds$mat2, seq(10, 18))
     expect_equal(cds$mat3, seq(19, 27))
     
+    # SE does not have dimnames, one assay has duplicated colnames, one has no colnames
+    se1 <- se
+    rownames(se1) <- colnames(se1) <- NULL
+    colnames(assay(se1, "mat1", withDimnames = FALSE))[2] <- 
+        colnames(assay(se1, "mat1", withDimnames = FALSE))[1]
+    colnames(assay(se1, "mat2", withDimnames = FALSE)) <- NULL
+    expect_equal(colnames(assay(se1, "mat1", withDimnames = FALSE)), paste0("S", c(1, 1, 3)))
+    expect_equal(rownames(assay(se1, "mat1", withDimnames = FALSE)), paste0("G", seq_len(3)))
+    expect_null(colnames(assay(se1, "mat2", withDimnames = FALSE)))
+    expect_equal(colnames(assay(se1, "mat3", withDimnames = FALSE)), paste0("S", seq_len(3)))
+    expect_null(colnames(se1))
+    expect_null(rownames(se1))
+    expect_error(cds <- get_count_datasets(se1), "some column names are duplicated")
+    
+    # SE does not have dimnames, one assay has duplicated rownames, one has no rownames
+    se1 <- se
+    rownames(se1) <- colnames(se1) <- NULL
+    rownames(assay(se1, "mat1", withDimnames = FALSE))[2:3] <- 
+        rownames(assay(se1, "mat1", withDimnames = FALSE))[1]
+    rownames(assay(se1, "mat2", withDimnames = FALSE)) <- NULL
+    expect_equal(rownames(assay(se1, "mat1", withDimnames = FALSE)), paste0("G", c(1, 1, 1)))
+    expect_equal(colnames(assay(se1, "mat1", withDimnames = FALSE)), paste0("S", seq_len(3)))
+    expect_null(rownames(assay(se1, "mat2", withDimnames = FALSE)))
+    expect_equal(rownames(assay(se1, "mat3", withDimnames = FALSE)), paste0("G", seq_len(3)))
+    expect_null(colnames(se1))
+    expect_null(rownames(se1))
+    expect_error(cds <- get_count_datasets(se1), "some row names are duplicated")
+    
+    # SE has duplicated colname
+    se1 <- se
+    colnames(se1) <- paste0("S", c(1, 1, 1))
+    expect_error(cds <- get_count_datasets(se1), "some column names are duplicated")
+    
+    # SE has duplicated rowname
+    se1 <- se
+    rownames(se1) <- paste0("G", c(1, 2, 1))
+    expect_error(cds <- get_count_datasets(se1), "some row names are duplicated")
+
     # Unnamed assay(s)
     # se1 <- SummarizedExperiment::SummarizedExperiment(
     #     assays = list(
