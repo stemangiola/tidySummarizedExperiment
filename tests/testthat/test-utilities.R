@@ -275,15 +275,50 @@ test_that("get_count_datasets works", {
     expect_null(rownames(se1))
     expect_error(cds <- get_count_datasets(se1), "some row names are duplicated")
     
-    # SE has duplicated colname
+    # SE has duplicated colnames
     se1 <- se
     colnames(se1) <- paste0("S", c(1, 1, 1))
     expect_error(cds <- get_count_datasets(se1), "some column names are duplicated")
+    expect_true(check_if_any_dimnames_duplicated(se1, dim = "cols"))
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "rows"))
     
-    # SE has duplicated rowname
+    # SE has duplicated rownames
     se1 <- se
     rownames(se1) <- paste0("G", c(1, 2, 1))
     expect_error(cds <- get_count_datasets(se1), "some row names are duplicated")
+    expect_true(check_if_any_dimnames_duplicated(se1, dim = "cols"))
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "rows"))
+    
+    # All assays + SE have duplicated colnames
+    se1 <- se
+    colnames(se1)[2] <- 
+        colnames(assay(se1, "mat1", withDimnames = FALSE))[2] <- 
+        colnames(assay(se1, "mat2", withDimnames = FALSE))[2] <- 
+        colnames(assay(se1, "mat3", withDimnames = FALSE))[2] <- "S1"
+    expect_true(check_if_any_dimnames_duplicated(se1, dim = "cols"))
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "rows"))
+    expect_false(check_if_assays_are_NOT_overlapped(se1, dim = "cols"))
+    expect_false(check_if_assays_are_NOT_overlapped(se1, dim = "rows"))
+    
+    # Two assays + SE have duplicated colnames
+    se1 <- se
+    colnames(se1)[2] <- 
+        colnames(assay(se1, "mat1", withDimnames = FALSE))[2] <- 
+        colnames(assay(se1, "mat3", withDimnames = FALSE))[2] <- "S1"
+    expect_true(check_if_any_dimnames_duplicated(se1, dim = "cols"))
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "rows"))
+    expect_true(check_if_assays_are_NOT_overlapped(se1, dim = "cols"))
+    expect_false(check_if_assays_are_NOT_overlapped(se1, dim = "rows"))
+    
+    # Assays have duplicated colnames in different ways
+    se1 <- se
+    assay(se1, "mat2") <- NULL
+    colnames(assay(se1, "mat1", withDimnames = FALSE)) <- c("S1", "S1", "S2")
+    colnames(assay(se1, "mat3", withDimnames = FALSE)) <- c("S1", "S2", "S2")
+    expect_true(check_if_any_dimnames_duplicated(se1, dim = "cols"))
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "rows"))
+    expect_true(check_if_assays_are_NOT_overlapped(se1, dim = "cols"))
+    expect_false(check_if_assays_are_NOT_overlapped(se1, dim = "rows"))
 
     # All dimnames are NULL - not duplicated
     se1 <- se
