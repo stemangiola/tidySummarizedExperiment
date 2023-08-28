@@ -285,6 +285,18 @@ test_that("get_count_datasets works", {
     rownames(se1) <- paste0("G", c(1, 2, 1))
     expect_error(cds <- get_count_datasets(se1), "some row names are duplicated")
 
+    # All dimnames are NULL - not duplicated
+    se1 <- se
+    rownames(se1) <- colnames(se1) <- NULL
+    rownames(assay(se1, "mat1", withDimnames = FALSE)) <- 
+        colnames(assay(se1, "mat1", withDimnames = FALSE)) <- 
+        rownames(assay(se1, "mat2", withDimnames = FALSE)) <- 
+        colnames(assay(se1, "mat2", withDimnames = FALSE)) <- 
+        rownames(assay(se1, "mat3", withDimnames = FALSE)) <- 
+        colnames(assay(se1, "mat3", withDimnames = FALSE)) <- NULL
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "cols"))
+    expect_false(check_if_any_dimnames_duplicated(se1, dim = "rows"))
+    
     # Unnamed assay(s)
     # se1 <- SummarizedExperiment::SummarizedExperiment(
     #     assays = list(
