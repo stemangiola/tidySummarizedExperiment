@@ -621,6 +621,14 @@ get_special_datasets <- function(se) {
 }
 
 check_se_dimnames <- function(se) {
+    # Stop if any column or row names are duplicated
+    if (check_if_any_dimnames_duplicated(se, dim = "cols")) {
+        stop("tidySummarizedExperiment says: some column names are duplicated")
+    }
+    if (check_if_any_dimnames_duplicated(se, dim = "rows")) {
+        stop("tidySummarizedExperiment says: some row names are duplicated")
+    }
+
     # Stop if column names of assays do not overlap, or if some assays have 
     # column names and others don't
     if (check_if_assays_are_NOT_overlapped(se, dim = "cols")) { 
@@ -1269,6 +1277,51 @@ check_if_assays_are_NOT_consistently_ordered <- function(se) {
         not()
 }
 
+check_if_any_dimnames_duplicated <- function(se, dim = "cols") {
+    stopifnot(dim %in% c("rows", "cols"))
+    if (dim == "rows") {
+        dimnames_function <- rownames
+        nbr_unique_dimnames_function <- function(x) length(unique(rownames(x)))
+        length_function <- nrow
+    } else {
+        dimnames_function <- colnames
+        nbr_unique_dimnames_function <- function(x) length(unique(colnames(x)))
+        length_function <- ncol
+    }
+    
+    # Check assays
+    # If I have any assay at all
+    assays_check <- assays(se) |> length() |> gt(0) &&
+        
+        # If I have at least one assay with dimnames
+        Filter(
+            Negate(is.null),
+            assays(se, withDimnames = FALSE) |>  
+                as.list() |> 
+                map(dimnames_function)
+        ) |> 
+        length() |>
+        gt(0) &&
+        
+        # If any named assay have fewer unique names than expected
+        assays(se, withDimnames = FALSE) |>  
+        as.list() |> 
+        map(dimnames_function) |>
+        Filter(Negate(is.null), x = _) |>
+        map(unique) |> 
+        map(length) |>
+        reduce(min) |> 
+        equals(length_function(se)) |> 
+        not()
+    
+    # Check SE object
+    se_check <- !is.null(dimnames_function(se)) &&
+        nbr_unique_dimnames_function(se) != length_function(se)
+    
+    # Return TRUE if either of the two checks return TRUE
+    assays_check || se_check
+}
+
 check_if_assays_are_NOT_overlapped <- function(se, dim = "cols") {
     stopifnot(dim %in% c("rows", "cols"))
     if (dim == "rows") {
@@ -1278,6 +1331,7 @@ check_if_assays_are_NOT_overlapped <- function(se, dim = "cols") {
         dimnames_function <- colnames
         length_function <- ncol
     }
+    is_identical_for_reduce <- function(x,y) if (identical(x,y)) x else FALSE
     
     # If I have any assay at all
     assays(se) |> length() |> gt(0) &&
@@ -1294,13 +1348,16 @@ check_if_assays_are_NOT_overlapped <- function(se, dim = "cols") {
         
         # If I have lack of consistency
         # This will be TRUE also if some assays have dimnames and other don't
+        # For each assay, sort the dimnames, then check that they are all the 
+        # same. Can't check for unique length, since some names may be repeated
+        # If they're not all the same, the reduce() step will return FALSE; 
+        # otherwise, returns the (shared) dimnames
         assays(se, withDimnames = FALSE) |>  
         as.list() |> 
         map(dimnames_function) |> 
-        reduce(intersect) |> 
-        length() |> 
-        equals(length_function(se)) |> 
-        not()
+        map(sort) |>
+        reduce(is_identical_for_reduce) |> 
+        is.logical()
 }
 
 
