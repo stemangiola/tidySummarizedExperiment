@@ -64,7 +64,7 @@ happens when there are not enough pieces. There are three valid options:
 \item{...}{Additional arguments passed on to methods.}
 }
 \value{
-\code{tidySingleCellExperiment}
+\code{tidySummarizedExperiment}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}

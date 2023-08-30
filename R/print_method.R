@@ -47,7 +47,7 @@ tbl_format_header.tidySummarizedExperiment <- function(x, setup, ...) {
 #' @aliases print
 #' @inherit tibble::formatting
 #' @return Prints a message to the console describing
-#'   the contents of the `tidySingleCellExperiment`.
+#'   the contents of the `tidySummarizedExperiment`.
 #' 
 #' @param n_extra Number of extra columns to print abbreviated information for,
 #'   if the width is too small for the entire tibble. If `NULL`, the default,

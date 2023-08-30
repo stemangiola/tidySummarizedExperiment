@@ -621,7 +621,7 @@ unite.SummarizedExperiment <- function(data, col, ...,
 #' @name separate
 #' @rdname separate
 #' @inherit tidyr::separate
-#' @return `tidySingleCellExperiment`
+#' @return `tidySummarizedExperiment`
 #' 
 #' @examples
 #' un <- tidySummarizedExperiment::pasilla |>
