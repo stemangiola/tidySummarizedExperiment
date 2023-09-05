@@ -299,7 +299,9 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
     
     # Check if the nesting is too complicated for the moment without optimisation
     my_test_nest = 
-      my_data__[1,1] %>%
+      
+      # I need to get the min because if a SE has 0x0 dimension this crash
+      my_data__[min(1, nrow(my_data__)),min(1, ncol(my_data__))] %>%
       as_tibble() %>%
       tidyr::nest(...) 
 
@@ -363,12 +365,16 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
                     
                     # Check if nested by sample
                     if(sample_name %in% colnames(my_test_nest)) { my_samples=..2 }
-                    else {my_samples=pull(..1,!!sample_symbol)}
+                    
+                    # Here I am filtering because if I have 0 samples this leads to failure
+                    else my_samples= ..1 |> filter(!is.na(!!sample_symbol)) |> pull(!!sample_symbol)
 
                     # Check if nested by feature and sample
                     if(sample_name %in% colnames(my_test_nest) & feature_name %in% colnames(my_test_nest)) {my_transcripts=..3}
                     else if(feature_name %in% colnames(my_test_nest)) my_transcripts=..2
-                    else my_transcripts=pull(..1,!!feature_symbol)
+                    
+                    # Here I am filtering because if I have 0 features this leads to failure
+                    else my_transcripts= ..1 |> filter(!is.na(!!feature_symbol)) |>  pull(!!feature_symbol)
                     
                     ###
 

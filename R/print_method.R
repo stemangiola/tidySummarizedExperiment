@@ -134,6 +134,7 @@ print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra =
   # Fix NOTEs
   . = NULL
   
+
   # Stop if any column or row names are duplicated
   if (check_if_any_dimnames_duplicated(x, dim = "cols")) {
       stop("tidySummarizedExperiment says: some column names are duplicated")
@@ -141,6 +142,7 @@ print.SummarizedExperiment <- function(x, ..., n = NULL, width = NULL, n_extra =
   if (check_if_any_dimnames_duplicated(x, dim = "rows")) {
       stop("tidySummarizedExperiment says: some row names are duplicated")
   }
+
   # Stop if column names of assays do not overlap
   if (check_if_assays_are_NOT_overlapped(x, dim = "cols")) { 
       stop( 
@@ -168,6 +170,7 @@ but they do not completely overlap."
     # If I have more than 30 genes select first sample
     when(
       nrow(.) > 30 ~.[1:min(50, nrow(x)), min(1, ncol(x)), drop=FALSE] ,
+      ncol(.) == 0 ~ .,
       ~ .[, 1:min(20, ncol(x)), drop=FALSE]
     ) %>%
     
