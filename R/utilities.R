@@ -698,7 +698,7 @@ check_se_dimnames <- function(se) {
         )
 
     }
-  }
+  
   if (is.null(rownames(se)) && 
       length(assays(se)) > 0) {
     rn <- vapply(assays(se, withDimnames = FALSE), function(x) !is.null(rownames(x)), FALSE)
