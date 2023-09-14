@@ -432,7 +432,6 @@ extract.SummarizedExperiment <- function(data, col,
 #' @inherit tidyr::pivot_longer
 #' @return `tidySummarizedExperiment`
 #' 
-#' @export
 #' @examples
 #' # See vignette("pivot") for examples and explanation
 #' library(dplyr)
@@ -478,7 +477,6 @@ pivot_longer.SummarizedExperiment <- function(data,
 #' @inherit tidyr::pivot_wider
 #' @return `tidySummarizedExperiment`
 #' 
-#' @export
 #' @examples
 #' # See vignette("pivot") for examples and explanation
 #' library(dplyr)

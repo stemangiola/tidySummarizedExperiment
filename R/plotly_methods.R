@@ -4,7 +4,8 @@
 #' @return `plotly`
 #' 
 #' @examples
-#' # TODO
+#' data(pasilla)
+#' plot_ly(pasilla)
 #' 
 #' @importFrom plotly plot_ly
 #' @export
