@@ -17,10 +17,10 @@ License: GPL-3
 Depends:
     R (>= 4.1.0),
     SummarizedExperiment,
-    ttservice
+    ttservice,
+    dplyr
 Imports:
     tibble (>= 3.0.4),
-    dplyr,
     magrittr,
     tidyr,
     ggplot2,
