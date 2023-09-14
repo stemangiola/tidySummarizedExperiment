@@ -214,7 +214,7 @@ Here we plot the distribution of counts per sample.
 
 ```{r plot1}
 pasilla_tidy %>%
-    tidySummarizedExperiment::ggplot(aes(counts + 1, group=.sample, color=`type`)) +
+    ggplot(aes(counts + 1, group=.sample, color=`type`)) +
     geom_density() +
     scale_x_log10() +
     my_theme

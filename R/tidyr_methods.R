@@ -1,1102 +1,725 @@
-#' unnest
-#'
-#' @importFrom tidyr unnest
-#'
-#' @param data A tbl. (See tidyr)
-#' @param cols <[`tidy-select`][tidyr_tidy_select]> Columns to unnest.
-#'   If you `unnest()` multiple columns, parallel entries must be of
-#'   compatible sizes, i.e. they're either equal or length 1 (following the
-#'   standard tidyverse recycling rules).
-#' @param ... <[`tidy-select`][tidyr_tidy_select]> Columns to nest, specified
-#'   using name-variable pairs of the form `new_col=c(col1, col2, col3)`.
-#'   The right hand side can be any valid tidy select expression.
-#'
-#'   \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}:
-#'   previously you could write `df %>% nest(x, y, z)` and `df %>%
-#'   unnest(x, y, z)`. Convert to `df %>% nest(data=c(x, y, z))`.
-#'   and `df %>% unnest(c(x, y, z))`.
-#'
-#'   If you previously created new variable in `unnest()` you'll now need to
-#'   do it explicitly with `mutate()`. Convert `df %>% unnest(y=fun(x, y, z))`
-#'   to `df %>% mutate(y=fun(x, y, z)) %>% unnest(y)`.
-#' @param names_sep If `NULL`, the default, the names will be left
-#'   as is. In `nest()`, inner names will come from the former outer names;
-#'   in `unnest()`, the new outer names will come from the inner names.
-#'
-#'   If a string, the inner and outer names will be used together. In `nest()`,
-#'   the names of the new outer columns will be formed by pasting together the
-#'   outer and the inner column names, separated by `names_sep`. In `unnest()`,
-#'   the new inner names will have the outer names (+ `names_sep`) automatically
-#'   stripped. This makes `names_sep` roughly symmetric between nesting and unnesting.
-#' @param keep_empty See tidyr::unnest
-#' @param names_repair See tidyr::unnest
-#' @param ptype See tidyr::unnest
-#' @param .drop See tidyr::unnest
-#' @param .id tidyr::unnest
-#' @param .sep tidyr::unnest
-#' @param .preserve See tidyr::unnest
-#'
-#'
-#' @return A tidySummarizedExperiment objector a tibble depending on input
-#'
-#' @examples
-#'
-#' tidySummarizedExperiment::pasilla %>%
-#'
-#'     nest(data=-condition) %>%
-#'     unnest(data)
-#'
-#' @rdname tidyr-methods
 #' @name unnest
-#'
-#' @export
-NULL
-
+#' @rdname unnest
+#' @inherit tidyr::unnest
+#' @aliases unnest_summarized_experiment
+#' @return `tidySummarizedExperiment`
+#' 
+#' @examples
+#' tidySummarizedExperiment::pasilla |>
+#'     nest(data=-condition) |>
+#'     unnest(data)
+#' 
+#' @importFrom tidyr unnest
 #' @importFrom rlang quo_name
 #' @importFrom purrr imap
-#'
 #' @export
-
-unnest.tidySummarizedExperiment_nested <-
-  function(data, cols, ..., keep_empty=FALSE, ptype=NULL, names_sep=NULL, names_repair="check_unique", .drop, .id, .sep, .preserve) {
+unnest.tidySummarizedExperiment_nested <- function(data, cols, ...,
+    keep_empty=FALSE, ptype=NULL, names_sep=NULL,
+    names_repair="check_unique", .drop, .id, .sep, .preserve) {
     
     cols <- enquo(cols)
     
-    unnest_summarized_experiment(data, !!cols, ..., keep_empty=keep_empty, ptype=ptype,
-                                  names_sep=names_sep, names_repair=names_repair)
-
+    unnest_summarized_experiment(data, !!cols, ...,
+        keep_empty=keep_empty, ptype=ptype,
+        names_sep=names_sep, names_repair=names_repair)
    
-  }
+}
 
 
-#' unnest_summarized_experiment
-#'
+#' @rdname unnest
+#' @examples
+#' tidySummarizedExperiment::pasilla |>
+#'     nest(data=-condition) |>
+#'     unnest_summarized_experiment(data)
+#' 
 #' @importFrom tidyr unnest
 #' @importFrom purrr when
 #' @importFrom rlang quo_name
 #' @importFrom purrr imap
 #' @importFrom purrr map_lgl
-#'
-#' @param data A tbl. (See tidyr)
-#' @param cols <[`tidy-select`][tidyr_tidy_select]> Columns to unnest.
-#'   If you `unnest()` multiple columns, parallel entries must be of
-#'   compatible sizes, i.e. they're either equal or length 1 (following the
-#'   standard tidyverse recycling rules).
-#' @param ... <[`tidy-select`][tidyr_tidy_select]> Columns to nest, specified
-#'   using name-variable pairs of the form `new_col=c(col1, col2, col3)`.
-#'   The right hand side can be any valid tidy select expression.
-#'
-#'   \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}:
-#'   previously you could write `df %>% nest(x, y, z)` and `df %>%
-#'   unnest(x, y, z)`. Convert to `df %>% nest(data=c(x, y, z))`.
-#'   and `df %>% unnest(c(x, y, z))`.
-#'
-#'   If you previously created new variable in `unnest()` you'll now need to
-#'   do it explicitly with `mutate()`. Convert `df %>% unnest(y=fun(x, y, z))`
-#'   to `df %>% mutate(y=fun(x, y, z)) %>% unnest(y)`.
-#' @param names_sep If `NULL`, the default, the names will be left
-#'   as is. In `nest()`, inner names will come from the former outer names;
-#'   in `unnest()`, the new outer names will come from the inner names.
-#'
-#'   If a string, the inner and outer names will be used together. In `nest()`,
-#'   the names of the new outer columns will be formed by pasting together the
-#'   outer and the inner column names, separated by `names_sep`. In `unnest()`,
-#'   the new inner names will have the outer names (+ `names_sep`) automatically
-#'   stripped. This makes `names_sep` roughly symmetric between nesting and unnesting.
-#' @param keep_empty See tidyr::unnest
-#' @param names_repair See tidyr::unnest
-#' @param ptype See tidyr::unnest
-#' @param .drop See tidyr::unnest
-#' @param .id tidyr::unnest
-#' @param .sep tidyr::unnest
-#' @param .preserve See tidyr::unnest
-#'
-#' @return A tidySingleCellExperiment objector a tibble depending on input
-#'
-#' @examples
-#'
-#' tidySummarizedExperiment::pasilla  |>
-#'     nest(data=-condition) |>
-#'     unnest_summarized_experiment(data)
-#'
-#' @rdname unnest-methods
-#' @name unnest_summarized_experiment
-#'
-#'
-#'
 #' @export
-unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, ptype=NULL,
-                                            names_sep=NULL, names_repair="check_unique", .drop, .id, .sep, .preserve) {
-  # Need this otherwise crashes map
-  .data_ <- data
-  
-  cols <- enquo(cols)
-  
-  # If the column is not SE do normal stuff
-  if(
-    data %>% 
-    pull(!!cols) %>%
-    .[[1]] %>%
-    class() %>%
-    as.character() %in% 
-    c("SummarizedExperiment", "RangedSummarizedExperiment") %>%
-    all() %>% 
-    not()
-  )
-    return(
-      data %>%
-        drop_class("tidySummarizedExperiment_nested") %>%
-        tidyr::unnest(!!cols, ..., keep_empty=keep_empty, ptype=ptype, names_sep=names_sep, names_repair=names_repair) %>%
-        add_class("tidySummarizedExperiment_nested")
-    )
-  
-  # If both nested by transcript and sample
-  if( s_(se)$name %in% colnames(data) & f_(se)$name %in% colnames(data) ){
-    stop("tidySummarizedExperiment says: for the moment nesting both by sample- and feature-wise information is not possible. Please ask this feature to github/stemangiola/tidySummarizedExperiment")
-  }
-  
-  # If both nested not by transcript nor sample
-  if(! s_(se)$name  %in% colnames(data) & !f_(se)$name %in% colnames(data) ){
-    
-    my_se = pull(.data_, !!cols) %>% .[[1]] 
+unnest_summarized_experiment <- function(data, cols, ...,
+    keep_empty=FALSE, ptype=NULL, names_sep=NULL,
+    names_repair="check_unique", .drop, .id, .sep, .preserve) {
 
-    
-    # Mark if columns belong to feature or sample
-    my_unnested_tibble =
-      mutate(data, !!cols := map(!!cols, ~ as_tibble(.x))) %>%
+    . <- NULL
 
-      select(-suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
-      unnest(!!cols)
-    
-    # Get which column is relative to feature or sample
-    sample_columns = my_unnested_tibble %>% get_subset_columns(!!s_(my_se)$symbol)
-    transcript_columns = my_unnested_tibble %>% get_subset_columns(!!f_(my_se)$symbol)
-    
-    source_column =
-      c(
-        rep(s_(my_se)$name, length(sample_columns)) %>% setNames(sample_columns),
-        rep(f_(my_se)$name, length(transcript_columns)) %>% setNames(transcript_columns)
-
-      )
-    
-    # Drop if SE is null
-    if(data |> filter(map_lgl(!!cols, is.null)) |> nrow() > 0){
-      warning("tidySummarizedcExperiment says: some SummarizedExperiment objects to unnest were <NULL>, and were elminated")
-      data = data |> filter(!map_lgl(!!cols, is.null))
+    # Need this otherwise crashes map
+    .data_ <- data
+  
+    cols <- enquo(cols)
+  
+    # If the column is not SE do normal stuff
+    if (
+        data %>%
+        pull(!!cols) %>%
+        .[[1]] %>%
+        class() %>%
+        as.character() %in%
+        c("SummarizedExperiment",
+            "RangedSummarizedExperiment") %>%
+        all() %>%
+        not()
+    ) {
+        return(
+            data %>%
+            drop_class("tidySummarizedExperiment_nested") %>%
+            tidyr::unnest(!!cols, ..., keep_empty=keep_empty,
+                ptype=ptype, names_sep=names_sep,
+                names_repair=names_repair) %>%
+            add_class("tidySummarizedExperiment_nested")
+        )
     }
-    
-    # Do my trick to unnest
-    data = 
-      data |>
-      mutate(!!cols := imap(
-        !!cols, ~ .x %>%
-          bind_cols_internal(
-            
-            # Attach back the columns used for nesting
-            .data_ %>%
-              select(-!!cols, -suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
-              slice(rep(.y, ncol(.x) * nrow(.x))),
-            
-            # Column sample-wise or feature-wise
-            column_belonging =
-              source_column[
-                .data_ %>%
-                  select(-!!cols, -suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
-                  colnames()
-              ]
-          )
-      ))
-    
-    # Understand if split was done feature 
-    if(identical(
-      data |> pull(!!cols) |> magrittr::extract2(1) |> colnames() |> sort(),
-      data |> pull(!!cols) |> map(colnames) |> reduce(intersect) |> sort()
-    ))
-      return(data |> pull(!!cols) |> reduce_rbind_se())
-    
-    # Understand if split was done sample 
-    else if(identical(
-      data |> pull(!!cols) |> magrittr::extract2(1) |> rownames() |> sort(),
-      data |> pull(!!cols) |> map(rownames) |> reduce(intersect) |> sort()
-    ))
-      return(data |> pull(!!cols) |> reduce_cbind_se())
-    
-    # If neither there is something wrong
-    else
-      stop("tidybulk says: not the sample names nor the feature names overlap through your nesting. The nesting (due to the underlying SummarizedExperiment::cbind and SummarizedExperiment::rbind requirements) needs to be rectangular.)")
 
-  }
+    # If both nested by transcript and sample
+    if (s_(se)$name %in% colnames(data) &
+        f_(se)$name %in% colnames(data) ) {
+        stop("tidySummarizedExperiment says:",
+            " for the moment nesting both by sample- and feature-wise",
+            " information is not possible. Please ask this feature",
+            " to github/stemangiola/tidySummarizedExperiment")
+    }
   
-  # If column is SE nd only feature
-  if(f_(se)$name %in% colnames(data)){
+    # If both nested not by transcript nor sample
+    if(!s_(se)$name %in% colnames(data) &
+        !f_(se)$name %in% colnames(data)) {
     
-    se = do.call(SummarizedExperiment::rbind, pull(data, !!cols))
-    rowData(se) = cbind( rowData(se), data %>% select(-!!cols, -!!f_(se)$symbol))
+        my_se <- pull(.data_, !!cols) %>% .[[1]] 
+
     
-    return(se)
-  }
+        # Mark if columns belong to feature or sample
+        my_unnested_tibble <-
+            mutate(data, !!cols := map(!!cols, ~ as_tibble(.x))) %>%
+            select(-suppressWarnings(one_of(s_(my_se)$name,
+                f_(my_se)$name))) %>%
+            unnest(!!cols)
+    
+        # Get which column is relative to feature or sample
+        sample_columns <- my_unnested_tibble %>%
+            get_subset_columns(!!s_(my_se)$symbol)
+        transcript_columns <- my_unnested_tibble %>%
+            get_subset_columns(!!f_(my_se)$symbol)
+    
+        source_column <-
+            c(
+                rep(s_(my_se)$name,
+                    length(sample_columns)) %>%
+                    setNames(sample_columns),
+                rep(f_(my_se)$name,
+                    length(transcript_columns)) %>%
+                    setNames(transcript_columns)
+            )
+    
+        # Drop if SE is null
+        if (data |> filter(map_lgl(!!cols, is.null)) |> nrow() > 0) {
+            warning("tidySummarizedcExperiment says:",
+                " some SummarizedExperiment objects to",
+                " unnest were <NULL>, and were elminated")
+            data <- data |> filter(!map_lgl(!!cols, is.null))
+        }
+    
+        # Do my trick to unnest
+        data <- data |>
+            mutate(!!cols := imap(
+                !!cols, ~ .x %>%
+                bind_cols_internal(
+                    # Attach back the columns used for nesting
+                    .data_ %>%
+                        select(-!!cols,
+                            -suppressWarnings(one_of(s_(my_se)$name,
+                            f_(my_se)$name))) %>%
+                        slice(rep(.y, ncol(.x) * nrow(.x))),
+            
+                    # Column sample-wise or feature-wise
+                    column_belonging=source_column[
+                        .data_ %>%
+                        select(-!!cols,
+                            -suppressWarnings(one_of(s_(my_se)$name,
+                                f_(my_se)$name))) %>%
+                        colnames()
+                    ]
+                )
+            ))
+    
+        # Understand if split was done feature 
+        if(identical(
+            data |> pull(!!cols) |> magrittr::extract2(1) |>
+                colnames() |> sort(),
+            data |> pull(!!cols) |> map(colnames) |> 
+                reduce(intersect) |> sort()
+        )) {
+            return(data |> pull(!!cols) |> reduce_rbind_se())
+        } 
+        # Understand if split was done sample 
+        else if (identical(
+            data |> pull(!!cols) |> magrittr::extract2(1) |>
+                rownames() |> sort(),
+            data |> pull(!!cols) |> map(rownames) |>
+                reduce(intersect) |> sort()
+        )) {
+            return(data |> pull(!!cols) |> reduce_cbind_se())
+        }
+        # If neither there is something wrong
+        else {
+            stop("tidySummarizedcExperiment says: not the sample names",
+                " nor the feature names overlap through your nesting.",
+                " The nesting (due to the underlying",
+                " SummarizedExperiment::cbind and",
+                " SummarizedExperiment::rbind requirements)",
+                " needs to be rectangular.)")
+        }
+
+    }
   
-  # If column is SE nd only sample
-  if(s_(se)$name %in% colnames(data)){
-    
-    se = data |> pull(!!cols) |> reduce_cbind_se()
-    colData(se) = cbind( colData(se), data %>% select(-!!cols, -!!s_(se)$symbol))
-    
-    return(se)
-    
-  }
+    # If column is SE nd only feature
+    if (f_(se)$name %in% colnames(data)) {
+        se <- do.call(SummarizedExperiment::rbind, pull(data, !!cols))
+        rowData(se) <- cbind(rowData(se),
+            data %>% select(-!!cols, -!!f_(se)$symbol))
+        return(se)
+    }
+  
+    # If column is SE nd only sample
+    if (s_(se)$name %in% colnames(data)) {
+        se <- data |> pull(!!cols) |> reduce_cbind_se()
+        colData(se) <- cbind(colData(se),
+            data %>% select(-!!cols, -!!s_(se)$symbol))
+        return(se)
+    }
 }
 
-
-
-#' nest
-#'
-#' @importFrom tidyr nest
-#'
-#' @param .data A tbl. (See tidyr)
-#' @param ... Name-variable pairs of the form new_col=c(col1, col2, col3) (See tidyr)
-#' @param .names_sep See ?tidyr::nest
-#'
-#' @return A tidySummarizedExperiment objector a tibble depending on input
+#' @name nest
+#' @rdname nest
+#' @inherit tidyr::nest
+#' @return `tidySummarizedExperiment_nested`
 #'
 #' @examples
-#'
-#' tidySummarizedExperiment::pasilla %>%
-#'
+#' tidySummarizedExperiment::pasilla |>
 #'     nest(data=-condition)
-#'
-#' @rdname tidyr-methods
-#' @name nest
-#'
-#' @export
-NULL
-
+#'     
 #' @importFrom rlang enquos
 #' @importFrom rlang :=
 #' @importFrom purrr when
 #' @importFrom purrr pmap
-#'
+#' @importFrom tidyr nest
 #' @export
-nest.SummarizedExperiment <- function(.data, ..., .names_sep = NULL) {
+nest.SummarizedExperiment <- function(.data, ..., .names_sep=NULL) {
     cols <- enquos(...)
     col_name_data <- names(cols)
 
     # Deprecation of special column names
-    if(is_sample_feature_deprecated_used(
-      .data, 
-      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
-    )){
-      .data= ping_old_special_column_into_metadata(.data)
+    .cols <- enquos(..., .ignore_empty="all") %>% 
+        map(~ quo_name(.x)) %>% unlist()
+    if (is_sample_feature_deprecated_used(.data, .cols)) {
+        .data <- ping_old_special_column_into_metadata(.data)
     }
     
     my_data__ <- .data 
     
     # Names
-    sample_name = s_(my_data__)$name
-    feature_name = f_(my_data__)$name
-    sample_symbol = s_(my_data__)$symbol
-    feature_symbol = f_(my_data__)$symbol
+    sample_name <- s_(my_data__)$name
+    feature_name <- f_(my_data__)$name
+    sample_symbol <- s_(my_data__)$symbol
+    feature_symbol <- f_(my_data__)$symbol
     
-    # Check if the nesting is too complicated for the moment without optimisation
-    my_test_nest = 
-      my_data__[1,1] %>%
-      as_tibble() %>%
-      tidyr::nest(...) 
+    # Check if the nesting is too complicated
+    # for the moment without optimisation
+    my_test_nest <- 
+        my_data__[1,1] %>%
+        as_tibble() %>%
+        tidyr::nest(...) 
 
     # Understand what the nesting is about
-    my_nesting_column = my_test_nest |> select(-!!as.symbol(col_name_data)) |> colnames()
+    my_nesting_column <- my_test_nest |>
+        select(-!!as.symbol(col_name_data)) |>
+        colnames()
 
     # Check that sample or feature are in the nesting
     if(
+        # Check column intersection
+        c(f_(.data)$name) %>%
+            intersect(colnames(my_test_nest)) %>%
+            length() %>% `>` (0) &
       
-      # Check column intersection
-      c(f_(.data)$name) %>% intersect(colnames(my_test_nest)) %>% length() %>% `>` (0) &
-      
-      # Check that other column are there
-      length(colnames(my_test_nest)) > 2
-    )
-    stop("tidySummarizedExperiment says: You cannot have the columns feature among the nesting mixed with other nesting for efficiency reasons. Please consider to convert to_tibble() first. We are working for optimising a generalised solution of nest().")
+        # Check that other column are there
+        length(colnames(my_test_nest)) > 2
+    ) {
+        stop("tidySummarizedExperiment says:",
+            " You cannot have the columns feature among the nesting",
+            " mixed with other nesting for efficiency reasons.",
+            " Please consider to convert to_tibble() first.",
+            " We are working for optimising a generalised solution of nest().")
+    }
 
-    # my_data__nested =
-      # my_data__ %>%
-      # 
-      # # This is needed otherwise nest goes into loop and fails
-      # as_tibble() %>%
-      # tidyr::nest(...)
+    # my_data__nested <-
+    #     my_data__ %>% 
+    #     # This is needed otherwise nest goes into loop and fails
+    #     as_tibble() %>%
+    #     tidyr::nest(...)
      
     # If I nest only for .feature -> THIS WORKS ONLY WITH THE CHECK ABOVE
-    if(feature_name %in% colnames(my_test_nest))
-     return(
-       my_data__ %>%
-         
-         # This is needed otherwise nest goes into loop and fails
-         as_tibble() %>%
-         tidyr::nest(...) %>% 
-         mutate(
-           !!as.symbol(col_name_data) := 
-             split_SummarizedExperiment_by_feature_to_list(!!.data)
-        ) %>%
-         
-         # Coerce to tidySummarizedExperiment_nested for unnesting
-         add_class("tidySummarizedExperiment_nested")
-     ) 
+    if (feature_name %in% colnames(my_test_nest)) {
+        return(
+            my_data__ %>%
+            # This is needed otherwise nest goes into loop and fails
+            as_tibble() %>%
+            tidyr::nest(...) %>% 
+            mutate(
+                !!as.symbol(col_name_data) := 
+                 split_SummarizedExperiment_by_feature_to_list(!!.data)
+            ) %>%
+            # Coerce to tidySummarizedExperiment_nested for unnesting
+            add_class("tidySummarizedExperiment_nested")
+        )
+    } 
     
 
     my_data__ %>%
-      select(!!sample_symbol, !!feature_symbol, my_nesting_column) |> 
-      as_tibble() %>%
-      tidyr::nest(...) |> 
+        select(!!sample_symbol, !!feature_symbol, my_nesting_column) |> 
+        as_tibble() %>%
+        tidyr::nest(...) |> 
 
         mutate(
             !!as.symbol(col_name_data) := pmap(
 
-              # Add sample feature to map if nesting by those
+                # Add sample feature to map if nesting by those
                 list(!!as.symbol(col_name_data)) %>%
-
-                  # Check if nested by sample
-                  when(sample_name %in% colnames(my_test_nest) ~ c(., list(!!sample_symbol)), ~ (.)) %>%
-
-                  # Check if nested by feature
-                  when(feature_name %in% colnames(my_test_nest) ~ c(., list(!!feature_symbol)), ~ (.)) , ~ { 
-                    
-                    # VERY COMPLICATE WAY TO DO THIS. SIMPLIFY IN THE FUTURE
-                    
                     # Check if nested by sample
-                    if(sample_name %in% colnames(my_test_nest)) { my_samples=..2 }
-                    else {my_samples=pull(..1,!!sample_symbol)}
+                    when(sample_name %in% colnames(my_test_nest) ~
+                        c(., list(!!sample_symbol)), ~ (.)) %>%
 
-                    # Check if nested by feature and sample
-                    if(sample_name %in% colnames(my_test_nest) & feature_name %in% colnames(my_test_nest)) {my_transcripts=..3}
-                    else if(feature_name %in% colnames(my_test_nest)) my_transcripts=..2
-                    else my_transcripts=pull(..1,!!feature_symbol)
+                    # Check if nested by feature
+                    when(feature_name %in% colnames(my_test_nest) ~
+                        c(., list(!!feature_symbol)), ~ (.)), ~ {
                     
-                    ###
+                        # VERY COMPLICATE WAY TO DO THIS.
+                        # SIMPLIFY IN THE FUTURE
+                    
+                        # Check if nested by sample
+                        if (sample_name %in% colnames(my_test_nest)) {
+                            my_samples=..2
+                        } else {
+                            my_samples=pull(..1,!!sample_symbol)
+                        }
 
-                    my_data__[unique(my_transcripts),unique(my_samples)] |>
-                      select(-one_of(
-                        my_nesting_column |> 
-                          setdiff(c(sample_name, feature_name))
-                      )) |> 
-                      suppressWarnings()
+                        # Check if nested by feature and sample
+                        if (sample_name %in% colnames(my_test_nest) &
+                            feature_name %in% colnames(my_test_nest)) {
+                            my_transcripts=..3
+                        } else if (feature_name %in% colnames(my_test_nest)) {
+                            my_transcripts=..2  
+                        } else {
+                            my_transcripts=pull(..1,!!feature_symbol)                            
+                        }
+                        ###
 
-                 
-                }
+                        my_data__[unique(my_transcripts), unique(my_samples)] |>
+                            select(-one_of(
+                                my_nesting_column |> 
+                                setdiff(c(sample_name, feature_name))
+                            )) |> 
+                            suppressWarnings()    
+                    }
             )
         ) %>%
-
         # Coerce to tidySummarizedExperiment_nested for unnesting
         add_class("tidySummarizedExperiment_nested")
 }
 
-#' Extract a character column into multiple columns using regular
-#' expression groups
-#'
-#' Given a regular expression with capturing groups, `extract()` turns
-#' each group into a new column. If the groups don't match, or the input
-#' is NA, the output will be NA.
-#'
-#' @importFrom tidyr extract
-#'
-#' @param data A tidySummarizedExperiment object
-#' @param col Column name or position. This is passed to
-#'   [tidyselect::vars_pull()].
-#'
-#'   This argument is passed by expression and supports
-#'   [quasiquotation][rlang::quasiquotation] (you can unquote column
-#'   names or column positions).
-#' @param into Names of new variables to create as character vector.
-#'    Use `NA` to omit the variable in the output.
-#' @param regex a regular expression used to extract the desired values.
-#'   There should be one group (defined by `()`) for each element of `into`.
-#' @param remove If `TRUE`, remove input column from output data frame.
-#' @param convert If `TRUE`, will run [type.convert()] with
-#'   `as.is=TRUE` on new columns. This is useful if the component
-#'   columns are integer, numeric or logical.
-#'
-#'   NB: this will cause string `"NA"`s to be converted to `NA`s.
-#' @param ... Additional arguments passed on to methods.
-#' @seealso [separate()] to split up by a separator.
-#'
-#' @rdname tidyr-methods
 #' @name extract
-#'
-#' @export
+#' @rdname extract
+#' @inherit tidyr::extract
+#' @return `tidySummarizedExperiment`
+#' 
 #' @examples
-#'
-#' tidySummarizedExperiment::pasilla %>%
-#'
+#' tidySummarizedExperiment::pasilla |>
 #'     extract(type, into="sequencing", regex="([a-z]*)_end", convert=TRUE)
-#'     
-#' @return A tidySummarizedExperiment objector a tibble depending on input
-#'
+#' 
+#' @importFrom SummarizedExperiment colData
 #' @importFrom tidyr extract
-#'
-#' @export
-NULL
-
 #' @importFrom rlang enquo
 #' @export
-extract.SummarizedExperiment <- function(data, col, into, regex="([[:alnum:]]+)", remove=TRUE,
+extract.SummarizedExperiment <- function(data, col,
+    into, regex="([[:alnum:]]+)", remove=TRUE,
     convert=FALSE, ...) {
+
+    . <- NULL
+    se <- tidySummarizedExperiment::se
     col <- enquo(col)
 
     # Deprecation of special column names
-    if(is_sample_feature_deprecated_used(
-      data, 
-      c(quo_name(col), into)
-    )){
-      data= ping_old_special_column_into_metadata(data)
+    if (is_sample_feature_deprecated_used(
+        data, c(quo_name(col), into)
+    )) {
+        data <- ping_old_special_column_into_metadata(data)
     }
+
     
-    secial_columns = get_special_columns(
-      
-      # Decrease the size of the dataset
-      data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
+    secial_columns <- get_special_columns(  
+        # Decrease the size of the dataset
+        data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
     ) |> 
-      c(get_needed_columns(data))
+        c(get_needed_columns(data))
     
-    tst =
-        intersect( quo_names(into),  secial_columns ) %>%
+    tst <- intersect(quo_names(into),  secial_columns) %>%
         length() %>%
-        gt(0) &
-        remove
+        gt(0) & remove
 
 
     if (tst) {
-        columns = secial_columns |>  paste(collapse=", ")
+        columns <- secial_columns |>  paste(collapse=", ")
         stop(
-            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says:",
+            " you are trying to rename a column that is view only",
             columns,
-            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+            "(it is not present in the colData).",
+            " If you want to mutate a view-only column,",
+            " make a copy and mutate that one."
         )
     }
 
     # Subset column annotation
-    if(
-      (
-        all(quo_names(col) %in% colnames(colData(data))) |
-        ( quo_name(col) == s_(se)$name & !remove )
-      ) & 
-      !s_(se)$name %in% into
-    ){
-      colData(data) = 
-        colData(data) %>% 
-        as.data.frame() %>% 
-        as_tibble(rownames = s_(data)$name) %>% 
-        tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>% 
-        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
-        select(-!!s_(se)$symbol) %>%
-        DataFrame(check.names = FALSE)
+    if (
+        (
+            all(quo_names(col) %in% colnames(colData(data))) |
+            (quo_name(col) == s_(se)$name & !remove)
+        ) & 
+        !s_(se)$name %in% into
+    ) {
+        colData(data) <- colData(data) %>% 
+            as.data.frame() %>% 
+            as_tibble(rownames=s_(data)$name) %>% 
+            tidyr::extract(col=!!col, into=into, regex=regex,
+                remove=remove, convert=convert, ...) %>% 
+            data.frame(row.names=pull(., !!s_(se)$symbol),
+                check.names=FALSE) %>%
+            select(-!!s_(se)$symbol) %>%
+            DataFrame(check.names=FALSE)
       
-      return(data)
+        return(data)
     }
      
     # Subset row annotation
-    if(
-      (
-        all( quo_names(col) %in% colnames(rowData(data)) ) | 
-        ( quo_name(col) == f_(se)$name & !remove )
-      ) & 
+    if (
+        (
+            all( quo_names(col) %in% colnames(rowData(data))) | 
+            (quo_name(col) == f_(se)$name & !remove)
+        ) & 
         !f_(se)$name %in% into
-      ){
-      rowData(data) = 
-        rowData(data) %>% 
-        as.data.frame() %>% 
-        as_tibble(rownames = f_(data)$name) %>% 
-        tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>% 
-        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
-        select(-!!f_(se)$symbol) %>%
-        DataFrame(check.names = FALSE)
+    ) {
+        rowData(data) <- rowData(data) %>% 
+            as.data.frame() %>% 
+            as_tibble(rownames=f_(data)$name) %>% 
+            tidyr::extract(col=!!col, into=into, regex=regex,
+                remove=remove, convert=convert, ...) %>% 
+            data.frame(row.names=pull(., !!f_(se)$symbol),
+                check.names=FALSE) %>%
+            select(-!!f_(se)$symbol) %>%
+            DataFrame(check.names=FALSE)
       
-      return(data)
+        return(data)
     }
     
     data %>%
-        as_tibble(skip_GRanges = TRUE) %>%
-        tidyr::extract(col=!!col, into=into, regex=regex, remove=remove, convert=convert, ...) %>%
+        as_tibble(skip_GRanges=TRUE) %>%
+        tidyr::extract(col=!!col, into=into, regex=regex,
+            remove=remove, convert=convert, ...) %>%
         update_SE_from_tibble(data)
 }
 
-#' Pivot data from wide to long
-#'
-#' @description
-#'
-#' `pivot_longer()` "lengthens" data, increasing the number of rows and
-#' decreasing the number of columns. The inverse transformation is
-#' `pivot_wider()`
-#'
-#' Learn more in `vignette("pivot")`.
-#'
-#' @importFrom ellipsis check_dots_used
-#' @importFrom tidyr pivot_longer
-#'
-#' @details
-#' `pivot_longer()` is an updated approach to [gather()], designed to be both
-#' simpler to use and to handle more use cases. We recommend you use
-#' `pivot_longer()` for new code; `gather()` isn't going away but is no longer
-#' under active development.
-#'
-#' @param data A data frame to pivot.
-#' @param cols <[`tidy-select`][tidyr_tidy_select]> Columns to pivot into
-#'   longer format.
-#' @param cols_vary When pivoting `cols` into longer format, how should the
-#'   output rows be arranged relative to their original row number?
-#'
-#'   * `"fastest"`, the default, keeps individual rows from `cols` close
-#'     together in the output. This often produces intuitively ordered output
-#'     when you have at least one key column from `data` that is not involved in
-#'     the pivoting process.
-#'
-#'   * `"slowest"` keeps individual columns from `cols` close together in the
-#'     output. This often produces intuitively ordered output when you utilize
-#'     all of the columns from `data` in the pivoting process.
-#' @param names_to A character vector specifying the new column or columns to
-#'   create from the information stored in the column names of `data` specified
-#'   by `cols`.
-#'
-#'   * If length 0, or if `NULL` is supplied, no columns will be created.
-#'
-#'   * If length 1, a single column will be created which will contain the
-#'     column names specified by `cols`.
-#'
-#'   * If length >1, multiple columns will be created. In this case, one of
-#'     `names_sep` or `names_pattern` must be supplied to specify how the
-#'     column names should be split. There are also two additional character
-#'     values you can take advantage of:
-#'
-#'     * `NA` will discard the corresponding component of the column name.
-#'
-#'     * `".value"` indicates that the corresponding component of the column
-#'       name defines the name of the output column containing the cell values,
-#'       overriding `values_to` entirely.
-#' @param names_prefix A regular expression used to remove matching text
-#'   from the start of each variable name.
-#' @param names_sep,names_pattern If `names_to` contains multiple values,
-#'   these arguments control how the column name is broken up.
-#'
-#'   `names_sep` takes the same specification as [separate()], and can either
-#'   be a numeric vector (specifying positions to break on), or a single string
-#'   (specifying a regular expression to split on).
-#'
-#'   `names_pattern` takes the same specification as [extract()], a regular
-#'   expression containing matching groups (`()`).
-#'
-#'   If these arguments do not give you enough control, use
-#'   `pivot_longer_spec()` to create a spec object and process manually as
-#'   needed.
-#' @param names_repair What happens if the output has invalid column names?
-#'   The default, `"check_unique"` is to error if the columns are duplicated.
-#'   Use `"minimal"` to allow duplicates in the output, or `"unique"` to
-#'   de-duplicated by adding numeric suffixes. See [vctrs::vec_as_names()]
-#'   for more options.
-#' @param values_to A string specifying the name of the column to create
-#'   from the data stored in cell values. If `names_to` is a character
-#'   containing the special `.value` sentinel, this value will be ignored,
-#'   and the name of the value column will be derived from part of the
-#'   existing column names.
-#' @param values_drop_na If `TRUE`, will drop rows that contain only `NA`s
-#'   in the `value_to` column. This effectively converts explicit missing values
-#'   to implicit missing values, and should generally be used only when missing
-#'   values in `data` were created by its structure.
-#' @param names_transform,values_transform Optionally, a list of column
-#'   name-function pairs. Alternatively, a single function can be supplied,
-#'   which will be applied to all columns. Use these arguments if you need to
-#'   change the types of specific columns. For example, `names_transform =
-#'   list(week = as.integer)` would convert a character variable called `week`
-#'   to an integer.
-#'
-#'   If not specified, the type of the columns generated from `names_to` will
-#'   be character, and the type of the variables generated from `values_to`
-#'   will be the common type of the input columns used to generate them.
-#' @param names_ptypes,values_ptypes Optionally, a list of column name-prototype
-#'   pairs. Alternatively, a single empty prototype can be supplied, which will
-#'   be applied to all columns. A prototype (or ptype for short) is a
-#'   zero-length vector (like `integer()` or `numeric()`) that defines the type,
-#'   class, and attributes of a vector. Use these arguments if you want to
-#'   confirm that the created columns are the types that you expect. Note that
-#'   if you want to change (instead of confirm) the types of specific columns,
-#'   you should use `names_transform` or `values_transform` instead.
-#' @param ... Additional arguments passed on to methods.
-#'
-#' @return A tidySummarizedExperiment objector a tibble depending on input
-#'
-#' @rdname tidyr-methods
 #' @name pivot_longer
-#'
-#' @export
+#' @rdname pivot_longer
+#' @inherit tidyr::pivot_longer
+#' @return `tidySummarizedExperiment`
+#' 
 #' @examples
 #' # See vignette("pivot") for examples and explanation
-#'
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
-#'
-#'     pivot_longer(c(condition, type), names_to="name", values_to="value")
-#'     
-NULL
-
+#'     pivot_longer(c(condition, type),
+#'         names_to="name", values_to="value")
+#' 
+#' @importFrom tidyr pivot_longer
 #' @export
 pivot_longer.SummarizedExperiment <- function(data,
-                                              cols, ..., cols_vary = "fastest", names_to = "name", 
-                                              names_prefix = NULL, names_sep = NULL, names_pattern = NULL, 
-                                              names_ptypes = NULL, names_transform = NULL, names_repair = "check_unique", 
-                                              values_to = "value", values_drop_na = FALSE, values_ptypes = NULL, 
-                                              values_transform = NULL) {
+    cols, ..., cols_vary = "fastest", names_to = "name", 
+    names_prefix = NULL, names_sep = NULL, names_pattern = NULL, 
+    names_ptypes = NULL, names_transform = NULL, names_repair = "check_unique", 
+    values_to = "value", values_drop_na = FALSE, values_ptypes = NULL, 
+    values_transform = NULL) {
+
     cols <- enquo(cols)
 
     message(data_frame_returned_message)
 
-    
     # Deprecation of special column names
     if(is_sample_feature_deprecated_used(
-      data, 
-      c(quo_names(cols))
-    )){
-      data= ping_old_special_column_into_metadata(data)
+        data, 
+        c(quo_names(cols))
+    )) {
+        data <- ping_old_special_column_into_metadata(data)
     }
     
     data %>%
-        as_tibble(skip_GRanges = TRUE) %>%
-        tidyr::pivot_longer(!!cols,
-                            ..., 
-                            cols_vary = cols_vary, 
-                            names_to = names_to, 
-                            names_prefix = names_prefix, 
-                            names_sep = names_sep, 
-                            names_pattern = names_pattern, 
-                            names_ptypes = names_ptypes, 
-                            names_transform = names_transform,
-                            names_repair = names_repair, 
-                            values_to = values_to,
-                            values_drop_na = values_drop_na, 
-                            values_ptypes = values_ptypes, 
-                            values_transform = values_transform
+        as_tibble(skip_GRanges=TRUE) %>%
+        tidyr::pivot_longer(!!cols, ..., cols_vary=cols_vary, 
+            names_to=names_to, names_prefix=names_prefix, 
+            names_sep=names_sep, names_pattern=names_pattern, 
+            names_ptypes=names_ptypes, names_transform=names_transform,
+            names_repair=names_repair, values_to=values_to,
+            values_drop_na=values_drop_na, values_ptypes=values_ptypes, 
+            values_transform=values_transform
         )
 }
 
-
-
-#' Pivot data from long to wide
-#
-#' @description
-#' `pivot_wider()` "widens" data, increasing the number of columns and
-#' decreasing the number of rows. The inverse transformation is
-#' [pivot_longer()].
-#'
-#' Learn more in `vignette("pivot")`.
-#'
-#' @details
-#' `pivot_wider()` is an updated approach to [spread()], designed to be both
-#' simpler to use and to handle more use cases. We recommend you use
-#' `pivot_wider()` for new code; `spread()` isn't going away but is no longer
-#' under active development.
-#'
-#' @seealso [pivot_wider_spec()] to pivot "by hand" with a data frame that
-#'   defines a pivotting specification.
-#' @inheritParams pivot_longer
-#' @param id_cols <[`tidy-select`][tidyr_tidy_select]> A set of columns that
-#'   uniquely identify each observation. Typically used when you have
-#'   redundant variables, i.e. variables whose values are perfectly correlated
-#'   with existing variables.
-#'
-#'   Defaults to all columns in `data` except for the columns specified through
-#'   `names_from` and `values_from`. If a tidyselect expression is supplied, it
-#'   will be evaluated on `data` after removing the columns specified through
-#'   `names_from` and `values_from`.
-#' @param id_expand Should the values in the `id_cols` columns be expanded by
-#'   [expand()] before pivoting? This results in more rows, the output will
-#'   contain a complete expansion of all possible values in `id_cols`. Implicit
-#'   factor levels that aren't represented in the data will become explicit.
-#'   Additionally, the row values corresponding to the expanded `id_cols` will
-#'   be sorted.
-#' @param names_from,values_from <[`tidy-select`][tidyr_tidy_select]> A pair of
-#'   arguments describing which column (or columns) to get the name of the
-#'   output column (`names_from`), and which column (or columns) to get the
-#'   cell values from (`values_from`).
-#'
-#'   If `values_from` contains multiple values, the value will be added to the
-#'   front of the output column.
-#' @param names_sep If `names_from` or `values_from` contains multiple
-#'   variables, this will be used to join their values together into a single
-#'   string to use as a column name.
-#' @param names_prefix String added to the start of every variable name. This is
-#'   particularly useful if `names_from` is a numeric vector and you want to
-#'   create syntactic variable names.
-#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply
-#'   a glue specification that uses the `names_from` columns (and special
-#'   `.value`) to create custom column names.
-#' @param names_sort Should the column names be sorted? If `FALSE`, the default,
-#'   column names are ordered by first appearance.
-#' @param names_vary When `names_from` identifies a column (or columns) with
-#'   multiple unique values, and multiple `values_from` columns are provided,
-#'   in what order should the resulting column names be combined?
-#'
-#'   - `"fastest"` varies `names_from` values fastest, resulting in a column
-#'     naming scheme of the form: `value1_name1, value1_name2, value2_name1,
-#'     value2_name2`. This is the default.
-#'
-#'   - `"slowest"` varies `names_from` values slowest, resulting in a column
-#'     naming scheme of the form: `value1_name1, value2_name1, value1_name2,
-#'     value2_name2`.
-#' @param names_expand Should the values in the `names_from` columns be expanded
-#'   by [expand()] before pivoting? This results in more columns, the output
-#'   will contain column names corresponding to a complete expansion of all
-#'   possible values in `names_from`. Implicit factor levels that aren't
-#'   represented in the data will become explicit. Additionally, the column
-#'   names will be sorted, identical to what `names_sort` would produce.
-#' @param values_fill Optionally, a (scalar) value that specifies what each
-#'   `value` should be filled in with when missing.
-#'
-#'   This can be a named list if you want to apply different fill values to
-#'   different value columns.
-#' @param values_fn Optionally, a function applied to the value in each cell
-#'   in the output. You will typically use this when the combination of
-#'   `id_cols` and `names_from` columns does not uniquely identify an
-#'   observation.
-#'
-#'   This can be a named list if you want to apply different aggregations
-#'   to different `values_from` columns.
-#' @param unused_fn Optionally, a function applied to summarize the values from
-#'   the unused columns (i.e. columns not identified by `id_cols`,
-#'   `names_from`, or `values_from`).
-#'
-#'   The default drops all unused columns from the result.
-#'
-#'   This can be a named list if you want to apply different aggregations
-#'   to different unused columns.
-#'
-#'   `id_cols` must be supplied for `unused_fn` to be useful, since otherwise
-#'   all unspecified columns will be considered `id_cols`.
-#'
-#'   This is similar to grouping by the `id_cols` then summarizing the
-#'   unused columns using `unused_fn`.
-#' @param ... Additional arguments passed on to methods.
-#'
-#'   The default drops all unused columns from the result.
-#'
-#'   This can be a named list if you want to apply different aggregations
-#'   to different unused columns.
-#'
-#'   `id_cols` must be supplied for `unused_fn` to be useful, since otherwise
-#'   all unspecified columns will be considered `id_cols`.
-#'
-#'   This is similar to grouping by the `id_cols` then summarizing the
-#'   unused columns using `unused_fn`.
-#' @param ... Additional arguments passed on to methods.
-#'   
-#' @importFrom tidyr pivot_wider
-#' @rdname tidyr-methods
 #' @name pivot_wider
-#'
-#'
-#' @export
+#' @rdname pivot_wider
+#' @inherit tidyr::pivot_wider
+#' @return `tidySummarizedExperiment`
+#' 
 #' @examples
 #' # See vignette("pivot") for examples and explanation
-#'
 #' library(dplyr)
 #' tidySummarizedExperiment::pasilla %>%
-#'
 #'     pivot_wider(names_from=feature, values_from=counts)
-NULL
-
+#' 
+#' @importFrom tidyr pivot_wider
 #' @export
 pivot_wider.SummarizedExperiment <- function(data,
-                                             ...,
-                                             id_cols = NULL,
-                                             id_expand = FALSE,
-                                             names_from = name,
-                                             names_prefix = "",
-                                             names_sep = "_",
-                                             names_glue = NULL,
-                                             names_sort = FALSE,
-                                             names_vary = "fastest",
-                                             names_expand = FALSE,
-                                             names_repair = "check_unique",
-                                             values_from = value,
-                                             values_fill = NULL,
-                                             values_fn = NULL,
-                                             unused_fn = NULL
-) {
-  id_cols <- enquo(id_cols)
-  name = enquo(names_from)
-  value = enquo(values_from)
+    ..., id_cols = NULL, id_expand = FALSE, names_from = name,
+    names_prefix = "", names_sep = "_", names_glue = NULL,
+    names_sort = FALSE, names_vary = "fastest", names_expand = FALSE,
+    names_repair = "check_unique", values_from = value,
+    values_fill = NULL, values_fn = NULL, unused_fn = NULL) {
+    id_cols <- enquo(id_cols)
+    name <- enquo(names_from)
+    value <- enquo(values_from)
 
-  message(data_frame_returned_message)
+    message(data_frame_returned_message)
 
-  # Deprecation of special column names
-  if(is_sample_feature_deprecated_used(
-    data, 
-    c(quo_names(id_cols), quo_names(name), quo_names(value))
-  )){
-    data= ping_old_special_column_into_metadata(data)
-  }
+    # Deprecation of special column names
+    if (is_sample_feature_deprecated_used(
+        data, 
+        c(quo_names(id_cols), quo_names(name), quo_names(value))
+    )) {
+        data <- ping_old_special_column_into_metadata(data)
+    }
   
-  data %>%
-    as_tibble(skip_GRanges = TRUE) %>%
-    tidyr::pivot_wider(
-      ...,
-      id_cols = !!id_cols,
-      id_expand = id_expand,
-      names_from = !!name,
-      names_prefix = names_prefix,
-      names_sep = names_sep,
-      names_glue = names_glue,
-      names_sort = names_sort,
-      names_vary = names_vary,
-      names_expand = names_expand,
-      names_repair = names_repair,
-      values_from = !!value,
-      values_fill = values_fill,
-      values_fn = values_fn,
-      unused_fn = unused_fn
-    )
+    data %>%
+        as_tibble(skip_GRanges=TRUE) %>%
+        tidyr::pivot_wider(..., id_cols=!!id_cols, id_expand=id_expand,
+            names_from=!!name, names_prefix=names_prefix,
+            names_sep=names_sep, names_glue=names_glue,
+            names_sort=names_sort, names_vary=names_vary,
+            names_expand=names_expand, names_repair=names_repair,
+            values_from=!!value, values_fill=values_fill,
+            values_fn=values_fn, unused_fn=unused_fn
+        )
 }
 
-
-
-#' Unite multiple columns into one by pasting strings together
-#'
-#' Convenience function to paste together multiple columns into one.
-#'
-#' @importFrom ellipsis check_dots_unnamed
-#' @importFrom tidyr unite
-#'
-#' @param data A data frame.
-#' @param col The name of the new column, as a string or symbol.
-#'
-#'   This argument is passed by expression and supports
-#'   [quasiquotation][rlang::quasiquotation] (you can unquote strings
-#'   and symbols). The name is captured from the expression with
-#'   [rlang::ensym()] (note that this kind of interface where
-#'   symbols do not represent actual objects is now discouraged in the
-#'   tidyverse; we support it here for backward compatibility).
-#' @param ... <[`tidy-select`][tidyr_tidy_select]> Columns to unite
-#' @param sep Separator to use between values.
-#' @param na.rm If `TRUE`, missing values will be remove prior to uniting
-#'   each value.
-#' @param remove If `TRUE`, remove input columns from output data frame.
-#' @seealso [separate()], the complement.
-#'
-#' @return A tidySummarizedExperiment objector a tibble depending on input
-#'
-#' @rdname tidyr-methods
 #' @name unite
-#'
-#' @export
+#' @rdname unite
+#' @inherit tidyr::unite
+#' @return `tidySummarizedExperiment`
+#' 
 #' @examples
-#'
-#' tidySummarizedExperiment::pasilla %>%
-#'
+#' tidySummarizedExperiment::pasilla |>
 #'     unite("group", c(condition, type))
-NULL
-
+#'     
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment colData<-
+#' @importFrom rlang enquo enquos quo_name
+#' @importFrom tidyr unite
 #' @export
-unite.SummarizedExperiment <- function(data, col, ..., sep="_", remove=TRUE, na.rm=FALSE) {
-
+unite.SummarizedExperiment <- function(data, col, ...,
+    sep="_", remove=TRUE, na.rm=FALSE) {
+    
+    se <- tidySummarizedExperiment::se
+    . <- NULL
+    
     # Check that we are not modifying a key column
     cols <- enquo(col)
 
     # Deprecation of special column names
-    # Deprecation of special column names
-    if(is_sample_feature_deprecated_used(
-      data, 
-      (enquos(..., .ignore_empty = "all") %>% map(~ quo_name(.x)) %>% unlist)
-    )){
-      data= ping_old_special_column_into_metadata(data)
+    .cols <- enquos(..., .ignore_empty="all") %>% 
+        map(~ quo_name(.x)) %>% unlist()
+    if (is_sample_feature_deprecated_used(data, .cols)) {
+        data <- ping_old_special_column_into_metadata(data)
     }
-    
-    secial_columns = get_special_columns(
-      
-      # Decrease the size of the dataset
-      data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
+  
+    secial_columns <- get_special_columns(
+        # Decrease the size of the dataset
+        data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
     ) |> 
-      c(get_needed_columns(data))
+        c(get_needed_columns(data))
     
-    tst =
+    tst <-
         intersect(
             cols %>% quo_names(),
             secial_columns
         ) %>%
         length() %>%
-        gt(0) &
-        remove
-
+        gt(0) & remove
 
     if (tst) {
-        columns =
-          secial_columns %>%
-            paste(collapse=", ")
+        columns <- secial_columns |>  paste(collapse=", ")
         stop(
-            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says:",
+            " you are trying to rename a column that is view only",
             columns,
-            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+            "(it is not present in the colData).",
+            " If you want to mutate a view-only column,",
+            " make a copy and mutate that one."
         )
     }
 
-    columns_to_unite = data[1,1] %>% select(...) %>% colnames()
+    columns_to_unite <- data[1,1] %>% select(...) %>% colnames()
     
     # Subset column annotation
-    if(all(columns_to_unite %in% colnames(colData(data))) & !s_(se)$name %in% col){
-      colData(data) = 
-        colData(data) %>% 
-        as.data.frame() %>% 
-        as_tibble(rownames = s_(data)$name) %>% 
-        tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
-        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
-        select(-!!s_(se)$symbol) %>%
-        DataFrame(check.names = FALSE)
-      
-      return(data)
+    if (all(columns_to_unite %in% colnames(colData(data))) &
+        !s_(se)$name %in% col) {
+        colData(data) <-
+            colData(data) %>% 
+            as.data.frame() %>% 
+            as_tibble(rownames=s_(data)$name) %>% 
+            tidyr::unite(!!cols, ..., sep=sep,
+                remove=remove, na.rm=na.rm) %>%
+            data.frame(row.names=pull(., !!s_(se)$symbol),
+                check.names=FALSE) %>%
+            select(-!!s_(se)$symbol) %>%
+            DataFrame(check.names=FALSE)
+
+        return(data)
     }
     
     # Subset row annotation
-    if(all(columns_to_unite %in% colnames(rowData(data)))& !f_(se)$name %in% col){
-      rowData(data) = 
-        rowData(data) %>% 
-        as.data.frame() %>% 
-        as_tibble(rownames = f_(data)$name) %>% 
-        tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
-        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
-        select(-!!f_(se)$symbol) %>%
-        DataFrame(check.names = FALSE)
-      
-      return(data)
+    if (all(columns_to_unite %in% colnames(rowData(data))) &
+        !f_(se)$name %in% col) {
+        rowData(data) <-
+            rowData(data) %>% 
+            as.data.frame() %>% 
+            as_tibble(rownames=f_(data)$name) %>% 
+            tidyr::unite(!!cols, ..., sep=sep,
+                remove=remove, na.rm=na.rm) %>%
+            data.frame(row.names=pull(., !!f_(se)$symbol),
+                check.names=FALSE) %>%
+            select(-!!f_(se)$symbol) %>%
+            DataFrame(check.names = FALSE)
+
+        return(data)
     }
 
     # Otherwise go simple and slow
     data %>%
-        as_tibble(skip_GRanges = TRUE) %>%
+        as_tibble(skip_GRanges=TRUE) %>%
         tidyr::unite(!!cols, ..., sep=sep, remove=remove, na.rm=na.rm) %>%
         update_SE_from_tibble(data)
 }
 
-#' Separate a character column into multiple columns with a regular
-#' expression or numeric locations
-#'
-#' Given either a regular expression or a vector of character positions,
-#' `separate()` turns a single character column into multiple columns.
-#'
-#' @importFrom ellipsis check_dots_used
-#' @importFrom tidyr separate
-#'
-#' @inheritParams extract
-#' @param sep Separator between columns.
-#'
-#'   If character, `sep` is interpreted as a regular expression. The default
-#'   value is a regular expression that matches any sequence of
-#'   non-alphanumeric values.
-#'
-#'   If numeric, `sep` is interpreted as character positions to split at. Positive
-#'   values start at 1 at the far-left of the string; negative value start at -1 at
-#'   the far-right of the string. The length of `sep` should be one less than
-#'   `into`.
-#' @param extra If `sep` is a character vector, this controls what
-#'   happens when there are too many pieces. There are three valid options:
-#'
-#'   * "warn" (the default): emit a warning and drop extra values.
-#'   * "drop": drop any extra values without a warning.
-#'   * "merge": only splits at most `length(into)` times
-#' @param fill If `sep` is a character vector, this controls what
-#'   happens when there are not enough pieces. There are three valid options:
-#'
-#'   * "warn" (the default): emit a warning and fill from the right
-#'   * "right": fill with missing values on the right
-#'   * "left": fill with missing values on the left
-#' @seealso [unite()], the complement, [extract()] which uses regular
-#'   expression capturing groups.
-#'
-#' @return A tidySummarizedExperiment objector a tibble depending on input
-#'
-#' @rdname tidyr-methods
 #' @name separate
-#'
-#' @export
+#' @rdname separate
+#' @inherit tidyr::separate
+#' @return `tidySummarizedExperiment`
+#' 
 #' @examples
-#'
-# un <- tidySummarizedExperiment::pasilla %>%
-# 
-#     unite("group", c(condition, type))
-# un %>% separate(col=group, into=c("condition", "type"))
-NULL
-
+#' un <- tidySummarizedExperiment::pasilla |>
+#'     unite("group", c(condition, type))
+#' un |> separate(col=group, into=c("condition", "type"))
+#' 
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment colData<-
+#' @importFrom tidyr separate
 #' @export
-separate.SummarizedExperiment <- function(data, col, into, sep="[^[:alnum:]]+", remove=TRUE,
+separate.SummarizedExperiment <- function(data, col,
+    into, sep="[^[:alnum:]]+", remove=TRUE,
     convert=FALSE, extra="warn", fill="warn", ...) {
 
-  # Fix NOTEs
-  . = NULL
+    # Fix NOTEs
+    . <- NULL
+    se <- tidySummarizedExperiment::se
   
     # Check that we are not modifying a key column
     cols <- enquo(col)
 
     # Deprecation of special column names
-    if(is_sample_feature_deprecated_used(
-      data, 
-      c(quo_names(cols))
-    )){
-      data= ping_old_special_column_into_metadata(data)
+    if (is_sample_feature_deprecated_used(
+        data, 
+        c(quo_names(cols))
+    )) {
+        data <- ping_old_special_column_into_metadata(data)
     }
     
-    secial_columns = get_special_columns(
-      
-      # Decrease the size of the dataset
-      data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
+    secial_columns <- get_special_columns(
+        # Decrease the size of the dataset
+        data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
     ) |> 
-      c(get_needed_columns(data))
+        c(get_needed_columns(data))
     
-    tst =
+    tst <-
         intersect(
             cols %>% quo_names(),
             secial_columns
         ) %>%
         length() %>%
-        gt(0) &
-        remove
+        gt(0) & remove
  
-
     if (tst) {
-        columns =
-          secial_columns %>%
-            paste(collapse=", ")
+        columns <- secial_columns |>  paste(collapse=", ")
         stop(
-            "tidySummarizedExperiment says: you are trying to rename a column that is view only",
+            "tidySummarizedExperiment says:",
+            " you are trying to rename a column that is view only",
             columns,
-            "(it is not present in the colData). If you want to mutate a view-only column, make a copy and mutate that one."
+            "(it is not present in the colData).",
+            " If you want to mutate a view-only column,",
+            " make a copy and mutate that one."
         )
     }
 
-    columns_to_unite = data[1,1] %>% select(!!cols) %>% suppressMessages() %>%  colnames()
+
+    columns_to_unite <- data[1,1] %>% select(!!cols) %>%
+        suppressMessages() %>% colnames()
     
     # Subset column annotation
-    if(all(columns_to_unite %in% colnames(colData(data))) & (!s_(data)$name %in% into)){
-      colData(data) = 
-        colData(data) %>% 
-        as.data.frame() %>% 
-        as_tibble(rownames = s_(data)$name) %>% 
-        tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
-        data.frame(row.names=pull(., !!s_(se)$symbol), check.names = FALSE) %>%
-        select(-!!s_(se)$symbol) %>%
-        DataFrame(check.names = FALSE)
+    if (all(columns_to_unite %in% colnames(colData(data))) &
+        (!s_(data)$name %in% into)) {
+        colData(data) <-
+            colData(data) %>% 
+            as.data.frame() %>% 
+            as_tibble(rownames=s_(data)$name) %>% 
+            tidyr::separate(!!cols, into=into, sep=sep,
+                remove=remove, convert=convert,
+                extra=extra, fill=fill, ...) %>%
+            data.frame(row.names=pull(., !!s_(se)$symbol),
+                check.names=FALSE) %>%
+            select(-!!s_(se)$symbol) %>%
+            DataFrame(check.names=FALSE)
       
-      return(data)
+        return(data)
     }
     
     # Subset row annotation
-    if(all(columns_to_unite %in% colnames(rowData(data)))& (!f_(data)$name %in% into)){
-      rowData(data) = 
-        rowData(data) %>% 
-        as.data.frame() %>% 
-        as_tibble(rownames = f_(data)$name) %>% 
-        tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
-        data.frame(row.names=pull(., !!f_(se)$symbol), check.names = FALSE) %>%
-        select(-!!f_(data)$symbol) %>%
-        DataFrame(check.names = FALSE)
-      
-      return(data)
+    if (all(columns_to_unite %in% colnames(rowData(data))) &
+        (!f_(data)$name %in% into)) {
+        rowData(data) <-
+            rowData(data) %>% 
+            as.data.frame() %>% 
+            as_tibble(rownames = f_(data)$name) %>% 
+            tidyr::separate(!!cols, into=into, sep=sep,
+                remove=remove, convert=convert,
+                extra=extra, fill=fill, ...) %>%
+            data.frame(row.names=pull(., !!f_(se)$symbol),
+                check.names=FALSE) %>%
+            select(-!!f_(data)$symbol) %>%
+            DataFrame(check.names=FALSE)
+
+        return(data)
     }
     
     # Otherwise go simple and slow
     data %>%
-        as_tibble(skip_GRanges = TRUE) %>%
-        tidyr::separate(!!cols, into=into, sep=sep, remove=remove, convert=convert, extra=extra, fill=fill, ...) %>%
+        as_tibble(skip_GRanges=TRUE) %>%
+        tidyr::separate(!!cols, into=into, sep=sep,
+            remove=remove, convert=convert,
+            extra=extra, fill=fill, ...) %>%
         update_SE_from_tibble(data)
 }
