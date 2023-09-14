@@ -15,11 +15,11 @@ Description: The tidySummarizedExperiment package provides a set of tools for cr
   ecosystem of tidy tools for data analysis.
 License: GPL-3
 Depends:
-    R (>= 4.1.0),
+    R (>= 4.3.0),
     SummarizedExperiment,
-    ttservice,
-    dplyr
+    ttservice
 Imports:
+	dplyr,
     tibble (>= 3.0.4),
     magrittr,
     tidyr,

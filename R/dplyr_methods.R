@@ -17,7 +17,6 @@
 #' @importFrom SummarizedExperiment assays<-
 #' @importFrom S4Vectors SimpleList
 #' @importFrom ttservice bind_rows
-#' @export bind_rows.SummarizedExperiment
 #' @export
 bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
     tts <- flatten_if(dots_values(...), is_spliced)
@@ -92,13 +91,11 @@ bind_cols_ <- function(..., .id=NULL) { bind_cols_internal(..., .id=NULL) }
 
 #' @rdname bind_rows
 #' @aliases bind_cols
-#' @export bind_cols.SummarizedExperiment
 #' @export
 bind_cols.SummarizedExperiment <- bind_cols_
 
 #' @rdname bind_rows
 #' @aliases bind_cols
-#' @export bind_cols.RangedSummarizedExperiment
 #' @export
 bind_cols.RangedSummarizedExperiment <- bind_cols_
 
