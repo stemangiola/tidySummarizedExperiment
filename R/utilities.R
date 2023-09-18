@@ -795,7 +795,7 @@ get_count_datasets <- function(se) {
       if(.x |> select(-!!f_(se)$symbol) |> ncol() == 0) return(.x)
       
       .x |> 
-        pivot_longer(names_to = s_(se)$name, values_to = .y, cols = -!!f_(se)$symbol)
+        pivot_longer(names_to = s_(se)$name, values_to = .y, cols = -!!f_(se)$symbol, cols_vary = "slowest")
       
       #%>%
       #  rename(!!.y := count)
