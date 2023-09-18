@@ -946,49 +946,28 @@ eliminate_GRanges_metadata_columns_also_present_in_Rowdata <- function(.my_data,
 }
 
 subset_tibble_output <- function(.data, count_info, sample_info, gene_info, range_info, .subset) {
-
-    . <- NULL
-
-    # This function outputs a tibble after subsetting the columns
-    .subset <- enquo(.subset)
-    
-    # Build template of the output
-    output_colnames <- 
-        slice(count_info, 0) %>%
-        left_join(slice(sample_info, 0), by = s_(.data)$name) %>%
-        left_join(slice(gene_info, 0), by = f_(.data)$name) %>%
-        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by = f_(.data)$name), ~ (.)) %>%
-        select(!!.subset) %>%
-        colnames()
-    
-    
-    # Sample table
-    sample_info <- 
-        sample_info %>%
-        when(
-            colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-            select(., one_of(s_(.data)$name, output_colnames)) %>%
-                suppressWarnings()
-        )
-    
-    # Ranges table
-    range_info <- 
-        range_info %>%
-        when(
-            colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-            select(., one_of(f_(.data)$name, output_colnames)) %>%
-                suppressWarnings()
-        )
-    
-    # Ranges table
-    gene_info <- 
-        gene_info %>%
-        when(
-            colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-            select(., one_of(f_(.data)$name, output_colnames)) %>%
-                suppressWarnings()
-        )
-    
+  # This function outputs a tibble after subsetting the columns
+  .subset <- enquo(.subset)
+  
+  # Build template of the output
+  output_colnames <- 
+    slice(count_info, 0) %>%
+    left_join(slice(sample_info, 0), by = s_(.data)$name) %>%
+    left_join(slice(gene_info, 0), by = f_(.data)$name) %>%
+    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by = f_(.data)$name), ~ (.)) %>%
+    select(!!.subset) %>%
+    colnames()
+  
+  
+  # Sample table
+  sample_info <- 
+    sample_info %>%
+    when(
+      colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+      select(., one_of(s_(.data)$name, output_colnames)) %>%
+        suppressWarnings()
+    )
+  
   # Ranges table
   range_info <- 
     range_info %>%
