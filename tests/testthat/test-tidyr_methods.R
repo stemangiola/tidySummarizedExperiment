@@ -68,6 +68,15 @@ test_that("nest_unnest_slice_1",{
     
 })
 
+test_that("nest_0_samples",{
+  
+  rowData(tt)$n = rep(1, nrow(tt))
+  
+  tt[,0] |> 
+    nest(data = -n) 
+  
+})
+
 test_that("unite separate", {
     un <- tt %>% unite("new_col", c(condition, col2), sep = ":")
 
