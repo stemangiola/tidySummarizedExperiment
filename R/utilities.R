@@ -344,10 +344,11 @@ get_abundance_sc_long <- function(.data, transcripts = NULL, all = FALSE,
 #' @importFrom SummarizedExperiment colData<-
 #' @importFrom SummarizedExperiment rowData<-
 #' @importFrom S4Vectors head 
+#' @importFrom rlang .data
 #'
 #' @keywords internal
 #'
-#' @param .data A tibble
+#' @param .data_mutated A tibble
 #' @param se A tidySummarizedExperiment
 #'
 #' @noRd
@@ -511,17 +512,84 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
           }
         )) %>%
         
-        # Create correct list
-        pull(data___) %>%
-        reduce(c) 
-    )
-  
-  # return
-  se
+        # In case unitary SE subset does not work because all same
+        data.frame(row.names = pull(.,f_(se)$symbol), check.names = FALSE) %>%
+        select(-!!f_(se)$symbol) %>%
+        DataFrame(check.names = FALSE)
+    
+    # This to avoid the mismatch between missing row names for counts 
+    # and numerical row names for rowData
+    row_names_row <- 
+        row_data %>%
+        rownames() %>%
+        when(
+            rownames(se) %>% is.null ~ as.integer(.),
+            ~ (.)
+        )
+    
+    # Subset if needed. This function is used by many dplyr utilities
+    se <- se[row_names_row, row_names_col]
+    
+    # Update
+    colData(se) <- col_data
+    rowData(se) <- row_data
+    
+    # Count-like data that is NOT in the assay slot already 
+    colnames_assay <-
+        colnames(.data_mutated) %>% 
+        setdiff(c(f_(se)$name, s_(se)$name, colnames(as.data.frame(head(rowRanges(se), 1))) )) %>%
+        setdiff(colnames(col_data)) %>% 
+        setdiff(colnames(row_data)) %>%
+        setdiff(assays(se) %>% names)
+    
+    if (length(colnames_assay) > 0)
+        assays(se) = #, withDimnames=FALSE) = 
+        assays(se, withDimnames = FALSE) %>% c(
+            .data_mutated %>% 
+                
+                # Select assays column
+                select(!!f_(se)$symbol, !!s_(se)$symbol, colnames_assay) %>% 
+                
+                # Pivot for generalising to many assays
+                pivot_longer(cols = -c(!!s_(se)$symbol, !!f_(se)$symbol)) %>%
+                nest(data___ = c(!!s_(se)$symbol, !!f_(se)$symbol, .data$value)) %>%
+                
+                # Convert to matrix and to named list
+                mutate(data___ = map2(
+                    .data$data___, .data$name,
+                    ~ {
+                        .x = 
+                            .x %>%
+                            spread(!!s_(se)$symbol, value) %>% 
+                            as_matrix(rownames = !!f_(se)$symbol)  %>% 
+                            suppressWarnings()
+                        
+                        # Rearrange if assays has colnames and rownames
+                        if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
+                        if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
+                        
+                        
+                        .x %>%
+                            
+                            list() %>%
+                            setNames(.y)
+                    }
+                )) %>%
+                
+                # Create correct list
+                pull(.data$data___) %>%
+                reduce(c) 
+        )
+    
+    # return
+    se
+
 }
 
 #' @importFrom methods is
 slice_optimised <- function(.data, ..., .preserve=FALSE) {
+  
+  . <- NULL
   
   # This simulated tibble only gets samples and features so we know those that have been completely omitted already
   # In order to save time for the as_tibble conversion
@@ -944,28 +1012,49 @@ eliminate_GRanges_metadata_columns_also_present_in_Rowdata <- function(.my_data,
 }
 
 subset_tibble_output <- function(.data, count_info, sample_info, gene_info, range_info, .subset) {
-  # This function outputs a tibble after subsetting the columns
-  .subset <- enquo(.subset)
-  
-  # Build template of the output
-  output_colnames <- 
-    slice(count_info, 0) %>%
-    left_join(slice(sample_info, 0), by = s_(.data)$name) %>%
-    left_join(slice(gene_info, 0), by = f_(.data)$name) %>%
-    when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by = f_(.data)$name), ~ (.)) %>%
-    select(!!.subset) %>%
-    colnames()
-  
-  
-  # Sample table
-  sample_info <- 
-    sample_info %>%
-    when(
-      colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
-      select(., one_of(s_(.data)$name, output_colnames)) %>%
-        suppressWarnings()
-    )
-  
+
+    . <- NULL
+
+    # This function outputs a tibble after subsetting the columns
+    .subset <- enquo(.subset)
+    
+    # Build template of the output
+    output_colnames <- 
+        slice(count_info, 0) %>%
+        left_join(slice(sample_info, 0), by = s_(.data)$name) %>%
+        left_join(slice(gene_info, 0), by = f_(.data)$name) %>%
+        when(nrow(range_info) > 0 ~ (.) %>% left_join(range_info, by = f_(.data)$name), ~ (.)) %>%
+        select(!!.subset) %>%
+        colnames()
+    
+    
+    # Sample table
+    sample_info <- 
+        sample_info %>%
+        when(
+            colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+            select(., one_of(s_(.data)$name, output_colnames)) %>%
+                suppressWarnings()
+        )
+    
+    # Ranges table
+    range_info <- 
+        range_info %>%
+        when(
+            colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+            select(., one_of(f_(.data)$name, output_colnames)) %>%
+                suppressWarnings()
+        )
+    
+    # Ranges table
+    gene_info <- 
+        gene_info %>%
+        when(
+            colnames(.) %>% intersect(output_colnames) %>% length() %>% equals(0) ~ NULL,
+            select(., one_of(f_(.data)$name, output_colnames)) %>%
+                suppressWarnings()
+        )
+    
   # Ranges table
   range_info <- 
     range_info %>%
@@ -1247,10 +1336,12 @@ get_special_column_name_symbol <- function(name) {
 # to make optimisation before as_tibble is called
 # for big datasets
 simulate_feature_sample_from_tibble <- function(.data) {
-  r <- rownames(.data) %>% .[rep(1:length(.), ncol(.data) )]
-  c <- colnames(.data) %>% .[rep(1:length(.), each = nrow(.data) )]
-  
-  tibble(!!f_(.data)$symbol := r,  !!s_(.data)$symbol := c)
+
+    . <- NULL
+    r <- rownames(.data) %>% .[rep(1:length(.), ncol(.data) )]
+    c <- colnames(.data) %>% .[rep(1:length(.), each = nrow(.data) )]
+    
+    tibble(!!f_(.data)$symbol := r,  !!s_(.data)$symbol := c)
 }
 
 feature__ <- get_special_column_name_symbol(".feature")
@@ -1437,7 +1528,7 @@ order_assays_internally_to_be_consistent <- function(se) {
 }
 
 #' @importFrom SummarizedExperiment cbind
-reduce_cbind_se = function(se_list){
+reduce_cbind_se <- function(se_list){
   
   do.call(cbind, se_list)
 }
@@ -1445,7 +1536,9 @@ reduce_cbind_se = function(se_list){
 #' @importFrom purrr reduce
 #' @importFrom purrr map
 #' @importFrom SummarizedExperiment rbind
-reduce_rbind_se = function(se_list){
+#' @importFrom SummarizedExperiment elementMetadata
+#' @importFrom SummarizedExperiment elementMetadata<-
+reduce_rbind_se <- function(se_list){
   
   # rbind does not accept elementMetadata so I merge and take it off
   element_metadata = se_list %>% map(elementMetadata) |> reduce(rbind)
