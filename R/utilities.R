@@ -512,80 +512,14 @@ update_SE_from_tibble <- function(.data_mutated, se, column_belonging = NULL) {
           }
         )) %>%
         
-        # In case unitary SE subset does not work because all same
-        data.frame(row.names = pull(.,f_(se)$symbol), check.names = FALSE) %>%
-        select(-!!f_(se)$symbol) %>%
-        DataFrame(check.names = FALSE)
-    
-    # This to avoid the mismatch between missing row names for counts 
-    # and numerical row names for rowData
-    row_names_row <- 
-        row_data %>%
-        rownames() %>%
-        when(
-            rownames(se) %>% is.null ~ as.integer(.),
-            ~ (.)
-        )
-    
-    # Subset if needed. This function is used by many dplyr utilities
-    se <- se[row_names_row, row_names_col]
-    
-    # Update
-    colData(se) <- col_data
-    rowData(se) <- row_data
-    
-    # Count-like data that is NOT in the assay slot already 
-    colnames_assay <-
-        colnames(.data_mutated) %>% 
-        setdiff(c(f_(se)$name, s_(se)$name, colnames(as.data.frame(head(rowRanges(se), 1))) )) %>%
-        setdiff(colnames(col_data)) %>% 
-        setdiff(colnames(row_data)) %>%
-        setdiff(assays(se) %>% names)
-    
-    if (length(colnames_assay) > 0)
-        assays(se) = #, withDimnames=FALSE) = 
-        assays(se, withDimnames = FALSE) %>% c(
-            .data_mutated %>% 
-                
-                # Select assays column
-                select(!!f_(se)$symbol, !!s_(se)$symbol, colnames_assay) %>% 
-                
-                # Pivot for generalising to many assays
-                pivot_longer(cols = -c(!!s_(se)$symbol, !!f_(se)$symbol)) %>%
-                nest(data___ = c(!!s_(se)$symbol, !!f_(se)$symbol, .data$value)) %>%
-                
-                # Convert to matrix and to named list
-                mutate(data___ = map2(
-                    .data$data___, .data$name,
-                    ~ {
-                        .x = 
-                            .x %>%
-                            spread(!!s_(se)$symbol, value) %>% 
-                            as_matrix(rownames = !!f_(se)$symbol)  %>% 
-                            suppressWarnings()
-                        
-                        # Rearrange if assays has colnames and rownames
-                        if(!is.null(rownames(se)) & !is.null(rownames(.x))) .x = .x[rownames(se),,drop=FALSE]
-                        if(!is.null(colnames(se)) & !is.null(colnames(.x))) .x = .x[,colnames(se),drop=FALSE]
-                        
-                        
-                        .x %>%
-                            
-                            list() %>%
-                            setNames(.y)
-                    }
-                )) %>%
-                
-                # Create correct list
-                pull(.data$data___) %>%
-                reduce(c) 
-        )
-    
-    # return
-    se
-
+        # Create correct list
+        pull(data___) %>%
+        reduce(c) 
+    )
+  
+  # return
+  se
 }
-
 #' @importFrom methods is
 slice_optimised <- function(.data, ..., .preserve=FALSE) {
   
