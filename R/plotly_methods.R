@@ -1,5 +1,5 @@
-#' @name plotly
-#' @rdname plotly
+#' @name plot_ly
+#' @rdname plot_ly
 #' @inherit plotly::plot_ly
 #' @return `plotly`
 #' 
@@ -9,21 +9,23 @@
 #' 
 #' @importFrom plotly plot_ly
 #' @export
-plot_ly <- function(data=data.frame(), ..., type=NULL, name=NULL,
-    color=NULL, colors=NULL, alpha=NULL,
-    stroke=NULL, strokes=NULL, alpha_stroke=1,
-    size=NULL, sizes=c(10, 100),
-    span=NULL, spans=c(1, 20),
-    symbol=NULL, symbols=NULL,
-    linetype=NULL, linetypes=NULL,
-    split=NULL, frame=NULL,
-    width=NULL, height=NULL, source="A") {
-    UseMethod("plot_ly")
-}
+setGeneric("plot_ly", 
+    function(data=data.frame(), ..., type=NULL, name=NULL,
+        color=NULL, colors=NULL, alpha=NULL,
+        stroke=NULL, strokes=NULL, alpha_stroke=1,
+        size=NULL, sizes=c(10, 100),
+        span=NULL, spans=c(1, 20),
+        symbol=NULL, symbols=NULL,
+        linetype=NULL, linetypes=NULL,
+        split=NULL, frame=NULL,
+        width=NULL, height=NULL, source="A") {
+            standardGeneric("plot_ly")
+})
 
-#' @rdname plotly
+#' @rdname plot_ly
 #' @export
-plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
+setMethod("plot_ly", "tbl_df",
+    function(data=data.frame(), ..., type=NULL, name=NULL,
     color=NULL, colors=NULL, alpha=NULL,
     stroke=NULL, strokes=NULL, alpha_stroke=1,
     size=NULL, sizes=c(10, 100),
@@ -47,11 +49,12 @@ plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
             split=split, frame=frame,
             width=width, height=height, source=source
         )
-}
+})
 
-#' @rdname plotly
+#' @rdname plot_ly
 #' @export
-plot_ly.SummarizedExperiment <- function(data=data.frame(),
+setMethod("plot_ly", "SummarizedExperiment",
+    function(data=data.frame(),
     ..., type=NULL, name=NULL,
     color=NULL, colors=NULL, alpha=NULL,
     stroke=NULL, strokes=NULL, alpha_stroke=1,
@@ -76,4 +79,4 @@ plot_ly.SummarizedExperiment <- function(data=data.frame(),
             split=split, frame=frame,
             width=width, height=height, source=source
         )
-}
+})
