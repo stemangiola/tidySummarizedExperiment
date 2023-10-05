@@ -191,7 +191,8 @@ help inform default axis/scale titles
 }
 \examples{
 data(pasilla)
-plot_ly(pasilla)
+pasilla |>
+    plot_ly(x = ~ counts)
 
 }
 \references{
