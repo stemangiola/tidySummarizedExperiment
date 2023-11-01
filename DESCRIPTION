@@ -28,7 +28,6 @@ Imports:
     purrr,
     lifecycle,
     methods,
-    plotly,
     utils,
     S4Vectors,
     tidyselect,
@@ -44,7 +43,8 @@ Suggests:
     BiocStyle,
     testthat,
     knitr,
-    markdown
+    markdown,
+    plotly
 VignetteBuilder: 
     knitr
 RdMacros:
