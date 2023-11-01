@@ -188,14 +188,17 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
     # Do my trick to unnest
     data = 
       data |>
-      mutate(!!cols := imap(
-        !!cols, ~ .x %>%
+      
+      # I have to use this because imap behave strangely
+      rowid_to_column(var = "i___") |> 
+      mutate(!!cols := map2(
+        !!cols, i___, ~ .x %>% 
           bind_cols_internal(
             
             # Attach back the columns used for nesting
             .data_ %>%
               select(-!!cols, -suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
-              slice(rep(.y, ncol(.x) * nrow(.x))),
+              slice(rep(as.integer(.y), ncol(.x) * nrow(.x))),
             
             # Column sample-wise or feature-wise
             column_belonging =
@@ -205,7 +208,10 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
                   colnames()
               ]
           )
-      ))
+      )) |> 
+      
+      # I have to use this because imap behave strangely
+      select(-i___)
     
     # Understand if split was done feature 
     if(identical(
