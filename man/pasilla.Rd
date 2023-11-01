@@ -14,6 +14,7 @@ containing 14599 features and 7 biological replicates.
 data(pasilla)
 }
 \description{
-A SummarizedExperiment dataset containing the transcriptome information for Drosophila Melanogaster.
+A SummarizedExperiment dataset containing
+the transcriptome information for Drosophila Melanogaster.
 }
 \keyword{datasets}

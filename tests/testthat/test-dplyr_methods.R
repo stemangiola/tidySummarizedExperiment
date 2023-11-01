@@ -73,6 +73,19 @@ test_that("left_join", {
     )
 })
 
+test_that("left_join 0 samples", {
+ 
+    pasilla[0,] %>%
+      left_join(pasilla %>%
+                  distinct(condition) %>%
+                  mutate(new_column = 1)) |> 
+    as_tibble() |> 
+      pull(new_column) %>%
+      unique() |> 
+      expect_equal(1)
+  
+})
+
 test_that("inner_join", {
     pasilla %>% inner_join(pasilla %>%
                           distinct(condition) %>%
