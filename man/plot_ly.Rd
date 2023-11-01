@@ -166,9 +166,13 @@ help inform default axis/scale titles
 (e.g., \code{plot_ly(x = mtcars$wt)} vs \code{plot_ly(x = ~mtcars$wt)})
 }
 \examples{
-# TODO
+data(se)
+se |>
+    plot_ly(x = ~counts)
 
-# TODO
+data(se)
+se |>
+    plot_ly(x = ~counts)
 
 }
 \references{

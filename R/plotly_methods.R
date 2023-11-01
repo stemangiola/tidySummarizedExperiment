@@ -4,7 +4,9 @@
 #' @return `plotly`
 #' 
 #' @examples
-#' # TODO
+#' data(se)
+#' se |>
+#'     plot_ly(x = ~counts)
 #' 
 #' @importFrom ttservice plot_ly
 #' @export
@@ -40,7 +42,9 @@ plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
 #' @return `plotly`
 #' 
 #' @examples
-#' # TODO
+#' data(se)
+#' se |>
+#'     plot_ly(x = ~counts)
 #' 
 #' @importFrom ttservice plot_ly
 #' @export
