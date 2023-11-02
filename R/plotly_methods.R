@@ -1,27 +1,14 @@
-#' @name plotly
-#' @rdname plotly
-#' @inherit plotly::plot_ly
+#' @name plot_ly
+#' @rdname plot_ly
+#' @inherit ttservice::plot_ly
 #' @return `plotly`
 #' 
 #' @examples
-#' data(pasilla)
-#' plot_ly(pasilla)
+#' data(se)
+#' se |>
+#'     plot_ly(x = ~counts)
 #' 
-#' @importFrom plotly plot_ly
-#' @export
-plot_ly <- function(data=data.frame(), ..., type=NULL, name=NULL,
-    color=NULL, colors=NULL, alpha=NULL,
-    stroke=NULL, strokes=NULL, alpha_stroke=1,
-    size=NULL, sizes=c(10, 100),
-    span=NULL, spans=c(1, 20),
-    symbol=NULL, symbols=NULL,
-    linetype=NULL, linetypes=NULL,
-    split=NULL, frame=NULL,
-    width=NULL, height=NULL, source="A") {
-    UseMethod("plot_ly")
-}
-
-#' @rdname plotly
+#' @importFrom ttservice plot_ly
 #' @export
 plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
     color=NULL, colors=NULL, alpha=NULL,
@@ -32,10 +19,10 @@ plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
     linetype=NULL, linetypes=NULL,
     split=NULL, frame=NULL,
     width=NULL, height=NULL, source="A") {
-    data %>%
+    data |>
 
         # This is a trick to not loop the call
-        drop_class("tbl_df") %>%
+        drop_class("tbl_df") |>
         plotly::plot_ly(...,
             type=type, name=name,
             color=color, colors=colors, alpha=alpha,
@@ -49,7 +36,17 @@ plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
         )
 }
 
-#' @rdname plotly
+#' @name plot_ly
+#' @rdname plot_ly
+#' @inherit ttservice::plot_ly
+#' @return `plotly`
+#' 
+#' @examples
+#' data(se)
+#' se |>
+#'     plot_ly(x = ~counts)
+#' 
+#' @importFrom ttservice plot_ly
 #' @export
 plot_ly.SummarizedExperiment <- function(data=data.frame(),
     ..., type=NULL, name=NULL,
@@ -61,10 +58,10 @@ plot_ly.SummarizedExperiment <- function(data=data.frame(),
     linetype=NULL, linetypes=NULL,
     split=NULL, frame=NULL,
     width=NULL, height=NULL, source="A") {
-    data %>%
+    data |>
 
         # This is a trick to not loop the call
-        as_tibble() %>%
+        as_tibble() |>
         plotly::plot_ly(...,
             type=type, name=name,
             color=color, colors=colors, alpha=alpha,
