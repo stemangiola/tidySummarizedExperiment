@@ -1,7 +1,7 @@
 Type: Package
 Package: tidySummarizedExperiment
 Title: Brings SummarizedExperiment to the Tidyverse 
-Version: 1.11.7
+Version: 1.11.8
 Authors@R: c(person("Stefano", "Mangiola", email = "mangiolastefano@gmail.com",
                   role = c("aut", "cre")) )
 Description: The tidySummarizedExperiment package provides a set of tools for creating and
@@ -17,7 +17,7 @@ License: GPL-3
 Depends:
     R (>= 4.3.0),
     SummarizedExperiment,
-    ttservice
+    ttservice (>= 0.4.0)
 Imports:
 	dplyr,
     tibble (>= 3.0.4),
