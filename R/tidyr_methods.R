@@ -130,14 +130,14 @@ unnest_summarized_experiment <- function(data, cols, ...,
             
             # Attach back the columns used for nesting
             .data_ %>%
-              select(-!!cols, -suppressWarnings( any_of(s_(my_se)$name, f_(my_se)$name))) %>%
+              select(-!!cols, - any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
               slice(rep(as.integer(.y), ncol(.x) * nrow(.x))),
             
             # Column sample-wise or feature-wise
             column_belonging =
               source_column[
                 .data_ %>%
-                  select(-!!cols, -suppressWarnings( any_of(s_(my_se)$name, f_(my_se)$name))) %>%
+                  select(-!!cols, - any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
                   colnames()
               ]
           )
