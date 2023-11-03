@@ -6,7 +6,7 @@
 \alias{bind_cols.SummarizedExperiment}
 \alias{bind_cols}
 \alias{bind_cols.RangedSummarizedExperiment}
-\title{#' Efficiently bind multiple data frames by row and column}
+\title{Efficiently bind multiple data frames by row and column}
 \usage{
 \method{bind_rows}{SummarizedExperiment}(..., .id = NULL, add.cell.ids = NULL)
 
