@@ -163,9 +163,9 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
     
     # Mark if columns belong to feature or sample
     my_unnested_tibble =
-      mutate(data, !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-
-      select(-suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
+      data |> 
+      mutate(!!cols := map(!!cols, ~ as_tibble(.x))) |>
+      select(-any_of(c(s_(my_se)$name, f_(my_se)$name))) |> 
       unnest(!!cols)
     
     # Get which column is relative to feature or sample
@@ -197,14 +197,14 @@ unnest_summarized_experiment  <-  function(data, cols, ..., keep_empty=FALSE, pt
             
             # Attach back the columns used for nesting
             .data_ %>%
-              select(-!!cols, -suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
+              select(-!!cols, -any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
               slice(rep(as.integer(.y), ncol(.x) * nrow(.x))),
             
             # Column sample-wise or feature-wise
             column_belonging =
               source_column[
                 .data_ %>%
-                  select(-!!cols, -suppressWarnings( one_of(s_(my_se)$name, f_(my_se)$name))) %>%
+                  select(-!!cols, -any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
                   colnames()
               ]
           )

@@ -103,24 +103,77 @@ NULL
 bind_cols_internal = function(..., .id=NULL, column_belonging = NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
-    tts[[1]] |> 
-        as_tibble(skip_GRanges = TRUE) |>
-        dplyr::bind_cols(tts[[2]], .id=.id) %>%
-        when(
-
-            # If the column added are not sample-wise or feature-wise return tibble
-            (colnames(tts[[2]]) %in% c(
-                get_subset_columns(., !!s_(tts[[1]])$symbol),
-                get_subset_columns(., !!f_(tts[[1]])$symbol)
-            )
-            ) |> all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
-
-            # Return tiblle
-            ~ {
-                warning("tidySummarizedExperiment says: The new columns do not include pure sample-wise or feature-wise. A data frame is returned for independent data analysis.")
-                (.)
-            }
-        )
+    # If I have column corresponding bind directly
+    # Without tranformation to tibble
+    if(!is.null(column_belonging)){
+      
+      # For colData
+      colData_additions = column_belonging[column_belonging==s_(tts[[1]] )$name] |> names()
+      
+      data_frame_to_attach = 
+        tts[[1]] |> 
+        select(!!s_(tts[[1]] )$symbol) |> 
+        suppressMessages() |> 
+        bind_cols(tts[[2]] |> select(all_of(colData_additions))) |> 
+        distinct() 
+      
+      # Set row names
+      data_frame_to_attach = 
+        data_frame_to_attach |> 
+        select(-1) |> 
+        DataFrame(row.names = data_frame_to_attach |> pull(1)) 
+      
+      # Reorder
+      data_frame_to_attach = data_frame_to_attach[match(rownames(data_frame_to_attach), colnames(tts[[1]])), , drop=FALSE]
+      
+      # Attach
+      colData(tts[[1]]) = cbind(colData(tts[[1]]), data_frame_to_attach)
+      
+      # For rowData
+      rowData_additions = column_belonging[column_belonging==f_(tts[[1]] )$name] |> names()
+      
+      data_frame_to_attach = 
+        tts[[1]] |> 
+        select(!!f_(tts[[1]] )$symbol) |> 
+        suppressMessages() |> 
+        bind_cols(tts[[2]] |> select(all_of(rowData_additions))) |> 
+        distinct() 
+      
+      # Set row names
+      data_frame_to_attach = 
+        data_frame_to_attach |> 
+        select(-1) |> 
+        DataFrame(row.names = data_frame_to_attach |> pull(1)) 
+      
+      # Reorder
+      data_frame_to_attach = data_frame_to_attach[match(rownames(data_frame_to_attach), rownames(tts[[1]])), , drop=FALSE]
+      
+      # Attach
+      rowData(tts[[1]]) = cbind(rowData(tts[[1]]), data_frame_to_attach)
+      
+      tts[[1]]
+    }
+    
+    # If I DON'T have column corresponding go through tibble
+    else
+      tts[[1]] |> 
+          as_tibble(skip_GRanges = TRUE) |>
+          dplyr::bind_cols(tts[[2]], .id=.id) %>%
+          when(
+  
+              # If the column added are not sample-wise or feature-wise return tibble
+              (colnames(tts[[2]]) %in% c(
+                  get_subset_columns(., !!s_(tts[[1]])$symbol),
+                  get_subset_columns(., !!f_(tts[[1]])$symbol)
+              )
+              ) |> all() ~ update_SE_from_tibble(., tts[[1]], column_belonging = column_belonging),
+  
+              # Return tiblle
+              ~ {
+                  warning("tidySummarizedExperiment says: The new columns do not include pure sample-wise or feature-wise. A data frame is returned for independent data analysis.")
+                  (.)
+              }
+          )
 }
 
 bind_cols_ = function(..., .id=NULL) { bind_cols_internal(..., .id=NULL) }
