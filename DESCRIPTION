@@ -1,7 +1,7 @@
 Type: Package
 Package: tidySummarizedExperiment
 Title: Brings SummarizedExperiment to the Tidyverse 
-Version: 1.11.4
+Version: 1.11.6
 Authors@R: c(person("Stefano", "Mangiola", email = "mangiolastefano@gmail.com",
                   role = c("aut", "cre")) )
 Description: The tidySummarizedExperiment package provides a set of tools for creating and
@@ -15,12 +15,12 @@ Description: The tidySummarizedExperiment package provides a set of tools for cr
   ecosystem of tidy tools for data analysis.
 License: GPL-3
 Depends:
-    R (>= 4.1.0),
+    R (>= 4.3.0),
     SummarizedExperiment,
     ttservice
 Imports:
+	dplyr,
     tibble (>= 3.0.4),
-    dplyr,
     magrittr,
     tidyr,
     ggplot2,
@@ -38,7 +38,8 @@ Imports:
     stringr,
     cli,
     fansi,
-    stats
+    stats,
+    pkgconfig
 Suggests:
     BiocStyle,
     testthat,
