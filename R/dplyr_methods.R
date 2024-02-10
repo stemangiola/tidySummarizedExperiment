@@ -874,7 +874,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
 #' pasilla |> group_split(condition, counts > 0)
 #' 
 #' @importFrom ellipsis check_dots_used
-#' @export
+#' @export group_split.SummarizedExperiment
 group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   
   var_list <- enquos(...)
