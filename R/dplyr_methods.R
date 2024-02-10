@@ -880,6 +880,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
 group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   
   var_list <- enquos(...)
+  data_nested <- NULL
   
   .tbl |> 
     mutate(!!!var_list) |> 
