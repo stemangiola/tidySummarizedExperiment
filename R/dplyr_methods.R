@@ -870,7 +870,7 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
 #' 
 #' @examples
 #' data(pasilla)
-#' pasilla |> group_split(condition )
+#' pasilla |> group_split(condition)
 #' 
 #' @importFrom ellipsis check_dots_used
 #' @importFrom dplyr group_by
@@ -881,23 +881,9 @@ group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   
   var_list <- enquos(...)
   
-  group_list <- .tbl |> 
-    as_tibble() |> 
-    dplyr::group_by(!!!var_list)
-  
-  groups <- group_list |> 
-    dplyr::group_rows()
-  
-  v <- vector(mode = "list", length = length(groups))
-  
-  for (i in seq_along(v)) {
-    v[[i]] <- .tbl[,groups[[i]]]
-    
-    if(.keep == FALSE) {
-      v[[i]] <- select(v[[i]], !(!!!var_list))
-    }
-  }
-  
-  v
+  .tbl |> 
+    mutate(!!!var_list) |> 
+    nest(data_nested = - (!!!var_list)) |> 
+    pull(data_nested)
   
 }
