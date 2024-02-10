@@ -51,7 +51,7 @@ future.
 }
 
 \examples{
-data(pasilla)
+data(pasilla, package = "tidySummarizedExperiment")
 pasilla |> group_split(condition)
 pasilla |> group_split(counts > 0)
 pasilla |> group_split(condition, counts > 0)

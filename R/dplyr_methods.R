@@ -868,13 +868,14 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
 #' @inherit dplyr::group_split
 #' 
 #' @examples
-#' data(pasilla)
+#' data(pasilla, package = "tidySummarizedExperiment")
 #' pasilla |> group_split(condition)
 #' pasilla |> group_split(counts > 0)
 #' pasilla |> group_split(condition, counts > 0)
 #' 
 #' @importFrom ellipsis check_dots_used
-#' @export group_split.SummarizedExperiment
+#' @importFrom dplyr group_split
+#' @export
 group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   
   var_list <- enquos(...)
