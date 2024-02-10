@@ -871,11 +871,10 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
 #' @examples
 #' data(pasilla)
 #' pasilla |> group_split(condition)
+#' pasilla |> group_split(counts > 0)
+#' pasilla |> group_split(condition, counts > 0)
 #' 
 #' @importFrom ellipsis check_dots_used
-#' @importFrom dplyr group_by
-#' @importFrom dplyr group_rows
-#' @importFrom dplyr group_split
 #' @export
 group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   
