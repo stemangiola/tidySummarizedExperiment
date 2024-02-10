@@ -863,7 +863,6 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
         dplyr::pull(var=!!var, name=!!name, ...)
 }
 
-
 #' @name group_split
 #' @rdname group_split
 #' @inherit dplyr::group_split
