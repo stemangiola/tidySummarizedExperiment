@@ -882,9 +882,27 @@ group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   var_list <- enquos(...)
   data_nested <- NULL
   
-  .tbl |> 
+  nested <- .tbl |> 
     mutate(!!!var_list) |> 
-    nest(data_nested = - (!!!var_list)) |> 
-    pull(data_nested)
+    nest(data_nested = -(substring(as.character(var_list), 2)))
   
+  if(.keep) {
+    grouped_data <- nested |> 
+      pull(data_nested)
+    
+    grouping_cols <- nested |> 
+      select(substring(as.character(var_list), 2))
+    
+    for(i in 1:length(grouped_data)) {
+      grouped_data[[i]] <- grouped_data[[i]] |> 
+        mutate(grouping_cols[i,])
+    }
+    
+    grouped_data
+    
+  } else {
+    nested |> 
+      pull(data_nested)
+  }
+    
 }
