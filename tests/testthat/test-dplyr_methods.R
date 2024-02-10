@@ -181,3 +181,27 @@ test_that("mutate counts", {
     expect_equal(TRUE)
   
   })
+
+test_that("group_split splits character columns", {
+  data(pasilla)
+  pasilla |> 
+    group_split(condition) |> 
+    length()
+    expect_equal(2)
+})
+
+test_that("group_split splits logical comparisons", {
+  data(pasilla)
+  pasilla |> 
+    group_split(counts > 0) |> 
+    length()
+  expect_equal(2)
+})
+
+test_that("group_split splits with mutliple arguments", {
+  data(pasilla)
+  pasilla |> 
+    group_split(condition, counts > 0) |> 
+    length()
+  expect_equal(4)
+})
