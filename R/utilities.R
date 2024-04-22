@@ -1251,6 +1251,7 @@ is_filer_columns_in_column_selection <- function(.data, ...) {
     error = function(e) FALSE)
 }
 
+#' @importFrom rlang set_names
 check_if_assays_are_NOT_consistently_ordered <- function(se) {
   
   # If I have any assay at all
