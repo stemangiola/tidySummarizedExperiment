@@ -41,7 +41,6 @@ unnest.tidySummarizedExperiment_nested <- function(data, cols, ...,
 unnest_summarized_experiment <- function(data, cols, ...,
     keep_empty=FALSE, ptype=NULL, names_sep=NULL,
     names_repair="check_unique", .drop, .id, .sep, .preserve) {
-
     . <- NULL
 
     # Need this otherwise crashes map
@@ -71,6 +70,7 @@ unnest_summarized_experiment <- function(data, cols, ...,
         )
     }
 
+
     # If both nested by transcript and sample
     if (s_(se)$name %in% colnames(data) &
         f_(se)$name %in% colnames(data) ) {
@@ -88,11 +88,11 @@ unnest_summarized_experiment <- function(data, cols, ...,
 
     
         # Mark if columns belong to feature or sample
-        my_unnested_tibble <-
-            mutate(data, !!cols := map(!!cols, ~ as_tibble(.x))) %>%
-            select(-suppressWarnings(one_of(s_(my_se)$name,
-                f_(my_se)$name))) %>%
-            unnest(!!cols)
+        my_unnested_tibble =
+          data |> 
+          mutate(!!cols := map(!!cols, ~ as_tibble(.x))) |>
+          select(-any_of(c(s_(my_se)$name, f_(my_se)$name))) |> 
+          unnest(!!cols)
     
         # Get which column is relative to feature or sample
         sample_columns <- my_unnested_tibble %>%
@@ -130,14 +130,14 @@ unnest_summarized_experiment <- function(data, cols, ...,
             
             # Attach back the columns used for nesting
             .data_ %>%
-              select(-!!cols, - any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
+              select(-!!cols, -any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
               slice(rep(as.integer(.y), ncol(.x) * nrow(.x))),
             
             # Column sample-wise or feature-wise
             column_belonging =
               source_column[
                 .data_ %>%
-                  select(-!!cols, - any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
+                  select(-!!cols, -any_of(c(s_(my_se)$name, f_(my_se)$name))) %>%
                   colnames()
               ]
           )
@@ -219,6 +219,14 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep=NULL) {
         .data <- ping_old_special_column_into_metadata(.data)
     }
     
+    # if the data does not have raw, names or clumn names
+    # we have to add them, otherwise the nesting and a nesting will get confused with 
+    # the link between Sample wise, columns, and Sample IDs
+    if(rownames(.data) |> is.null() | colnames(.data) |> is.null() )
+      warning("tidySummarizedExperiment says: the nesting and unnesting operations require row names and column names to avoid side-effects. Therefore, doors will be added as \"1\", \"2\", \"3\".")
+    if(rownames(.data) |> is.null() ) rownames(.data) = .data |> nrow() |> seq_len() |> as.character()
+    if(colnames(.data) |> is.null() ) colnames(.data) = .data |> ncol() |> seq_len() |> as.character()
+    
     my_data__ <- .data 
     
     # Names
@@ -256,12 +264,6 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep=NULL) {
             " We are working for optimising a generalised solution of nest().")
     }
 
-    # my_data__nested <-
-    #     my_data__ %>% 
-    #     # This is needed otherwise nest goes into loop and fails
-    #     as_tibble() %>%
-    #     tidyr::nest(...)
-     
     # If I nest only for .feature -> THIS WORKS ONLY WITH THE CHECK ABOVE
     if (feature_name %in% colnames(my_test_nest)) {
         return(
@@ -280,7 +282,7 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep=NULL) {
     
 
     my_data__ %>%
-        select(!!sample_symbol, !!feature_symbol, my_nesting_column) |> 
+        select(!!sample_symbol, !!feature_symbol, all_of(my_nesting_column)) |> 
         as_tibble() %>%
         tidyr::nest(...) |> 
 
@@ -311,15 +313,18 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep=NULL) {
                     # Here I am filtering because if I have 0 features this leads to failure
                     else my_transcripts= ..1 |> filter(!is.na(!!feature_symbol)) |>  pull(!!feature_symbol)
                     
-                    ###
-
+                    # if the summarised experiment does not have feature ID or Sample ID, 
+                    # convert back those to integers
+                    # Note to self: this is convoluted, because if feature ID and sample ID 
+                    # were to stay integers all along, these will not be needed
+                    if(rownames(my_data__) |> is.null()) my_transcripts = as.integer(my_transcripts)
+                    if(colnames(my_data__) |> is.null()) my_samples = as.integer(my_samples)
+                    
                     my_data__[unique(my_transcripts),unique(my_samples)] |>
-                      select(-one_of(
+                      select(-any_of(
                         my_nesting_column |> 
                           setdiff(c(sample_name, feature_name))
-                      )) |> 
-                      suppressWarnings()
-
+                      )) 
                  
                 }
             )
