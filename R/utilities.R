@@ -1252,29 +1252,46 @@ is_filer_columns_in_column_selection <- function(.data, ...) {
 }
 
 check_if_assays_are_NOT_consistently_ordered <- function(se) {
-    
-    # If I have any assay at all
+  
+  # If I have any assay at all
+  do_I_have_assays =
     assays(se) |> length() |> gt(0) &&
-        
-        # If I have more than one assay with colnames
-        Filter(
-            Negate(is.null),
-            assays(se, withDimnames = FALSE) |>  
-                as.list() |> 
-                map(colnames)
-        ) |> 
-        length() |>
-        gt(0) &&
-        
-        # If I have lack of consistency
-        se |> 
-        assays(withDimnames = FALSE) |>
-        as.list() |>
-        purrr::map_dfr(colnames) |>
-        apply(1, function(x) x |> unique() |> length()) |>
-        equals(1) |>
-        all() |>  
-        not()
+    
+    # If I have more than one assay with colnames
+    Filter(
+      Negate(is.null),
+      assays(se, withDimnames = FALSE) |>  
+        as.list() |> 
+        map(colnames)
+    ) |> 
+    length() |>
+    gt(0) 
+  
+  # If I have lack of consistency
+  # Forcing assay names otherwise fails if assay is unnamed
+  if(
+    se |> 
+    assays(withDimnames = FALSE) |> 
+    as.list() |> 
+    names()
+  )
+    assays(se) = 
+      se |> 
+      assays(withDimnames = FALSE) |> 
+      as.list() |> 
+      set_names(se |> assays() |> as.list() |> length() |> seq_len())
+  
+  lack_of_consistency  = 
+    se |> 
+    assays(withDimnames = FALSE) |>
+    as.list() |>
+    purrr::map_dfr(colnames) |>
+    apply(1, function(x) x |> unique() |> length()) |>
+    equals(1) |>
+    all() |>  
+    not()
+  
+  do_I_have_assays && lack_of_consistency
 }
 
 check_if_any_dimnames_duplicated <- function(se, dim = "cols") {
