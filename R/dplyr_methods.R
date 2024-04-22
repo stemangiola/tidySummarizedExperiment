@@ -62,7 +62,7 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
 bind_cols_internal <- function(..., .id=NULL, column_belonging=NULL) {
     tts <- tts <- flatten_if(dots_values(...), is_spliced)
 
-<<<<<<< HEAD
+
     # If I have column corresponding bind directly
     # Without tranformation to tibble
     if(!is.null(column_belonging)){
@@ -683,19 +683,28 @@ select.SummarizedExperiment <- function(.data, ...) {
         data.frame(row.names=pull(., !!f_(.data)$symbol)) |>
         select(-!!f_(.data)$symbol) |>
         DataFrame()
-  
+    
+    # If SE does not have rownames, 
+    # I have to take them our of here, otherwise count integration, 
+    # which is a matrix and behaved differently from DataFrame fails
+    if(rownames(.data) |> is.null()) rownames(row_data_DF)  = NULL
+    
     col_data_tibble <- 
         colData(.data) |> 
         as_tibble(rownames = s_(.data)$name) 
   
     col_data_DF <-
         col_data_tibble |>  
-        select(one_of(columns_query), !!s_(.data)$symbol) |>
-        suppressWarnings() %>% 
-        data.frame(row.names=pull(., !!s_(.data)$symbol)) |>
+        select(any_of(columns_query), !!s_(.data)$symbol) |>
+        data.frame(row.names=pull(col_data_tibble, !!s_(.data)$symbol)) |>
         select(-!!s_(.data)$symbol) |>
         DataFrame()
   
+    # If SE does not have rownames, 
+    # I have to take them our of here, otherwise count integration, 
+    # which is a matrix and behaved differently from DataFrame fails
+    if(colnames(.data) |> is.null()) rownames(col_data_DF)  = NULL
+    
     count_data <-
         assays(.data)@listData %>%
             .[names(assays(.data)@listData) %in% columns_query]
