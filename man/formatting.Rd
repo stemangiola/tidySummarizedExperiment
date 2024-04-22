@@ -2,63 +2,59 @@
 % Please edit documentation in R/print_method.R
 \name{formatting}
 \alias{formatting}
+\alias{print.SummarizedExperiment}
+\alias{print}
 \title{Printing tibbles}
+\usage{
+\method{print}{SummarizedExperiment}(x, ..., n = NULL, width = NULL, n_extra = NULL)
+}
 \arguments{
 \item{x}{Object to format or print.}
 
-\item{...}{Other arguments passed on to individual methods.}
+\item{...}{Passed on to \code{\link[=tbl_format_setup]{tbl_format_setup()}}.}
 
 \item{n}{Number of rows to show. If \code{NULL}, the default, will print all rows
-if less than option \code{tibble.print_max}. Otherwise, will print
-\code{tibble.print_min} rows.}
+if less than the \code{print_max} \link[pillar:pillar_options]{option}.
+Otherwise, will print as many rows as specified by the
+\code{print_min} \link[pillar:pillar_options]{option}.}
 
 \item{width}{Width of text output to generate. This defaults to \code{NULL}, which
-means use \code{getOption("tibble.width")} or (if also \code{NULL})
-\code{getOption("width")}; the latter displays only the columns that fit on one
-screen. You can also set \code{options(tibble.width = Inf)} to override this
-default and always print all columns.}
+means use the \code{width} \link[pillar:pillar_options]{option}.}
 
 \item{n_extra}{Number of extra columns to print abbreviated information for,
 if the width is too small for the entire tibble. If \code{NULL}, the default,
 will print information about at most \code{tibble.max_extra_cols} extra columns.}
 }
 \value{
-Nothing
+Prints a message to the console describing
+the contents of the \code{tidySummarizedExperiment}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
-
 One of the main features of the \code{tbl_df} class is the printing:
 \itemize{
 \item Tibbles only print as many rows and columns as fit on one screen,
 supplemented by a summary of the remaining rows and columns.
 \item Tibble reveals the type of each column, which keeps the user informed about
 whether a variable is, e.g., \verb{<chr>} or \verb{<fct>} (character versus factor).
+See \code{vignette("types")} for an overview of common
+type abbreviations.
 }
 
 Printing can be tweaked for a one-off call by calling \code{print()} explicitly
 and setting arguments like \code{n} and \code{width}. More persistent control is
-available by setting the options described below.
-}
-\section{Package options}{
+available by setting the options described in \link[pillar:pillar_options]{pillar::pillar_options}.
+See also \code{vignette("digits")} for a comparison to base options,
+and \code{vignette("numbers")} that showcases \code{\link[tibble:num]{num()}} and \code{\link[tibble:char]{char()}}
+for creating columns with custom formatting options.
 
-
-The following options are used by the tibble and pillar packages
-to format and print \code{tbl_df} objects.
-Used by the formatting workhorse \code{trunc_mat()} and, therefore,
-indirectly, by \code{print.tbl()}.
-\itemize{
-\item \code{tibble.print_max}: Row number threshold: Maximum number of rows printed.
-Set to \code{Inf} to always print all rows.  Default: 20.
-\item \code{tibble.print_min}: Number of rows printed if row number threshold is
-exceeded. Default: 10.
-\item \code{tibble.width}: Output width. Default: \code{NULL} (use \code{width} option).
-\item \code{tibble.max_extra_cols}: Number of extra columns printed in reduced form.
-Default: 100.
+As of tibble 3.1.0, printing is handled entirely by the \pkg{pillar} package.
+If you implement a package that extends tibble,
+the printed output can be customized in various ways.
+See \code{vignette("extending", package = "pillar")} for details,
+and \link[pillar:pillar_options]{pillar::pillar_options} for options that control the display in the console.
 }
-}
-
 \examples{
-library(dplyr)
-pasilla  \%>\% print()
+data(pasilla)
+print(pasilla)
+
 }

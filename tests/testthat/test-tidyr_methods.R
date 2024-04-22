@@ -5,8 +5,7 @@ library(tidySummarizedExperiment)
 
 tt <-
     pasilla %>%
-    
-    tidySummarizedExperiment::mutate(col2 = "other_col")
+    mutate(col2="other_col")
 
 # Create SummarizedExperiment object for testing
 nrows <- 200
@@ -69,11 +68,20 @@ test_that("nest_unnest_slice_1",{
     
 })
 
+test_that("nest_0_samples",{
+  
+  rowData(tt)$n = rep(1, nrow(tt))
+  
+  tt[,0] |> 
+    nest(data = -n) 
+  
+})
+
 test_that("unite separate", {
     un <- tt %>% unite("new_col", c(condition, col2), sep = ":")
 
     un %>%
-        tidySummarizedExperiment::select(new_col) %>%
+        select(new_col) %>%
         slice(1) %>%
         pull(new_col) %>%
         expect_equal("untreated:other_col")
@@ -87,27 +95,25 @@ test_that("unite separate", {
         )
 
     se %>%
-        tidySummarizedExperiment::select(.sample) %>%
+        select(.sample) %>%
         ncol() %>%
         expect_equal(1)
 })
 
-test_that("extract", {
+test_that("extract()", {
     tt %>%
-        tidySummarizedExperiment::extract(col2,
-                        into = "g",
-                        regex = "other_([a-z]+)",
-                        convert = TRUE) %>%
-        tidySummarizedExperiment::pull(g) %>%
+        extract(col2,
+            into="g", regex="other_([a-z]+)",
+            convert = TRUE) %>%
+        pull(g) %>%
         class() %>%
         expect_equal("character")
 })
 
-test_that("pivot_longer", {
+test_that("pivot_longer()", {
     tt %>%
-        tidySummarizedExperiment::pivot_longer(c(.sample, condition),
-                             names_to = "name",
-                             values_to = "value") %>%
+        pivot_longer(c(.sample, condition), names_to = "name",
+            values_to = "value") %>%
         class() %>%
         .[1] %>%
         expect_equal("tbl_df")

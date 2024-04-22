@@ -3,7 +3,8 @@
 \docType{data}
 \name{se}
 \alias{se}
-\title{Read counts of RNA-seq samples derived from Pasilla knock-down by Brooks et al.}
+\title{Read counts of RNA-seq samples derived from
+Pasilla knock-down by Brooks et al.}
 \format{
 containing 14599 features and 7 biological replicates.
 }
@@ -14,6 +15,7 @@ containing 14599 features and 7 biological replicates.
 data(se)
 }
 \description{
-A SummarizedExperiment dataset containing the transcriptome information for Drosophila Melanogaster.
+A SummarizedExperiment dataset containing
+the transcriptome information for Drosophila Melanogaster.
 }
 \keyword{datasets}

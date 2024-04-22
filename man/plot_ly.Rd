@@ -2,9 +2,37 @@
 % Please edit documentation in R/plotly_methods.R
 \name{plot_ly}
 \alias{plot_ly}
+\alias{plot_ly.tbl_df}
+\alias{plot_ly.SummarizedExperiment}
 \title{Initiate a plotly visualization}
 \usage{
-plot_ly(
+\method{plot_ly}{tbl_df}(
+  data = data.frame(),
+  ...,
+  type = NULL,
+  name = NULL,
+  color = NULL,
+  colors = NULL,
+  alpha = NULL,
+  stroke = NULL,
+  strokes = NULL,
+  alpha_stroke = 1,
+  size = NULL,
+  sizes = c(10, 100),
+  span = NULL,
+  spans = c(1, 20),
+  symbol = NULL,
+  symbols = NULL,
+  linetype = NULL,
+  linetypes = NULL,
+  split = NULL,
+  frame = NULL,
+  width = NULL,
+  height = NULL,
+  source = "A"
+)
+
+\method{plot_ly}{SummarizedExperiment}(
   data = data.frame(),
   ...,
   type = NULL,
@@ -34,13 +62,12 @@ plot_ly(
 \item{data}{A data frame (optional) or \link[crosstalk:SharedData]{crosstalk::SharedData} object.}
 
 \item{...}{Arguments (i.e., attributes) passed along to the trace \code{type}.
-See \code{\link[=schema]{schema()}} for a list of acceptable attributes for a given trace \code{type}
+See \code{\link[plotly:schema]{schema()}} for a list of acceptable attributes for a given trace \code{type}
 (by going to \code{traces} -> \code{type} -> \code{attributes}). Note that attributes
 provided at this level may override other arguments
-(e.g. \code{plot_ly(x=1:10, y=1:10, color=I("red"), marker=list(color="blue"))}).}
+(e.g. \code{plot_ly(x = 1:10, y = 1:10, color = I("red"), marker = list(color = "blue"))}).}
 
-\item{type}{A character string specifying the trace type
-(e.g. \code{"scatter"}, \code{"bar"}, \code{"box"}, etc).
+\item{type}{A character string specifying the trace type (e.g. \code{"scatter"}, \code{"bar"}, \code{"box"}, etc).
 If specified, it \emph{always} creates a trace, otherwise}
 
 \item{name}{Values mapped to the trace's name attribute. Since a trace can
@@ -48,25 +75,23 @@ only have one name, this argument acts very much like \code{split} in that it
 creates one trace for every unique value.}
 
 \item{color}{Values mapped to relevant 'fill-color' attribute(s)
-(e.g. \href{https://plot.ly/r/reference#scatter-fillcolor}{fillcolor},
-\href{https://plot.ly/r/reference#scatter-marker-color}{marker.color},
-\href{https://plot.ly/r/reference/#scatter-textfont-color}{textfont.color}, etc.).
+(e.g. \href{https://plotly.com/r/reference/#scatter-fillcolor}{fillcolor},
+\href{https://plotly.com/r/reference/#scatter-marker-color}{marker.color},
+\href{https://plotly.com/r/reference/#scatter-textfont-color}{textfont.color}, etc.).
 The mapping from data values to color codes may be controlled using
-\code{colors} and \code{alpha}, or avoided altogether via \code{\link[=I]{I()}}
-(e.g., \code{color=I("red")}).
+\code{colors} and \code{alpha}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{color = I("red")}).
 Any color understood by \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}} may be used in this way.}
 
-\item{colors}{Either a colorbrewer2.org palette name
-(e.g. "YlOrRd" or "Blues"),
+\item{colors}{Either a colorbrewer2.org palette name (e.g. "YlOrRd" or "Blues"),
 or a vector of colors to interpolate in hexadecimal "#RRGGBB" format,
 or a color interpolation function like \code{colorRamp()}.}
 
 \item{alpha}{A number between 0 and 1 specifying the alpha channel applied to \code{color}.
-Defaults to 0.5 when mapping to \href{https://plot.ly/r/reference#scatter-fillcolor}{fillcolor} and 1 otherwise.}
+Defaults to 0.5 when mapping to \href{https://plotly.com/r/reference/#scatter-fillcolor}{fillcolor} and 1 otherwise.}
 
 \item{stroke}{Similar to \code{color}, but values are mapped to relevant 'stroke-color' attribute(s)
-(e.g., \href{https://plot.ly/r/reference#scatter-marker-line-color}{marker.line.color}
-and \href{https://plot.ly/r/reference#scatter-line-color}{line.color}
+(e.g., \href{https://plotly.com/r/reference/#scatter-marker-line-color}{marker.line.color}
+and \href{https://plotly.com/r/reference/#scatter-line-color}{line.color}
 for filled polygons). If not specified, \code{stroke} inherits from \code{color}.}
 
 \item{strokes}{Similar to \code{colors}, but controls the \code{stroke} mapping.}
@@ -74,37 +99,37 @@ for filled polygons). If not specified, \code{stroke} inherits from \code{color}
 \item{alpha_stroke}{Similar to \code{alpha}, but applied to \code{stroke}.}
 
 \item{size}{(Numeric) values mapped to relevant 'fill-size' attribute(s)
-(e.g., \href{https://plot.ly/r/reference#scatter-marker-size}{marker.size},
-\href{https://plot.ly/r/reference#scatter-textfont-size}{textfont.size},
-and \href{https://plot.ly/r/reference#scatter-error_x-width}{error_x.width}).
+(e.g., \href{https://plotly.com/r/reference/#scatter-marker-size}{marker.size},
+\href{https://plotly.com/r/reference/#scatter-textfont-size}{textfont.size},
+and \href{https://plotly.com/r/reference/#scatter-error_x-width}{error_x.width}).
 The mapping from data values to symbols may be controlled using
-\code{sizes}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{size=I(30)}).}
+\code{sizes}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{size = I(30)}).}
 
 \item{sizes}{A numeric vector of length 2 used to scale \code{size} to pixels.}
 
 \item{span}{(Numeric) values mapped to relevant 'stroke-size' attribute(s)
 (e.g.,
-\href{https://plot.ly/r/reference#scatter-marker-line-width}{marker.line.width},
-\href{https://plot.ly/r/reference#scatter-line-width}{line.width} for filled polygons,
-and \href{https://plot.ly/r/reference#scatter-error_x-thickness}{error_x.thickness})
+\href{https://plotly.com/r/reference/#scatter-marker-line-width}{marker.line.width},
+\href{https://plotly.com/r/reference/#scatter-line-width}{line.width} for filled polygons,
+and \href{https://plotly.com/r/reference/#scatter-error_x-thickness}{error_x.thickness})
 The mapping from data values to symbols may be controlled using
-\code{spans}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{span=I(30)}).}
+\code{spans}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{span = I(30)}).}
 
 \item{spans}{A numeric vector of length 2 used to scale \code{span} to pixels.}
 
-\item{symbol}{(Discrete) values mapped to \href{https://plot.ly/r/reference#scatter-marker-symbol}{marker.symbol}.
+\item{symbol}{(Discrete) values mapped to \href{https://plotly.com/r/reference/#scatter-marker-symbol}{marker.symbol}.
 The mapping from data values to symbols may be controlled using
-\code{symbols}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{symbol=I("pentagon")}).
-Any \link{pch} value or \href{https://plot.ly/r/reference#scatter-marker-symbol}{symbol name} may be used in this way.}
+\code{symbols}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{symbol = I("pentagon")}).
+Any \link{pch} value or \href{https://plotly.com/r/reference/#scatter-marker-symbol}{symbol name} may be used in this way.}
 
-\item{symbols}{A character vector of \link{pch} values or \href{https://plot.ly/r/reference#scatter-marker-symbol}{symbol names}.}
+\item{symbols}{A character vector of \link{pch} values or \href{https://plotly.com/r/reference/#scatter-marker-symbol}{symbol names}.}
 
-\item{linetype}{(Discrete) values mapped to \href{https://plot.ly/r/reference#scatter-line-dash}{line.dash}.
+\item{linetype}{(Discrete) values mapped to \href{https://plotly.com/r/reference/#scatter-line-dash}{line.dash}.
 The mapping from data values to symbols may be controlled using
-\code{linetypes}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{linetype=I("dash")}).
-Any \code{lty} (see \link{par}) value or \href{https://plot.ly/r/reference#scatter-line-dash}{dash name} may be used in this way.}
+\code{linetypes}, or avoided altogether via \code{\link[=I]{I()}} (e.g., \code{linetype = I("dash")}).
+Any \code{lty} (see \link{par}) value or \href{https://plotly.com/r/reference/#scatter-line-dash}{dash name} may be used in this way.}
 
-\item{linetypes}{A character vector of \code{lty} values or \href{https://plot.ly/r/reference#scatter-line-dash}{dash names}}
+\item{linetypes}{A character vector of \code{lty} values or \href{https://plotly.com/r/reference/#scatter-line-dash}{dash names}}
 
 \item{split}{(Discrete) values used to create multiple traces (one trace per value).}
 
@@ -115,70 +140,39 @@ Any \code{lty} (see \link{par}) value or \href{https://plot.ly/r/reference#scatt
 \item{height}{Height in pixels (optional, defaults to automatic sizing).}
 
 \item{source}{a character string of length 1. Match the value of this string
-with the source argument in \code{\link[=event_data]{event_data()}} to retrieve the
+with the source argument in \code{\link[plotly:event_data]{event_data()}} to retrieve the
 event data corresponding to a specific plot (shiny apps can have multiple plots).}
 }
 \value{
-A plotly
+\code{plotly}
+
+\code{plotly}
 }
 \description{
-This function maps R objects to \href{https://plot.ly/javascript/}{plotly.js},
+This function maps R objects to \href{https://plotly.com/javascript/}{plotly.js},
 an (MIT licensed) web-based interactive charting library. It provides
 abstractions for doing common things (e.g. mapping data values to
-fill colors (via \code{color}) or creating \link{animation}s (via \code{frame})) and sets
+fill colors (via \code{color}) or creating \link[plotly]{animation}s (via \code{frame})) and sets
 some different defaults to make the interface feel more 'R-like'
 (i.e., closer to \code{\link[=plot]{plot()}} and \code{\link[ggplot2:qplot]{ggplot2::qplot()}}).
 }
 \details{
 Unless \code{type} is specified, this function just initiates a plotly
 object with 'global' attributes that are passed onto downstream uses of
-\code{\link[=add_trace]{add_trace()}} (or similar). A \link{formula} must always be used when
-referencing column name(s) in \code{data} (e.g. \code{plot_ly(mtcars, x=~wt)}).
+\code{\link[plotly:add_trace]{add_trace()}} (or similar). A \link{formula} must always be used when
+referencing column name(s) in \code{data} (e.g. \code{plot_ly(mtcars, x = ~wt)}).
 Formulas are optional when supplying values directly, but they do
 help inform default axis/scale titles
-(e.g., \code{plot_ly(x=mtcars$wt)} vs \code{plot_ly(x=~mtcars$wt)})
+(e.g., \code{plot_ly(x = mtcars$wt)} vs \code{plot_ly(x = ~mtcars$wt)})
 }
 \examples{
+data(se)
+se |>
+    plot_ly(x = ~counts)
 
-# Plotly better not run
-print("See below examples")
-
-\dontrun{
-# plot_ly() tries to create a sensible plot based on the information you
-# give it. If you don't provide a trace type, plot_ly() will infer one.
-plot_ly(economics, x=~pop)
-plot_ly(economics, x=~date, y=~pop)
-# plot_ly() doesn't require data frame(s), which allows one to take
-# advantage of trace type(s) designed specifically for numeric matrices
-plot_ly(z=~volcano)
-plot_ly(z=~volcano, type="surface")
-
-# plotly has a functional interface: every plotly function takes a plotly
-# object as it's first input argument and returns a modified plotly object
-add_lines(plot_ly(economics, x=~date, y=~ unemploy / pop))
-
-# To make code more readable, plotly imports the pipe operator from magrittr
-economics \%>\%
-    plot_ly(x=~date, y=~ unemploy / pop) \%>\%
-    add_lines()
-
-# Attributes defined via plot_ly() set 'global' attributes that
-# are carried onto subsequent traces, but those may be over-written
-plot_ly(economics, x=~date, color=I("black")) \%>\%
-    add_lines(y=~uempmed) \%>\%
-    add_lines(y=~psavert, color=I("red"))
-
-# Attributes are documented in the figure reference -> https://plot.ly/r/reference
-# You might notice plot_ly() has named arguments that aren't in this figure
-# reference. These arguments make it easier to map abstract data values to
-# visual attributes.
-p <- plot_ly(iris, x=~Sepal.Width, y=~Sepal.Length)
-add_markers(p, color=~Petal.Length, size=~Petal.Length)
-add_markers(p, color=~Species)
-add_markers(p, color=~Species, colors="Set1")
-add_markers(p, symbol=~Species)
-add_paths(p, linetype=~Species)
-}
+data(se)
+se |>
+    plot_ly(x = ~counts)
 
 }
 \references{
@@ -186,14 +180,14 @@ add_paths(p, linetype=~Species)
 }
 \seealso{
 \itemize{
-\item For initializing a plotly-geo object: \code{\link[=plot_geo]{plot_geo()}}
-\item For initializing a plotly-mapbox object: \code{\link[=plot_mapbox]{plot_mapbox()}}
-\item For translating a ggplot2 object to a plotly object: \code{\link[=ggplotly]{ggplotly()}}
-\item For modifying any plotly object: \code{\link[=layout]{layout()}}, \code{\link[=add_trace]{add_trace()}}, \code{\link[=style]{style()}}
-\item For linked brushing: \code{\link[=highlight]{highlight()}}
-\item For arranging multiple plots: \code{\link[=subplot]{subplot()}}, \code{\link[crosstalk:bscols]{crosstalk::bscols()}}
-\item For inspecting plotly objects: \code{\link[=plotly_json]{plotly_json()}}
-\item For quick, accurate, and searchable plotly.js reference: \code{\link[=schema]{schema()}}
+\item For initializing a plotly-geo object: \code{\link[plotly:plot_geo]{plot_geo()}}
+\item For initializing a plotly-mapbox object: \code{\link[plotly:plot_mapbox]{plot_mapbox()}}
+\item For translating a ggplot2 object to a plotly object: \code{\link[plotly:ggplotly]{ggplotly()}}
+\item For modifying any plotly object: \code{\link[plotly:layout]{layout()}}, \code{\link[plotly:add_trace]{add_trace()}}, \code{\link[plotly:style]{style()}}
+\item For linked brushing: \code{\link[plotly:highlight]{highlight()}}
+\item For arranging multiple plots: \code{\link[plotly:subplot]{subplot()}}, \code{\link[crosstalk:bscols]{crosstalk::bscols()}}
+\item For inspecting plotly objects: \code{\link[plotly:plotly_json]{plotly_json()}}
+\item For quick, accurate, and searchable plotly.js reference: \code{\link[plotly:schema]{schema()}}
 }
 }
 \author{
