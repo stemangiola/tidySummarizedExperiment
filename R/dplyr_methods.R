@@ -862,3 +862,46 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
         as_tibble(skip_GRanges=skip_GRanges) |>
         dplyr::pull(var=!!var, name=!!name, ...)
 }
+
+#' @name group_split
+#' @rdname group_split
+#' @inherit dplyr::group_split
+#' 
+#' @examples
+#' data(pasilla, package = "tidySummarizedExperiment")
+#' pasilla |> group_split(condition)
+#' pasilla |> group_split(counts > 0)
+#' pasilla |> group_split(condition, counts > 0)
+#' 
+#' @importFrom ellipsis check_dots_used
+#' @importFrom dplyr group_split
+#' @export
+group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
+  
+  var_list <- enquos(...)
+  data_nested <- NULL
+  
+  nested <- .tbl |> 
+    mutate(!!!var_list) |> 
+    nest(data_nested = -(substring(as.character(var_list), 2)))
+  
+  if(.keep) {
+    grouped_data <- nested |> 
+      pull(data_nested)
+    
+    grouping_cols <- nested |> 
+      select(substring(as.character(var_list), 2))
+    
+    for(i in 1:length(grouped_data)) {
+      grouped_data[[i]] <- grouped_data[[i]] |> 
+        mutate(grouping_cols[i,])
+    }
+    
+    grouped_data
+    
+  } else {
+    nested |> 
+      pull(data_nested)
+  }
+    
+}
