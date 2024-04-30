@@ -749,7 +749,8 @@ get_count_datasets <- function(se) {
   se <- check_se_dimnames(se)
   
   # Join assays
-  map2( 
+  list_assays = 
+    map2( 
     assays(se, withDimnames = FALSE) %>% as.list(),
     names(assays(se)),
     ~ {
@@ -807,21 +808,27 @@ get_count_datasets <- function(se) {
       f_(se)$name %in% colnames(.x) %>% not ~ mutate(.x, !!f_(se)$symbol := as.character(NA)),
       s_(se)$name %in% colnames(.x) %>% not ~ mutate(.x, !!s_(se)$symbol := as.character(NA)),
       ~ .x
-    )) |> 
-    
-    when(
-      length(.)>0 ~ 
-        
-        reduce(., full_join, by = c(f_(se)$name, s_(se)$name)),
-      # reduce(., left_join, by = c(f_(se)$name, s_(se)$name)),
-      # bind_cols(.,  .name_repair = c("minimal")) %>% .[!duplicated(colnames(.))], 
-      ~ expand.grid(
-        rownames(se), colnames(se)
-      ) %>% 
-        setNames(c(f_(se)$name, s_(se)$name)) %>%
-        tibble::as_tibble()
-    ) 
+    )) 
   
+  # If assays is non empty 
+  if(list_assays |> length() > 0)
+    list_assays |> 
+    reduce(full_join, by = c(f_(se)$name, s_(se)$name))
+  
+  # If assays is empty 
+  else {
+    
+    # If I don't have row column names
+    if(se |> rownames() |> is.null()) rn = nrow(se) |> seq_len() |> as.character()
+    else rn = rownames(se)
+    if(se |> colnames() |> is.null()) cn = ncol(se) |> seq_len() |> as.character()
+    else cn = colnames(se)
+    
+    expand.grid(  rn, cn  ) |> 
+             setNames(c(f_(se)$name, s_(se)$name)) |> 
+             tibble::as_tibble()
+  }
+   
   
 }
 
