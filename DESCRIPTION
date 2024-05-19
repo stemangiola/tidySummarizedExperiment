@@ -44,6 +44,7 @@ Suggests:
     testthat,
     knitr,
     markdown,
+    rmarkdown,
     plotly
 VignetteBuilder: 
     knitr
