@@ -390,6 +390,28 @@ mutate.SummarizedExperiment <- function(.data, ...) {
         update_SE_from_tibble(.data)
 }
 
+#' mutate features
+#'
+#' function to mutate features
+#'
+#' @param .data incoming SE
+#' @param ... extra arguments passed to mutate
+#'
+#' @return SE with modified rowData
+#' 
+#' @export
+mutate_features <- function(.data, ...) {
+
+  gene_info <- rowData(.data) %>%
+    tibble::as_tibble() %>%
+    dplyr::mutate(...)
+
+  rowData(.data) <- gene_info
+
+  return(.data)
+  
+}
+
 #' @name rename
 #' @rdname rename
 #' @inherit dplyr::rename
