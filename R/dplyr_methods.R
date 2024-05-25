@@ -404,7 +404,8 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 mutate_features <- function(.data, ...) {
   feature_info <- rowData(.data) |>
     tibble::as_tibble() |>
-    dplyr::mutate(...)
+    dplyr::mutate(...) |>
+    as("DataFrame")
   rowData(.data) <- feature_info
   return(.data)
 }
@@ -418,13 +419,14 @@ mutate_features <- function(.data, ...) {
 #' @param ... extra arguments passed to dplyr::mutate
 #'
 #' @return a SummarizedExperiment with modified colData
-#' 
+#'
 #' @export
 mutate_samples <- function(.data, ...) {
-  feature_info <- colData(.data) |>
+  sample_info <- colData(.data) |>
     tibble::as_tibble() |>
-    dplyr::mutate(...)
-  colData(.data) <- feature_info
+    dplyr::mutate(...) |>
+    as("DataFrame")
+  colData(.data) <- sample_info
   return(.data)
 }
 
