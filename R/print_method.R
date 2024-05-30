@@ -13,6 +13,7 @@
 #' @importFrom pillar get_extent
 #' @importFrom pillar style_subtle
 #' @importFrom pillar tbl_format_header
+#' @importFrom cli col_br_black
 #' @export
 tbl_format_header.tidySummarizedExperiment <- function(x, setup, ...) {
   
@@ -32,12 +33,12 @@ tbl_format_header.tidySummarizedExperiment <- function(x, setup, ...) {
                 named_header
             ) %>%
             # Add further info single-cell
-            append(sprintf(
-                "\033[90m Features=%s | Samples=%s | Assays=%s\033[39m",
+            append( cli::col_br_black( sprintf(
+                " Features=%s | Samples=%s | Assays=",
                 number_of_features,
                 number_of_samples,
                 assay_names %>% paste(collapse=", ")
-            ), after = 1)
+            )), after = 1)
     }
     style_subtle(pillar___format_comment(header, width=setup$width))
 }

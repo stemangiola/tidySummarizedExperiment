@@ -350,7 +350,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
         .data <- ping_old_special_column_into_metadata(.data)
     }
     
-    secial_columns <- get_special_columns(
+    special_columns <- get_special_columns(
         # Decrease the size of the dataset
         .data[1:min(100, nrow(.data)), 1:min(20, ncol(.data))]
     ) |> c(get_needed_columns(.data))
@@ -358,7 +358,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
     tst <-
         intersect(
             cols,
-            secial_columns
+            special_columns
         ) |> 
         length() |>
         gt(0)
@@ -366,7 +366,7 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 
     if (tst) {
         columns <-
-            secial_columns |>
+            special_columns |>
                 paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says:",
@@ -388,6 +388,46 @@ mutate.SummarizedExperiment <- function(.data, ...) {
         as_tibble(skip_GRanges=skip_GRanges) |>
         dplyr::mutate(...) |>
         update_SE_from_tibble(.data)
+}
+
+#' Mutate features
+#'
+#' Allows mutate call on features (rowData)
+#' of a SummarizedExperiment
+#'
+#' @param .data a SummarizedExperiment
+#' @param ... extra arguments passed to dplyr::mutate
+#'
+#' @return a SummarizedExperiment with modified rowData
+#' 
+#' @export
+mutate_features <- function(.data, ...) {
+  feature_info <- rowData(.data) |>
+    tibble::as_tibble() |>
+    dplyr::mutate(...) |>
+    as("DataFrame")
+  rowData(.data) <- feature_info
+  return(.data)
+}
+
+#' Mutate samples
+#'
+#' Allows mutate call on samples (colData)
+#' of a SummarizedExperiment
+#'
+#' @param .data a SummarizedExperiment
+#' @param ... extra arguments passed to dplyr::mutate
+#'
+#' @return a SummarizedExperiment with modified colData
+#'
+#' @export
+mutate_samples <- function(.data, ...) {
+  sample_info <- colData(.data) |>
+    tibble::as_tibble() |>
+    dplyr::mutate(...) |>
+    as("DataFrame")
+  colData(.data) <- sample_info
+  return(.data)
 }
 
 #' @name rename
@@ -434,7 +474,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
         " Please run two `rename` commands for",
         " sample-wise and feature-wise columns.")
     
-    secial_columns <- get_special_columns(
+    special_columns <- get_special_columns(
         # Decrease the size of the dataset
         .data[1:min(100, nrow(.data)), 1:min(20, ncol(.data))]
     ) |> c(get_needed_columns(.data))
@@ -442,7 +482,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
     tst <-
         intersect(
             cols |> names(),
-            secial_columns
+            special_columns
         ) |>
         length() |>
         gt(0)
@@ -450,7 +490,7 @@ rename.SummarizedExperiment <- function(.data, ...) {
     # If column in view-only columns stop
     if (tst) {
         columns <-
-            secial_columns |>
+            special_columns |>
             paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says:",

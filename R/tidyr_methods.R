@@ -362,19 +362,19 @@ extract.SummarizedExperiment <- function(data, col,
     }
 
     
-    secial_columns <- get_special_columns(  
+    special_columns <- get_special_columns(  
         # Decrease the size of the dataset
         data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
     ) |> 
         c(get_needed_columns(data))
     
-    tst <- intersect(quo_names(into),  secial_columns) %>%
+    tst <- intersect(quo_names(into),  special_columns) %>%
         length() %>%
         gt(0) & remove
 
 
     if (tst) {
-        columns <- secial_columns |>  paste(collapse=", ")
+        columns <- special_columns |>  paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says:",
             " you are trying to rename a column that is view only",
@@ -554,7 +554,7 @@ unite.SummarizedExperiment <- function(data, col, ...,
         data <- ping_old_special_column_into_metadata(data)
     }
   
-    secial_columns <- get_special_columns(
+    special_columns <- get_special_columns(
         # Decrease the size of the dataset
         data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
     ) |> 
@@ -563,13 +563,13 @@ unite.SummarizedExperiment <- function(data, col, ...,
     tst <-
         intersect(
             cols %>% quo_names(),
-            secial_columns
+            special_columns
         ) %>%
         length() %>%
         gt(0) & remove
 
     if (tst) {
-        columns <- secial_columns |>  paste(collapse=", ")
+        columns <- special_columns |>  paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says:",
             " you are trying to rename a column that is view only",
@@ -656,7 +656,7 @@ separate.SummarizedExperiment <- function(data, col,
         data <- ping_old_special_column_into_metadata(data)
     }
     
-    secial_columns <- get_special_columns(
+    special_columns <- get_special_columns(
         # Decrease the size of the dataset
         data[1:min(100, nrow(data)), 1:min(20, ncol(data))]
     ) |> 
@@ -665,13 +665,13 @@ separate.SummarizedExperiment <- function(data, col,
     tst <-
         intersect(
             cols %>% quo_names(),
-            secial_columns
+            special_columns
         ) %>%
         length() %>%
         gt(0) & remove
  
     if (tst) {
-        columns <- secial_columns |>  paste(collapse=", ")
+        columns <- special_columns |>  paste(collapse=", ")
         stop(
             "tidySummarizedExperiment says:",
             " you are trying to rename a column that is view only",
