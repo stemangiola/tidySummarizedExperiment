@@ -34,7 +34,7 @@ tbl_format_header.tidySummarizedExperiment <- function(x, setup, ...) {
             ) %>%
             # Add further info single-cell
             append( cli::col_br_black( sprintf(
-                " Features=%s | Samples=%s | Assays=",
+                " Features=%s | Samples=%s | Assays=%s",
                 number_of_features,
                 number_of_samples,
                 assay_names %>% paste(collapse=", ")
