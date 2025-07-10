@@ -45,7 +45,8 @@ Suggests:
     knitr,
     markdown,
     rmarkdown,
-    plotly
+    plotly,
+    rbibutils
 VignetteBuilder: 
     knitr
 RdMacros:
