@@ -2,13 +2,7 @@
 #' @rdname bind_rows
 #' @inherit ttservice::bind_rows
 #' @param add.cell.ids Appends the corresponding values to
-#' @examples
-#' data(se)
-#' ttservice::bind_rows(se, se)
-#'
-#' se_bind <- se |> select(dex,  albut)
-#' se |> ttservice::bind_cols(se_bind)
-#' 
+#' @noRd
 #' @importFrom rlang dots_values
 #' @importFrom rlang flatten_if
 #' @importFrom rlang is_spliced
