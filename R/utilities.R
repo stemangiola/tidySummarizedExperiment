@@ -1286,22 +1286,6 @@ split_SummarizedExperiment_by_feature_to_list <- function(.data) {
   map(1:nrow(.data), ~ .data[.x,])
 }
 
-#' Add attribute to abject
-#'
-#' @keywords internal
-#' @noRd
-#'
-#'
-#' @param var A tibble
-#' @param attribute An object
-#' @param name A character name of the attribute
-#'
-#' @return A tibble with an additional attribute
-add_attr <- function(var, attribute, name) {
-  attr(var, name) <- attribute
-  var
-}
-
 is_filer_columns_in_column_selection <- function(.data, ...) {
   # columns = enquos(columns)
   tryCatch({

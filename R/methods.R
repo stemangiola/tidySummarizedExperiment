@@ -1,28 +1,4 @@
 #' @importFrom methods getMethod
-setMethod(
-    f="show",
-    signature="SummarizedExperiment",
-    definition=function(object) {
-        if (isTRUE(x=getOption(x="restore_SummarizedExperiment_show",
-            default = FALSE)) |         
-            # If the object is a SingleCellExperiment
-            # # From BioC 3_14 SingleCellExperiment is SummarizedExperiment and 
-            # # we don't want to process with tidySummarizedExperiment
-            is(object, "SingleCellExperiment")
-        ) {
-            f <- getMethod(
-                f="show",
-                signature="SummarizedExperiment",
-                where=asNamespace(ns="SummarizedExperiment")
-            )
-            f(object=object)
-        } else {
-            object %>%
-                print()
-        }
-    }
-)
-
 setClass("tidySummarizedExperiment",
     contains=c("SummarizedExperiment", "RangedSummarizedExperiment"))
 
