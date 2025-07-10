@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package \pkg{tidySummarizedExperiment}}
 
-\section{Changes in version 1.16.0, Bioconductor 3.17 Release}{
+\section{Changes in version 1.16.0, Bioconductor 3.22 Release}{
 \itemize{
     \item Prepared for ggplot2 4.0.0 compatibility with S7 methods.
     \item Added conditional S7 method for ggplot while maintaining S3 method for current ggplot2 versions.

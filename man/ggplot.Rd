@@ -2,9 +2,10 @@
 % Please edit documentation in R/ggplot2_methods.R
 \name{ggplot}
 \alias{ggplot}
+\alias{ggplot.SummarizedExperiment}
 \title{Create a new \code{ggplot} from a \code{SummarizedExperiment}}
 \usage{
-ggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
+\method{ggplot}{SummarizedExperiment}(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
 \item{data}{Default dataset to use for plot. If not already a data.frame,
