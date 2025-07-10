@@ -2,33 +2,35 @@ tidySummarizedExperiment - part of tidytranscriptomics
 ================
 
 <!-- badges: start -->
- 
+
 [![Lifecycle:maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![R build
 status](https://github.com/stemangiola/tidySummarizedExperiment/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/stemangiola/tidySummarizedExperiment/actions)
 <!-- badges: end -->
 
-**Brings SummarizedExperiment to the tidyverse!** 
+**Brings SummarizedExperiment to the tidyverse!**
 
 website:
 [stemangiola.github.io/tidySummarizedExperiment/](https://stemangiola.github.io/tidySummarizedExperiment/)
 
-Another [nice introduction](https://carpentries-incubator.github.io/bioc-intro/60-next-steps/index.html) by carpentries-incubator.
+Another [nice
+introduction](https://carpentries-incubator.github.io/bioc-intro/60-next-steps/index.html)
+by carpentries-incubator.
 
 Please also have a look at
 
--   [tidySingleCellExperiment](https://stemangiola.github.io/tidySingleCellExperiment/)
-    for tidy manipulation of SingleCellExperiment objects
--   [tidyseurat](https://stemangiola.github.io/tidyseurat/) for tidy
-    manipulation of Seurat objects
--   [tidybulk](https://stemangiola.github.io/tidybulk/) for tidy
-    analysis of RNA sequencing data
--   [nanny](https://github.com/stemangiola/nanny) for tidy high-level
-    data analysis and manipulation
--   [tidygate](https://github.com/stemangiola/tidygate) for adding
-    custom gate information to your tibble
--   [tidyHeatmap](https://stemangiola.github.io/tidyHeatmap/) for
-    heatmaps produced with tidy principles
+- [tidySingleCellExperiment](https://stemangiola.github.io/tidySingleCellExperiment/)
+  for tidy manipulation of SingleCellExperiment objects
+- [tidyseurat](https://stemangiola.github.io/tidyseurat/) for tidy
+  manipulation of Seurat objects
+- [tidybulk](https://stemangiola.github.io/tidybulk/) for tidy analysis
+  of RNA sequencing data
+- [nanny](https://github.com/stemangiola/nanny) for tidy high-level data
+  analysis and manipulation
+- [tidygate](https://github.com/stemangiola/tidygate) for adding custom
+  gate information to your tibble
+- [tidyHeatmap](https://stemangiola.github.io/tidyHeatmap/) for heatmaps
+  produced with tidy principles
 
 # Introduction
 
@@ -43,9 +45,9 @@ tidyverse worlds.
 
 ## Functions/utilities available
 
-| SummarizedExperiment-compatible Functions | Description                                                                        |
-|-------------------------------------------|------------------------------------------------------------------------------------|
-| `all`                                     | After all `tidySummarizedExperiment` is a SummarizedExperiment object, just better |
+| SummarizedExperiment-compatible Functions | Description |
+|----|----|
+| `all` | After all `tidySummarizedExperiment` is a SummarizedExperiment object, just better |
 
 | tidyverse Packages | Description                                 |
 |--------------------|---------------------------------------------|
@@ -98,7 +100,7 @@ pasilla_tidy
 ```
 
     ## # A SummarizedExperiment-tibble abstraction: 102,193 × 5
-    ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
+    ## # Features=14599 | Samples=7 | Assays=counts
     ##    .feature    .sample counts condition type      
     ##    <chr>       <chr>    <int> <chr>     <chr>     
     ##  1 FBgn0000003 untrt1       0 untreated single_end
@@ -111,7 +113,7 @@ pasilla_tidy
     ##  8 FBgn0000024 untrt1      10 untreated single_end
     ##  9 FBgn0000028 untrt1       0 untreated single_end
     ## 10 FBgn0000032 untrt1    1446 untreated single_end
-    ## # … with 40 more rows
+    ## # ℹ 40 more rows
 
 **But it is a SummarizedExperiment object after all**
 
@@ -136,7 +138,7 @@ pasilla_tidy %>%
 ```
 
     ## # A SummarizedExperiment-tibble abstraction: 1 × 5
-    ## [90m# Transcripts=1 | Samples=1 | Assays=counts[39m
+    ## # Features=1 | Samples=1 | Assays=counts
     ##   .feature    .sample counts condition type      
     ##   <chr>       <chr>    <int> <chr>     <chr>     
     ## 1 FBgn0000003 untrt1       0 untreated single_end
@@ -149,7 +151,7 @@ pasilla_tidy %>%
 ```
 
     ## # A SummarizedExperiment-tibble abstraction: 58,396 × 5
-    ## [90m# Transcripts=14599 | Samples=4 | Assays=counts[39m
+    ## # Features=14599 | Samples=4 | Assays=counts
     ##    .feature    .sample counts condition type      
     ##    <chr>       <chr>    <int> <chr>     <chr>     
     ##  1 FBgn0000003 untrt1       0 untreated single_end
@@ -162,7 +164,7 @@ pasilla_tidy %>%
     ##  8 FBgn0000024 untrt1      10 untreated single_end
     ##  9 FBgn0000028 untrt1       0 untreated single_end
     ## 10 FBgn0000032 untrt1    1446 untreated single_end
-    ## # … with 40 more rows
+    ## # ℹ 40 more rows
 
 We can use `select` to choose columns.
 
@@ -184,7 +186,7 @@ pasilla_tidy %>%
     ##  8 untrt1 
     ##  9 untrt1 
     ## 10 untrt1 
-    ## # … with 102,183 more rows
+    ## # ℹ 102,183 more rows
 
 We can use `count` to count how many rows we have for each sample.
 
@@ -231,7 +233,7 @@ pasilla_tidy %>%
 ```
 
     ## # A SummarizedExperiment-tibble abstraction: 102,193 × 5
-    ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
+    ## # Features=14599 | Samples=7 | Assays=counts
     ##    .feature    .sample counts condition sequencing
     ##    <chr>       <chr>    <int> <chr>     <chr>     
     ##  1 FBgn0000003 untrt1       0 untreated single_end
@@ -244,7 +246,7 @@ pasilla_tidy %>%
     ##  8 FBgn0000024 untrt1      10 untreated single_end
     ##  9 FBgn0000028 untrt1       0 untreated single_end
     ## 10 FBgn0000032 untrt1    1446 untreated single_end
-    ## # … with 40 more rows
+    ## # ℹ 40 more rows
 
 We could use `mutate` to create a column. For example, we could create a
 new type column that contains single and paired instead of single_end
@@ -256,7 +258,7 @@ pasilla_tidy %>%
 ```
 
     ## # A SummarizedExperiment-tibble abstraction: 102,193 × 5
-    ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
+    ## # Features=14599 | Samples=7 | Assays=counts
     ##    .feature    .sample counts condition type  
     ##    <chr>       <chr>    <int> <chr>     <chr> 
     ##  1 FBgn0000003 untrt1       0 untreated single
@@ -269,7 +271,7 @@ pasilla_tidy %>%
     ##  8 FBgn0000024 untrt1      10 untreated single
     ##  9 FBgn0000028 untrt1       0 untreated single
     ## 10 FBgn0000032 untrt1    1446 untreated single
-    ## # … with 40 more rows
+    ## # ℹ 40 more rows
 
 We could use `unite` to combine multiple columns into a single column.
 
@@ -279,7 +281,7 @@ pasilla_tidy %>%
 ```
 
     ## # A SummarizedExperiment-tibble abstraction: 102,193 × 4
-    ## [90m# Transcripts=14599 | Samples=7 | Assays=counts[39m
+    ## # Features=14599 | Samples=7 | Assays=counts
     ##    .feature    .sample counts group               
     ##    <chr>       <chr>    <int> <chr>               
     ##  1 FBgn0000003 untrt1       0 untreated_single_end
@@ -292,7 +294,7 @@ pasilla_tidy %>%
     ##  8 FBgn0000024 untrt1      10 untreated_single_end
     ##  9 FBgn0000028 untrt1       0 untreated_single_end
     ## 10 FBgn0000032 untrt1    1446 untreated_single_end
-    ## # … with 40 more rows
+    ## # ℹ 40 more rows
 
 We can also combine commands with the tidyverse pipe `%>%`.
 
@@ -340,7 +342,7 @@ pasilla_tidy %>%
     ##  8 FBgn0000024 untrt1      10 untreated single_end      7    
     ##  9 FBgn0000028 untrt1       0 untreated single_end      0.429
     ## 10 FBgn0000032 untrt1    1446 untreated single_end   1085.   
-    ## # … with 86,503 more rows
+    ## # ℹ 86,503 more rows
 
 # Plotting
 
@@ -371,7 +373,7 @@ Here we plot the distribution of counts per sample.
 
 ``` r
 pasilla_tidy %>%
-    tidySummarizedExperiment::ggplot(aes(counts + 1, group=.sample, color=`type`)) +
+    ggplot(aes(counts + 1, group=.sample, color=`type`)) +
     geom_density() +
     scale_x_log10() +
     my_theme
