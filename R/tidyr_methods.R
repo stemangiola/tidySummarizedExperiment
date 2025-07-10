@@ -37,6 +37,10 @@ unnest.tidySummarizedExperiment_nested <- function(data, cols, ...,
 #' @importFrom rlang quo_name
 #' @importFrom purrr imap
 #' @importFrom purrr map_lgl
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., Vaughan, D. (2023). tidyr: Tidy Messy Data. R package version 2.0.0, https://CRAN.R-project.org/package=tidyr
 #' @export
 unnest_summarized_experiment <- function(data, cols, ...,
     keep_empty=FALSE, ptype=NULL, names_sep=NULL,
@@ -207,6 +211,10 @@ unnest_summarized_experiment <- function(data, cols, ...,
 #' @importFrom purrr when
 #' @importFrom purrr pmap
 #' @importFrom tidyr nest
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., Vaughan, D. (2023). tidyr: Tidy Messy Data. R package version 2.0.0, https://CRAN.R-project.org/package=tidyr
 #' @export
 nest.SummarizedExperiment <- function(.data, ..., .names_sep=NULL) {
     cols <- enquos(...)
@@ -345,6 +353,10 @@ nest.SummarizedExperiment <- function(.data, ..., .names_sep=NULL) {
 #' @importFrom SummarizedExperiment colData
 #' @importFrom tidyr extract
 #' @importFrom rlang enquo
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., Vaughan, D. (2023). tidyr: Tidy Messy Data. R package version 2.0.0, https://CRAN.R-project.org/package=tidyr
 #' @export
 extract.SummarizedExperiment <- function(data, col,
     into, regex="([[:alnum:]]+)", remove=TRUE,
@@ -447,6 +459,10 @@ extract.SummarizedExperiment <- function(data, col,
 #'         names_to="name", values_to="value")
 #' 
 #' @importFrom tidyr pivot_longer
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., Vaughan, D. (2023). tidyr: Tidy Messy Data. R package version 2.0.0, https://CRAN.R-project.org/package=tidyr
 #' @export
 pivot_longer.SummarizedExperiment <- function(data,
     cols, ..., cols_vary = "fastest", names_to = "name", 
@@ -491,6 +507,10 @@ pivot_longer.SummarizedExperiment <- function(data,
 #'     pivot_wider(names_from=feature, values_from=counts)
 #' 
 #' @importFrom tidyr pivot_wider
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., Vaughan, D. (2023). tidyr: Tidy Messy Data. R package version 2.0.0, https://CRAN.R-project.org/package=tidyr
 #' @export
 pivot_wider.SummarizedExperiment <- function(data,
     ..., id_cols = NULL, id_expand = FALSE, names_from = name,
@@ -537,6 +557,10 @@ pivot_wider.SummarizedExperiment <- function(data,
 #' @importFrom SummarizedExperiment colData<-
 #' @importFrom rlang enquo enquos quo_name
 #' @importFrom tidyr unite
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., Vaughan, D. (2023). tidyr: Tidy Messy Data. R package version 2.0.0, https://CRAN.R-project.org/package=tidyr
 #' @export
 unite.SummarizedExperiment <- function(data, col, ...,
     sep="_", remove=TRUE, na.rm=FALSE) {
@@ -636,6 +660,10 @@ unite.SummarizedExperiment <- function(data, col, ...,
 #' @importFrom SummarizedExperiment colData
 #' @importFrom SummarizedExperiment colData<-
 #' @importFrom tidyr separate
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., Vaughan, D. (2023). tidyr: Tidy Messy Data. R package version 2.0.0, https://CRAN.R-project.org/package=tidyr
 #' @export
 separate.SummarizedExperiment <- function(data, col,
     into, sep="[^[:alnum:]]+", remove=TRUE,
