@@ -19,7 +19,7 @@ column) and delete columns (by setting their value to NULL)."><!-- mathjax --><s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.2</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@ column) and delete columns (by setting their value to NULL)."><!-- mathjax --><s
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create, modify, and delete columns</h1>
-    <small class="dont-index">Source: <a href="https://github.com/stemangiola/tidySummarizedExperiment/blob/master/R/dplyr_methods.R" class="external-link"><code>R/dplyr_methods.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/stemangiola/tidySummarizedExperiment/blob/drop-printing/R/dplyr_methods.R" class="external-link"><code>R/dplyr_methods.R</code></a></small>
     <div class="hidden name"><code>mutate.Rd</code></div>
     </div>
 
@@ -160,21 +160,14 @@ dplyr (<code>data.frame</code>), plotly (<code><a href="https://rdrr.io/pkg/plot
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pasilla</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pasilla</span> <span class="op">|&gt;</span> <span class="fu">mutate</span><span class="op">(</span>logcounts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log2</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 102,193 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=14599 | Samples=7 | Assays=counts, logcounts</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .feature    .sample counts logcounts condition type      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> FBgn0000003 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> FBgn0000008 untrt1      92      6.52 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> FBgn0000014 untrt1       5      2.32 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> FBgn0000015 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> FBgn0000017 untrt1    <span style="text-decoration: underline;">4</span>664     12.2  untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> FBgn0000018 untrt1     583      9.19 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> FBgn0000022 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> FBgn0000024 untrt1      10      3.32 untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> FBgn0000028 untrt1       0   -<span style="color: #BB0000;">Inf</span>    untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> FBgn0000032 untrt1    <span style="text-decoration: underline;">1</span>446     10.5  untreated single_end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 40 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class: SummarizedExperiment </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 14599 7 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> assays(2): counts logcounts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(14599): FBgn0000003 FBgn0000008 ... FBgn0261574 FBgn0261575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rowData names(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colnames(7): untrt1 untrt2 ... trt2 trt3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(2): condition type</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

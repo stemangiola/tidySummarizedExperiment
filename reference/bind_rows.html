@@ -22,7 +22,7 @@ data frames into one."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidySummarizedExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.2</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@ data frames into one."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Efficiently bind multiple data frames by row and column</h1>
-    <small class="dont-index">Source: <a href="https://github.com/stemangiola/tidySummarizedExperiment/blob/master/R/dplyr_methods.R" class="external-link"><code>R/dplyr_methods.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/stemangiola/tidySummarizedExperiment/blob/drop-printing/R/dplyr_methods.R" class="external-link"><code>R/dplyr_methods.R</code></a></small>
     <div class="hidden name"><code>bind_rows.Rd</code></div>
     </div>
 
@@ -129,23 +129,15 @@ appears in any of the inputs.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ttservice</span><span class="fu">::</span><span class="fu">bind_rows</span><span class="op">(</span><span class="va">se</span>, <span class="va">se</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>tidySummarizedExperiment says: you have duplicated sample names, they will be made unique.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A SummarizedExperiment-tibble abstraction: 1,600 × 14</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># </span><span style="color: #555555;">Features=100 | Samples=16 | Assays=counts</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .feature        .sample   counts SampleName cell  dex   albut Run   avgLength</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> LRG_239         SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> ENSG00000233845 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ENSG00000199201 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> ENSG00000270278 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ENSG00000234453 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> ENSG00000272397 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ENSG00000207997 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ENSG00000201884 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ENSG00000224188 SRR10395…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> ENSG00000122707 SRR10395…  <span style="text-decoration: underline;">11</span>225 GSM1275862 N613… untrt untrt SRR1…       126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 40 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: Experiment &lt;fct&gt;, Sample &lt;fct&gt;, BioSample &lt;fct&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   bla &lt;chr&gt;, GRangesList &lt;list&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class: RangedSummarizedExperiment </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 100 16 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> metadata(2): '' ''</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> assays(1): counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(100): LRG_239 ENSG00000233845 ... ENSG00000196400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000115687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rowData names(1): bla</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colnames(16): SRR1039508 SRR1039509 ... SRR1039520_1 SRR1039521_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(9): SampleName cell ... Sample BioSample</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">se_bind</span> <span class="op">&lt;-</span> <span class="va">se</span> <span class="op">|&gt;</span> <span class="fu"><a href="select.html">select</a></span><span class="op">(</span><span class="va">dex</span>,  <span class="va">albut</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.</span>

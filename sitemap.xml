@@ -10,7 +10,6 @@
 <url><loc>/reference/distinct.html</loc></url>
 <url><loc>/reference/extract.html</loc></url>
 <url><loc>/reference/filter.html</loc></url>
-<url><loc>/reference/formatting.html</loc></url>
 <url><loc>/reference/full_join.html</loc></url>
 <url><loc>/reference/ggplot.html</loc></url>
 <url><loc>/reference/group_by.html</loc></url>
@@ -37,7 +36,6 @@
 <url><loc>/reference/separate.html</loc></url>
 <url><loc>/reference/slice.html</loc></url>
 <url><loc>/reference/summarise.html</loc></url>
-<url><loc>/reference/tbl_format_header.html</loc></url>
 <url><loc>/reference/tidy.html</loc></url>
 <url><loc>/reference/unite.html</loc></url>
 <url><loc>/reference/unnest.html</loc></url>
