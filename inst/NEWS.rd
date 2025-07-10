@@ -3,9 +3,8 @@
 
 \section{Changes in version 1.16.0, Bioconductor 3.22 Release}{
 \itemize{
-    \item Prepared for ggplot2 4.0.0 compatibility with S7 methods.
-    \item Added conditional S7 method for ggplot while maintaining S3 method for current ggplot2 versions.
-    \item Added S7 as suggested dependency for future ggplot2 4.0.0 compatibility.
+    \item Updated documentation to properly reflect S3 method structure.
+    \item Simplified ggplot2 compatibility - S3 method continues to work with ggplot2 4.0.0.
 }}
 
 \section{Changes in version 1.4.0, Bioconductor 3.14 Release}{
