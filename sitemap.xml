@@ -1,60 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/introduction.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bind_rows.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dplyr-methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/formatting.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ggplot2-methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pasilla.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_ly.html</loc>
-  </url>
-  <url>
-    <loc>/reference/se.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tbl_format_header-methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tibble-methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tidy.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tidyr-methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/unnest-methods.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/introduction.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/as_tibble.html</loc></url>
+<url><loc>/reference/bind_rows.html</loc></url>
+<url><loc>/reference/count.html</loc></url>
+<url><loc>/reference/distinct.html</loc></url>
+<url><loc>/reference/extract.html</loc></url>
+<url><loc>/reference/filter.html</loc></url>
+<url><loc>/reference/formatting.html</loc></url>
+<url><loc>/reference/full_join.html</loc></url>
+<url><loc>/reference/ggplot.html</loc></url>
+<url><loc>/reference/group_by.html</loc></url>
+<url><loc>/reference/group_split.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/inner_join.html</loc></url>
+<url><loc>/reference/left_join.html</loc></url>
+<url><loc>/reference/mutate.html</loc></url>
+<url><loc>/reference/mutate_features.html</loc></url>
+<url><loc>/reference/mutate_samples.html</loc></url>
+<url><loc>/reference/nest.html</loc></url>
+<url><loc>/reference/pasilla.html</loc></url>
+<url><loc>/reference/pipe.html</loc></url>
+<url><loc>/reference/pivot_longer.html</loc></url>
+<url><loc>/reference/pivot_wider.html</loc></url>
+<url><loc>/reference/plot_ly.html</loc></url>
+<url><loc>/reference/pull.html</loc></url>
+<url><loc>/reference/rename.html</loc></url>
+<url><loc>/reference/right_join.html</loc></url>
+<url><loc>/reference/rowwise.html</loc></url>
+<url><loc>/reference/sample_n.html</loc></url>
+<url><loc>/reference/se.html</loc></url>
+<url><loc>/reference/select.html</loc></url>
+<url><loc>/reference/separate.html</loc></url>
+<url><loc>/reference/slice.html</loc></url>
+<url><loc>/reference/summarise.html</loc></url>
+<url><loc>/reference/tbl_format_header.html</loc></url>
+<url><loc>/reference/tidy.html</loc></url>
+<url><loc>/reference/unite.html</loc></url>
+<url><loc>/reference/unnest.html</loc></url>
 </urlset>
+
