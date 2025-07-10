@@ -16,6 +16,10 @@
 #' @importFrom tibble enframe
 #' @importFrom SummarizedExperiment colData
 #' @importFrom pkgconfig get_config
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Müller, K., Wickham, H. (2023). tibble: Simple Data Frames. R package version 3.2.1, https://CRAN.R-project.org/package=tibble
 #' @export
 as_tibble.SummarizedExperiment <- function(x, ...,
     .name_repair=c("check_unique", "unique", "universal", "minimal"),
