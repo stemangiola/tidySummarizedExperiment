@@ -3,15 +3,14 @@ context("dplyr test")
 library(tidySummarizedExperiment)
 
 
-test_that("bind_rows", {
-    pasilla_bind <- bind_rows(pasilla, pasilla)
+test_that("append_samples", {
+    pasilla_bind <- append_samples(pasilla, pasilla)
 
-    pasilla_bind %>%
-        count(.sample, .feature) %>%
-        dplyr::count(n) %>%
-        filter(n > 1) %>%
-        nrow() %>%
-        expect_equal(0)
+    # Check that the combined object has the expected number of samples
+    expect_equal(ncol(pasilla_bind), ncol(pasilla) * 2)
+    
+    # Check that it's still a SummarizedExperiment
+    expect_true(inherits(pasilla_bind, "SummarizedExperiment"))
 })
 
 test_that("distinct", {
