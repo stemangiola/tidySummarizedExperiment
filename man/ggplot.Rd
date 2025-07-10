@@ -3,7 +3,7 @@
 \name{ggplot}
 \alias{ggplot}
 \alias{ggplot.SummarizedExperiment}
-\title{Create a new \code{ggplot} from a \code{tidyseurat}}
+\title{Create a new \code{ggplot} from a \code{SummarizedExperiment}}
 \usage{
 \method{ggplot}{SummarizedExperiment}(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }

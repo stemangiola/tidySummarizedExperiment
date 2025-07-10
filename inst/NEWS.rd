@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package \pkg{tidySummarizedExperiment}}
 
+\section{Changes in version 1.16.0, Bioconductor 3.22 Release}{
+\itemize{
+    \item Updated documentation to properly reflect S3 method structure.
+    \item Simplified ggplot2 compatibility - S3 method continues to work with ggplot2 4.0.0.
+}}
+
 \section{Changes in version 1.4.0, Bioconductor 3.14 Release}{
 \itemize{
     \item Improved join_*() functions.
