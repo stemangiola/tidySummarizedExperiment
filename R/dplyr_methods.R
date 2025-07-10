@@ -144,11 +144,15 @@ bind_cols_ <- function(..., .id=NULL) { bind_cols_internal(..., .id=NULL) }
 
 #' @rdname bind_rows
 #' @aliases bind_cols
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
 #' @export
 bind_cols.SummarizedExperiment <- bind_cols_
 
 #' @rdname bind_rows
 #' @aliases bind_cols
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
 #' @export
 bind_cols.RangedSummarizedExperiment <- bind_cols_
 
@@ -161,6 +165,10 @@ bind_cols.RangedSummarizedExperiment <- bind_cols_
 #' pasilla |> distinct(.sample)
 #'
 #' @importFrom dplyr distinct
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
   
@@ -198,6 +206,10 @@ distinct.SummarizedExperiment <- function(.data, ..., .keep_all=FALSE) {
 #' 
 #' @importFrom purrr map
 #' @importFrom dplyr filter
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
     # Deprecation of special column names
@@ -268,6 +280,10 @@ filter.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
 #'     
 #' @importFrom dplyr group_by_drop_default
 #' @importFrom dplyr group_by
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 group_by.SummarizedExperiment <- function(.data, ...,
     .add=FALSE, .drop=group_by_drop_default(.data)) {
@@ -296,6 +312,10 @@ group_by.SummarizedExperiment <- function(.data, ...,
 #'
 #' @importFrom dplyr summarise
 #' @importFrom purrr map
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 summarise.SummarizedExperiment <- function(.data, ...) {
     message(data_frame_returned_message)
@@ -323,6 +343,10 @@ summarise.SummarizedExperiment <- function(.data, ...) {
 #' @name summarise
 #' @rdname summarise
 #' @importFrom dplyr summarize
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 summarize.SummarizedExperiment <- summarise.SummarizedExperiment
 
@@ -337,6 +361,10 @@ summarize.SummarizedExperiment <- summarise.SummarizedExperiment
 #'
 #' @importFrom rlang enquos
 #' @importFrom dplyr mutate
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @importFrom purrr map
 #' @export
 mutate.SummarizedExperiment <- function(.data, ...) {
@@ -400,6 +428,9 @@ mutate.SummarizedExperiment <- function(.data, ...) {
 #'
 #' @return a SummarizedExperiment with modified rowData
 #' 
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
 #' @export
 mutate_features <- function(.data, ...) {
   feature_info <- rowData(.data) |>
@@ -419,6 +450,9 @@ mutate_features <- function(.data, ...) {
 #' @param ... extra arguments passed to dplyr::mutate
 #'
 #' @return a SummarizedExperiment with modified colData
+#'
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
 #'
 #' @export
 mutate_samples <- function(.data, ...) {
@@ -445,6 +479,10 @@ mutate_samples <- function(.data, ...) {
 #' @importFrom SummarizedExperiment colData<-
 #' @importFrom SummarizedExperiment rowData<-
 #' @importFrom dplyr rename
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 rename.SummarizedExperiment <- function(.data, ...) {
 
@@ -526,6 +564,10 @@ rename.SummarizedExperiment <- function(.data, ...) {
 #' # TODO
 #'
 #' @importFrom dplyr rowwise
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 rowwise.SummarizedExperiment <- function(data, ...) {
     message(data_frame_returned_message)
@@ -550,6 +592,10 @@ rowwise.SummarizedExperiment <- function(data, ...) {
 #' @importFrom SummarizedExperiment colData
 #' @importFrom dplyr left_join
 #' @importFrom dplyr count
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 left_join.SummarizedExperiment <- function(x, y, by=NULL,
     copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -573,6 +619,10 @@ left_join.SummarizedExperiment <- function(x, y, by=NULL,
 #'     slice(1))
 #'
 #' @importFrom dplyr inner_join
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 inner_join.SummarizedExperiment <- function(x, y, by=NULL,
     copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -596,6 +646,10 @@ inner_join.SummarizedExperiment <- function(x, y, by=NULL,
 #'     slice(1))
 #'
 #' @importFrom dplyr right_join
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 right_join.SummarizedExperiment <- function(x, y, by=NULL,
     copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -615,6 +669,10 @@ right_join.SummarizedExperiment <- function(x, y, by=NULL,
 #' tt |> full_join(tibble::tibble(condition="treated", dose=10))
 #'
 #' @importFrom dplyr full_join
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 full_join.SummarizedExperiment <- function(x, y, by=NULL,
     copy=FALSE, suffix=c(".x", ".y"), ...) {
@@ -636,6 +694,10 @@ full_join.SummarizedExperiment <- function(x, y, by=NULL,
 #'
 #' @importFrom SummarizedExperiment colData
 #' @importFrom dplyr slice
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 slice.SummarizedExperiment <- function(.data, ..., .preserve=FALSE) {
   
@@ -815,6 +877,10 @@ select.SummarizedExperiment <- function(.data, ...) {
 #' 
 #' @importFrom SummarizedExperiment colData
 #' @importFrom dplyr sample_n
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 sample_n.SummarizedExperiment <- function(tbl, size, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
@@ -830,6 +896,10 @@ sample_n.SummarizedExperiment <- function(tbl, size, replace=FALSE,
 #' @rdname sample_n
 #' @importFrom SummarizedExperiment colData
 #' @importFrom dplyr sample_frac
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
     weight=NULL, .env=NULL, ...) {
@@ -851,6 +921,10 @@ sample_frac.SummarizedExperiment <- function(tbl, size=1, replace=FALSE,
 #' se |> count(dex)
 #'     
 #' @importFrom dplyr count
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 count.SummarizedExperiment <- function(x, ..., wt=NULL,
     sort=FALSE, name=NULL, .drop=group_by_drop_default(x)) {
@@ -887,6 +961,10 @@ count.SummarizedExperiment <- function(x, ..., wt=NULL,
 #' @importFrom ellipsis check_dots_used
 #' @importFrom dplyr pull
 #' @importFrom SummarizedExperiment assay
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
   
@@ -977,6 +1055,10 @@ pull.SummarizedExperiment <- function(.data, var=-1, name=NULL, ...) {
 #' 
 #' @importFrom ellipsis check_dots_used
 #' @importFrom dplyr group_split
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
+#' 
+#' Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D. (2023). dplyr: A Grammar of Data Manipulation. R package version 2.1.4, https://CRAN.R-project.org/package=dplyr
 #' @export
 group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   

@@ -9,6 +9,8 @@
 #'     plot_ly(x = ~counts)
 #' 
 #' @importFrom ttservice plot_ly
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
 #' @export
 plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
     color=NULL, colors=NULL, alpha=NULL,
@@ -47,6 +49,8 @@ plot_ly.tbl_df <- function(data=data.frame(), ..., type=NULL, name=NULL,
 #'     plot_ly(x = ~counts)
 #' 
 #' @importFrom ttservice plot_ly
+#' @references
+#' Hutchison, W.J., Keyes, T.J., The tidyomics Consortium. et al. The tidyomics ecosystem: enhancing omic data analyses. Nat Methods 21, 1166–1170 (2024). https://doi.org/10.1038/s41592-024-02299-2
 #' @export
 plot_ly.SummarizedExperiment <- function(data=data.frame(),
     ..., type=NULL, name=NULL,

@@ -1,9 +1,11 @@
 Type: Package
 Package: tidySummarizedExperiment
 Title: Brings SummarizedExperiment to the Tidyverse 
-Version: 1.19.3
+Version: 1.19.4
 Authors@R: c(person("Stefano", "Mangiola", email = "mangiolastefano@gmail.com",
                   role = c("aut", "cre")) )
+Author: Stefano Mangiola [aut, cre] <mangiolastefano@gmail.com>
+Maintainer: Stefano Mangiola <mangiolastefano@gmail.com>
 Description: The tidySummarizedExperiment package provides a set of tools for creating and
   manipulating tidy data representations of SummarizedExperiment objects. SummarizedExperiment
   is a widely used data structure in bioinformatics for storing high-throughput genomic data, 
