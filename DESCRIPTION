@@ -48,7 +48,8 @@ Suggests:
     markdown,
     rmarkdown,
     plotly,
-    rbibutils
+    rbibutils,
+    prettydoc
 VignetteBuilder: 
     knitr
 RdMacros:
