@@ -170,6 +170,21 @@ pasilla_tidy %>%
     unite("group", c(condition, type))
 ```
 
+We can use `append_samples` to combine multiple SummarizedExperiment objects by samples. It is equivalent to `cbind` but it is a tidyverse-like function.
+
+```{r}
+# Create two subsets of the data
+pasilla_subset1 <- pasilla_tidy %>%
+    filter(condition == "untreated")
+
+pasilla_subset2 <- pasilla_tidy %>%
+    filter(condition == "treated")
+
+# Combine them using append_samples
+combined_data <- append_samples(pasilla_subset1, pasilla_subset2)
+combined_data
+```
+
 We can also combine commands with the tidyverse pipe `%>%`.
 
 For example, we could combine `group_by` and `summarise` to get the total counts for each sample.

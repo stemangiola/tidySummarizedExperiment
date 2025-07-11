@@ -2,13 +2,7 @@
 #' @rdname bind_rows
 #' @inherit ttservice::bind_rows
 #' @param add.cell.ids Appends the corresponding values to
-#' @examples
-#' data(se)
-#' ttservice::bind_rows(se, se)
-#'
-#' se_bind <- se |> select(dex,  albut)
-#' se |> ttservice::bind_cols(se_bind)
-#' 
+#' @noRd
 #' @importFrom rlang dots_values
 #' @importFrom rlang flatten_if
 #' @importFrom rlang is_spliced
@@ -17,8 +11,15 @@
 #' @importFrom SummarizedExperiment assays<-
 #' @importFrom S4Vectors SimpleList
 #' @importFrom ttservice bind_rows
+#' @importFrom lifecycle deprecate_warn
 #' @export
 bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
+    lifecycle::deprecate_warn(
+        when = "1.19.5",
+        what = "bind_rows()",
+        with = "append_samples()",
+        details = "bind_rows is not a generic method in dplyr and may cause conflicts. Use append_samples from ttservice instead."
+    )
     tts <- flatten_if(dots_values(...), is_spliced)
 
     new_obj <- 
@@ -51,6 +52,55 @@ bind_rows.SummarizedExperiment <- function(..., .id=NULL, add.cell.ids=NULL) {
         .x
     }) |> 
         SimpleList()
+
+    new_obj
+}
+
+#' @name append_samples
+#' @rdname append_samples
+#' @title Append samples from multiple SummarizedExperiment objects
+#' 
+#' @description
+#' Append samples from multiple SummarizedExperiment objects by column-binding them.
+#' This function is equivalent to `cbind` but provides a tidyverse-like interface.
+#' 
+#' @param x First SummarizedExperiment object to combine
+#' @param ... Additional SummarizedExperiment objects to combine by samples
+#' @param .id Object identifier (currently not used)
+#' 
+#' @return A combined SummarizedExperiment object
+#' 
+#' @examples
+#' data(se)
+#' append_samples(se, se)
+#' 
+#' @importFrom ttservice append_samples
+#' @importFrom rlang dots_values
+#' @importFrom rlang flatten_if
+#' @importFrom rlang is_spliced
+#' @importFrom SummarizedExperiment cbind
+#' @importFrom SummarizedExperiment assays
+#' @importFrom SummarizedExperiment assays<-
+#' @importFrom S4Vectors SimpleList
+#' @export
+append_samples.SummarizedExperiment <- function(x, ..., .id = NULL) {
+    # Combine all arguments into a list
+    tts <- flatten_if(list(x, ...), is_spliced)
+    new_obj <- do.call(cbind, tts)
+
+    # If duplicated sample names
+    if (any(duplicated(colnames(new_obj)))) {
+        warning("tidySummarizedExperiment says:",
+                " you have duplicated sample names, they will be made unique.")
+        unique_colnames <- make.unique(colnames(new_obj), sep = "_")
+        colnames(new_obj) <- unique_colnames
+
+        # Change also all assays colnames
+        assays(new_obj) <- assays(new_obj)@listData |> lapply(function(.x) {
+            colnames(.x) <- unique_colnames
+            .x
+        }) |> SimpleList()
+    }
 
     new_obj
 }
@@ -1089,3 +1139,5 @@ group_split.SummarizedExperiment <- function(.tbl, ..., .keep = TRUE) {
   }
     
 }
+
+

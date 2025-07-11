@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package \pkg{tidySummarizedExperiment}}
 
+\section{Changes in version 1.19.5}{
+\itemize{
+    \item Soft deprecated \code{bind_rows()} in favor of \code{append_samples()} from ttservice.
+    \item Added \code{append_samples()} method for SummarizedExperiment objects.
+    \item \code{bind_rows()} is not a generic method in dplyr and may cause conflicts.
+    \item Users are encouraged to use \code{append_samples()} instead.
+}}
+
 \section{Changes in version 1.19.2, Bioconductor 3.22 Release}{
 \itemize{
     \item Updated documentation to properly reflect S3 method structure.
